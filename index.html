@@ -1243,12 +1243,11 @@
     // ===== SUPABASE =====
     const SUPABASE_URL = 'https://rxfjwklbvqkwgzmpzwae.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4Zmp3a2xidnFrd2d6bXB6d2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDg2MDIsImV4cCI6MjA5MzU4NDYwMn0.dGtiy1S1Q7mn5mX_cV60KfQQgmOQ5_JIeA7y2SGmdhY';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Guardar risc a Supabase
     async function guardarRiscSupabase(dataStr, riscVal, factors, notes) {
       try {
-        const { error } = await supabase
+        const { error } = await sbClient
           .from('risc_historic')
           .upsert({
             data: dataStr,
@@ -1271,10 +1270,9 @@
       }
     }
 
-    // Llegir dia de Supabase
     async function carregarDiaSupabase(dataStr) {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await sbClient
           .from('risc_historic')
           .select('*')
           .eq('data', dataStr)
@@ -4499,7 +4497,6 @@
     // ==================== HISTORIC RISC GRAE ====================
 
     async function enviarRiscGAS(dataStr, edicions) {
-      // Ara usa Supabase en comptes del GAS
       const data = dataStr || getRiscDateString(0);
       const dia = dataStr ? null : riscState.today;
       const risc = dia ? calcularRisc(dia) : null;
@@ -4581,7 +4578,6 @@
         res.innerHTML = '<span style="color:#e53935;">❌ ' + e.message + '</span>';
       }
     }
-
 
 
     // ==================== HELICÒPTERS ====================
