@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
+  <!-- Sentry error monitoring -->
   <script
-  src="https://js-de.sentry-cdn.com/e7b9865c80ec5d1d07d39f149d7fb008.min.js"
-  crossorigin="anonymous"
-></script>
+    src="https://js-de.sentry-cdn.com/e7b9865c80ec5d1d07d39f149d7fb008.min.js"
+    crossorigin="anonymous"
+  ></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GRAE - Risc GRAE</title>
@@ -1235,8 +1236,56 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
   <!-- Leaflet JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+    // ===== SUPABASE =====
+    const SUPABASE_URL = 'https://rxfjwklbvqkwgzmpzwae.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4Zmp3a2xidnFrd2d6bXB6d2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDg2MDIsImV4cCI6MjA5MzU4NDYwMn0.dGtiy1S1Q7mn5mX_cV60KfQQgmOQ5_JIeA7y2SGmdhY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Guardar risc a Supabase
+    async function guardarRiscSupabase(dataStr, riscVal, factors, notes) {
+      try {
+        const { error } = await supabase
+          .from('risc_historic')
+          .upsert({
+            data: dataStr,
+            risc: riscVal,
+            planspc: factors.planspc || 0,
+            smp: factors.smp || 0,
+            allaus: factors.allaus || 0,
+            afluencia: factors.afluencia || 0,
+            hc: factors.hc || 0,
+            canvi: factors.canvi || 0,
+            boletaires: factors.boletaires || 0,
+            notes: notes || '',
+            font: 'web'
+          }, { onConflict: 'data' });
+        if (error) throw error;
+        return { ok: true };
+      } catch (e) {
+        logError('Supabase', e.message);
+        return { ok: false, error: e.message };
+      }
+    }
+
+    // Llegir dia de Supabase
+    async function carregarDiaSupabase(dataStr) {
+      try {
+        const { data, error } = await supabase
+          .from('risc_historic')
+          .select('*')
+          .eq('data', dataStr)
+          .single();
+        if (error) throw error;
+        return data;
+      } catch (e) {
+        return null;
+      }
+    }
+
     // URLs de les fonts de dades
     // ===== UTILITATS =====
     function escapeHtml(str) {
@@ -4450,46 +4499,37 @@
     // ==================== HISTORIC RISC GRAE ====================
 
     async function enviarRiscGAS(dataStr, edicions) {
-      // dataStr: 'YYYY-MM-DD', si no es passa usa avui
+      // Ara usa Supabase en comptes del GAS
       const data = dataStr || getRiscDateString(0);
       const dia = dataStr ? null : riscState.today;
-      
       const risc = dia ? calcularRisc(dia) : null;
-      
-      const payload = {
-        accio: 'guardarRisc',
-        data: data,
-        risc: risc,
-        factors: dia ? {
-          planspc: Math.round(dia.planspc || 0),
-          smp: Math.round(dia.smp || 0),
-          allaus: Math.round(dia.allaus || 0),
-          afluencia: Math.round(dia.afluencia || 0),
-          hc: Math.round(dia.hc || 0),
-          canvi: Math.round(dia.canvi || 0),
-          boletaires: Math.round(dia.boletaires || 0)
-        } : null,
-        edicions: edicions || null
-      };
 
-      const url = URLS.rischistoric;
-      if (!url || url === 'RISC_GAS_URL') {
-        document.getElementById('enviar-resultat').innerHTML = '<span style="color:#e53935;">⚠️ URL del GAS no configurada</span>';
+      const resultatEl = document.getElementById('enviar-resultat');
+      if (resultatEl) {
+        resultatEl.style.display = 'block';
+        resultatEl.innerHTML = '<span style="color:#666;">Guardant a Supabase...</span>';
+      }
+
+      if (!dia) {
+        if (resultatEl) resultatEl.innerHTML = '<span style="color:#e53935;">⚠️ No hi ha dades del dia</span>';
         return;
       }
 
-      try {
-        document.getElementById('enviar-resultat').innerHTML = '<span style="color:#666;">Enviant...</span>';
-        const resp = await fetch(url + '?accio=guardarRisc', {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        const res = await resp.json();
-        document.getElementById('enviar-resultat').innerHTML = res.ok
-          ? '<span style="color:#2e7d32;">✅ Guardat correctament</span>'
+      const factors = {
+        planspc: Math.round(dia.planspc || 0),
+        smp: Math.round(dia.smp || 0),
+        allaus: Math.round(dia.allaus || 0),
+        afluencia: Math.round(dia.afluencia || 0),
+        hc: Math.round(dia.hc || 0),
+        canvi: Math.round(dia.canvi || 0),
+        boletaires: Math.round(dia.boletaires || 0)
+      };
+
+      const res = await guardarRiscSupabase(data, risc, factors, dia.notes);
+      if (resultatEl) {
+        resultatEl.innerHTML = res.ok
+          ? '<span style="color:#2e7d32;">✅ Guardat a Supabase</span>'
           : '<span style="color:#e53935;">❌ Error: ' + (res.error || 'desconegut') + '</span>';
-      } catch (e) {
-        document.getElementById('enviar-resultat').innerHTML = '<span style="color:#e53935;">❌ ' + e.message + '</span>';
       }
     }
 
@@ -4504,155 +4544,44 @@
       const input = document.getElementById('historic-data-input').value;
       if (!input) return;
       const res = document.getElementById('historic-resultat');
+      res.innerHTML = '<span style="color:#666;">Carregant de Supabase...</span>';
 
-      const url = URLS.rischistoric;
-      if (!url || url === 'RISC_GAS_URL') {
-        res.innerHTML = '<span style="color:#e53935;">⚠️ URL del GAS no configurada</span>';
-        return;
-      }
-
-      res.innerHTML = '<span style="color:#666;">Carregant...</span>';
       try {
-        const resp = await fetchAmbTimeout(url + '?accio=getDia&data=' + input);
-        const dades = await resp.json();
+        const dades = await carregarDiaSupabase(input);
 
-        if (!dades || dades.error) {
+        if (!dades) {
           res.innerHTML = '<span style="color:#e53935;">No hi ha dades per aquesta data</span>';
           return;
         }
-        // Pot ser que no hi hagi risc calculat però sí context
-        const senseRisc = dades.risc === null || dades.risc === undefined;
 
         const colors = { 0:'#4caf50',1:'#8bc34a',2:'#cddc39',3:'#ff9800',4:'#ff5722',5:'#f44336',6:'#b71c1c' };
         const color = colors[dades.risc] || '#999';
-
         const FACTOR_LABELS = {planspc:'🚨 Plans PC',smp:'⚠️ SMP',allaus:'❄️ Allaus',afluencia:'📅 Afluència',hc:'🚁 HC',canvi:'🌦️ Canvi',boletaires:'🍄 Boletaires'};
         const FACTOR_MAX = {planspc:3,smp:6,allaus:5,afluencia:3,hc:2,canvi:2,boletaires:2};
 
-        const filesFactors = dades.factors
-          ? Object.entries(dades.factors).map(([k,v]) =>
-              '<tr style="border-bottom:1px solid #eee;">' +
-              '<td style="padding:0.3rem;">' + (FACTOR_LABELS[k]||k) + '</td>' +
-              '<td style="padding:0.3rem;text-align:center;">' + v + '</td>' +
-              '<td style="padding:0.3rem;text-align:right;color:#aaa;">' + (FACTOR_MAX[k]||'—') + '</td>' +
-              '</tr>'
-            ).join('')
-          : '<tr><td colspan="3" style="color:#aaa;padding:0.5rem;">Sense detall de factors</td></tr>';
+        const filesFactors = Object.entries(FACTOR_LABELS).map(([k, label]) =>
+          '<tr style="border-bottom:1px solid #eee;">' +
+          '<td style="padding:0.3rem;">' + label + '</td>' +
+          '<td style="padding:0.3rem;text-align:center;">' + (dades[k] ?? '—') + '</td>' +
+          '<td style="padding:0.3rem;text-align:right;color:#aaa;">' + FACTOR_MAX[k] + '</td>' +
+          '</tr>'
+        ).join('');
 
-        const blocEdicions = dades.edicions && dades.edicions.length > 0
-          ? '<div style="margin-top:0.75rem;font-size:0.75rem;color:#666;"><strong>✏️ Edicions manuals:</strong><br>' +
-            dades.edicions.map(e => e.camp + ': ' + e.valorAnterior + '→' + e.valorNou + (e.motiu ? ' (' + e.motiu + ')' : '')).join('<br>') +
-            '</div>'
-          : '';
-
-        // Targetes de context
-        const ctx = dades.context || {};
-        const targetaStyle = 'background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:0.75rem;margin-top:0.75rem;';
-        const titolStyle = 'font-size:0.75rem;font-weight:600;color:#555;margin-bottom:0.4rem;';
-        const nivellCols = {Groc:'#f57f17',Taronja:'#e65100',Vermell:'#c62828'};
-        const faseColors = {'EMERGÈNCIA':'#c62828','ALERTA':'#e65100','PREALERTA':'#f57f17'};
-
-        // SMP: {meteor, estat, afectacions:[{zona,nivell,...}]}
-        let blocSMP = '<div style="color:#aaa;font-size:0.8rem;">Sense dades SMP</div>';
-        if (ctx.smp && ctx.smp.length > 0) {
-          const dataSMP = ctx.dataConsultaSMP || '';
-          blocSMP = (dataSMP ? '<div style="font-size:0.72rem;color:#aaa;margin-bottom:0.4rem;">Consulta: ' + dataSMP + '</div>' : '') +
-          ctx.smp.map(avis => {
-            const afs = avis.afectacions || [];
-            const nivellMax = afs.reduce((max, a) => {
-              const ord = {Groc:1,Taronja:2,Vermell:3};
-              return (ord[a.nivell]||0) > (ord[max]||0) ? a.nivell : max;
-            }, 'Groc');
-            const col = nivellCols[nivellMax] || '#666';
-            const zones = [...new Set(afs.map(a => a.zona))];
-            return '<div style="padding:0.25rem 0;border-bottom:1px solid #f0f0f0;font-size:0.8rem;">' +
-              '<div style="display:flex;justify-content:space-between;">' +
-              '<span style="font-weight:600;">' + avis.meteor + '</span>' +
-              '<span style="color:' + col + ';font-weight:600;">' + nivellMax + '</span></div>' +
-              '<div style="color:#888;font-size:0.72rem;">' + zones.slice(0,4).join(', ') + (zones.length>4?' +'+( zones.length-4):'') + '</div>' +
-              '</div>';
-          }).join('');
-        }
-
-        // BPA: {data, perill_maxim, perill_maxim_numeric, zones_alt_perill, recomanacio}
-        let blocBPA = '<div style="color:#aaa;font-size:0.8rem;">Sense dades BPA</div>';
-        if (ctx.bpa && ctx.bpa.perill_maxim) {
-          const perillColors = {1:'#8bc34a',2:'#cddc39',3:'#ff9800',4:'#ff5722',5:'#f44336'};
-          const dataBPA = ctx.bpa.data || '';
-          const pc = perillColors[ctx.bpa.perill_maxim_numeric] || '#999';
-          const zonesAlt = (ctx.bpa.zones_alt_perill || []).join(', ');
-          blocBPA = (dataBPA ? '<div style="font-size:0.72rem;color:#aaa;margin-bottom:0.4rem;">Butlletí: ' + dataBPA + '</div>' : '') +
-            '<div style="display:flex;align-items:center;gap:0.75rem;">' +
-            '<span style="font-size:1.8rem;font-weight:700;color:' + pc + '">' + ctx.bpa.perill_maxim_numeric + '</span>' +
-            '<div><div style="font-size:0.85rem;font-weight:600;color:' + pc + '">' + ctx.bpa.perill_maxim + '</div>' +
-            (zonesAlt ? '<div style="font-size:0.72rem;color:#888;">' + zonesAlt + '</div>' : '') +
-            (ctx.bpa.recomanacio ? '<div style="font-size:0.72rem;color:#666;margin-top:0.25rem;">' + ctx.bpa.recomanacio + '</div>' : '') +
-            '</div></div>';
-        }
-
-        // Plans PC: [{plaacronim, plafase, descripcio}]
-        let blocPlans = '<div style="color:#aaa;font-size:0.8rem;">Cap pla activat</div>';
-        if (ctx.planspc && ctx.planspc.length > 0) {
-          // Agrupar per acronim+fase (pot haver-hi duplicats)
-          const vistos = {};
-          blocPlans = ctx.planspc.map(p => {
-            const clau = p.plaacronim + '_' + p.plafase;
-            if (vistos[clau]) return '';
-            vistos[clau] = true;
-            const fase = (p.plafase || '').toUpperCase();
-            const col = faseColors[fase] || '#666';
-            return '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.25rem 0;border-bottom:1px solid #f0f0f0;font-size:0.8rem;">' +
-              '<span style="font-weight:600;">' + (p.plaacronim || '—') + '</span>' +
-              '<span style="color:' + col + ';font-weight:600;">' + p.plafase + '</span></div>';
-          }).join('');
-        }
-
-        // Afluència
-        const afluLabels = ['Normal','Moderat','Alt','Molt alt'];
-        const afluColors2 = ['#666','#f57f17','#e65100','#c62828'];
-        const afluVal = ctx.afluencia || 0;
-        const blocAflu = '<span style="color:' + afluColors2[afluVal] + ';font-weight:600;font-size:0.9rem;">' +
-          (afluLabels[afluVal]||'Normal') + ' (' + afluVal + '/3)</span>';
-
-        // Previsió
-        let blocPrevisio = '<div style="color:#aaa;font-size:0.8rem;">Sense dades de previsió</div>';
-        if (ctx.previsio) {
-          const varNoms = {
-            estatDelCel: '☁️ Estat del cel',
-            precipitacions: '🌧️ Precipitacions',
-            temperatures: '🌡️ Temperatures',
-            visibilitat: '👁️ Visibilitat',
-            vent: '💨 Vent'
-          };
-          blocPrevisio = Object.entries(ctx.previsio).map(([k, v]) =>
-            '<div style="padding:0.25rem 0;border-bottom:1px solid #f0f0f0;font-size:0.8rem;">' +
-            '<span style="font-weight:600;">' + (varNoms[k]||k) + '</span> ' +
-            '<span style="color:#555;">' + (typeof v === 'string' ? v.replace(/\n/g,'<br>') : v) + '</span>' +
-            '</div>'
-          ).join('');
-        }
-
-        const blocRisc = senseRisc
-          ? '<div style="background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:0.75rem;font-size:0.85rem;color:#666;">⚠️ No hi ha índex de risc calculat per aquesta data</div>'
-          : '<div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:1rem;">' +
-            '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">' +
-            '<span style="font-size:2rem;font-weight:700;color:' + color + '">' + dades.risc + '</span>' +
-            '<div><div style="font-weight:600;">' + input + '</div>' +
-            '<div style="font-size:0.75rem;color:#888;">Risc GRAE calculat · font: ' + (dades.font||'—') + '</div></div></div>' +
-            '<table style="width:100%;font-size:0.8rem;border-collapse:collapse;">' +
-            '<tr style="background:#f0f0f0;"><th style="padding:0.3rem;text-align:left;">Factor</th><th style="padding:0.3rem;text-align:center;">Valor</th><th style="padding:0.3rem;text-align:right;">Màx</th></tr>' +
-            filesFactors + '</table>' + blocEdicions + '</div>';
-
-        res.innerHTML = blocRisc +
-          '<div style="' + targetaStyle + '"><div style="' + titolStyle + '">⚠️ Alertes SMP</div>' + blocSMP + '</div>' +
-          '<div style="' + targetaStyle + '"><div style="' + titolStyle + '">❄️ Risc Allaus (BPA)</div>' + blocBPA + '</div>' +
-          '<div style="' + targetaStyle + '"><div style="' + titolStyle + '">🚨 Plans Protecció Civil</div>' + blocPlans + '</div>' +
-          '<div style="' + targetaStyle + '"><div style="' + titolStyle + '">📅 Afluència</div>' + blocAflu + '</div>' +
-          '<div style="' + targetaStyle + '"><div style="' + titolStyle + '">🌦️ Previsió</div>' + blocPrevisio + '</div>';
+        res.innerHTML = '<div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:1rem;">' +
+          '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">' +
+          '<span style="font-size:2rem;font-weight:700;color:' + color + '">' + dades.risc + '</span>' +
+          '<div><div style="font-weight:600;">' + input + '</div>' +
+          '<div style="font-size:0.75rem;color:#888;">Risc GRAE · font: ' + (dades.font||'—') + ' · ' + new Date(dades.creat_at).toLocaleString('ca-ES') + '</div></div></div>' +
+          '<table style="width:100%;font-size:0.8rem;border-collapse:collapse;">' +
+          '<tr style="background:#f0f0f0;"><th style="padding:0.3rem;text-align:left;">Factor</th><th style="padding:0.3rem;text-align:center;">Valor</th><th style="padding:0.3rem;text-align:right;">Màx</th></tr>' +
+          filesFactors + '</table>' +
+          (dades.notes ? '<div style="margin-top:0.5rem;font-size:0.8rem;color:#666;">📝 ' + dades.notes + '</div>' : '') +
+          '</div>';
       } catch (e) {
         res.innerHTML = '<span style="color:#e53935;">❌ ' + e.message + '</span>';
       }
     }
+
 
 
     // ==================== HELICÒPTERS ====================
