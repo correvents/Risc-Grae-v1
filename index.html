@@ -3506,20 +3506,18 @@
         riscState.history = [];
       }
       
-      // Carregar configuració de paràmetres
-      carregarRiscConfig();
     }
     
     // Configuració de paràmetres per càlcul automàtic
     let riscParams = {
       zones: {
-        'Pirineu Occidental': 1.0,  // inclou: Pirineu Occidental, Pirineu Central
-        'Pirineu Oriental': 1.0,    // inclou: Pirineu Oriental, Prepirineu
-        'Empordà': 0.4,             // inclou: Empordà, Litoral Nord
-        'Litoral Central': 0.3,     // inclou: Litoral Central, Vallès, Penedès
-        'Plana de Lleida': 0.3,     // inclou: Plana de Lleida, Catalunya Central
-        'Camp de Tarragona': 0.4,   // inclou: Camp de Tarragona, Serres de Prades i Montsant
-        "Terres de l'Ebre": 0.3,
+        'Pirineu Occidental': 1,
+        'Pirineu Oriental': 1,
+        'Empordà': 1,
+        'Litoral Central': 1,
+        'Plana de Lleida': 1,
+        'Camp de Tarragona': 1,
+        "Terres de l'Ebre": 1,
       },
       // Mapeig de zona original a grup (per agrupar alertes)
       zonesGrup: {
@@ -3553,15 +3551,84 @@
       maxSMP: 6,         // Valor màxim SMP
     };
     
-    function carregarRiscConfig() {
-      const saved = localStorage.getItem('riscGRAE_params');
-      if (saved) {
-        riscParams = JSON.parse(saved);
-      }
+    function riscParamsToRow(p) {
+      return {
+        id: 1,
+        pes_pirineu_occidental: p.zones['Pirineu Occidental'],
+        pes_pirineu_oriental:   p.zones['Pirineu Oriental'],
+        pes_emporda:            p.zones['Empordà'],
+        pes_litoral_central:    p.zones['Litoral Central'],
+        pes_plana_lleida:       p.zones['Plana de Lleida'],
+        pes_camp_tarragona:     p.zones['Camp de Tarragona'],
+        pes_terres_ebre:        p.zones["Terres de l'Ebre"],
+        pes_periode_00_06:      p.periodes['00-06'],
+        pes_periode_06_12:      p.periodes['06-12'],
+        pes_periode_12_18:      p.periodes['12-18'],
+        pes_periode_18_24:      p.periodes['18-24'],
+        pes_nivell_groc:        p.nivells['Groc'],
+        pes_nivell_taronja:     p.nivells['Taronja'],
+        pes_nivell_vermell:     p.nivells['Vermell'],
+        normalitzador:          p.normalitzador,
+        max_smp:                p.maxSMP,
+        actualitzat_at:         new Date().toISOString(),
+      };
     }
-    
-    function guardarRiscParams() {
+
+    function rowToRiscParams(row, base) {
+      return {
+        ...base,
+        zones: {
+          'Pirineu Occidental': +row.pes_pirineu_occidental,
+          'Pirineu Oriental':   +row.pes_pirineu_oriental,
+          'Empordà':            +row.pes_emporda,
+          'Litoral Central':    +row.pes_litoral_central,
+          'Plana de Lleida':    +row.pes_plana_lleida,
+          'Camp de Tarragona':  +row.pes_camp_tarragona,
+          "Terres de l'Ebre":  +row.pes_terres_ebre,
+        },
+        periodes: {
+          '00-06': +row.pes_periode_00_06,
+          '06-12': +row.pes_periode_06_12,
+          '12-18': +row.pes_periode_12_18,
+          '18-24': +row.pes_periode_18_24,
+        },
+        nivells: {
+          'Groc':    +row.pes_nivell_groc,
+          'Taronja': +row.pes_nivell_taronja,
+          'Vermell': +row.pes_nivell_vermell,
+        },
+        normalitzador: +row.normalitzador,
+        maxSMP:        +row.max_smp,
+      };
+    }
+
+    async function carregarRiscConfig() {
+      try {
+        const { data, error } = await sbClient
+          .from('taula_config_Alertes_SMP')
+          .select('*')
+          .eq('id', 1)
+          .single();
+        if (!error && data) {
+          riscParams = rowToRiscParams(data, riscParams);
+          localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
+          return;
+        }
+      } catch(e) { /* fallback */ }
+      // Fallback localStorage
+      const saved = localStorage.getItem('riscGRAE_params');
+      if (saved) riscParams = JSON.parse(saved);
+    }
+
+    async function guardarRiscParams() {
       localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
+      try {
+        await sbClient
+          .from('taula_config_Alertes_SMP')
+          .upsert(riscParamsToRow(riscParams));
+      } catch(e) {
+        console.warn('Error guardant params a Supabase:', e);
+      }
     }
     
     function crearRiscDiaDefault(data) {
@@ -3605,94 +3672,58 @@
       return `${dies[d.getDay()]} ${d.getDate()} ${mesos[d.getMonth()]}`;
     }
     
-    // Funció per calcular SMP amb lògica simplificada
+    // Funció per calcular SMP: compta zones de muntanya afectades per nivell màxim
     function calcularSMPPonderat(data_str) {
       if (!dadesCarregades.smp || !dadesCarregades.smp.avisos) {
-        return { punts: 0, valor: 0, detall: [] };
+        return { valor: 0, explicacio: 'Sense dades', zones: { groc: 0, taronja: 0, vermell: 0 }, detall: [] };
       }
-      
-      // Comptar zones afectades per nivell (només zones de muntanya)
-      // Cada zona compta només pel seu nivell MÀxIM (evita doble comptatge)
+
       const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
-      const nivellMaxPerZona = {}; // zonaGrup -> nivell màxim
-      
-      const detall = [];
-      
+      const infoPerZona = {}; // zonaGrup → { nivell màxim, meteors Set }
+
       for (const avis of dadesCarregades.smp.avisos) {
         const meteor = avis.meteor || '';
-        
         for (const dia of (avis.dies || [])) {
           if (dia.dia !== data_str) continue;
-          
           for (const afectacio of (dia.afectacions || [])) {
             const zonaOriginal = afectacio.zona || '';
             const nivell = afectacio.nivell || '';
-            
-            // Mapejar zona original a grup
             const zonaGrup = riscParams.zonesGrup[zonaOriginal] || zonaOriginal;
-            const pesZona = riscParams.zones[zonaGrup] || 0;
-            
-            if (pesZona === 0) continue;  // Zona no rellevant (no està al mapa)
+            if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) continue;
             if (!nivellOrdre[nivell]) continue;
-            
-            // Guardar el nivell màxim per cada zona
-            if (!nivellMaxPerZona[zonaGrup] || nivellOrdre[nivell] > nivellOrdre[nivellMaxPerZona[zonaGrup]]) {
-              nivellMaxPerZona[zonaGrup] = nivell;
+
+            if (!infoPerZona[zonaGrup]) {
+              infoPerZona[zonaGrup] = { nivell, meteors: new Set([meteor]) };
+            } else {
+              if (nivellOrdre[nivell] > nivellOrdre[infoPerZona[zonaGrup].nivell]) {
+                infoPerZona[zonaGrup].nivell = nivell;
+              }
+              infoPerZona[zonaGrup].meteors.add(meteor);
             }
-            
-            detall.push({
-              meteor,
-              nivell,
-              zona: zonaGrup
-            });
           }
         }
       }
 
-      // Comptar zones per nivell màxim (cada zona compta una sola vegada)
-      const zonesPerNivell = { 'Groc': new Set(), 'Taronja': new Set(), 'Vermell': new Set() };
-      for (const [zona, nivell] of Object.entries(nivellMaxPerZona)) {
-        zonesPerNivell[nivell].add(zona);
+      const zonesPerNivell = { 'Groc': [], 'Taronja': [], 'Vermell': [] };
+      const detall = [];
+      for (const [zona, info] of Object.entries(infoPerZona)) {
+        zonesPerNivell[info.nivell].push(zona);
+        detall.push({ zona, nivell: info.nivell, meteors: [...info.meteors] });
       }
-      
-      const numGroc = zonesPerNivell['Groc'].size;
-      const numTaronja = zonesPerNivell['Taronja'].size;
-      const numVermell = zonesPerNivell['Vermell'].size;
-      
-      // Calcular valor segons la lògica
-      let valor = 0;
-      let explicacio = 'Cap alerta';
-      
-      if (numVermell >= 3) {
-        valor = 6;
-        explicacio = `${numVermell} zones vermell (≥3)`;
-      } else if (numVermell > 0) {
-        valor = 5;
-        explicacio = `${numVermell} zones vermell (<3)`;
-      } else if (numTaronja >= 3) {
-        valor = 4;
-        explicacio = `${numTaronja} zones taronja (≥3)`;
-      } else if (numTaronja > 0) {
-        valor = 3;
-        explicacio = `${numTaronja} zones taronja (<3)`;
-      } else if (numGroc >= 3) {
-        valor = 2;
-        explicacio = `${numGroc} zones groc (≥3)`;
-      } else if (numGroc > 0) {
-        valor = 1;
-        explicacio = `${numGroc} zones groc (<3)`;
-      }
-      
-      return {
-        valor,
-        explicacio,
-        zones: {
-          groc: numGroc,
-          taronja: numTaronja,
-          vermell: numVermell
-        },
-        detall
-      };
+
+      const numGroc    = zonesPerNivell['Groc'].length;
+      const numTaronja = zonesPerNivell['Taronja'].length;
+      const numVermell = zonesPerNivell['Vermell'].length;
+
+      let valor = 0, explicacio = 'Cap alerta';
+      if      (numVermell >= 3) { valor = 6; explicacio = `${numVermell} zones vermell (≥3)`; }
+      else if (numVermell >  0) { valor = 5; explicacio = `${numVermell} zona vermell (<3)`;  }
+      else if (numTaronja >= 3) { valor = 4; explicacio = `${numTaronja} zones taronja (≥3)`; }
+      else if (numTaronja >  0) { valor = 3; explicacio = `${numTaronja} zona taronja (<3)`;  }
+      else if (numGroc    >= 3) { valor = 2; explicacio = `${numGroc} zones groc (≥3)`;       }
+      else if (numGroc    >  0) { valor = 1; explicacio = `${numGroc} zona groc (<3)`;        }
+
+      return { valor, explicacio, zones: { groc: numGroc, taronja: numTaronja, vermell: numVermell }, detall };
     }
     
     // Funció per calcular valors automàtics des de les dades carregades
@@ -4106,17 +4137,345 @@
       actualitzarRiscAuto();
     }
     
+    // ── Historial alertes SMP ──────────────────────────────────
+    let smpHistoricPage = 0;
+    let smpHistoricDies = []; // timestamps únics (un per sessió de consulta), desc
+
+    async function carregarSMPHistoric() {
+      const el = document.getElementById('smp-historic-taula');
+      if (!el) return;
+      el.innerHTML = '<span style="color:#999;font-style:italic;">Carregant índex de dies...</span>';
+      smpHistoricDies = [];
+      smpHistoricPage = 0;
+
+      try {
+        // Obtenir tots els timestamps únics: 3 lots de 1000 files (camp lleuger)
+        const [r0, r1, r2] = await Promise.all([
+          sbClient.from('smp_historic').select('data_consulta').order('data_consulta', { ascending: false }).range(0, 999),
+          sbClient.from('smp_historic').select('data_consulta').order('data_consulta', { ascending: false }).range(1000, 1999),
+          sbClient.from('smp_historic').select('data_consulta').order('data_consulta', { ascending: false }).range(2000, 2999),
+        ]);
+        const totes = [...(r0.data||[]), ...(r1.data||[]), ...(r2.data||[])];
+        if (!totes.length) { el.innerHTML = '<span style="color:#999;">Sense dades.</span>'; return; }
+
+        // Timestamps únics (cada dia de consulta té el mateix timestamp exacte)
+        const vistos = new Set();
+        for (const r of totes) {
+          if (!vistos.has(r.data_consulta)) vistos.add(r.data_consulta);
+        }
+        smpHistoricDies = [...vistos].sort((a, b) => b.localeCompare(a));
+
+        await smpHistoricCarregarPagina();
+      } catch(e) {
+        el.innerHTML = `<span style="color:#c62828;">Error: ${e.message || e}</span>`;
+      }
+    }
+
+    async function smpHistoricCarregarPagina() {
+      const PAGE = 10;
+      const el = document.getElementById('smp-historic-taula');
+      const pagEl = document.getElementById('smp-historic-pag');
+      if (!el || !smpHistoricDies.length) return;
+
+      const diesPagina = smpHistoricDies.slice(smpHistoricPage * PAGE, (smpHistoricPage + 1) * PAGE);
+      if (!diesPagina.length) { el.innerHTML = '<span style="color:#999;">Sense més dades.</span>'; return; }
+
+      const total = smpHistoricDies.length;
+      const ini = smpHistoricPage * PAGE + 1;
+      const fi = Math.min(ini + PAGE - 1, total);
+      if (pagEl) pagEl.textContent = `${ini}–${fi} / ${total} dies`;
+
+      el.innerHTML = '<span style="color:#999;font-style:italic;">Carregant...</span>';
+
+      try {
+        // Fetch les files exactes dels 10 timestamps d'aquesta pàgina
+        const { data, error } = await sbClient
+          .from('smp_historic')
+          .select('data_consulta,dia,zona,nivell,meteor,llindar,periodes,probabilitat')
+          .in('data_consulta', diesPagina)
+          .order('data_consulta', { ascending: false });
+        if (error) throw error;
+
+        // Agrupar per timestamp
+        const grups = {};
+        for (const r of (data||[])) {
+          if (!grups[r.data_consulta]) grups[r.data_consulta] = [];
+          grups[r.data_consulta].push(r);
+        }
+
+        smpHistoricRenderTaula(diesPagina, grups);
+      } catch(e) {
+        el.innerHTML = `<span style="color:#c62828;">Error: ${e.message || e}</span>`;
+      }
+    }
+
+    function smpHistoricRenderTaula(diesPagina, grups) {
+      const el = document.getElementById('smp-historic-taula');
+      if (!el) return;
+
+      const nivellColor = { 'Groc':'#f57f17','Taronja':'#e65100','Vermell':'#c62828' };
+      const nivellBg    = { 'Groc':'#fffde7','Taronja':'#fff3e0','Vermell':'#ffebee' };
+      const nivellOrdre = { 'Groc':1,'Taronja':2,'Vermell':3 };
+      const diesNom = ['Dg','Dl','Dm','Dc','Dj','Dv','Ds'];
+      const mesoNom = ['gen','feb','mar','abr','mai','jun','jul','ago','set','oct','nov','des'];
+
+      const files = diesPagina.map(ts => {
+        const rows = grups[ts] || [];
+        const dt = new Date(ts);
+        const dataFmt = `${diesNom[dt.getDay()]} ${dt.getDate()} ${mesoNom[dt.getMonth()]} ${dt.getFullYear()}`;
+
+        const zonesMax = {};
+        for (const r of rows) {
+          if (!zonesMax[r.zona] || (nivellOrdre[r.nivell]||0) > (nivellOrdre[zonesMax[r.zona]]||0))
+            zonesMax[r.zona] = r.nivell;
+        }
+        const resum = Object.entries(zonesMax)
+          .sort((a,b) => (nivellOrdre[b[1]]||0) - (nivellOrdre[a[1]]||0))
+          .map(([zona, niv]) => `<span style="background:${nivellBg[niv]||'#eee'};color:${nivellColor[niv]||'#333'};padding:0.1rem 0.35rem;border-radius:3px;font-size:0.72rem;font-weight:600;">${zona}</span>`)
+          .join(' ');
+        const meteors = [...new Set(rows.map(r => r.meteor))].join(', ');
+        const nivellMax = Object.values(zonesMax).sort((a,b)=>(nivellOrdre[b]||0)-(nivellOrdre[a]||0))[0]||'—';
+
+        return `<tr style="border-bottom:1px solid #eee;">
+          <td style="padding:0.3rem 0.5rem;white-space:nowrap;font-weight:600;">${dataFmt}</td>
+          <td style="padding:0.3rem 0.5rem;font-weight:700;color:${nivellColor[nivellMax]||'#333'};">${nivellMax}</td>
+          <td style="padding:0.3rem 0.5rem;line-height:1.8;">${resum}</td>
+          <td style="padding:0.3rem 0.5rem;color:#666;font-size:0.75rem;">${meteors}</td>
+        </tr>`;
+      }).join('');
+
+      el.innerHTML = `
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead><tr style="background:#e3f2fd;">
+            <th style="padding:0.3rem 0.5rem;text-align:left;">Dia</th>
+            <th style="padding:0.3rem 0.5rem;text-align:left;">Nivell màx.</th>
+            <th style="padding:0.3rem 0.5rem;text-align:left;">Zones afectades</th>
+            <th style="padding:0.3rem 0.5rem;text-align:left;">Fenòmens</th>
+          </tr></thead>
+          <tbody>${files}</tbody>
+        </table>`;
+    }
+
+    async function smpHistoricNav(delta) {
+      if (!smpHistoricDies.length) return;
+      const PAGE = 10;
+      const maxPage = Math.max(0, Math.ceil(smpHistoricDies.length / PAGE) - 1);
+      smpHistoricPage = Math.max(0, Math.min(maxPage, smpHistoricPage + delta));
+      await smpHistoricCarregarPagina();
+    }
+    // ───────────────────────────────────────────────────────────
+
+    // ── Modificació manual SMP ─────────────────────────────────
+    async function guardarSMPOverride() {
+      const valorEl = document.getElementById('smp-override-valor');
+      const motiuEl = document.getElementById('smp-override-motiu');
+      const feedback = document.getElementById('smp-override-feedback');
+      const valor = parseFloat(valorEl?.value);
+      const motiu = motiuEl?.value?.trim();
+
+      if (isNaN(valor) || valor < 0 || valor > 6) {
+        feedback.style.color = '#c62828';
+        feedback.textContent = '⚠️ El valor ha de ser entre 0 i 6.';
+        return;
+      }
+      if (!motiu) {
+        feedback.style.color = '#c62828';
+        feedback.textContent = '⚠️ Cal indicar el motiu.';
+        return;
+      }
+
+      feedback.style.color = '#555';
+      feedback.textContent = 'Guardant...';
+
+      try {
+        const { error } = await sbClient.from('smp_override_historic').insert({
+          valor_smp: valor,
+          motiu: motiu,
+          data_hora: new Date().toISOString(),
+        });
+        if (error) throw error;
+
+        // Actualitzar riscState amb el valor manual
+        if (riscState.today) {
+          riscState.today.smp = valor;
+          riscState.today.modificatManualment = true;
+        }
+        localStorage.setItem('riscGRAE', JSON.stringify(riscState));
+
+        feedback.style.color = '#388e3c';
+        feedback.textContent = `✅ Guardat: SMP = ${valor} — ${new Date().toLocaleTimeString('ca')}`;
+        valorEl.value = '';
+        motiuEl.value = '';
+        carregarSMPOverrideHistoric();
+      } catch(e) {
+        feedback.style.color = '#c62828';
+        feedback.textContent = '❌ Error guardant: ' + (e.message || e);
+      }
+    }
+
+    async function carregarSMPOverrideHistoric() {
+      const el = document.getElementById('smp-override-historic');
+      if (!el) return;
+      try {
+        const { data, error } = await sbClient
+          .from('smp_override_historic')
+          .select('data_hora, valor_smp, motiu')
+          .order('data_hora', { ascending: false })
+          .limit(5);
+        if (error || !data?.length) { el.innerHTML = ''; return; }
+
+        const files = data.map(r => {
+          const dt = new Date(r.data_hora);
+          const label = `${dt.toLocaleDateString('ca')} ${dt.toLocaleTimeString('ca', { hour: '2-digit', minute: '2-digit' })}`;
+          const color = r.valor_smp >= 5 ? '#c62828' : r.valor_smp >= 3 ? '#e65100' : r.valor_smp >= 1 ? '#f57f17' : '#388e3c';
+          return `<tr>
+            <td style="padding:0.15rem 0.4rem;color:#888;">${label}</td>
+            <td style="padding:0.15rem 0.4rem;font-weight:700;color:${color};text-align:center;">${r.valor_smp}</td>
+            <td style="padding:0.15rem 0.4rem;">${r.motiu}</td>
+          </tr>`;
+        }).join('');
+
+        el.innerHTML = `<strong style="font-size:0.75rem;">Últimes modificacions:</strong>
+          <table style="width:100%;border-collapse:collapse;margin-top:0.3rem;">
+            <thead><tr style="color:#999;">
+              <th style="padding:0.15rem 0.4rem;text-align:left;font-weight:400;">Data/hora</th>
+              <th style="padding:0.15rem 0.4rem;font-weight:400;">Valor</th>
+              <th style="padding:0.15rem 0.4rem;text-align:left;font-weight:400;">Motiu</th>
+            </tr></thead>
+            <tbody>${files}</tbody>
+          </table>`;
+      } catch(e) { el.innerHTML = ''; }
+    }
+    // ───────────────────────────────────────────────────────────
+
+    // ── Càlcul real avui SMP ───────────────────────────────────
+    function renderCalcRealAvui() {
+      const el = document.getElementById('calc-real-avui');
+      if (!el) return;
+
+      const avui = getRiscDateString(0);
+      const calc = calcularSMPPonderat(avui);
+
+      if (!calc.detall || calc.detall.length === 0) {
+        el.innerHTML = `<span style="color:#388e3c;">✅ Cap alerta activa avui — SMP = <strong>0 / 6</strong></span>`;
+        return;
+      }
+
+      const nivellBg    = { 'Groc': '#fffde7', 'Taronja': '#fff3e0', 'Vermell': '#ffebee' };
+      const nivellColor = { 'Groc': '#f57f17', 'Taronja': '#e65100', 'Vermell': '#c62828' };
+      const color = calc.valor >= 5 ? '#c62828' : calc.valor >= 3 ? '#e65100' : calc.valor >= 1 ? '#f57f17' : '#388e3c';
+
+      const files = calc.detall.map(d => `
+        <tr style="background:${nivellBg[d.nivell] || '#fff'};">
+          <td style="padding:0.25rem 0.5rem;">${d.zona}</td>
+          <td style="padding:0.25rem 0.5rem;font-weight:600;color:${nivellColor[d.nivell]};">${d.nivell}</td>
+          <td style="padding:0.25rem 0.5rem;color:#555;font-size:0.75rem;">${d.meteors.join(', ')}</td>
+        </tr>`).join('');
+
+      el.innerHTML = `
+        <table style="width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:0.6rem;">
+          <thead>
+            <tr style="background:#e3f2fd;">
+              <th style="padding:0.25rem 0.5rem;text-align:left;">Zona</th>
+              <th style="padding:0.25rem 0.5rem;text-align:left;">Nivell màxim</th>
+              <th style="padding:0.25rem 0.5rem;text-align:left;">Fenòmens</th>
+            </tr>
+          </thead>
+          <tbody>${files}</tbody>
+        </table>
+        <div style="font-size:0.82rem;">
+          🟡 ${calc.zones.groc} groc &nbsp;🟠 ${calc.zones.taronja} taronja &nbsp;🔴 ${calc.zones.vermell} vermell
+          &nbsp;→&nbsp; <strong style="color:${color};font-size:1.05rem;">SMP = ${calc.valor} / 6</strong>
+          <span style="color:#666;font-size:0.75rem;margin-left:0.4rem;">(${calc.explicacio})</span>
+        </div>`;
+    }
+    // ───────────────────────────────────────────────────────────
+
+    // ── Simulador SMP ──────────────────────────────────────────
+    let simFiles = [];
+    let simIdCounter = 0;
+
+    function simAfegirFila() {
+      const id = simIdCounter++;
+      simFiles.push(id);
+      const zonesOpts = Object.entries(riscParams.zones)
+        .filter(([, v]) => v > 0)
+        .map(([z]) => `<option value="${z}">${z}</option>`).join('');
+      const nivellsOpts = ['Groc', 'Taronja', 'Vermell']
+        .map(n => `<option value="${n}">${n}</option>`).join('');
+
+      if (simFiles.length === 1) {
+        const cap = document.createElement('div');
+        cap.id = 'sim-cap';
+        cap.style.cssText = 'display:grid;grid-template-columns:1fr 110px 32px;gap:0.4rem;margin-bottom:0.25rem;';
+        cap.innerHTML = `<span style="font-size:0.72rem;color:#666;">Zona</span><span style="font-size:0.72rem;color:#666;">Nivell</span><span></span>`;
+        document.getElementById('sim-files').prepend(cap);
+      }
+
+      const fila = document.createElement('div');
+      fila.id = `sim-fila-${id}`;
+      fila.style.cssText = 'display:grid;grid-template-columns:1fr 110px 32px;gap:0.4rem;align-items:center;margin-bottom:0.4rem;';
+      fila.innerHTML = `
+        <select class="risc-form-input" style="font-size:0.78rem;padding:0.25rem;" onchange="simRecalcular()">${zonesOpts}</select>
+        <select class="risc-form-input" style="font-size:0.78rem;padding:0.25rem;" onchange="simRecalcular()">${nivellsOpts}</select>
+        <button class="risc-btn" style="padding:0.2rem 0.4rem;font-size:0.8rem;" onclick="simEliminarFila(${id})">✕</button>
+      `;
+      document.getElementById('sim-files').appendChild(fila);
+      simRecalcular();
+    }
+
+    function simEliminarFila(id) {
+      simFiles = simFiles.filter(f => f !== id);
+      document.getElementById(`sim-fila-${id}`)?.remove();
+      if (simFiles.length === 0) document.getElementById('sim-cap')?.remove();
+      simRecalcular();
+    }
+
+    function simRecalcular() {
+      const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
+      const infoPerZona = {};
+      document.querySelectorAll('[id^="sim-fila-"]').forEach(fila => {
+        const selects = fila.querySelectorAll('select');
+        if (selects.length < 2) return;
+        const zona = selects[0].value;
+        const nivell = selects[1].value;
+        if (!infoPerZona[zona] || nivellOrdre[nivell] > nivellOrdre[infoPerZona[zona]]) {
+          infoPerZona[zona] = nivell;
+        }
+      });
+
+      const counts = { 'Groc': 0, 'Taronja': 0, 'Vermell': 0 };
+      for (const n of Object.values(infoPerZona)) counts[n]++;
+      const { Groc: g, Taronja: t, Vermell: v } = counts;
+
+      let valor = 0, explicacio = 'Cap alerta';
+      if      (v >= 3) { valor = 6; explicacio = `${v} zones vermell (≥3)`; }
+      else if (v >  0) { valor = 5; explicacio = `${v} zona vermell (<3)`;  }
+      else if (t >= 3) { valor = 4; explicacio = `${t} zones taronja (≥3)`; }
+      else if (t >  0) { valor = 3; explicacio = `${t} zona taronja (<3)`;  }
+      else if (g >= 3) { valor = 2; explicacio = `${g} zones groc (≥3)`;    }
+      else if (g >  0) { valor = 1; explicacio = `${g} zona groc (<3)`;     }
+
+      const res = document.getElementById('sim-resultat');
+      if (!res) return;
+      const color = valor >= 5 ? '#c62828' : valor >= 3 ? '#e65100' : valor >= 1 ? '#f57f17' : '#388e3c';
+      res.innerHTML = `🟡 ${g} groc &nbsp;🟠 ${t} taronja &nbsp;🔴 ${v} vermell<br>
+        <strong style="font-size:1.1rem;color:${color};">SMP = ${valor} / 6</strong>
+        <span style="color:#666;font-size:0.75rem;margin-left:0.5rem;">${explicacio}</span>`;
+    }
+    // ───────────────────────────────────────────────────────────
+
     function resetRiscParams() {
       if (confirm('Segur que vols restablir els paràmetres per defecte?')) {
         riscParams = {
           zones: {
-            'Pirineu Occidental': 1.0,
-            'Pirineu Oriental': 1.0,
-            'Empordà': 0.4,
-            'Litoral Central': 0.3,
-            'Plana de Lleida': 0.3,
-            'Camp de Tarragona': 0.4,
-            "Terres de l'Ebre": 0.3,
+            'Pirineu Occidental': 1,
+            'Pirineu Oriental': 1,
+            'Empordà': 1,
+            'Litoral Central': 1,
+            'Plana de Lleida': 1,
+            'Camp de Tarragona': 1,
+            "Terres de l'Ebre": 1,
           },
           zonesGrup: {
             'Pirineu Occidental': 'Pirineu Occidental',
@@ -4134,17 +4493,8 @@
             'Serres de Prades i Montsant': 'Camp de Tarragona',
             "Terres de l'Ebre": "Terres de l'Ebre",
           },
-          periodes: {
-            '00-06': 0.3,
-            '06-12': 0.8,
-            '12-18': 1.0,
-            '18-24': 0.6,
-          },
-          nivells: {
-            'Groc': 1,
-            'Taronja': 2,
-            'Vermell': 3,
-          },
+          periodes: { '00-06': 0.3, '06-12': 0.8, '12-18': 1.0, '18-24': 0.6 },
+          nivells: { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 },
           normalitzador: 1,
           maxSMP: 6,
         };
@@ -4181,77 +4531,91 @@
         <div id="param-smp" class="param-tab">
           <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem;">
             <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #e53935;">⚠️ Paràmetres Alertes SMP</h3>
-            
-            <div style="background: #f0f7ff; border: 1px solid #0082d9; border-radius: 6px; padding: 0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
-              <strong>📐 Fórmula:</strong><br>
-              <code style="background: #e3f2fd; padding: 0.2rem 0.4rem; border-radius: 3px;">Punts = Σ (nivell × pes_zona × pes_període)</code><br><br>
-              <strong>Normalització:</strong> Valor SMP = min(6, Punts ÷ <strong>${riscParams.normalitzador}</strong>)<br>
-              <strong>Rang:</strong> 0 a 6
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-              <div>
-                <h4 style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #333;">🗺️ Pes per Zona</h4>
-                <p style="font-size: 0.75rem; color: #666; margin-bottom: 0.5rem;">Zones muntanya amb més activitat GRAE = més pes</p>
-                <div style="display: grid; grid-template-columns: 1fr 70px; gap: 0.4rem;">
-                  ${Object.entries(riscParams.zones).map(([zona, pes]) => `
-                    <label style="font-size: 0.8rem; display: flex; align-items: center;">${zona}</label>
-                    <input type="number" step="0.1" min="0" max="2" value="${pes}" 
-                      class="risc-form-input" style="padding: 0.3rem; font-size: 0.8rem; text-align: center;"
-                      onchange="riscParams.zones['${zona}'] = parseFloat(this.value)">
-                  `).join('')}
-                </div>
-              </div>
-              
-              <div>
-                <h4 style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #333;">🕐 Pes per Període</h4>
-                <p style="font-size: 0.75rem; color: #666; margin-bottom: 0.5rem;">Hores centrals = més gent a muntanya</p>
-                <div style="display: grid; grid-template-columns: 1fr 70px; gap: 0.4rem;">
-                  ${Object.entries(riscParams.periodes).map(([periode, pes]) => `
-                    <label style="font-size: 0.8rem; display: flex; align-items: center;">${periode}h</label>
-                    <input type="number" step="0.1" min="0" max="2" value="${pes}" 
-                      class="risc-form-input" style="padding: 0.3rem; font-size: 0.8rem; text-align: center;"
-                      onchange="riscParams.periodes['${periode}'] = parseFloat(this.value)">
-                  `).join('')}
-                </div>
-                
-                <h4 style="margin: 1rem 0 0.75rem; font-size: 0.9rem; color: #333;">⚠️ Pes per Nivell Alerta</h4>
-                <div style="display: grid; grid-template-columns: 1fr 70px; gap: 0.4rem;">
-                  ${Object.entries(riscParams.nivells).map(([nivell, pes]) => `
-                    <label style="font-size: 0.8rem; display: flex; align-items: center;">
-                      <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 0.5rem; background: ${nivell === 'Groc' ? '#facc15' : nivell === 'Taronja' ? '#f97316' : '#ef4444'};"></span>
-                      ${nivell}
-                    </label>
-                    <input type="number" step="0.1" min="0" max="2" value="${pes}" 
-                      class="risc-form-input" style="padding: 0.3rem; font-size: 0.8rem; text-align: center;"
-                      onchange="riscParams.nivells['${nivell}'] = parseFloat(this.value)">
-                  `).join('')}
-                </div>
-                
-                <h4 style="margin: 1rem 0 0.75rem; font-size: 0.9rem; color: #333;">📊 Normalitzador</h4>
-                <div style="display: grid; grid-template-columns: 1fr 70px; gap: 0.4rem;">
-                  <label style="font-size: 0.8rem;">Divisor (÷)</label>
-                  <input type="number" step="0.5" min="0.5" max="20" value="${riscParams.normalitzador}" 
-                    class="risc-form-input" style="padding: 0.3rem; font-size: 0.8rem; text-align: center;"
-                    onchange="riscParams.normalitzador = parseFloat(this.value)">
-                </div>
+
+            <!-- 1. Càlcul real d'avui -->
+            <div style="background:#f0f7ff;border:1px solid #0082d9;border-radius:6px;padding:0.75rem;margin-bottom:1.25rem;font-size:0.8rem;">
+              <strong>📊 Càlcul real d'avui</strong>
+              <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.6rem;margin-left:0.75rem;" onclick="renderCalcRealAvui()">🔄 Recalcular</button>
+              <div id="calc-real-avui" style="margin-top:0.5rem;">
+                <span style="color:#999;font-style:italic;">Carregant...</span>
               </div>
             </div>
-            
-            <div style="background: #fff9e6; border: 1px solid #f59e0b; border-radius: 6px; padding: 0.75rem; margin-top: 1.25rem; font-size: 0.8rem;">
-              <strong>📋 Exemples de càlcul (resultat 0-6):</strong><br>
-              • Avís groc Pirineu 12-18h: 0.3 × 1.0 × 1.0 = 0.30 → <strong>0.3/6</strong><br>
-              • Alerta taronja Pirineu tot el dia: ~2.70 → <strong>2.7/6</strong><br>
-              • Situació greu (vent vermell + neu): ~5.00 → <strong>5.0/6</strong>
+
+            <!-- 2. Fórmula -->
+            <div style="background:#f0f7ff;border:1px solid #0082d9;border-radius:6px;padding:0.75rem;margin-bottom:1.25rem;font-size:0.85rem;">
+              <strong>📐 Fórmula — Càlcul Risc SMP per GRAE</strong><br>
+              <span style="color:#555;">Es compten les zones de muntanya afectades per alertes:</span>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.3rem;margin-top:0.5rem;font-size:0.78rem;text-align:center;">
+                <span style="background:#e8f5e9;border-radius:4px;padding:0.2rem 0.3rem;"><strong>0</strong> Cap alerta</span>
+                <span style="background:#fffde7;border-radius:4px;padding:0.2rem 0.3rem;"><strong>1</strong> &lt;3 zones groc</span>
+                <span style="background:#fffde7;border-radius:4px;padding:0.2rem 0.3rem;"><strong>2</strong> ≥3 zones groc</span>
+                <span style="background:#fff3e0;border-radius:4px;padding:0.2rem 0.3rem;"><strong>3</strong> &lt;3 zones taronja</span>
+                <span style="background:#fff3e0;border-radius:4px;padding:0.2rem 0.3rem;"><strong>4</strong> ≥3 zones taronja</span>
+                <span style="background:#ffebee;border-radius:4px;padding:0.2rem 0.3rem;"><strong>5</strong> &lt;3 zones vermell</span>
+                <span style="background:#ffebee;border-radius:4px;padding:0.2rem 0.3rem;"><strong>6</strong> ≥3 zones vermell</span>
+                <span></span><span></span>
+              </div>
+              <p style="font-size:0.75rem;color:#666;margin:0.5rem 0 0;">Cada zona compta una sola vegada pel seu nivell màxim del dia.</p>
             </div>
-            
-            <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem; justify-content: flex-end;">
-              <button class="risc-btn" onclick="resetRiscParams()">🔄 Reset defecte</button>
-              <button class="risc-btn risc-btn-primary" onclick="aplicarITornar()">💾 Guardar i tornar</button>
+
+            <!-- 3. Modificació manual -->
+            <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:8px;padding:1rem;margin-bottom:1.25rem;">
+              <h4 style="margin:0 0 0.75rem;font-size:0.95rem;color:#92400e;">✏️ Modificació manual Càlcul Risc SMP per GRAE</h4>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:0.75rem;align-items:start;">
+                <div>
+                  <label style="font-size:0.78rem;color:#555;display:block;margin-bottom:0.25rem;">Valor SMP (0–6)</label>
+                  <input id="smp-override-valor" type="number" min="0" max="6" step="1" value=""
+                    placeholder="0–6"
+                    class="risc-form-input" style="width:70px;padding:0.4rem;font-size:1rem;text-align:center;font-weight:700;">
+                </div>
+                <div>
+                  <label style="font-size:0.78rem;color:#555;display:block;margin-bottom:0.25rem;">Motiu de la modificació</label>
+                  <textarea id="smp-override-motiu" rows="2" placeholder="Descriu el motiu..."
+                    style="width:100%;box-sizing:border-box;padding:0.4rem;font-size:0.82rem;border:1px solid #d1d5db;border-radius:4px;resize:vertical;"></textarea>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.75rem;">
+                <span id="smp-override-feedback" style="font-size:0.78rem;color:#555;"></span>
+                <button class="risc-btn risc-btn-primary" style="background:#f59e0b;border-color:#d97706;" onclick="guardarSMPOverride()">💾 Guardar modificació</button>
+              </div>
+              <div id="smp-override-historic" style="margin-top:0.75rem;font-size:0.75rem;color:#666;"></div>
+            </div>
+
+            <!-- 4. Simulador -->
+            <div style="background:#f0fff4;border:1px solid #22c55e;border-radius:6px;padding:0.75rem;margin-bottom:1.25rem;">
+              <strong style="font-size:0.85rem;">🧮 Simulador de càlcul</strong>
+              <p style="font-size:0.75rem;color:#555;margin:0.25rem 0 0.75rem;">Selecciona zona i nivell per simular el resultat SMP.</p>
+              <div id="sim-files"></div>
+              <button class="risc-btn" style="margin-top:0.5rem;font-size:0.8rem;" onclick="simAfegirFila()">＋ Afegir zona</button>
+              <div id="sim-resultat" style="margin-top:0.75rem;padding:0.6rem 0.9rem;background:#fff;border-radius:6px;border:1px solid #86efac;font-size:0.85rem;">
+                Afegeix zones per simular
+              </div>
+            </div>
+
+            <!-- 5. Historial alertes SMP -->
+            <div style="background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:0.75rem;margin-bottom:1.25rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.4rem;">
+                <strong style="font-size:0.85rem;">🗂️ Historial alertes SMP</strong>
+                <div style="display:flex;gap:0.3rem;flex-wrap:wrap;align-items:center;">
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(-10)">← 100 dies</button>
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(-1)">← 10 dies</button>
+                  <span id="smp-historic-pag" style="font-size:0.75rem;color:#666;padding:0.2rem 0.4rem;"></span>
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(1)">10 dies →</button>
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(10)">100 dies →</button>
+                  <button class="risc-btn risc-btn-primary" style="font-size:0.75rem;padding:0.2rem 0.6rem;" onclick="smpHistoricPage=0;carregarSMPHistoric()">🔄 Carregar</button>
+                </div>
+              </div>
+              <div id="smp-historic-taula" style="font-size:0.78rem;">
+                <span style="color:#999;font-style:italic;">Prem "Carregar" per veure l'historial.</span>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;justify-content:flex-end;">
+              <button class="risc-btn" onclick="renderRisc()">← Tornar</button>
             </div>
           </div>
         </div>
-        
+
         <!-- Tab Allaus -->
         <div id="param-allaus" class="param-tab" style="display: none;">
           <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem;">
@@ -4387,6 +4751,10 @@
       // Mostrar el tab seleccionat
       document.getElementById('param-' + tab).style.display = 'block';
       document.getElementById('tab-' + tab).classList.add('risc-btn-primary');
+      if (tab === 'smp') {
+        renderCalcRealAvui();
+        carregarSMPOverrideHistoric();
+      }
       if (tab === 'errors') {
         document.getElementById('errors-list').innerHTML = renderErrorLog();
         // Netejar badge
@@ -4487,7 +4855,7 @@
     }
     
     // Carregar tot al iniciar
-    renderRisc();  // Carregar primer la secció de risc (és la que s'obre per defecte)
+    carregarRiscConfig().then(() => renderRisc());  // Config de Supabase primer, després renderitza risc
     carregarBPA();
     carregarPrevisio();
     carregarSMP();
