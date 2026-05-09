@@ -1780,10 +1780,8 @@
         `;
       } else {
         // Obtenir avui i demà
-        const avui = new Date().toISOString().split('T')[0];
-        const demaDate = new Date();
-        demaDate.setDate(demaDate.getDate() + 1);
-        const dema = demaDate.toISOString().split('T')[0];
+        const avui = localDateStr(0);
+        const dema  = localDateStr(1);
         
         const periodes = ['00-06', '06-12', '12-18', '18-00'];
         
@@ -1994,9 +1992,9 @@
       }
       
       // Secció càlcul risc SMP
-      const avui = new Date().toISOString().split('T')[0];
-      const ahir = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      const dema = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      const avui = localDateStr(0);
+      const ahir  = localDateStr(-1);
+      const dema  = localDateStr(1);
       
       const smpAhir = calcularSMPPonderat(ahir);
       const smpAvui = calcularSMPPonderat(avui);
@@ -3676,7 +3674,11 @@
     function getRiscDateString(offset = 0) {
       const d = new Date();
       d.setDate(d.getDate() + offset);
-      return d.toISOString().split('T')[0];
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function localDateStr(offset = 0) {
+      return getRiscDateString(offset);
     }
     
     function formatRiscDate(dateStr) {
@@ -3759,15 +3761,12 @@
         resultat.notes.push(`SMP: ${smpCalc.explicacio}`);
       }
       
-      // 2. RISC ALLAUS (BPA) - rang 0-5
-      // Convertir nivell BPA (1-5) a valor (0-5): nivell 1=0, 2=1, 3=2, 4=3, 5=5... usem (perill-1)*1.25
+      // 2. RISC ALLAUS (BPA) - valor màxim del dia directe (1-5)
       if (dadesCarregades.bpa && dadesCarregades.bpa.resum) {
         const perillMax = dadesCarregades.bpa.resum.perill_maxim_numeric || 1;
-        // Nivell 1=0, 2=1.25, 3=2.5, 4=3.75, 5=5
-        resultat.allaus = Math.round(Math.max(0, (perillMax - 1) * 1.25));
-        
+        resultat.allaus = perillMax;
         if (perillMax >= 3) {
-          resultat.notes.push(`BPA: nivell ${perillMax} → ${resultat.allaus}/5`);
+          resultat.notes.push(`BPA: perill ${perillMax}/5`);
         }
       }
       
@@ -3908,11 +3907,11 @@
     }
     
     function getAllausLabel(val) {
-      if (val == 0) return 'Feble';
-      if (val == 1) return 'Moderat';
+      if (val <= 1) return 'Feble';
+      if (val == 2) return 'Limitat';
       if (val == 3) return 'Marcat';
       if (val == 4) return 'Fort';
-      if (val == 5) return 'Molt fort';
+      if (val >= 5) return 'Molt fort';
       return 'Feble';
     }
     
@@ -4286,6 +4285,18 @@
         const meteors = [...new Set(rows.map(r => r.meteor))].join(', ');
         const nivellMax = Object.values(zonesMax).sort((a,b)=>(nivellOrdre[b]||0)-(nivellOrdre[a]||0))[0]||'—';
 
+        // SMP numèric: zones actives amb alertes (mateixa lògica que calcularSMPPonderat)
+        const grupActiu = new Set();
+        for (const r of rows) {
+          const grup = riscParams.zonesGrup[r.zona] || r.zona;
+          if ((riscParams.zones[grup] ?? -1) > 0) grupActiu.add(grup);
+        }
+        const smpNum = grupActiu.size;
+
+        // Probabilitat màxima del dia
+        const maxProb = rows.reduce((mx, r) => Math.max(mx, r.probabilitat || 0), 0);
+        const probTxt = maxProb > 0 ? `<span style="color:#555;font-size:0.72rem;font-weight:400;"> · ${maxProb}%</span>` : '';
+
         // Files d'override per aquest dia
         const ovFiles = (overridePerDia[diaStr] || []).map(ov => {
           const hora = new Date(ov.data_hora).toLocaleTimeString('ca', { hour:'2-digit', minute:'2-digit' });
@@ -4298,7 +4309,10 @@
 
         return `<tr style="border-bottom:1px solid #eee;">
           <td style="padding:0.3rem 0.5rem;white-space:nowrap;font-weight:600;">${dataFmt}</td>
-          <td style="padding:0.3rem 0.5rem;font-weight:700;color:${nivellColor[nivellMax]||'#333'};">${nivellMax}</td>
+          <td style="padding:0.3rem 0.5rem;white-space:nowrap;">
+            <span style="font-weight:700;font-size:1rem;color:${nivellColor[nivellMax]||'#388e3c'};">${smpNum}</span>
+            <span style="font-weight:600;font-size:0.75rem;color:${nivellColor[nivellMax]||'#555'};margin-left:0.25rem;">${nivellMax !== '—' ? nivellMax : ''}</span>${probTxt}
+          </td>
           <td style="padding:0.3rem 0.5rem;line-height:1.8;">${resum}</td>
           <td style="padding:0.3rem 0.5rem;color:#666;font-size:0.75rem;">${meteors}</td>
         </tr>${ovFiles}`;
@@ -4308,7 +4322,7 @@
         <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
           <thead><tr style="background:#e3f2fd;">
             <th style="padding:0.3rem 0.5rem;text-align:left;">Dia</th>
-            <th style="padding:0.3rem 0.5rem;text-align:left;">Nivell màx.</th>
+            <th style="padding:0.3rem 0.5rem;text-align:left;">SMP · Prob.</th>
             <th style="padding:0.3rem 0.5rem;text-align:left;">Zones afectades</th>
             <th style="padding:0.3rem 0.5rem;text-align:left;">Fenòmens</th>
           </tr></thead>
