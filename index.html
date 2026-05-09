@@ -1708,7 +1708,7 @@
     const ZONES_GRUPS = {
       'Pirineu Occidental': ['Pirineu Occidental', 'Pirineu Central'],
       'Pirineu Oriental': ['Pirineu Oriental', 'Prepirineu'],
-      'Empordà': ['Empordà', 'Litoral Nord'],
+      'Costa Brava': ['Costa Brava', 'Litoral Nord'],
       'Litoral Central': ['Litoral Central', 'Vallès', 'Penedès'],
       'Plana de Lleida': ['Plana de Lleida', 'Catalunya Central'],
       'Camp de Tarragona': ['Camp de Tarragona', 'Serres de Prades i Montsant'],
@@ -1716,7 +1716,7 @@
     };
     
     const ZONES_ORDRE = [
-      'Pirineu Occidental', 'Pirineu Oriental', 'Empordà', 
+      'Pirineu Occidental', 'Pirineu Oriental', 'Costa Brava', 
       'Litoral Central', 'Plana de Lleida', 'Camp de Tarragona', "Terres de l'Ebre"
     ];
     
@@ -2036,7 +2036,7 @@
           </div>
           
           <div style="background: #e3f2fd; border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.8rem;">
-            <strong>Zones considerades:</strong> Pirineu Occidental, Pirineu Oriental, Empordà, Litoral Central, Plana de Lleida, Camp de Tarragona, Terres de l'Ebre
+            <strong>Zones considerades:</strong> Pirineu Occidental, Pirineu Oriental, Costa Brava, Litoral Central, Plana de Lleida, Camp de Tarragona, Terres de l'Ebre, Zona Marítima
           </div>
           
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
@@ -3513,11 +3513,12 @@
       zones: {
         'Pirineu Occidental': 1,
         'Pirineu Oriental': 1,
-        'Empordà': 1,
+        'Costa Brava': 1,
         'Litoral Central': 1,
         'Plana de Lleida': 1,
         'Camp de Tarragona': 1,
         "Terres de l'Ebre": 1,
+        'Zona Marítima': 1,
       },
       // Mapeig de zona original a grup (per agrupar alertes)
       zonesGrup: {
@@ -3525,8 +3526,9 @@
         'Pirineu Central': 'Pirineu Occidental',
         'Pirineu Oriental': 'Pirineu Oriental',
         'Prepirineu': 'Pirineu Oriental',
-        'Empordà': 'Empordà',
-        'Litoral Nord': 'Empordà',
+        'Costa Brava': 'Costa Brava',
+        'Litoral Nord': 'Costa Brava',
+        "Gironès i Pla de l'Estany": 'Costa Brava',
         'Litoral Central': 'Litoral Central',
         'Vallès': 'Litoral Central',
         'Penedès': 'Litoral Central',
@@ -3535,6 +3537,18 @@
         'Camp de Tarragona': 'Camp de Tarragona',
         'Serres de Prades i Montsant': 'Camp de Tarragona',
         "Terres de l'Ebre": "Terres de l'Ebre",
+        'Comarca 88': 'Zona Marítima',
+        'Comarca 89': 'Zona Marítima',
+        'Comarca 90': 'Zona Marítima',
+        'Comarca 91': 'Zona Marítima',
+        'Comarca 92': 'Zona Marítima',
+        'Comarca 93': 'Zona Marítima',
+        'Comarca 94': 'Zona Marítima',
+        'Comarca 95': 'Zona Marítima',
+        'Comarca 96': 'Zona Marítima',
+        'Comarca 97': 'Zona Marítima',
+        'Comarca 98': 'Zona Marítima',
+        'Comarca 99': 'Zona Marítima',
       },
       periodes: {
         '00-06': 0.3,
@@ -3556,7 +3570,7 @@
         id: 1,
         pes_pirineu_occidental: p.zones['Pirineu Occidental'],
         pes_pirineu_oriental:   p.zones['Pirineu Oriental'],
-        pes_emporda:            p.zones['Empordà'],
+        pes_emporda:            p.zones['Costa Brava'],
         pes_litoral_central:    p.zones['Litoral Central'],
         pes_plana_lleida:       p.zones['Plana de Lleida'],
         pes_camp_tarragona:     p.zones['Camp de Tarragona'],
@@ -3580,7 +3594,7 @@
         zones: {
           'Pirineu Occidental': +row.pes_pirineu_occidental,
           'Pirineu Oriental':   +row.pes_pirineu_oriental,
-          'Empordà':            +row.pes_emporda,
+          'Costa Brava':            +row.pes_emporda,
           'Litoral Central':    +row.pes_litoral_central,
           'Plana de Lleida':    +row.pes_plana_lleida,
           'Camp de Tarragona':  +row.pes_camp_tarragona,
@@ -4138,15 +4152,20 @@
     }
     
     // ── Historial alertes SMP ──────────────────────────────────
-    let smpHistoricPage = 0;
-    let smpHistoricDies = []; // timestamps únics (un per sessió de consulta), desc
+    let smpHistoricMes = null;  // 'YYYY-MM' del mes mostrat
+    let smpHistoricMesos = [];  // llista de 'YYYY-MM' amb dades, ordre desc
+
+    function _nextMonth(mesStr) {
+      const [y, m] = mesStr.split('-').map(Number);
+      return m === 12 ? `${y+1}-01` : `${y}-${String(m+1).padStart(2,'0')}`;
+    }
 
     async function carregarSMPHistoric() {
       const el = document.getElementById('smp-historic-taula');
       if (!el) return;
-      el.innerHTML = '<span style="color:#999;font-style:italic;">Carregant índex de dies...</span>';
-      smpHistoricDies = [];
-      smpHistoricPage = 0;
+      el.innerHTML = '<span style="color:#999;font-style:italic;">Carregant índex de mesos...</span>';
+      smpHistoricMesos = [];
+      smpHistoricMes = null;
 
       try {
         // Obtenir tots els timestamps únics: 3 lots de 1000 files (camp lleuger)
@@ -4158,52 +4177,68 @@
         const totes = [...(r0.data||[]), ...(r1.data||[]), ...(r2.data||[])];
         if (!totes.length) { el.innerHTML = '<span style="color:#999;">Sense dades.</span>'; return; }
 
-        // Timestamps únics (cada dia de consulta té el mateix timestamp exacte)
-        const vistos = new Set();
-        for (const r of totes) {
-          if (!vistos.has(r.data_consulta)) vistos.add(r.data_consulta);
-        }
-        smpHistoricDies = [...vistos].sort((a, b) => b.localeCompare(a));
+        // Extreure mesos únics (YYYY-MM) de tots els timestamps
+        const mesoSet = new Set();
+        for (const r of totes) mesoSet.add(r.data_consulta.substring(0, 7));
+        smpHistoricMesos = [...mesoSet].sort().reverse(); // desc: primer el més recent
+        smpHistoricMes = smpHistoricMesos[0];
 
-        await smpHistoricCarregarPagina();
+        await smpHistoricCarregarMes();
       } catch(e) {
         el.innerHTML = `<span style="color:#c62828;">Error: ${e.message || e}</span>`;
       }
     }
 
-    async function smpHistoricCarregarPagina() {
-      const PAGE = 10;
+    async function smpHistoricCarregarMes() {
       const el = document.getElementById('smp-historic-taula');
       const pagEl = document.getElementById('smp-historic-pag');
-      if (!el || !smpHistoricDies.length) return;
-
-      const diesPagina = smpHistoricDies.slice(smpHistoricPage * PAGE, (smpHistoricPage + 1) * PAGE);
-      if (!diesPagina.length) { el.innerHTML = '<span style="color:#999;">Sense més dades.</span>'; return; }
-
-      const total = smpHistoricDies.length;
-      const ini = smpHistoricPage * PAGE + 1;
-      const fi = Math.min(ini + PAGE - 1, total);
-      if (pagEl) pagEl.textContent = `${ini}–${fi} / ${total} dies`;
+      const mesNoms = ['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
+      if (!el || !smpHistoricMes) return;
 
       el.innerHTML = '<span style="color:#999;font-style:italic;">Carregant...</span>';
 
+      // Actualitzar indicador de mes
+      if (pagEl) {
+        const [y, m] = smpHistoricMes.split('-').map(Number);
+        const idxActual = smpHistoricMesos.indexOf(smpHistoricMes);
+        const total = smpHistoricMesos.length;
+        pagEl.textContent = `${mesNoms[m-1]} ${y} (${total - idxActual}/${total})`;
+      }
+
       try {
-        // Fetch les files exactes dels 10 timestamps d'aquesta pàgina
+        const mesIni = smpHistoricMes + '-01';
+        const mesFi  = _nextMonth(smpHistoricMes) + '-01';
+
         const { data, error } = await sbClient
           .from('smp_historic')
           .select('data_consulta,dia,zona,nivell,meteor,llindar,periodes,probabilitat')
-          .in('data_consulta', diesPagina)
+          .gte('data_consulta', mesIni)
+          .lt('data_consulta', mesFi)
           .order('data_consulta', { ascending: false });
         if (error) throw error;
 
-        // Agrupar per timestamp
+        // Agrupar per timestamp de consulta
         const grups = {};
         for (const r of (data||[])) {
           if (!grups[r.data_consulta]) grups[r.data_consulta] = [];
           grups[r.data_consulta].push(r);
         }
+        const diesMes = Object.keys(grups).sort().reverse();
 
-        smpHistoricRenderTaula(diesPagina, grups);
+        if (!diesMes.length) {
+          el.innerHTML = '<span style="color:#999;">Sense dades per aquest mes.</span>';
+          return;
+        }
+
+        // Actualitzar el comptador amb els dies reals del mes
+        if (pagEl) {
+          const [y, m] = smpHistoricMes.split('-').map(Number);
+          const idxActual = smpHistoricMesos.indexOf(smpHistoricMes);
+          const total = smpHistoricMesos.length;
+          pagEl.textContent = `${mesNoms[m-1]} ${y} · ${diesMes.length} dies`;
+        }
+
+        smpHistoricRenderTaula(diesMes, grups);
       } catch(e) {
         el.innerHTML = `<span style="color:#c62828;">Error: ${e.message || e}</span>`;
       }
@@ -4256,12 +4291,12 @@
         </table>`;
     }
 
-    async function smpHistoricNav(delta) {
-      if (!smpHistoricDies.length) return;
-      const PAGE = 10;
-      const maxPage = Math.max(0, Math.ceil(smpHistoricDies.length / PAGE) - 1);
-      smpHistoricPage = Math.max(0, Math.min(maxPage, smpHistoricPage + delta));
-      await smpHistoricCarregarPagina();
+    async function smpHistoricNavMes(delta) {
+      if (!smpHistoricMesos.length) return;
+      const idx = smpHistoricMesos.indexOf(smpHistoricMes);
+      const nouIdx = Math.max(0, Math.min(smpHistoricMesos.length - 1, idx + delta));
+      smpHistoricMes = smpHistoricMesos[nouIdx];
+      await smpHistoricCarregarMes();
     }
     // ───────────────────────────────────────────────────────────
 
@@ -4471,7 +4506,7 @@
           zones: {
             'Pirineu Occidental': 1,
             'Pirineu Oriental': 1,
-            'Empordà': 1,
+            'Costa Brava': 1,
             'Litoral Central': 1,
             'Plana de Lleida': 1,
             'Camp de Tarragona': 1,
@@ -4482,8 +4517,8 @@
             'Pirineu Central': 'Pirineu Occidental',
             'Pirineu Oriental': 'Pirineu Oriental',
             'Prepirineu': 'Pirineu Oriental',
-            'Empordà': 'Empordà',
-            'Litoral Nord': 'Empordà',
+            'Costa Brava': 'Costa Brava',
+            'Litoral Nord': 'Costa Brava',
             'Litoral Central': 'Litoral Central',
             'Vallès': 'Litoral Central',
             'Penedès': 'Litoral Central',
@@ -4597,12 +4632,10 @@
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.4rem;">
                 <strong style="font-size:0.85rem;">🗂️ Historial alertes SMP</strong>
                 <div style="display:flex;gap:0.3rem;flex-wrap:wrap;align-items:center;">
-                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(-10)">← 100 dies</button>
-                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(-1)">← 10 dies</button>
-                  <span id="smp-historic-pag" style="font-size:0.75rem;color:#666;padding:0.2rem 0.4rem;"></span>
-                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(1)">10 dies →</button>
-                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNav(10)">100 dies →</button>
-                  <button class="risc-btn risc-btn-primary" style="font-size:0.75rem;padding:0.2rem 0.6rem;" onclick="smpHistoricPage=0;carregarSMPHistoric()">🔄 Carregar</button>
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNavMes(1)">← Mes anterior</button>
+                  <span id="smp-historic-pag" style="font-size:0.75rem;color:#666;padding:0.2rem 0.4rem;min-width:9rem;text-align:center;display:inline-block;"></span>
+                  <button class="risc-btn" style="font-size:0.75rem;padding:0.2rem 0.5rem;" onclick="smpHistoricNavMes(-1)">Mes següent →</button>
+                  <button class="risc-btn risc-btn-primary" style="font-size:0.75rem;padding:0.2rem 0.6rem;" onclick="carregarSMPHistoric()">🔄 Carregar</button>
                 </div>
               </div>
               <div id="smp-historic-taula" style="font-size:0.78rem;">
