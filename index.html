@@ -1405,16 +1405,121 @@
         badge.style.display = 'inline';
       }
       
-      // Agrupar zones per nivell de perill
-      const grups = {};
-      bpa.zones.forEach(zona => {
-        const nivell = zona.perill_numeric || 0;
-        if (!grups[nivell]) grups[nivell] = [];
-        grups[nivell].push(zona);
+      // Zones ordenades de major a menor perill, agrupant les que tenen problemes idèntics
+      const zonesOrd = [...bpa.zones].sort((a, b) => (b.perill_numeric || 0) - (a.perill_numeric || 0));
+      const _grpMap = new Map();
+      const zonesAgrup = [];
+      zonesOrd.forEach(zona => {
+        const probs = zona.problems || [];
+        const p1 = probs.find(p => p.priority == '1');
+        const p2 = probs.find(p => p.priority == '2');
+        const key = [
+          zona.perill_numeric || 0,
+          p1 ? `${p1.id_tipus_situacio}|${p1.origen}|${p1.mida}|${p1.tendencia}` : '',
+          p2 ? `${p2.id_tipus_situacio}|${p2.origen}|${p2.mida}|${p2.tendencia}` : '',
+        ].join('::');
+        if (_grpMap.has(key)) {
+          _grpMap.get(key).noms.push(zona.nom);
+        } else {
+          const g = { zona, noms: [zona.nom] };
+          _grpMap.set(key, g);
+          zonesAgrup.push(g);
+        }
       });
-      
-      const nivellsOrdenats = Object.keys(grups).sort((a, b) => b - a);
-      
+
+      const ORIGEN  = { '1':'Natural', '2':'Accidental', '3':'Natural i accidental' };
+      const MIDA    = { '1':'Petita (D1)', '2':'Mitjana (D2)', '3':'Gran (D3)', '4':'Molt gran (D4)', '5':'Extrema (D5)' };
+      const TEND_IC = { '1':'↘ Decreixent', '2':'→ Estacionari', '3':'↗ Creixent' };
+      const TEND_COLOR = { '1':'#c62828', '2':'#555', '3':'#1565c0' };
+      const ICGC_IMG = 'https://bpa.icgc.cat/img/level2/';
+      const DISTRIB_BASE = 'https://bpa.icgc.cat/butlletigenerator/assets/';
+
+      const pic = (type, code) => code
+        ? `<img src="${ICGC_IMG}${type}${code}.png" style="height:32px;vertical-align:middle;" title="${
+            type==='origen'?ORIGEN[code]:type==='mida'?MIDA[code]:type==='tendencia'?TEND_IC[code]:''
+          }" onerror="this.style.display='none'">`
+        : '';
+
+      const renderProblem = (prob, zona, etiqueta, colorBorde) => {
+        if (!prob) return `<div style="flex:1;padding:0.5rem 0.6rem;background:#f9f9f9;border-radius:6px;border-top:3px solid #ddd;color:#aaa;font-size:0.75rem;text-align:center;">Sense ${etiqueta.toLowerCase()}</div>`;
+        const origen  = ORIGEN[prob.origen]    || '—';
+        const mida    = MIDA[prob.mida]        || '—';
+        const tend    = TEND_IC[prob.tendencia] || '—';
+        const tendCol = TEND_COLOR[prob.tendencia] || '#555';
+        const distribImg = (zona.id_zona && prob.id_tipus_situacio)
+          ? `<img src="${DISTRIB_BASE}Distribucio_${bpa.data}_Zona_${zona.id_zona}_Situacio_${prob.id_tipus_situacio}.png"
+               style="height:56px;border-radius:4px;margin-bottom:0.4rem;" onerror="this.style.display='none'">`
+          : '';
+        return `
+          <div style="flex:1;padding:0.5rem 0.6rem;background:#f8f8f8;border-radius:6px;border-top:3px solid ${colorBorde};">
+            <div style="font-size:0.65rem;font-weight:700;color:#546e7a;text-transform:uppercase;margin-bottom:0.35rem;">${etiqueta}</div>
+            ${distribImg}
+            <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;">
+              ${pic('situacio', prob.id_tipus_situacio)}
+              <span style="font-weight:600;font-size:0.8rem;">${prob.tipus_situacio || '—'}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.25rem;">
+              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;">
+                ${pic('origen', prob.origen)}<span>Origen: <strong>${origen}</strong></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;">
+                ${pic('mida', prob.mida)}<span>Mida: <strong>${mida}</strong></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:${tendCol};">
+                ${pic('tendencia', prob.tendencia)}<span>Tendència: <strong>${tend}</strong></span>
+              </div>
+            </div>
+          </div>`;
+      };
+
+      const zonesHtml = zonesAgrup.map(({ zona, noms }) => {
+        const nivellNum = zona.perill_numeric || 0;
+        const nomNivell = getPerillNom(nivellNum);
+        const emoji = getPerillEmoji(nivellNum);
+        const cota = zona.cota_critica?.trim() || '';
+        const probs = zona.problems || [];
+        const primari   = probs.find(p => p.priority == '1') || null;
+        const secundari = probs.find(p => p.priority == '2') || null;
+        const nomPrimari   = primari?.tipus_situacio   || zona.situacio_primaria?.trim()   || '';
+        const nomSecundari = secundari?.tipus_situacio || zona.situacio_secundaria?.trim() || '';
+        const distribucio  = (zona.text_distribucio || zona.distribucio_mantell || '').trim();
+        const tendencia    = (zona.text_tendencia   || zona.tendencia || '').trim();
+        const estatMantell = (zona.text_estat_mantell || '').trim();
+
+        const detall = (icona, titol, text, bgColor) => text ? `
+            <details style="border-top:1px solid #eee;">
+              <summary style="padding:0.4rem 0.75rem;background:${bgColor};cursor:pointer;font-size:0.7rem;font-weight:700;color:#444;text-transform:uppercase;list-style:none;display:flex;align-items:center;gap:0.3rem;">
+                <span style="font-size:0.75rem;">▶</span> ${icona} ${titol}
+              </summary>
+              <div style="padding:0.5rem 0.75rem;font-size:0.75rem;color:#333;line-height:1.5;background:#fff;">${text}</div>
+            </details>` : '';
+
+        const colPrincipal = primari
+          ? renderProblem(primari, zona, 'Perill principal', '#e53935')
+          : (nomPrimari ? `<div style="flex:1;padding:0.5rem;background:#f8f8f8;border-radius:6px;border-top:3px solid #e53935;font-size:0.8rem;">Principal: ${nomPrimari}</div>` : renderProblem(null, zona, 'Perill principal', '#ddd'));
+        const colSecundari = secundari
+          ? renderProblem(secundari, zona, 'Perill secundari', '#fb8c00')
+          : (nomSecundari ? `<div style="flex:1;padding:0.5rem;background:#f8f8f8;border-radius:6px;border-top:3px solid #fb8c00;font-size:0.8rem;">Secundari: ${nomSecundari}</div>` : renderProblem(null, zona, 'Perill secundari', '#ddd'));
+
+        return `
+          <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-bottom:0.75rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.75rem;background:#f5f5f5;border-bottom:1px solid #e0e0e0;">
+              <strong style="font-size:0.9rem;">${emoji} ${noms.join(' · ')}</strong>
+              <div style="display:flex;align-items:center;gap:0.5rem;">
+                ${cota ? `<span style="font-size:0.68rem;color:#666;">Cota: ${cota}</span>` : ''}
+                <span style="font-size:0.7rem;font-weight:700;padding:0.15rem 0.45rem;border-radius:3px;background:${['','#43a047','#fdd835','#ef6c00','#e53935','#7b1fa2'][nivellNum]||'#333'};color:${nivellNum==2?'#333':'#fff'};">${nomNivell} (${nivellNum})</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.5rem;padding:0.6rem;">
+              ${colPrincipal}
+              ${colSecundari}
+            </div>
+            ${detall('❄️', 'Estat del mantell nival', estatMantell, '#e3f2fd')}
+            ${detall('🗺️', 'Distribució', distribucio, '#fafafa')}
+            ${detall('📈', 'Tendència', tendencia, '#f1f8e9')}
+          </div>`;
+      }).join('');
+
       let html = `
         <div class="bpa-header-compact perill-${bpa.resum.perill_maxim_numeric}">
           <div class="bpa-header-left">
@@ -1433,76 +1538,10 @@
             </div>
           </div>
         </div>
-        
+
         <div class="bpa-main">
           <div class="bpa-grups">
-      `;
-      
-      nivellsOrdenats.forEach(nivell => {
-        const zones = grups[nivell];
-        const nivellNum = parseInt(nivell);
-        const nomNivell = getPerillNom(nivellNum);
-        const emoji = getPerillEmoji(nivellNum);
-        const nomsZones = zones.map(z => z.nom).join(' · ');
-        
-        let problemaDesc = nivellNum >= 3 
-          ? "Plaques molt fràgils sota colls i carenes. Poden caure al pas d'un esquiador. Mida mitjana-gran."
-          : "Plaques a sotavent. Poden generar allaus mida petita-mitjana.";
-        
-        let taulaGruix = zones.map(zona => {
-          let gruix = "-";
-          const gruixMatch = zona.distribucio_mantell?.match(/(\d{2,3}[-–]\d{2,3})\s*cm/);
-          if (gruixMatch) gruix = gruixMatch[1] + " cm";
-          
-          let cotaNeu = "-";
-          const cotaMatch = zona.distribucio_mantell?.match(/neu[^.]*?(\d[\d.]*)\s*m/i);
-          if (cotaMatch) cotaNeu = cotaMatch[1] + "m";
-          
-          return `<tr><td>${zona.nom}</td><td>${gruix}</td><td>${cotaNeu}</td></tr>`;
-        }).join('');
-        
-        html += `
-          <div class="grup">
-            <div class="grup-header">
-              <span style="font-size: 1.5rem;">${emoji}</span>
-              <h3>PERILL ${nomNivell} (${nivell})</h3>
-            </div>
-            <p class="grup-zones"><strong>Zones:</strong> ${nomsZones}</p>
-            
-            <div class="problemes perill-${nivell}" style="border: 1px solid; margin-top: 0.75rem;">
-              <div class="problema-item">
-                <div class="problema-nom">❄️ Neu ventada (principal)</div>
-                <div class="problema-desc">${problemaDesc}</div>
-              </div>
-              <div class="problema-item">
-                <div class="problema-nom">💧 Neu humida (secundari)</div>
-                <div class="problema-desc">Purgues per sota 2.100m en vessants inclinats. Mida petita-mitjana.</div>
-              </div>
-            </div>
-            
-            ${zones[0]?.tendencia ? `
-              <div class="tendencia" style="margin-top: 0.75rem;">
-                <strong>📈 Tendència 48-72h:</strong>
-                ${zones[0].tendencia}
-              </div>
-            ` : ''}
-            
-            <details>
-              <summary>📏 Gruix de neu per zona</summary>
-              <div class="details-content">
-                <div class="taula-container">
-                  <table>
-                    <thead><tr><th>Zona</th><th>Gruix (2.200m)</th><th>Neu des de</th></tr></thead>
-                    <tbody>${taulaGruix}</tbody>
-                  </table>
-                </div>
-              </div>
-            </details>
-          </div>
-        `;
-      });
-      
-      html += `
+            ${zonesHtml}
           </div>
           <div class="bpa-mapa">
             <div class="loading" style="height:500px; display:flex; align-items:center; justify-content:center;">
@@ -1510,7 +1549,7 @@
             </div>
           </div>
         </div>
-        
+
         <footer>
           <a href="${bpa.url_pdf}" target="_blank" rel="noopener noreferrer" class="btn-pdf">📄 Veure PDF original</a>
           <p class="font-info">${bpa.font}</p>
@@ -1546,9 +1585,37 @@
         if (!response.ok) throw new Error("No s'han pogut carregar les dades");
         const bpa = await response.json();
         if (bpa.error) throw new Error(bpa.error);
-        dadesCarregades.bpa = bpa;  // Guardar dades
+
+        // Enriquir amb dades detallades de l'API ICGC (problems, origen, mida, tendència)
+        try {
+          const icgcResp = await fetch(
+            `https://bpa.icgc.cat/api/apiext/butlletiglobal?id=512&values=${bpa.data};1`
+          );
+          if (icgcResp.ok) {
+            const icgcZones = await icgcResp.json();
+            if (Array.isArray(icgcZones)) {
+              // Mapejar per nom i afegir camps detallats a cada zona del Gist
+              const icgcMap = {};
+              icgcZones.forEach(z => { icgcMap[z.nom_zona] = z; });
+              bpa.zones = bpa.zones.map(zona => {
+                const det = icgcMap[zona.nom];
+                if (!det) return zona;
+                return {
+                  ...zona,
+                  id_zona:       det.id_zona,
+                  problems:      det.problems || [],
+                  text_distribucio: det.text_distribucio || zona.distribucio_mantell || '',
+                  text_tendencia:   det.text_tendencia   || zona.tendencia || '',
+                  text_estat_mantell: det.text_estat_mantell || '',
+                };
+              });
+            }
+          }
+        } catch(_) { /* Si falla ICGC, continuem amb les dades del Gist */ }
+
+        dadesCarregades.bpa = bpa;
         renderBPA(bpa);
-        actualitzarRiscAuto();  // Actualitzar risc amb noves dades
+        actualitzarRiscAuto();
       } catch (error) {
         document.getElementById('app-bpa').innerHTML = `
           <div class="error">
@@ -3907,12 +3974,12 @@
     }
     
     function getAllausLabel(val) {
-      if (val <= 1) return 'Feble';
-      if (val == 2) return 'Limitat';
+      if (val == 1) return 'Feble';
+      if (val == 2) return 'Moderat';
       if (val == 3) return 'Marcat';
       if (val == 4) return 'Fort';
-      if (val >= 5) return 'Molt fort';
-      return 'Feble';
+      if (val == 5) return 'Molt fort';
+      return '—';
     }
     
     function renderRisc() {
