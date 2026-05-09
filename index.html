@@ -4209,12 +4209,20 @@
         const mesIni = smpHistoricMes + '-01';
         const mesFi  = _nextMonth(smpHistoricMes) + '-01';
 
-        const { data, error } = await sbClient
-          .from('smp_historic')
-          .select('data_consulta,dia,zona,nivell,meteor,llindar,periodes,probabilitat')
-          .gte('data_consulta', mesIni)
-          .lt('data_consulta', mesFi)
-          .order('data_consulta', { ascending: false });
+        const [{ data, error }, { data: overrides }] = await Promise.all([
+          sbClient
+            .from('smp_historic')
+            .select('data_consulta,dia,zona,nivell,meteor,llindar,periodes,probabilitat')
+            .gte('data_consulta', mesIni)
+            .lt('data_consulta', mesFi)
+            .order('data_consulta', { ascending: false }),
+          sbClient
+            .from('smp_override_historic')
+            .select('data_hora,valor_smp,motiu')
+            .gte('data_hora', mesIni)
+            .lt('data_hora', mesFi)
+            .order('data_hora', { ascending: false }),
+        ]);
         if (error) throw error;
 
         // Agrupar per timestamp de consulta
@@ -4230,21 +4238,27 @@
           return;
         }
 
+        // Agrupar overrides per dia (YYYY-MM-DD)
+        const overridePerDia = {};
+        for (const ov of (overrides||[])) {
+          const dia = ov.data_hora.substring(0, 10);
+          if (!overridePerDia[dia]) overridePerDia[dia] = [];
+          overridePerDia[dia].push(ov);
+        }
+
         // Actualitzar el comptador amb els dies reals del mes
         if (pagEl) {
           const [y, m] = smpHistoricMes.split('-').map(Number);
-          const idxActual = smpHistoricMesos.indexOf(smpHistoricMes);
-          const total = smpHistoricMesos.length;
           pagEl.textContent = `${mesNoms[m-1]} ${y} · ${diesMes.length} dies`;
         }
 
-        smpHistoricRenderTaula(diesMes, grups);
+        smpHistoricRenderTaula(diesMes, grups, overridePerDia);
       } catch(e) {
         el.innerHTML = `<span style="color:#c62828;">Error: ${e.message || e}</span>`;
       }
     }
 
-    function smpHistoricRenderTaula(diesPagina, grups) {
+    function smpHistoricRenderTaula(diesPagina, grups, overridePerDia = {}) {
       const el = document.getElementById('smp-historic-taula');
       if (!el) return;
 
@@ -4258,6 +4272,7 @@
         const rows = grups[ts] || [];
         const dt = new Date(ts);
         const dataFmt = `${diesNom[dt.getDay()]} ${dt.getDate()} ${mesoNom[dt.getMonth()]} ${dt.getFullYear()}`;
+        const diaStr = ts.substring(0, 10);
 
         const zonesMax = {};
         for (const r of rows) {
@@ -4271,12 +4286,22 @@
         const meteors = [...new Set(rows.map(r => r.meteor))].join(', ');
         const nivellMax = Object.values(zonesMax).sort((a,b)=>(nivellOrdre[b]||0)-(nivellOrdre[a]||0))[0]||'—';
 
+        // Files d'override per aquest dia
+        const ovFiles = (overridePerDia[diaStr] || []).map(ov => {
+          const hora = new Date(ov.data_hora).toLocaleTimeString('ca', { hour:'2-digit', minute:'2-digit' });
+          return `<tr style="background:#fffbeb;border-bottom:1px solid #fde68a;">
+            <td style="padding:0.2rem 0.5rem;color:#92400e;font-size:0.75rem;">✏️ ${hora}</td>
+            <td style="padding:0.2rem 0.5rem;font-weight:700;color:#92400e;">${ov.valor_smp}</td>
+            <td colspan="2" style="padding:0.2rem 0.5rem;color:#78350f;font-size:0.75rem;font-style:italic;">${ov.motiu}</td>
+          </tr>`;
+        }).join('');
+
         return `<tr style="border-bottom:1px solid #eee;">
           <td style="padding:0.3rem 0.5rem;white-space:nowrap;font-weight:600;">${dataFmt}</td>
           <td style="padding:0.3rem 0.5rem;font-weight:700;color:${nivellColor[nivellMax]||'#333'};">${nivellMax}</td>
           <td style="padding:0.3rem 0.5rem;line-height:1.8;">${resum}</td>
           <td style="padding:0.3rem 0.5rem;color:#666;font-size:0.75rem;">${meteors}</td>
-        </tr>`;
+        </tr>${ovFiles}`;
       }).join('');
 
       el.innerHTML = `
