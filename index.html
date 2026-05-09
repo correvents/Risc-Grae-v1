@@ -2591,6 +2591,7 @@
     };
     
     let modeConfiguracio = false;
+    let afluenciaTarget = 'app-afluencia';
     
     const mostrarInfoDia = (dataStr) => {
       const info = getInfoDia(dataStr);
@@ -2810,6 +2811,25 @@
       }
     };
     
+    const obrirEdicioAfluencia = () => {
+      const container = document.getElementById('afluencia-config-inline');
+      const btn = document.getElementById('btn-config');
+      const obert = container.style.display !== 'none';
+      if (obert) {
+        container.style.display = 'none';
+        afluenciaTarget = 'app-afluencia';
+        modeConfiguracio = false;
+        if (btn) btn.textContent = '⚙️ Mode edició calendari';
+        renderCalendariAfluencia();
+      } else {
+        container.style.display = 'block';
+        afluenciaTarget = 'afluencia-config-inline';
+        modeConfiguracio = true;
+        if (btn) btn.textContent = '✖ Tancar edició';
+        renderCalendariAfluencia();
+      }
+    };
+
     const toggleConfiguracio = () => {
       modeConfiguracio = !modeConfiguracio;
       const btn = document.getElementById('btn-config');
@@ -3400,7 +3420,6 @@
         </div>
         
         <div style="text-align: center; margin-top: 1.5rem;">
-          <button id="btn-config" onclick="toggleConfiguracio()" class="btn-link" style="margin-right: 0.5rem;">⚙️ Configuració</button>
           <button id="btn-generador" onclick="obrirGenerador()" class="btn-link" style="margin-right: 0.5rem; display: none;">📅 Generador calendari</button>
           <button id="btn-exportar" onclick="exportarAfluencia()" class="btn-link" style="display: none;">📥 Exportar JSON</button>
         </div>
@@ -3490,7 +3509,7 @@
         </footer>
       `;
       
-      document.getElementById('app-afluencia').innerHTML = html;
+      document.getElementById(afluenciaTarget).innerHTML = html;
     };
     
     const canviarAny = (increment) => {
@@ -4352,13 +4371,20 @@
         const meteors = [...new Set(rows.map(r => r.meteor))].join(', ');
         const nivellMax = Object.values(zonesMax).sort((a,b)=>(nivellOrdre[b]||0)-(nivellOrdre[a]||0))[0]||'—';
 
-        // SMP numèric: zones actives amb alertes (mateixa lògica que calcularSMPPonderat)
-        const grupActiu = new Set();
+        // SMP numèric (0-6): mateixa fórmula que calcularSMPPonderat
+        const nivellOrdreH = { 'Groc':1, 'Taronja':2, 'Vermell':3 };
+        const zonesNivellH = {};
         for (const r of rows) {
           const grup = riscParams.zonesGrup[r.zona] || r.zona;
-          if ((riscParams.zones[grup] ?? -1) > 0) grupActiu.add(grup);
+          if (!((riscParams.zones[grup] ?? -1) > 0)) continue;
+          if (!nivellOrdreH[r.nivell]) continue;
+          if (!zonesNivellH[grup] || nivellOrdreH[r.nivell] > nivellOrdreH[zonesNivellH[grup]])
+            zonesNivellH[grup] = r.nivell;
         }
-        const smpNum = grupActiu.size;
+        const nV = Object.values(zonesNivellH).filter(n => n === 'Vermell').length;
+        const nT = Object.values(zonesNivellH).filter(n => n === 'Taronja').length;
+        const nG = Object.values(zonesNivellH).filter(n => n === 'Groc').length;
+        const smpNum = nV >= 3 ? 6 : nV > 0 ? 5 : nT >= 3 ? 4 : nT > 0 ? 3 : nG >= 3 ? 2 : nG > 0 ? 1 : 0;
 
         // Probabilitat màxima del dia
         const maxProb = rows.reduce((mx, r) => Math.max(mx, r.probabilitat || 0), 0);
@@ -4376,10 +4402,11 @@
 
         return `<tr style="border-bottom:1px solid #eee;">
           <td style="padding:0.3rem 0.5rem;white-space:nowrap;font-weight:600;">${dataFmt}</td>
-          <td style="padding:0.3rem 0.5rem;white-space:nowrap;">
+          <td style="padding:0.3rem 0.5rem;white-space:nowrap;text-align:center;">
             <span style="font-weight:700;font-size:1rem;color:${nivellColor[nivellMax]||'#388e3c'};">${smpNum}</span>
-            <span style="font-weight:600;font-size:0.75rem;color:${nivellColor[nivellMax]||'#555'};margin-left:0.25rem;">${nivellMax !== '—' ? nivellMax : ''}</span>${probTxt}
+            ${nivellMax !== '—' ? `<span style="display:block;font-size:0.65rem;font-weight:600;color:${nivellColor[nivellMax]||'#555'};">${nivellMax}</span>` : ''}
           </td>
+          <td style="padding:0.3rem 0.5rem;text-align:center;color:#555;font-size:0.8rem;">${maxProb > 0 ? maxProb + '%' : '—'}</td>
           <td style="padding:0.3rem 0.5rem;line-height:1.8;">${resum}</td>
           <td style="padding:0.3rem 0.5rem;color:#666;font-size:0.75rem;">${meteors}</td>
         </tr>${ovFiles}`;
@@ -4389,7 +4416,8 @@
         <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
           <thead><tr style="background:#e3f2fd;">
             <th style="padding:0.3rem 0.5rem;text-align:left;">Dia</th>
-            <th style="padding:0.3rem 0.5rem;text-align:left;">SMP · Prob.</th>
+            <th style="padding:0.3rem 0.5rem;text-align:center;">Risc</th>
+            <th style="padding:0.3rem 0.5rem;text-align:center;">Prob.</th>
             <th style="padding:0.3rem 0.5rem;text-align:left;">Zones afectades</th>
             <th style="padding:0.3rem 0.5rem;text-align:left;">Fenòmens</th>
           </tr></thead>
@@ -4804,7 +4832,12 @@
               <strong>Pes màxim:</strong> 1.5 punts sobre el total de 6
             </div>
             
-            <p style="color: #666; font-style: italic; font-size: 0.9rem;">
+            <div style="margin-top:1rem;">
+              <button id="btn-config" onclick="obrirEdicioAfluencia()" class="btn-link">⚙️ Mode edició calendari</button>
+            </div>
+            <div id="afluencia-config-inline" style="display:none;margin-top:1rem;border:2px dashed #ff9800;border-radius:8px;overflow:hidden;"></div>
+
+            <p style="color: #666; font-style: italic; font-size: 0.9rem; margin-top:1rem;">
               🚧 Paràmetres d'afluència - Pròximament<br>
               Aquí es podran configurar pesos per tipus de dia, temporada, etc.
             </p>
