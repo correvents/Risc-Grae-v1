@@ -1346,13 +1346,10 @@
     }
 
     const URLS = {
-      bpa: "https://gist.githubusercontent.com/correvents/bf2beb9bca2a338f7b06180b14ab139f/raw/bpa_latest.json",
-      previsio: "https://script.google.com/macros/s/AKfycbwrs_70U09LXvyRQ-oMYVHG7R-UgNSn62Z2lh1uoach9h6oB5QwNkyIFNdwgiZV8AOl/exec",
-      smp: "https://script.google.com/macros/s/AKfycbyto2Dl-N8YTgSk37IIPP8fpj4zD3IgNr9_1SR785nigSR67aly5x0cD2zq1xMsIw1sxA/exec",
-      afluencia: "https://script.google.com/macros/s/AKfycbwWPFLzgRppSM0AmR_rAphGIRzh9EOJcV3zmbW5CivQJ1RGwm7Ar_t4hvvxBo6o84urTA/exec",
-      planspc: "https://script.google.com/macros/s/AKfycby5xfG3ZLmJ7dnRZjG15S9S9aVhmFuaF93di3sFcRjhsTjcE0zDv3QCFEu9mFIz8rD5/exec",
-      rischistoric: "https://script.google.com/macros/s/AKfycbygn498Ixbvee3niYA8Z8D3GztLcbOEU43EVRyR_XQq8d55RPghJd6w3S_pjzj9PGBWvg/exec",
-      helicopters: "https://script.google.com/macros/s/AKfycbybDgqx0--_Jk6-IL-dGrPH80EAVHVHZVi-rA2kBweNvBNFZbILEkUGD5YY5SDuZxnE/exec"
+      bpa:     "./data/bpa_latest.json",
+      previsio: "./data/previsio_latest.json",
+      smp:     "./data/smp_latest.json",
+      planspc: "./data/planspc_latest.json"
     };
     
     // Navegació
@@ -1575,6 +1572,23 @@
       }, 100);
     };
 
+    async function guardarBPASupabase(bpa) {
+      if (!bpa || !bpa.data || !bpa.zones) return;
+      const rows = bpa.zones.map(z => ({
+        data: bpa.data,
+        zona: z.nom,
+        perill: z.perill_numeric || null,
+        cota_critica: z.cota_critica?.trim() || null,
+        situacio_prim: z.situacio_primaria?.trim() || z.problems?.find(p => p.priority == '1')?.tipus_situacio || null,
+        situacio_sec: z.situacio_secundaria?.trim() || z.problems?.find(p => p.priority == '2')?.tipus_situacio || null,
+        problems: z.problems?.length ? z.problems : null
+      }));
+      const { error } = await sbClient
+        .from('bpa_historic')
+        .upsert(rows, { onConflict: 'data,zona' });
+      if (error) throw error;
+    }
+
     const carregarBPA = async () => {
       document.getElementById('app-bpa').innerHTML = `
         <div class="loading">
@@ -1619,6 +1633,7 @@
         dadesCarregades.bpa = bpa;
         renderBPA(bpa);
         actualitzarRiscAuto();
+        guardarBPASupabase(bpa).catch(() => {});
       } catch (error) {
         document.getElementById('app-bpa').innerHTML = `
           <div class="error">
@@ -2297,15 +2312,11 @@
     
     const carregarAfluenciaRemot = async () => {
       try {
-        const response = await fetch(URLS.afluencia + "?t=" + Date.now());
-        if (response.ok) {
-          const dades = await response.json();
-          if (dades.edicions) {
-            afluenciaEdits = dades.edicions;
-          }
+        const { data, error } = await sbClient.from('afluencia_edicions').select('*');
+        if (!error && data) {
+          afluenciaEdits = {};
+          data.forEach(r => { afluenciaEdits[r.data] = { nivell: r.nivell, motiu: r.motiu || '' }; });
         } else {
-          // Si la resposta no és OK, usar localStorage
-          console.warn('API afluència no disponible, usant localStorage');
           afluenciaEdits = JSON.parse(localStorage.getItem('afluenciaEdits') || '{}');
         }
         afluenciaCarregat = true;
@@ -2313,7 +2324,6 @@
         renderCalendariAfluencia();
       } catch (error) {
         console.error('Error carregant afluència:', error);
-        // Fallback a localStorage si l'API falla
         afluenciaEdits = JSON.parse(localStorage.getItem('afluenciaEdits') || '{}');
         afluenciaCarregat = true;
         actualitzarAfluenciaRisc();
@@ -2347,49 +2357,25 @@
     
     const guardarAfluenciaRemot = async (dataStr, nivell, motiu) => {
       try {
-        await fetch(URLS.afluencia, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            accio: 'guardar',
-            data: dataStr,
-            nivell: nivell,
-            motiu: motiu
-          }),
-          mode: 'no-cors'
-        });
-        // També guardar a localStorage com a backup
+        await sbClient.from('afluencia_edicions').upsert({ data: dataStr, nivell, motiu });
         localStorage.setItem('afluenciaEdits', JSON.stringify(afluenciaEdits));
       } catch (error) {
         console.error('Error guardant afluència:', error);
       }
     };
-    
+
     const eliminarAfluenciaRemot = async (dataStr) => {
       try {
-        await fetch(URLS.afluencia, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            accio: 'eliminar',
-            data: dataStr
-          }),
-          mode: 'no-cors'
-        });
+        await sbClient.from('afluencia_edicions').delete().eq('data', dataStr);
         localStorage.setItem('afluenciaEdits', JSON.stringify(afluenciaEdits));
       } catch (error) {
         console.error('Error eliminant afluència:', error);
       }
     };
-    
+
     const resetAfluenciaRemot = async () => {
       try {
-        await fetch(URLS.afluencia, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ accio: 'reset' }),
-          mode: 'no-cors'
-        });
+        await sbClient.from('afluencia_edicions').delete().neq('data', '');
         localStorage.removeItem('afluenciaEdits');
       } catch (error) {
         console.error('Error resetejant afluència:', error);
@@ -3240,17 +3226,12 @@
         }
       });
       
-      // Guardar tot al Drive
+      // Guardar tot a Supabase
       try {
-        await fetch(URLS.afluencia, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            accio: 'guardarTot',
-            edicions: afluenciaEdits
-          }),
-          mode: 'no-cors'
-        });
+        const rows = Object.entries(afluenciaEdits).map(([data, v]) => ({
+          data, nivell: v.nivell, motiu: v.motiu || v.nom || ''
+        }));
+        await sbClient.from('afluencia_edicions').upsert(rows);
         localStorage.setItem('afluenciaEdits', JSON.stringify(afluenciaEdits));
       } catch (error) {
         console.error('Error guardant:', error);
@@ -5220,7 +5201,41 @@
         </div>`;
     }
 
+    async function carregarHelicoptersDiaSupabase(dataStr) {
+      try {
+        const { data, error } = await sbClient
+          .from('helicopters_historic')
+          .select('*')
+          .eq('data', dataStr)
+          .order('heli_id');
+        if (error || !data || data.length === 0) return null;
+        return data.map(row => ({
+          id: row.heli_id,
+          recurs: row.recurs,
+          base: row.base,
+          lat: row.lat,
+          lon: row.lon,
+          operativitat: row.operativitat,
+          observacions: row.observacions
+        }));
+      } catch(e) {
+        return null;
+      }
+    }
+
     async function carregarDadesHelicoptersDia(dataStr) {
+      document.getElementById('heli-status').textContent = 'Carregant...';
+
+      // Supabase primer
+      const dadesSupabase = await carregarHelicoptersDiaSupabase(dataStr);
+      if (dadesSupabase) {
+        helicopterDadesActuals = dadesSupabase;
+        renderTaulaHelicopters();
+        document.getElementById('heli-status').textContent = '✅ ' + dataStr;
+        return;
+      }
+
+      // Fallback GAS
       const url = URLS.helicopters;
       if (!url || url === 'HELICOPTERS_GAS_URL') {
         helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
@@ -5229,7 +5244,6 @@
         return;
       }
       try {
-        document.getElementById('heli-status').textContent = 'Carregant...';
         const resp = await fetchAmbTimeout(url + '?accio=getDia&data=' + dataStr);
         const dades = await resp.json();
         helicopterDadesActuals = dades.helicopters && dades.helicopters.length > 0
@@ -5237,7 +5251,7 @@
           : JSON.parse(JSON.stringify(HELICOPTERS_BASE));
         renderTaulaHelicopters();
         if (!dades.noDades) {
-          document.getElementById('heli-status').textContent = '✅ ' + dataStr;
+          document.getElementById('heli-status').textContent = '✅ ' + dataStr + ' (GAS)';
         } else if (dades.fontData) {
           document.getElementById('heli-status').textContent = '📋 Dades de ' + dades.fontData;
         } else {
@@ -5700,28 +5714,45 @@
       heliAutoSaveTimer = setTimeout(() => guardarHelicopters(), 1500);
     }
 
+    async function guardarHelicoptersSupabase(dataStr, helis) {
+      const rows = helis.map(h => ({
+        data: dataStr,
+        heli_id: h.id,
+        recurs: h.recurs,
+        base: h.base,
+        lat: h.lat || null,
+        lon: h.lon || null,
+        operativitat: h.operativitat,
+        observacions: h.observacions || ''
+      }));
+      const { error } = await sbClient
+        .from('helicopters_historic')
+        .upsert(rows, { onConflict: 'data,heli_id' });
+      if (error) throw error;
+    }
+
     async function guardarHelicopters() {
-      const url = URLS.helicopters;
-      if (!url || url === 'HELICOPTERS_GAS_URL') {
-        document.getElementById('heli-status').textContent = '⚠️ URL no configurada';
-        return;
-      }
       const btn = document.getElementById('heli-btn-guardar');
       btn.disabled = true;
       document.getElementById('heli-status').textContent = 'Guardant...';
       try {
-        const resp = await fetch(url, {
+        await guardarHelicoptersSupabase(helicopterDataActual, helicopterDadesActuals);
+        document.getElementById('heli-status').textContent = '✅ Guardat';
+      } catch(e) {
+        logError('HeliSupabase', e.message);
+        document.getElementById('heli-status').textContent = '❌ ' + e.message;
+      }
+      // Guardat paral·lel al GAS com a backup
+      const url = URLS.helicopters;
+      if (url && url !== 'HELICOPTERS_GAS_URL') {
+        fetch(url, {
           method: 'POST',
           body: JSON.stringify({
             accio: 'guardarDia',
             data: helicopterDataActual,
             helicopters: helicopterDadesActuals
           })
-        });
-        const res = await resp.json();
-        document.getElementById('heli-status').textContent = res.ok ? '✅ Guardat' : '❌ ' + (res.error||'Error');
-      } catch(e) {
-        document.getElementById('heli-status').textContent = '❌ ' + e.message;
+        }).catch(() => {});
       }
       btn.disabled = false;
     }

@@ -1,0 +1,74 @@
+name: Dades diàries GRAE
+
+on:
+  schedule:
+    - cron: '45 5 * * *'   # 06:45 CET hivern (força guardat)
+    - cron: '0 8 * * *'    # 09:00 CET hivern (guarda si canvis)
+    - cron: '30 13 * * *'  # 14:30 CET hivern (guarda si canvis)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Forçar guardat (ignorar canvis)'
+        type: boolean
+        default: false
+
+jobs:
+  actualitzar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Determinar force
+        id: cfg
+        run: |
+          FORCE=false
+          [[ "${{ github.event.schedule }}" == "45 5 * * *" ]] && FORCE=true
+          [[ "${{ github.event.inputs.force }}" == "true" ]] && FORCE=true
+          echo "force=$FORCE" >> $GITHUB_OUTPUT
+
+      - name: SMP
+        env:
+          METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FORCE: ${{ steps.cfg.outputs.force }}
+        run: node scripts/fetch-smp.js
+
+      - name: Previsió
+        env:
+          METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FORCE: ${{ steps.cfg.outputs.force }}
+        run: node scripts/fetch-previsio.js
+
+      - name: Plans PC
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FORCE: ${{ steps.cfg.outputs.force }}
+        run: node scripts/fetch-planspc.js
+
+      - name: BPA
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          FORCE: ${{ steps.cfg.outputs.force }}
+        run: node scripts/fetch-bpa.js
+
+      - name: Commit JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin main --rebase
+          git add data/
+          git diff --staged --quiet && echo "Sense canvis als JSON" || \
+            (git commit -m "chore: dades $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)

@@ -1,0 +1,25 @@
+name: Risc diari GRAE
+
+on:
+  schedule:
+    - cron: '0 21 * * *'  # 22:00 CET hivern
+  workflow_dispatch:
+
+jobs:
+  risc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Calcular i guardar risc
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node scripts/risc-diari.js
