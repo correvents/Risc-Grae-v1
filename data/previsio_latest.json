@@ -1,1 +1,23 @@
-{"dataConsulta":null,"avui":null,"dema":null}
+{
+  "dataConsulta": "2026-05-11T08:45:28.057Z",
+  "avui": {
+    "data": "2026-05-11",
+    "variables": {
+      "estatDelCel": "Fins a mig matí el cel estarà serè al nord-oest del país i poc o mig ennuvolat a la resta pel pas de franges de núvols alts i prims. A partir de llavors, quedarà serè o poc ennuvolat, tret del Pirineu, Prepirineu, quadrant nord-est i massís del Port on creixeran nuvolades que deixaran el cel entre mig i molt ennuvolat, amb intervals de cobert, mentre que és possible algun núvol d'evolució a punts de l'oest i a altres punts del prelitoral de forma més aïllada. Al final del dia, la nuvolositat minvarà i quedarà restringida a l'extrem nord del Pirineu i del quadrant nord-est.\nIndependentment, fins a primeres hores del matí hi haurà estrats baixos a la depressió Central, al quadrant nord-est i valls del Pirineu i Prepirineu.\n",
+      "precipitacions": "A partir de migdia i durant la tarda s'esperen alguns ruixats locals a punts del Pirineu i nord de l'Alt Empordà, són probables al Prepirineu, sobretot oriental, i possibles a punts de l'interior del quadrant nord-est i al massís del Port. Seran d'intensitat feble o localment moderada i és probable que vagin acompanyats de tempesta. La quantitat de precipitació acumulada serà minsa o localment poc abundant.",
+      "temperatures": "La temperatura màxima serà lleugerament més alta a la meitat sud del litoral i prelitoral, baixarà al litoral i prelitoral nord i serà similar a la resta del país.",
+      "visibilitat": "La visibilitat serà bona o excel·lent en general, tot i que fins a primera hora del matí hi haurà bancs de boirina i boira a punts de la depressió Central, Pirineu, Prepirineu i al litoral i prelitoral nord. A banda, empitjorarà localment en moment de ruixat.",
+      "vent": "Fins a mig matí, el vent serà fluix i variable, amb predomini del component oest. A partir d'aleshores, s'imposarà el component sud al quadrant nord-est i a la resta del litoral, mentre que a la resta del país bufarà de component oest; el vent bufarà amb intensitat feble o moderada, amb algunes ratxes fortes a la tarda sobretot al sector central del litoral. A la nit, el vent tornarà a quedar fluix i de direcció variable."
+    }
+  },
+  "dema": {
+    "data": "2026-05-12",
+    "variables": {
+      "estatDelCel": "Fins a mig matí el cel estarà serè en general, si bé hi haurà alguns núvols baixos a trams del litoral central i sud de la Costa Brava. A partir de llavors, creixeran nuvolades a l'interior, sobretot al Pirineu, Prepirineu, quadrant nord-est i prelitoral, mentre que al llarg de la tarda n'arribaran per l'oest de Catalunya, i el cel quedarà molt ennuvolat o cobert arreu. Al final del dia la nuvolositat minvarà al terç sud.",
+      "precipitacions": "A partir de migdia s'esperen ruixats i xàfecs al Pirineu, Prepirineu i prelitoral, que al llarg de la tarda s'estendran i afectaran qualsevol punt del territori. Al final del dia la precipitació quedarà restringida a l'extrem nord del Pirineu i a punts del quadrant nord-est. Seran d'intensitat entre feble i moderada, aniran acompanyats de tempesta i localment de calamarsa o pedra. La quantitat de precipitació acumulada serà entre minsa i poc abundant en general. Tot i això, a punts del prelitoral i del quadrant nord-est no es descarta que siguin d'intensitat forta i acumulin quantitats abundants.",
+      "temperatures": "La temperatura mínima serà similar o lleugerament més alta. La temperatura màxima serà similar o lleugerament més baixa, si bé pujarà a punts de Ponent.",
+      "visibilitat": "La visibilitat serà bona en general, si bé hi haurà alguns bancs de boirina o boira matinals a punts del nord de la depressió Central, del quadrant nord-est i valls del Pirineu i Prepirineu. Per altra banda, empitjorarà en moments de ruixat i als vessants de les muntanyes durant la tarda.",
+      "vent": "A l'inici i final del dia el vent serà fluix i de direcció variable a l'interior i bufarà el terral al litoral fluix amb cops moderats, tret del nord del cap de Creus on hi haurà tramuntana entre fluixa i moderada. La resta del jorn, s'imposarà el component sud i est al litoral i prelitoral i el component sud i oest a la resta del país. El vent bufarà amb intensitat entre feble i moderada, amb algunes ratxes fortes a la tarda, sobretot al prelitoral i l'altiplà Central i en moments de xàfec."
+    }
+  }
+}
