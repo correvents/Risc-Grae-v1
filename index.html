@@ -1345,11 +1345,14 @@
       console.error('[' + font + ']', missatge, detall || '');
     }
 
+    const _base = location.protocol === 'file:'
+      ? 'https://correvents.github.io/Risc-Grae-v1'
+      : '.';
     const URLS = {
-      bpa:     "./data/bpa_latest.json",
-      previsio: "./data/previsio_latest.json",
-      smp:     "./data/smp_latest.json",
-      planspc: "./data/planspc_latest.json"
+      bpa:     _base + "/data/bpa_latest.json",
+      previsio: _base + "/data/previsio_latest.json",
+      smp:     _base + "/data/smp_latest.json",
+      planspc: _base + "/data/planspc_latest.json"
     };
     
     // Navegació
