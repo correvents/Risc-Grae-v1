@@ -24,17 +24,19 @@ async function getBPA() {
 async function main() {
   const { date, zones } = await getBPA();
 
-  const zonesF = zones.map(z => ({
+  const zonesF = zones.map(z => {
+    const pn = parseInt(z.grau_perill_primari) || 0;
+    return {
     nom:               z.nom_zona,
-    perill:            z.perill_numeric ? `${PERILL_NOM[z.perill_numeric] || '?'} (${z.perill_numeric})` : '',
-    perill_numeric:    z.perill_numeric || 0,
+    perill:            pn ? `${PERILL_NOM[pn] || '?'} (${pn})` : '',
+    perill_numeric:    pn,
     cota_critica:      z.cota_critica || '',
     situacio_primaria: z.problems?.find(p => p.priority == 1)?.tipus_situacio || '',
     situacio_secundaria: z.problems?.find(p => p.priority == 2)?.tipus_situacio || '',
     distribucio_mantell: z.text_distribucio || '',
     tendencia:         z.text_tendencia || '',
     problems:          z.problems || []
-  }));
+  };});
 
   const maxPerill = Math.max(0, ...zonesF.map(z => z.perill_numeric));
   const bpa = {
