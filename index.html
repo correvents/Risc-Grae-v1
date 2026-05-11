@@ -1602,6 +1602,10 @@
         if (!response.ok) throw new Error("No s'han pogut carregar les dades");
         const bpa = await response.json();
         if (bpa.error) throw new Error(bpa.error);
+        if (!bpa.data) {
+          document.getElementById('app-bpa').innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">El butlletí s'actualitzarà demà a les 06:45h.</p><button onclick="carregarBPA()">Tornar a provar</button></div>`;
+          return;
+        }
 
         // Enriquir amb dades detallades de l'API ICGC (problems, origen, mida, tendència)
         try {
@@ -1754,6 +1758,10 @@
         if (!response.ok) throw new Error("No s'han pogut carregar les dades");
         const data = await response.json();
         if (data.error) throw new Error(data.error);
+        if (!data.dataConsulta) {
+          document.getElementById('app-previsio').innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">La previsió s'actualitzarà demà a les 06:45h.</p><button onclick="carregarPrevisio()">Tornar a provar</button></div>`;
+          return;
+        }
         dadesCarregades.previsio = data;  // Guardar dades
         renderPrevisio(data);
         actualitzarRiscAuto();  // Actualitzar risc amb noves dades
@@ -2206,6 +2214,10 @@
         if (!response.ok) throw new Error("No s'han pogut carregar les dades");
         const data = await response.json();
         if (data.error) throw new Error(data.error);
+        if (!data.dataConsulta) {
+          document.getElementById('app-smp').innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">Les alertes s'actualitzaran demà a les 06:45h.</p><button onclick="carregarSMP()">Tornar a provar</button></div>`;
+          return;
+        }
         dadesCarregades.smp = data;  // Guardar dades
         renderSMP(data);
         actualitzarRiscAuto();  // Actualitzar risc amb noves dades
@@ -5771,6 +5783,10 @@
         const resp = await fetchAmbTimeout(URLS.planspc);
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
+        if (!data.actualitzat) {
+          cont.innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">Els plans s'actualitzaran demà a les 06:45h.</p><button onclick="carregarPlansPC()">Tornar a provar</button></div>`;
+          return;
+        }
         dadesCarregades.planspc = data;
         actualitzarRiscAuto();
         renderPlansPC(data);
