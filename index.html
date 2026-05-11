@@ -5378,11 +5378,13 @@
       Object.values(helicopterMarkers).forEach(m => helicopterMap.removeLayer(m));
       helicopterMarkers = {};
 
-      // Agrupar helicòpters per coordenada (~100m)
+      // Agrupar helicòpters per base (si mateixa base) o per coordenada (~1km)
       const grups = {};
       helicopterDadesActuals.forEach((h, i) => {
         if (!h.lat || !h.lon) return;
-        const key = parseFloat(h.lat).toFixed(3) + ',' + parseFloat(h.lon).toFixed(3);
+        const key = h.base
+          ? h.base.toLowerCase().trim()
+          : parseFloat(h.lat).toFixed(2) + ',' + parseFloat(h.lon).toFixed(2);
         if (!grups[key]) grups[key] = { lat: parseFloat(h.lat), lon: parseFloat(h.lon), helis: [] };
         grups[key].helis.push({ h, i });
       });
