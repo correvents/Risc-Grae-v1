@@ -1,13 +1,13 @@
 {
   "data": "2026-05-11",
-  "actualitzat": "2026-05-11T08:45:31.922Z",
+  "actualitzat": "2026-05-11T09:07:48.246Z",
   "font": "ICGC - Institut Cartogràfic i Geològic de Catalunya",
   "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-05-11_cat.pdf",
   "zones": [
     {
       "nom": "Aran - Franja Nord Pallaresa",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "FEBLE (1)",
+      "perill_numeric": 1,
       "cota_critica": "",
       "situacio_primaria": "Neu humida",
       "situacio_secundaria": "Lliscaments basals",
@@ -38,8 +38,8 @@
     },
     {
       "nom": "Ribagorçana - Vall Fosca",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "FEBLE (1)",
+      "perill_numeric": 1,
       "cota_critica": "",
       "situacio_primaria": "Neu humida",
       "situacio_secundaria": "Lliscaments basals",
@@ -70,8 +70,8 @@
     },
     {
       "nom": "Pallaresa",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "FEBLE (1)",
+      "perill_numeric": 1,
       "cota_critica": "",
       "situacio_primaria": "Neu humida",
       "situacio_secundaria": "Lliscaments basals",
@@ -124,8 +124,8 @@
     },
     {
       "nom": "Vessant Nord Cadí-Moixeró",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "FEBLE (1)",
+      "perill_numeric": 1,
       "cota_critica": "",
       "situacio_primaria": "Neu humida",
       "situacio_secundaria": "",
@@ -168,8 +168,8 @@
     },
     {
       "nom": "Ter-Freser",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "MODERAT (2)",
+      "perill_numeric": 2,
       "cota_critica": "",
       "situacio_primaria": "Lliscaments basals",
       "situacio_secundaria": "Neu humida",
@@ -200,8 +200,8 @@
     }
   ],
   "resum": {
-    "perill_maxim": "Desconegut",
-    "perill_maxim_numeric": 0,
+    "perill_maxim": "MODERAT",
+    "perill_maxim_numeric": 2,
     "zones_alt_perill": [],
     "recomanacio": "Precaució en zones exposades."
   }
