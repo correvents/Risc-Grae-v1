@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-05-12T10:37:57.637Z",
+  "actualitzat": "2026-05-12T15:56:53.226Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,34 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-122990_ACTUALITZACIO--ACTIVAT_INUNCAT_202605121037.pdf"
       },
       "descripcio": "SMP Intensitat pluja pel dia 12/05 i 13/05."
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "12/05/2026 13:39",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123036_INICI--NOACTIVAT_PROCICAT_202605121355.pdf"
+      },
+      "descripcio": "Explosió edifici amb foc - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
+      },
+      "plaacronim": "TRANSCAT",
+      "planom": "Nou transcat",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "12/05/2026 13:00",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123034_ACTUALITZACIO--NOACTIVAT_TRANSCAT_202605121548.pdf"
+      },
+      "descripcio": "Camió MMPP (1779/83) amb fuita d'àcid fòrmic "
     }
   ]
 }

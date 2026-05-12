@@ -1,146 +1,176 @@
 {
   "data": "2026-05-12",
-  "actualitzat": "2026-05-12T10:37:58.763Z",
+  "actualitzat": "2026-05-12T15:56:54.204Z",
   "font": "ICGC - Institut Cartogràfic i Geològic de Catalunya",
   "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-05-12_cat.pdf",
   "zones": [
     {
       "nom": "Aran - Franja Nord Pallaresa",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "MODERAT (2)",
+      "perill_numeric": 2,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "Lliscaments basals",
-      "distribucio_mantell": "Hi ha neu en nord cap a uns 2.000 m i en sud a partir d'uns 2.300 m, sovint discontinu i molt variable segons el sector. A cotes mitjanes els gruixos són molt irregulars, amb sectors que volten els 20-30 cm (nord d'Aran) i d'altres que superen els 80-100 cm (Franja Nord Pallaresa), valors en general normals per l'època.",
-      "tendencia": "Condicions molt similars entre diumenge i dimarts. Els ruixats de tarda prevists, amb cota de neu molt elevada, podran donar lloc a purgues de neu humida i no podrem badar amb la possibilitat de lliscaments a terreny propici. Perill ESTACIONARI.",
+      "situacio_primaria": "Neu recent",
+      "situacio_secundaria": "Neu humida",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.100 m i a solanes per sobre de 2.300 m. Els gruixos són irregulars però estan al voltant de 60-80 cm a 2.300 m, lleugerament per sota dels habituals en aquestes dates. ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14348,
+          "id_problema": 14379,
+          "id_zona": "1",
+          "id_tipus_situacio": "1",
+          "tipus_situacio": "Neu recent",
+          "origen": "1",
+          "tendencia": "1",
+          "mida": "2",
+          "priority": "1"
+        },
+        {
+          "id_problema": 14380,
           "id_zona": "1",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
+          "mida": "2",
+          "priority": "2"
         },
         {
-          "id_problema": 14349,
+          "id_problema": 14377,
           "id_zona": "1",
           "id_tipus_situacio": "5",
           "tipus_situacio": "Lliscaments basals",
           "origen": "1",
           "tendencia": "2",
           "mida": "2",
-          "priority": "2"
+          "priority": "3"
         }
       ]
     },
     {
       "nom": "Ribagorçana - Vall Fosca",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "MODERAT (2)",
+      "perill_numeric": 2,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "Lliscaments basals",
-      "distribucio_mantell": "El mantell es presenta continu per damunt d'uns 2.100 m a terreny obac i tancat, i és més discontinu a la resta. A solanes hi ha neu per damunt de 2.300-2.400 m, discontínua fins als cims, . Els gruixos són irregulars però estan al voltant de 30-50 cm a cotes mitjanes-altes, per sota dels habituals a aquestes dates. La distribució i els gruixos de neu són majors al nord del sector. ",
-      "tendencia": "Continuaran predominant els mateixos problemes d'allaus. La màxima activitat allavosa es concentrarà en moments de xàfec, és a dir, durant les tardes. Les condicions del mantell seran molt similars. Perill ESTACIONARI. ",
+      "situacio_primaria": "Neu ventada",
+      "situacio_secundaria": "Neu humida",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 30-50 cm, per sota dels habituals en aquestes dates. La distribució i els gruixos de neu són majors al nord del sector. ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14351,
+          "id_problema": 14361,
+          "id_zona": "2",
+          "id_tipus_situacio": "2",
+          "tipus_situacio": "Neu ventada",
+          "origen": "2",
+          "tendencia": "1",
+          "mida": "1",
+          "priority": "1"
+        },
+        {
+          "id_problema": 14359,
           "id_zona": "2",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14350,
-          "id_zona": "2",
-          "id_tipus_situacio": "5",
-          "tipus_situacio": "Lliscaments basals",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "2",
           "priority": "2"
         }
       ]
     },
     {
       "nom": "Pallaresa",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "MODERAT (2)",
+      "perill_numeric": 2,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "Lliscaments basals",
-      "distribucio_mantell": "Hi ha neu per sobre d'uns 2.100 m en N, i per damunt de 2.300-2.400 m en S, discontínua fins als cims, i més contínua en conques. El mantell es presenta amb gruixos irregulars i variables, més elevats al nord del sector, i són en general deficitaris per l'època de l'any.  ",
-      "tendencia": "Continuaran predominant els mateixos problemes d'allaus. La màxima activitat allavosa es concentrarà en moments de xàfec, és a dir, durant les tardes. Les condicions del mantell seran molt similars. Perill ESTACIONARI. ",
+      "situacio_primaria": "Neu ventada",
+      "situacio_secundaria": "Neu humida",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 30-50 cm, per sota dels habituals en aquestes dates. La distribució i els gruixos de neu són majors al nord del sector. ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14353,
+          "id_problema": 14364,
+          "id_zona": "3",
+          "id_tipus_situacio": "2",
+          "tipus_situacio": "Neu ventada",
+          "origen": "2",
+          "tendencia": "1",
+          "mida": "1",
+          "priority": "1"
+        },
+        {
+          "id_problema": 14365,
           "id_zona": "3",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14352,
-          "id_zona": "3",
-          "id_tipus_situacio": "5",
-          "tipus_situacio": "Lliscaments basals",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "2",
           "priority": "2"
         }
       ]
     },
     {
       "nom": "Perafita-Puigpedrós",
-      "perill": "",
-      "perill_numeric": 0,
+      "perill": "FEBLE (1)",
+      "perill_numeric": 1,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "",
-      "distribucio_mantell": "",
-      "tendencia": "",
+      "situacio_primaria": "Neu ventada",
+      "situacio_secundaria": "Neu humida",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són molt irregulars, a cotes altes per sota dels 50 cm. La distribució i els gruixos de neu són majors a l'extrem nord del sector. ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14354,
+          "id_problema": 14367,
+          "id_zona": "4",
+          "id_tipus_situacio": "2",
+          "tipus_situacio": "Neu ventada",
+          "origen": "2",
+          "tendencia": "1",
+          "mida": "1",
+          "priority": "1"
+        },
+        {
+          "id_problema": 14368,
           "id_zona": "4",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
-          "tendencia": "1",
+          "tendencia": "2",
           "mida": "1",
-          "priority": "1"
+          "priority": "2"
         }
       ]
     },
     {
       "nom": "Vessant Nord Cadí-Moixeró",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "MODERAT (2)",
+      "perill_numeric": 2,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "",
-      "distribucio_mantell": "La neu es presenta en forma de congestes fins uns 2.200 m, i és continua a les zones més elevades del Moixeró i a les Canals del Cadí per sobre d'aquesta cota. Els gruixos volten, a obagues de cotes mitjanes, els 40-50 cm. Aquests valors són els normals per a l'època de l'any.",
-      "tendencia": "Continuaran predominant els mateixos problemes d'allaus. La màxima activitat allavosa es concentrarà en moments de xàfec, és a dir, durant les tardes. Les condicions del mantell seran molt similars. Perill ESTACIONARI. ",
+      "situacio_primaria": "Neu ventada",
+      "situacio_secundaria": "Neu humida",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 30-40 cm, valors per sobre de la mitjana.  ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14355,
+          "id_problema": 14370,
+          "id_zona": "5",
+          "id_tipus_situacio": "2",
+          "tipus_situacio": "Neu ventada",
+          "origen": "2",
+          "tendencia": "1",
+          "mida": "1",
+          "priority": "1"
+        },
+        {
+          "id_problema": 14371,
           "id_zona": "5",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "1"
+          "priority": "2"
         }
       ]
     },
@@ -155,7 +185,7 @@
       "tendencia": "",
       "problems": [
         {
-          "id_problema": 14356,
+          "id_problema": 14376,
           "id_zona": "6",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
@@ -171,23 +201,23 @@
       "perill": "MODERAT (2)",
       "perill_numeric": 2,
       "cota_critica": "",
-      "situacio_primaria": "Lliscaments basals",
+      "situacio_primaria": "Neu ventada",
       "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Només hi ha continuïtat a terreny obac i protegit per damunt d'uns 2.200 m. A la resta, el mantell és discontinu, en forma de congestes fora del terreny obac. El mantell presenta gruixos irregulars, reculant progressivament en gruix i extensió.",
-      "tendencia": "L'estabilitat del mantell serà similar entre diumenge i dimarts, encara amb possibles lliscaments basals i purgues superficials de neu humida, més probables en moments de xàfec. Perill ESTACIONARI. ",
+      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 30-50 cm. ",
+      "tendencia": "Fins divendres no tornaria a nevar a cotes altes. Fins divendres, el mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb probables allaus de neu humida des de mig matí per fusió. Perill EN AUGMENT DIVENDRES. ",
       "problems": [
         {
-          "id_problema": 14357,
+          "id_problema": 14374,
           "id_zona": "7",
-          "id_tipus_situacio": "5",
-          "tipus_situacio": "Lliscaments basals",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "2",
+          "id_tipus_situacio": "2",
+          "tipus_situacio": "Neu ventada",
+          "origen": "2",
+          "tendencia": "1",
+          "mida": "1",
           "priority": "1"
         },
         {
-          "id_problema": 14358,
+          "id_problema": 14375,
           "id_zona": "7",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
@@ -195,6 +225,16 @@
           "tendencia": "2",
           "mida": "1",
           "priority": "2"
+        },
+        {
+          "id_problema": 14373,
+          "id_zona": "7",
+          "id_tipus_situacio": "5",
+          "tipus_situacio": "Lliscaments basals",
+          "origen": "1",
+          "tendencia": "2",
+          "mida": "2",
+          "priority": "3"
         }
       ]
     }

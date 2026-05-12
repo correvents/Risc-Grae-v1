@@ -1,6 +1,44 @@
 {
-  "dataConsulta": "2026-05-12T10:37:54.549Z",
+  "dataConsulta": "2026-05-12T15:56:49.776Z",
   "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-05-12T15:47Z",
+      "dataFi": "2026-05-12T17:47Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-05-12",
+          "afectacions": [
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
