@@ -4684,6 +4684,7 @@
           <button class="risc-btn" id="tab-afluencia" onclick="mostrarTabParam('afluencia')">👥 Afluència</button>
           <button class="risc-btn" id="tab-canvi" onclick="mostrarTabParam('canvi')">🌦️ Canvi Temps</button>
           <button class="risc-btn" id="tab-historic" onclick="mostrarTabParam('historic')">📊 Històric</button>
+          <button class="risc-btn" id="tab-helicopters" onclick="mostrarTabParam('helicopters');carregarHelicoptersCfg()">🚁 Helicòpters</button>
           <button class="risc-btn" id="tab-errors" onclick="mostrarTabParam('errors')">🔴 Errors <span id="badge-errors" style="background:#e53935;color:white;border-radius:10px;padding:0 5px;font-size:0.7rem;display:none;margin-left:3px;"></span></button>
           <button class="risc-btn" id="tab-enllacos" onclick="mostrarTabParam('enllacos')">🔗 Enllaços</button>
         </div>
@@ -4857,6 +4858,13 @@
 
         <!-- Tab Històric -->
         <!-- Tab Errors -->
+        <div id="param-helicopters" class="param-tab" style="display: none;">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
+            <h3 style="margin:0 0 1rem;font-size:1rem;color:#1a1a2e;">🚁 Helicòpters — edició</h3>
+            <div id="param-helicopters-cont"><span style="color:#aaa;font-size:0.85rem;">Carregant...</span></div>
+          </div>
+        </div>
+
         <div id="param-errors" class="param-tab" style="display: none;">
           <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
@@ -5231,6 +5239,9 @@
     let helicopterMarkers = {};
     let helicopterDadesActuals = [];
     let helicopterDataActual = '';
+    let heliPfx = 'heli';
+    let heliReadOnly = false;
+    function heliEl(id) { return document.getElementById(heliPfx + '-' + id); }
 
     const HELI_OPERATIVITAT = ['Total', 'Parcial', 'Sense grua', 'Baixa'];
     const HELI_COLORS = ['#e53935','#1976d2','#388e3c','#f57c00','#7b1fa2','#0097a7','#c2185b','#455a64'];
@@ -5263,6 +5274,8 @@
     }
 
     async function carregarHelicopters() {
+      heliPfx = 'heli';
+      heliReadOnly = true;
       const cont = document.getElementById('app-helicopters');
       if (helicopterMap) { helicopterMap.remove(); helicopterMap = null; }
       helicopterMarkers = {};
@@ -5272,58 +5285,106 @@
 
       cont.innerHTML = renderHelicoptersHTML(avui);
 
-      helicopterMap = L.map('heli-mapa', { zoomControl: true });
+      helicopterMap = L.map(heliPfx + '-mapa', { zoomControl: true });
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap', maxZoom: 18
       }).addTo(helicopterMap);
-      // Ajustar als límits de Catalunya
       helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
 
       await carregarDadesHelicoptersDia(avui);
     }
 
     function renderHelicoptersHTML(dataStr) {
+      const p = heliPfx;
       return `
         <div style="background:#fff;padding:0.75rem 1.25rem;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters Bombers</div>
           <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto;">
             <label style="font-size:0.82rem;color:#666;">📅</label>
-            <input type="date" id="heli-data-input" value="${dataStr}"
+            <input type="date" id="${p}-data-input" value="${dataStr}"
               style="padding:0.3rem 0.5rem;border:1px solid #ddd;border-radius:4px;font-size:0.82rem;"
               onchange="canviarDataHelicopters(this.value)">
-            <button class="risc-btn risc-btn-primary" onclick="guardarHelicopters()" id="heli-btn-guardar">💾 Guardar</button>
-            <span id="heli-status" style="font-size:0.78rem;color:#888;min-width:80px;"></span>
+            ${heliReadOnly ? '' : `<button class="risc-btn risc-btn-primary" onclick="guardarHelicopters()" id="${p}-btn-guardar">💾 Guardar</button>`}
+            <span id="${p}-status" style="font-size:0.78rem;color:#888;min-width:80px;"></span>
           </div>
         </div>
 
-        <div id="heli-indexos" style="padding:0.75rem 1rem 0.5rem;"></div>
-        <div id="heli-mapa" style="width:100%;aspect-ratio:1/1;max-height:600px;"></div>
+        <div id="${p}-indexos" style="padding:0.75rem 1rem 0.5rem;"></div>
+        <div id="${p}-mapa" style="width:100%;aspect-ratio:1/1;max-height:600px;"></div>
 
         <div style="padding:0.75rem 1rem;overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:0.84rem;min-width:600px;" id="heli-taula">
+          <table style="width:100%;border-collapse:collapse;font-size:0.84rem;min-width:600px;" id="${p}-taula">
             <thead>
               <tr style="background:#1a1a2e;color:white;">
                 <th style="padding:0.5rem 0.75rem;text-align:left;width:12%;">Recurs</th>
                 <th style="padding:0.5rem 0.75rem;text-align:left;width:22%;">Base</th>
                 <th style="padding:0.5rem 0.75rem;text-align:left;width:18%;">Operativitat</th>
                 <th style="padding:0.5rem 0.75rem;text-align:left;">Observacions</th>
-                <th style="padding:0.5rem 0.75rem;text-align:center;width:60px;"></th>
+                ${heliReadOnly ? '' : '<th style="padding:0.5rem 0.75rem;text-align:center;width:60px;"></th>'}
               </tr>
             </thead>
-            <tbody id="heli-tbody">
-              <tr><td colspan="5" style="padding:1rem;color:#aaa;text-align:center;">Carregant...</td></tr>
+            <tbody id="${p}-tbody">
+              <tr><td colspan="${heliReadOnly ? 4 : 5}" style="padding:1rem;color:#aaa;text-align:center;">Carregant...</td></tr>
             </tbody>
           </table>
-          <button class="risc-btn" style="margin-top:0.75rem;" onclick="afegirHelicoter()">+ Afegir helicòpter</button>
+          ${heliReadOnly ? '' : `<button class="risc-btn" style="margin-top:0.75rem;" onclick="afegirHelicoter()">+ Afegir helicòpter</button>`}
         </div>
 
         <div style="padding:0.75rem 1rem 1.25rem;">
           <div style="font-weight:700;font-size:0.9rem;color:#1a1a2e;margin-bottom:0.5rem;">🌅 Llum solar</div>
-          <div id="heli-sol-cont" style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1rem;"><div style="color:#aaa;font-size:0.8rem;">Carregant...</div></div>
+          <div id="${p}-sol-cont" style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1rem;"><div style="color:#aaa;font-size:0.8rem;">Carregant...</div></div>
           <div style="font-weight:700;font-size:0.9rem;color:#1a1a2e;margin-bottom:0.6rem;">🌤️ Condicions de vol</div>
-          <div id="heli-meteo-cont"><div style="color:#aaa;font-size:0.8rem;">Carregant...</div></div>
+          <div id="${p}-meteo-cont"><div style="color:#aaa;font-size:0.8rem;">Carregant...</div></div>
           <button class="risc-btn" style="margin-top:0.5rem;font-size:0.78rem;" onclick="carregarMeteoHelicopters()">🔄 Actualitzar</button>
         </div>`;
+    }
+
+    function renderHelicoptersCfgHTML(dataStr) {
+      return `
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+          <label style="font-size:0.82rem;color:#666;">📅</label>
+          <input type="date" id="heli-cfg-data-input" value="${dataStr}"
+            style="padding:0.3rem 0.5rem;border:1px solid #ddd;border-radius:4px;font-size:0.82rem;"
+            onchange="helicopterDataActual=this.value;carregarDadesHelicoptersDia(this.value)">
+          <button class="risc-btn risc-btn-primary" onclick="guardarHelicopters()" id="heli-cfg-btn-guardar">💾 Guardar</button>
+          <span id="heli-cfg-status" style="font-size:0.78rem;color:#888;min-width:80px;"></span>
+        </div>
+        <div id="heli-cfg-indexos" style="margin-bottom:0.5rem;"></div>
+        <div id="heli-cfg-mapa" style="width:100%;height:320px;border-radius:6px;margin-bottom:1rem;"></div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.84rem;min-width:560px;">
+            <thead>
+              <tr style="background:#1a1a2e;color:white;">
+                <th style="padding:0.5rem 0.75rem;text-align:left;width:12%;">Recurs</th>
+                <th style="padding:0.5rem 0.75rem;text-align:left;width:22%;">Base</th>
+                <th style="padding:0.5rem 0.75rem;text-align:left;width:18%;">Operativitat</th>
+                <th style="padding:0.5rem 0.75rem;text-align:left;">Observacions</th>
+                <th style="padding:0.5rem 0.75rem;text-align:center;width:40px;"></th>
+              </tr>
+            </thead>
+            <tbody id="heli-cfg-tbody">
+              <tr><td colspan="5" style="padding:1rem;color:#aaa;text-align:center;">Carregant...</td></tr>
+            </tbody>
+          </table>
+          <button class="risc-btn" style="margin-top:0.75rem;" onclick="afegirHelicoter()">+ Afegir helicòpter</button>
+        </div>`;
+    }
+
+    async function carregarHelicoptersCfg() {
+      heliPfx = 'heli-cfg';
+      heliReadOnly = false;
+      if (helicopterMap) { helicopterMap.remove(); helicopterMap = null; }
+      helicopterMarkers = {};
+      const cont = document.getElementById('param-helicopters-cont');
+      const avui = getAvuiStr();
+      helicopterDataActual = avui;
+      cont.innerHTML = renderHelicoptersCfgHTML(avui);
+      helicopterMap = L.map('heli-cfg-mapa', { zoomControl: true });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap', maxZoom: 18
+      }).addTo(helicopterMap);
+      helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
+      await carregarDadesHelicoptersDia(avui);
     }
 
     async function carregarHelicoptersDiaSupabase(dataStr) {
@@ -5349,38 +5410,45 @@
     }
 
     async function carregarDadesHelicoptersDia(dataStr) {
-      document.getElementById('heli-status').textContent = 'Carregant...';
+      heliEl('status').textContent = 'Carregant...';
 
       // Supabase primer
       const dadesSupabase = await carregarHelicoptersDiaSupabase(dataStr);
       if (dadesSupabase) {
         helicopterDadesActuals = dadesSupabase;
         renderTaulaHelicopters();
-        document.getElementById('heli-status').textContent = '✅ ' + dataStr;
+        heliEl('status').textContent = '✅ ' + dataStr;
         return;
       }
 
       helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
       renderTaulaHelicopters();
-      document.getElementById('heli-status').textContent = 'Per defecte';
+      heliEl('status').textContent = 'Per defecte';
     }
 
     function renderTaulaHelicopters() {
-      const tbody = document.getElementById('heli-tbody');
+      const tbody = heliEl('tbody');
       if (!tbody) return;
 
       tbody.innerHTML = helicopterDadesActuals.map((h, i) => {
-        const color = HELI_COLORS[i % HELI_COLORS.length];
-        const optsHTML = HELI_OPERATIVITAT.map(op =>
-          `<option value="${op}" ${h.operativitat === op ? 'selected' : ''}>${op}</option>`
-        ).join('');
         const opColor = h.operativitat === 'Total' ? '#2e7d32' :
                         h.operativitat === 'Parcial' ? '#e65100' :
                         h.operativitat === 'Sense grua' ? '#f57f17' : '#888';
+        if (heliReadOnly) {
+          return `<tr data-idx="${i}" style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:0.4rem 0.75rem;font-weight:600;">${escapeHtml(h.recurs||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;">${escapeHtml(h.base||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;color:${opColor};font-weight:600;">${escapeHtml(h.operativitat||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;color:#666;">${escapeHtml(h.observacions||'')}</td>
+          </tr>`;
+        }
+        const optsHTML = HELI_OPERATIVITAT.map(op =>
+          `<option value="${op}" ${h.operativitat === op ? 'selected' : ''}>${op}</option>`
+        ).join('');
         return `<tr data-idx="${i}" style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:0.35rem 0.75rem;">
             <div style="display:flex;align-items:center;gap:0.4rem;">
-  <span style="width:10px;height:10px;border-radius:50%;background:#1a1a2e;flex-shrink:0;display:inline-block;"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#1a1a2e;flex-shrink:0;display:inline-block;"></span>
               <input type="text" value="${h.recurs||''}"
                 style="width:100%;border:1px solid #e0e0e0;border-radius:3px;padding:0.2rem 0.4rem;font-size:0.82rem;font-weight:600;"
                 onchange="heliActualitzarCamp(${i},'recurs',this.value);heliAutoSave()">
@@ -5424,15 +5492,15 @@
       helicopterDadesActuals[idx].base = valor;
 
       // Geocodificar
-      document.getElementById('heli-status').textContent = '📍 Cercant...';
+      heliEl('status').textContent = '📍 Cercant...';
       const coords = await geocodificar(valor);
       if (coords) {
         helicopterDadesActuals[idx].lat = coords.lat;
         helicopterDadesActuals[idx].lon = coords.lon;
-        document.getElementById('heli-status').textContent = '📍 Trobat';
+        heliEl('status').textContent = '📍 Trobat';
         actualitzarMarcadors();
       } else {
-        document.getElementById('heli-status').textContent = '⚠️ Lloc no trobat';
+        heliEl('status').textContent = '⚠️ Lloc no trobat';
       }
       heliAutoSave();
     }
@@ -5497,18 +5565,20 @@
           iconAnchor: [0, helis.length * 16]
         });
 
-        const marker = L.marker([lat, lon], { icon, draggable: true })
+        const marker = L.marker([lat, lon], { icon, draggable: !heliReadOnly })
           .addTo(helicopterMap)
           .bindPopup(popupHTML);
 
-        marker.on('dragend', function(e) {
-          const pos = e.target.getLatLng();
-          helis.forEach(({ i }) => {
-            helicopterDadesActuals[i].lat = parseFloat(pos.lat.toFixed(5));
-            helicopterDadesActuals[i].lon = parseFloat(pos.lng.toFixed(5));
+        if (!heliReadOnly) {
+          marker.on('dragend', function(e) {
+            const pos = e.target.getLatLng();
+            helis.forEach(({ i }) => {
+              helicopterDadesActuals[i].lat = parseFloat(pos.lat.toFixed(5));
+              helicopterDadesActuals[i].lon = parseFloat(pos.lng.toFixed(5));
+            });
+            heliAutoSave();
           });
-          heliAutoSave();
-        });
+        }
 
         helis.forEach(({ i }) => { helicopterMarkers[i] = marker; });
       });
@@ -5574,7 +5644,7 @@
     }
 
     function renderIndexos() {
-      const cont = document.getElementById('heli-indexos');
+      const cont = heliEl('indexos');
       if (!cont) return;
       const idx = calcularIndexos();
       const { distribucio, operativitat, provinciesAmbHeli } = idx;
@@ -5646,7 +5716,7 @@
       const helis = helicopterDadesActuals.filter(h => h.lat && h.lon);
       if (helis.length === 0) return;
 
-      const cont = document.getElementById('heli-meteo-cont');
+      const cont = heliEl('meteo-cont');
       if (!cont) return;
       cont.innerHTML = '<div style="color:#aaa;font-size:0.8rem;padding:0.5rem;">Carregant dades meteorològiques...</div>';
 
@@ -5664,7 +5734,7 @@
           '&daily=sunrise,sunset&forecast_days=2&timezone=Europe%2FMadrid';
         const rSol = await fetch(urlSol);
         const dSol = await rSol.json();
-        const contSol = document.getElementById('heli-sol-cont');
+        const contSol = heliEl('sol-cont');
         if (contSol && dSol.daily) {
           const dies = ['Avui', 'Demà'];
           contSol.innerHTML = dSol.daily.time.map((data, i) => {
@@ -5813,7 +5883,7 @@
     let heliAutoSaveTimer = null;
     function heliAutoSave() {
       clearTimeout(heliAutoSaveTimer);
-      document.getElementById('heli-status').textContent = '...';
+      const s = heliEl('status'); if (s) s.textContent = '...';
       heliAutoSaveTimer = setTimeout(() => guardarHelicopters(), 1500);
     }
 
@@ -5835,17 +5905,18 @@
     }
 
     async function guardarHelicopters() {
-      const btn = document.getElementById('heli-btn-guardar');
-      btn.disabled = true;
-      document.getElementById('heli-status').textContent = 'Guardant...';
+      const btn = heliEl('btn-guardar');
+      const st = heliEl('status');
+      if (btn) btn.disabled = true;
+      if (st) st.textContent = 'Guardant...';
       try {
         await guardarHelicoptersSupabase(helicopterDataActual, helicopterDadesActuals);
-        document.getElementById('heli-status').textContent = '✅ Guardat';
+        if (st) st.textContent = '✅ Guardat';
       } catch(e) {
         logError('HeliSupabase', e.message);
-        document.getElementById('heli-status').textContent = '❌ ' + e.message;
+        if (st) st.textContent = '❌ ' + e.message;
       }
-      btn.disabled = false;
+      if (btn) btn.disabled = false;
     }
 
     // ==================== PLANS PC ====================
