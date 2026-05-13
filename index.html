@@ -1313,7 +1313,8 @@
     }
 
     // ==================== LOG D'ERRORS ====================
-    const errorLog = [];
+    const LS_ERRORS_KEY = 'grae_error_log';
+    const errorLog = (() => { try { return JSON.parse(localStorage.getItem(LS_ERRORS_KEY) || '[]'); } catch { return []; } })();
     function logError(font, missatge, detall) {
       const entrada = {
         ts: new Date().toISOString(),
@@ -1322,8 +1323,11 @@
         detall: detall ? String(detall) : ''
       };
       errorLog.unshift(entrada);
-      if (errorLog.length > 100) errorLog.pop();
-      // Actualitzar badge errors si la pestanya de config és oberta
+      if (errorLog.length > 200) errorLog.pop();
+      try { localStorage.setItem(LS_ERRORS_KEY, JSON.stringify(errorLog)); } catch {}
+      if (typeof sbClient !== 'undefined' && sbClient) {
+        sbClient.from('error_log').insert({ ts: entrada.ts, font: entrada.font, missatge: entrada.missatge, detall: entrada.detall || null }).then(() => {});
+      }
       const badge = document.getElementById('badge-errors');
       if (badge) {
         badge.textContent = errorLog.filter(e => {
@@ -4857,7 +4861,10 @@
           <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
               <h3 style="margin:0;font-size:1rem;color:#c62828;">🔴 Registre d'errors</h3>
-              <button class="risc-btn" onclick="document.getElementById('errors-list').innerHTML=renderErrorLog()">🔄 Actualitzar</button>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="risc-btn" onclick="document.getElementById('errors-list').innerHTML=renderErrorLog()">🔄 Actualitzar</button>
+                <button class="risc-btn" style="color:#c62828;" onclick="netejarErrors()">🗑️ Netejar tot</button>
+              </div>
             </div>
             <div id="errors-list" style="font-size:0.82rem;">
               <span style="color:#aaa;">Carregant...</span>
@@ -4985,8 +4992,19 @@
       `;
     }
     
+    function netejarErrors() {
+      if (confirm('Segur que vols esborrar tots els errors guardats?')) {
+        errorLog.length = 0;
+        try { localStorage.removeItem(LS_ERRORS_KEY); } catch {}
+        document.getElementById('errors-list').innerHTML = renderErrorLog();
+        const badge = document.getElementById('badge-errors');
+        if (badge) badge.style.display = 'none';
+      }
+    }
+
     function renderErrorLog() {
       if (errorLog.length === 0) return '<div style="color:#aaa;padding:0.5rem;">Cap error registrat.</div>';
+
       return errorLog.map(e => {
         const d = new Date(e.ts);
         const hora = d.toLocaleTimeString('ca', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
