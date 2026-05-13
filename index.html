@@ -1165,6 +1165,9 @@
       <button class="nav-tab" onclick="mostrarSeccio(event, 'helicopters')">
         🚁 Helicòpters
       </button>
+      <button class="nav-tab" onclick="mostrarSeccio(event, 'canvitemps')">
+        🌦️ Canvi Temps
+      </button>
     </nav>
     
     <!-- Secció Risc Operacional -->
@@ -1220,6 +1223,16 @@
         <div class="loading">
           <div class="loading-icon">🚨</div>
           <p style="margin-top: 1rem; opacity: 0.8;">Carregant plans de protecció civil...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secció Canvi de Temps -->
+    <section id="seccio-canvitemps" class="section">
+      <div id="app-canvitemps">
+        <div class="loading">
+          <div class="loading-icon">🌦️</div>
+          <p style="margin-top:1rem;opacity:0.8;">Carregant dades meteorològiques...</p>
         </div>
       </div>
     </section>
@@ -1367,10 +1380,8 @@
       document.getElementById('seccio-' + seccio).classList.add('active');
       ev.currentTarget.classList.add('active');
       
-      // Carregar helicòpters
-      if (seccio === 'helicopters') {
-        carregarHelicopters();
-      }
+      if (seccio === 'helicopters') carregarHelicopters();
+      if (seccio === 'canvitemps') carregarCanviTemps();
 
       // Carregar iframe BPA quan es mostra la secció per primer cop
       if (seccio === 'bpa' && !bpaIframeLoaded) {
@@ -5917,6 +5928,300 @@
         if (st) st.textContent = '❌ ' + e.message;
       }
       if (btn) btn.disabled = false;
+    }
+
+    // ==================== CANVI DE TEMPS ====================
+
+    const CANVI_PUNTS = [
+      { nom: 'Boí Taüll',     lat: 42.490, lon: 0.837, alt: 2500 },
+      { nom: 'Tavascan',      lat: 42.658, lon: 1.215, alt: 1800 },
+      { nom: 'Port Bonaigua', lat: 42.534, lon: 1.014, alt: 2072 },
+      { nom: 'Espot Esquí',   lat: 42.570, lon: 1.090, alt: 2200 },
+      { nom: 'La Molina',     lat: 42.337, lon: 1.942, alt: 2050 },
+      { nom: 'Vall de Núria', lat: 42.394, lon: 2.148, alt: 1967 },
+      { nom: 'Vallter 2000',  lat: 42.393, lon: 2.345, alt: 2000 }
+    ];
+
+    function esTemporadaCanvi() {
+      const avui = new Date();
+      const mes = avui.getMonth() + 1;
+      const dia = avui.getDate();
+      if (mes === 8 && dia >= 20) return true;
+      if (mes === 9 || mes === 10) return true;
+      return false;
+    }
+
+    function esVentPerillos(graus) {
+      const d = ((graus % 360) + 360) % 360;
+      return d >= 292.5 || d <= 67.5; // N, NE, NW
+    }
+
+    function wmoTextCanvi(code) {
+      if (code >= 96) return 'Tempesta amb pedregada';
+      if (code >= 95) return 'Tempesta';
+      if (code >= 85) return 'Ruixats de neu';
+      if (code >= 80) return 'Ruixats de pluja';
+      if (code >= 77) return 'Granins de neu';
+      if (code >= 75) return 'Neu intensa';
+      if (code >= 71) return 'Neu';
+      if (code >= 67) return 'Pluja i neu barrejades';
+      if (code >= 61) return 'Pluja';
+      if (code >= 57) return 'Plugim i geladet';
+      if (code >= 51) return 'Plugim';
+      if (code >= 45) return 'Boira';
+      if (code >= 40) return 'Boira lleugera';
+      if (code === 3)  return 'Cel cobert';
+      if (code === 2)  return 'Parcialment ennuvolat';
+      if (code === 1)  return 'Poc ennuvolat';
+      if (code === 0)  return 'Cel clar';
+      return `WMO ${code}`;
+    }
+
+    function calcularRiscDia(prev, dataStr, avg30d, punt) {
+      const idx = (hIni, hFi) => prev.hourly.time.reduce((acc, t, i) => {
+        const [d, h] = t.split('T'); const hr = parseInt(h);
+        if (d === dataStr && hr >= hIni && hr < hFi) acc.push(i);
+        return acc;
+      }, []);
+      const idxMati  = idx(6, 12);
+      const idxTarda = idx(12, 19);
+      if (!idxTarda.length) return { nivell: 0, factors: [], dades: null };
+
+      const gM = arr => idxMati.map(i => arr[i]);
+      const gT = arr => idxTarda.map(i => arr[i]);
+
+      const tempsMati = gM(prev.hourly.temperature_2m);
+      const precMati  = gM(prev.hourly.precipitation).reduce((a,b)=>a+b,0);
+      const ventVMati = gM(prev.hourly.windspeed_10m);
+      const wmoMati   = idxMati.length ? Math.max(...gM(prev.hourly.weathercode)) : 0;
+      const tmaxMati  = tempsMati.length ? Math.max(...tempsMati) : null;
+      const ventMaxMati = ventVMati.length ? Math.max(...ventVMati) : 0;
+
+      const tempsTarda = gT(prev.hourly.temperature_2m);
+      const precTarda  = gT(prev.hourly.precipitation).reduce((a,b)=>a+b,0);
+      const neuTarda   = gT(prev.hourly.snowfall).reduce((a,b)=>a+b,0);
+      const ventVTarda = gT(prev.hourly.windspeed_10m);
+      const ventDTarda = gT(prev.hourly.winddirection_10m);
+      const wmoTarda   = Math.max(...gT(prev.hourly.weathercode));
+      const tminTarda  = tempsTarda.length ? Math.min(...tempsTarda) : null;
+      const tmaxTarda  = tempsTarda.length ? Math.max(...tempsTarda) : null;
+      const ventMaxTarda = ventVTarda.length ? Math.max(...ventVTarda) : 0;
+      const ventMaxDirTarda = ventDTarda[ventVTarda.indexOf(ventMaxTarda)] ?? 0;
+
+      let nivellBase = 0;
+      const factors = [];
+
+      if (tmaxMati !== null && tminTarda !== null) {
+        const drop = tmaxMati - tminTarda;
+        if (drop >= 10)     { nivellBase = Math.max(nivellBase, 2); factors.push(`🌡️ Descens ${drop.toFixed(0)}°C (${tmaxMati.toFixed(0)}→${tminTarda.toFixed(0)}°C)`); }
+        else if (drop >= 5) { nivellBase = Math.max(nivellBase, 1); factors.push(`🌡️ Descens ${drop.toFixed(0)}°C (${tmaxMati.toFixed(0)}→${tminTarda.toFixed(0)}°C)`); }
+      }
+      if (avg30d !== null && tmaxTarda !== null && (avg30d - tmaxTarda) >= 10) {
+        nivellBase = Math.max(nivellBase, 1);
+        factors.push(`🌡️ Tarda ${tmaxTarda.toFixed(1)}°C (−${(avg30d - tmaxTarda).toFixed(0)}°C vs 30d)`);
+      }
+      if (neuTarda > 0.1) {
+        const nv = punt.alt >= 2400 ? 1 : 2;
+        nivellBase = Math.max(nivellBase, nv);
+        factors.push(`❄️ Neu a la tarda a ${punt.alt}m${precMati < 1 ? ' (matí sec)' : ''}`);
+      }
+      if (precTarda >= 10)     { nivellBase = Math.max(nivellBase, 2); factors.push(`🌧️ Pluja ${precTarda.toFixed(1)}mm a la tarda${precMati < 1 ? ' (matí sec)' : ''}`); }
+      else if (precTarda >= 5) { nivellBase = Math.max(nivellBase, 1); factors.push(`🌦️ Pluja ${precTarda.toFixed(1)}mm a la tarda${precMati < 1 ? ' (matí sec)' : ''}`); }
+      if (wmoTarda >= 95) {
+        nivellBase = Math.max(nivellBase, 2);
+        factors.push(`⛈️ ${wmoTextCanvi(wmoTarda)} a la tarda${wmoMati < 50 ? ' (matí clar)' : ''}`);
+      }
+      let bonusVent = 0;
+      if (esVentPerillos(ventMaxDirTarda)) {
+        const calm = ventMaxMati < 20;
+        if (ventMaxTarda >= 60)      { bonusVent = 2; factors.push(`💨 Vent N/NE/NW ${ventMaxTarda.toFixed(0)} km/h tarda${calm?' (matí calm)':''}`); }
+        else if (ventMaxTarda >= 40) { bonusVent = 1; factors.push(`💨 Vent N/NE/NW ${ventMaxTarda.toFixed(0)} km/h tarda${calm?' (matí calm)':''}`); }
+      }
+
+      return { nivell: Math.min(2, nivellBase + bonusVent), factors, dades: { tmaxMati, precMati, ventMaxMati, wmoMati, tminTarda, tmaxTarda, precTarda, neuTarda, ventMaxTarda, ventMaxDirTarda, wmoTarda, avg30d } };
+    }
+
+    async function fetchCanviPunt(punt, avuiStr, demaStr, fa30Str) {
+      const p = `latitude=${punt.lat}&longitude=${punt.lon}&elevation=${punt.alt}&timezone=Europe%2FMadrid`;
+      const [prevResp, histResp] = await Promise.all([
+        fetchAmbTimeout(`https://api.open-meteo.com/v1/forecast?${p}&hourly=temperature_2m,precipitation,snowfall,windspeed_10m,winddirection_10m,weathercode&forecast_days=2`, 15000),
+        fetchAmbTimeout(`https://archive-api.open-meteo.com/v1/archive?${p}&daily=temperature_2m_max&start_date=${fa30Str}&end_date=${avuiStr}`, 15000)
+      ]);
+      if (!prevResp.ok || !histResp.ok) throw new Error(`Error API ${punt.nom}`);
+      const prev = await prevResp.json();
+      const hist = await histResp.json();
+      const histMaxs = (hist.daily?.temperature_2m_max || []).filter(v => v !== null);
+      const avg30d = histMaxs.length ? histMaxs.reduce((a,b)=>a+b,0)/histMaxs.length : null;
+      return {
+        punt,
+        avui: calcularRiscDia(prev, avuiStr, avg30d, punt),
+        dema: calcularRiscDia(prev, demaStr, avg30d, punt)
+      };
+    }
+
+    function dirVentText(graus) {
+      const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+      return dirs[Math.round(graus / 22.5) % 16];
+    }
+
+    function renderExplicacioCanvi(r) {
+      if (!r.dades) return '<div style="color:#aaa;font-size:0.78rem;">Sense dades</div>';
+      const { tmaxMati, precMati, ventMaxMati, wmoMati, tminTarda, tmaxTarda, precTarda, neuTarda, ventMaxTarda, ventMaxDirTarda, wmoTarda, avg30d } = r.dades;
+
+      const celBl = 'background:#e8f4fd;';
+      const celTa = 'background:#fff8ee;';
+      const tdS   = `style="padding:0.2rem 0.5rem;font-size:0.76rem;text-align:center;`;
+      const act   = 'color:#c62828;font-weight:700;';
+
+      const drop = (tmaxMati !== null && tminTarda !== null) ? tmaxMati - tminTarda : null;
+      const dropActiu2 = drop !== null && drop >= 10;
+      const dropActiu1 = drop !== null && drop >= 5 && !dropActiu2;
+      const anom = (avg30d !== null && tmaxTarda !== null) ? avg30d - tmaxTarda : null;
+      const anomActiu = anom !== null && anom >= 10;
+      const neuActiu  = neuTarda > 0.1;
+      const precActiu2 = precTarda >= 10;
+      const precActiu1 = precTarda >= 5 && !precActiu2;
+      const wmoActiu  = wmoTarda >= 95;
+      const esNord    = esVentPerillos(ventMaxDirTarda);
+      const ventActiu2 = esNord && ventMaxTarda >= 60;
+      const ventActiu1 = esNord && ventMaxTarda >= 40 && !ventActiu2;
+
+      const tag = (actiu, txt) => actiu ? `<span style="${act}">${txt}</span>` : `<span style="color:#666;">${txt}</span>`;
+      const nota = txt => `<span style="color:#aaa;font-size:0.71rem;"> ${txt}</span>`;
+
+      let html = `<div style="padding:0.5rem 0.75rem 0.5rem 1.8rem;border-top:1px solid #e8e8e8;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.76rem;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:0.2rem 0.5rem;color:#888;font-weight:500;width:30%;"></th>
+              <th style="${tdS}${celBl}border-radius:4px 0 0 0;">🌅 Matí (6–12h)</th>
+              <th style="${tdS}${celTa}border-radius:0 4px 0 0;">🌆 Tarda (12–18h)</th>
+              <th style="text-align:left;padding:0.2rem 0.5rem;color:#888;font-weight:500;width:28%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:0.2rem 0.5rem;color:#555;">🌡️ Temperatura</td>
+              <td ${tdS}${celBl}">${tmaxMati !== null ? tmaxMati.toFixed(1)+'°C' : '—'}</td>
+              <td ${tdS}${celTa}">${tag(dropActiu2||dropActiu1, tminTarda !== null ? tminTarda.toFixed(1)+'°C' : '—')}</td>
+              <td style="padding:0.2rem 0.5rem;font-size:0.73rem;">
+                ${drop !== null ? tag(dropActiu2||dropActiu1, `Descens ${drop.toFixed(0)}°C`) : ''}
+                ${dropActiu2 ? nota('✓ n2') : dropActiu1 ? nota('✓ n1') : drop !== null && drop > 0 ? nota('(cal ≥5°C)') : ''}
+                ${anomActiu ? tag(true, `Avg30d: ${avg30d.toFixed(1)}°C`)+nota('✓ n1') : ''}
+              </td>
+            </tr>
+            <tr style="background:#fafafa;">
+              <td style="padding:0.2rem 0.5rem;color:#555;">🌧️ Precipitació</td>
+              <td ${tdS}${celBl}">${precMati.toFixed(1)} mm</td>
+              <td ${tdS}${celTa}">${tag(precActiu2||precActiu1, precTarda.toFixed(1)+' mm')}</td>
+              <td style="padding:0.2rem 0.5rem;font-size:0.73rem;">
+                ${precActiu2 ? tag(true,'≥10mm')+nota('✓ n2') : precActiu1 ? tag(true,'≥5mm')+nota('✓ n1') : nota('cal ≥5mm')}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0.2rem 0.5rem;color:#555;">❄️ Neu</td>
+              <td ${tdS}${celBl}">—</td>
+              <td ${tdS}${celTa}">${tag(neuActiu, neuActiu ? neuTarda.toFixed(1)+' cm' : '0 cm')}</td>
+              <td style="padding:0.2rem 0.5rem;font-size:0.73rem;">
+                ${neuActiu ? tag(true, `cota ≤${r.punt.alt}m`)+nota(r.punt.alt>=2400?'✓ n1':'✓ n2') : nota('no hi ha neu')}
+              </td>
+            </tr>
+            <tr style="background:#fafafa;">
+              <td style="padding:0.2rem 0.5rem;color:#555;">💨 Vent màxim</td>
+              <td ${tdS}${celBl}">${ventMaxMati.toFixed(0)} km/h</td>
+              <td ${tdS}${celTa}">${tag(ventActiu2||ventActiu1, ventMaxTarda.toFixed(0)+' km/h '+dirVentText(ventMaxDirTarda))}</td>
+              <td style="padding:0.2rem 0.5rem;font-size:0.73rem;">
+                ${ventActiu2 ? tag(true,'≥60 N/NE/NW')+nota('✓ +2') : ventActiu1 ? tag(true,'≥40 N/NE/NW')+nota('✓ +1') : esNord ? nota('N/NE/NW, cal ≥40') : nota('no és del nord')}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0.2rem 0.5rem;color:#555;">⛈️ Condicions</td>
+              <td ${tdS}${celBl}">${wmoTextCanvi(wmoMati)||'—'}</td>
+              <td ${tdS}${celTa}">${tag(wmoActiu, wmoTextCanvi(wmoTarda)||'—')}</td>
+              <td style="padding:0.2rem 0.5rem;font-size:0.73rem;">
+                ${wmoActiu ? tag(true,'Tempesta/pedregada')+nota('✓ n2') : nota((wmoTextCanvi(wmoTarda)||'—')+' · no hi ha tempesta prevista')}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`;
+      return html;
+    }
+
+    async function carregarCanviTemps() {
+      const cont = document.getElementById('app-canvitemps');
+      cont.innerHTML = '<div class="loading"><div class="loading-icon">🌦️</div><p style="margin-top:1rem;opacity:0.8;">Carregant dades meteorològiques...</p></div>';
+
+      try {
+        const avui = new Date();
+        const dema = new Date(avui); dema.setDate(dema.getDate() + 1);
+        const avuiStr = avui.toISOString().split('T')[0];
+        const demaStr = dema.toISOString().split('T')[0];
+        const fa30 = new Date(avui); fa30.setDate(fa30.getDate() - 31);
+        const fa30Str = fa30.toISOString().split('T')[0];
+
+        const resultats = await Promise.all(
+          CANVI_PUNTS.map(p => fetchCanviPunt(p, avuiStr, demaStr, fa30Str)
+            .catch(e => {
+              logError('CanviTemps', e.message, p.nom);
+              const err = { nivell: 0, factors: [`⚠️ Error: ${e.message}`], dades: null };
+              return { punt: p, avui: err, dema: err };
+            }))
+        );
+
+        const formatDia = d => d.toLocaleDateString('ca-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+        function renderSeccio(dia, diaStr, resultats, camp) {
+          const dies = resultats.map(r => ({ punt: r.punt, ...r[camp] }));
+          const maxN = Math.max(...dies.map(d => d.nivell));
+          const col = ['#388e3c','#e65100','#c62828'][maxN];
+          const txt = ['NO ES PREVEU CANVI','NIVELL 1 — MODERAT','NIVELL 2 — ALT'][maxN];
+          const ico = ['✅','⚠️','🔴'][maxN];
+
+          let h = `<div style="border-bottom:1px solid #e0e0e0;padding:0.7rem 0.9rem;">
+            <div style="font-size:0.7rem;color:#888;margin-bottom:0.3rem;">📅 ${formatDia(dia)}</div>
+            <div style="background:${col};color:#fff;border-radius:7px;padding:0.35rem 0.9rem;font-size:0.88rem;font-weight:800;display:inline-block;">${ico} ${txt}</div>
+          </div>
+          <div style="padding:0.5rem 0.6rem;display:flex;flex-direction:column;gap:0.35rem;">`;
+
+          for (const r of dies) {
+            const bg  = ['#f1f8e9','#fff8e1','#ffebee'][r.nivell];
+            const brd = ['#c5e1a5','#ffe082','#ef9a9a'][r.nivell];
+            const em  = ['🟢','🟠','🔴'][r.nivell];
+            const nt  = ['Cap canvi','Moderat','Alt'][r.nivell];
+            const resum = r.factors.length ? r.factors.join(' · ') : '';
+            h += `<details style="background:${bg};border:1px solid ${brd};border-radius:6px;">
+              <summary style="padding:0.45rem 0.7rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;list-style:none;user-select:none;">
+                <span>${em}</span>
+                <span style="font-weight:700;font-size:0.84rem;flex:1;">${r.punt.nom} <span style="font-weight:400;color:#888;font-size:0.75rem;">· ${r.punt.alt}m</span></span>
+                <span style="font-size:0.72rem;color:#555;">${nt}</span>
+              </summary>
+              <div style="padding:0 0.7rem 0.1rem;">
+                ${resum ? `<div style="font-size:0.76rem;color:#555;margin-bottom:0.15rem;">${resum}</div>` : ''}
+                ${renderExplicacioCanvi(r)}
+              </div>
+            </details>`;
+          }
+          h += `</div>`;
+          return h;
+        }
+
+        const horaAct = avui.toLocaleTimeString('ca-ES', { hour: '2-digit', minute: '2-digit' });
+        let html = `<div style="font-size:0.7rem;color:#aaa;padding:0.35rem 1rem;background:#fafafa;border-bottom:1px solid #eee;">
+          🌦️ Canvi de Temps · Font: Open-Meteo · ${horaAct} · Risc més elevat: 20 ago – 31 oct
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-start;">
+          <div style="flex:1;min-width:280px;border-right:1px solid #e0e0e0;">${renderSeccio(avui, avuiStr, resultats, 'avui')}</div>
+          <div style="flex:1;min-width:280px;">${renderSeccio(dema, demaStr, resultats, 'dema')}</div>
+        </div>`;
+        html += `<div style="padding:0.5rem 1rem;border-top:1px solid #eee;"><button class="risc-btn" style="font-size:0.78rem;" onclick="carregarCanviTemps()">🔄 Actualitzar</button></div>`;
+
+        cont.innerHTML = html;
+
+      } catch(e) {
+        logError('CanviTemps', e.message);
+        cont.innerHTML = `<div class="error"><div style="font-size:3rem;">⚠️</div><h2>Error carregant dades</h2><p style="opacity:0.8;">${e.message}</p><button onclick="carregarCanviTemps()">Tornar a provar</button></div>`;
+      }
     }
 
     // ==================== PLANS PC ====================
