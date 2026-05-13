@@ -1,173 +1,13 @@
 {
-  "dataConsulta": "2026-05-12T15:56:49.776Z",
+  "dataConsulta": "2026-05-13T08:30:02.597Z",
   "avisos": [
     {
-      "meteor": "Temps violent",
-      "estat": "Vigent",
-      "dataInici": "2026-05-12T15:47Z",
-      "dataFi": "2026-05-12T17:47Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-05-12",
-          "afectacions": [
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Taronja",
-              "probabilitat": "Prob 6",
-              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
-      "dataInici": "2026-05-12T12:00Z",
+      "dataInici": "2026-05-13T12:00Z",
       "dataFi": "2026-05-13T17:59Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa o pedra i d'algunes ratxes fortes de vent.",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta.",
       "dies": [
-        {
-          "dia": "2026-05-12",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
         {
           "dia": "2026-05-13",
           "afectacions": [
@@ -205,6 +45,56 @@
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Vigent",
+      "dataInici": "2026-05-13T12:00Z",
+      "dataFi": "2026-05-13T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta.",
+      "dies": [
+        {
+          "dia": "2026-05-13",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
       "dataInici": "2026-05-12T12:00Z",
       "dataFi": "2026-05-13T17:59Z",
       "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa o pedra i d'algunes ratxes fortes de vent.",
@@ -396,8 +286,8 @@
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
       "dataInici": "2026-05-12T12:00Z",
-      "dataFi": "2026-05-12T17:59Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa o pedra petita.",
+      "dataFi": "2026-05-13T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa o pedra i d'algunes ratxes fortes de vent.",
       "dies": [
         {
           "dia": "2026-05-12",
@@ -414,7 +304,7 @@
             {
               "zona": "Catalunya Central",
               "nivell": "Groc",
-              "probabilitat": "Poc probable",
+              "probabilitat": "Molt probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
@@ -423,7 +313,7 @@
             {
               "zona": "Empordà",
               "nivell": "Groc",
-              "probabilitat": "Poc probable",
+              "probabilitat": "Probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
@@ -441,6 +331,92 @@
             {
               "zona": "Litoral Central",
               "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-05-13",
+          "afectacions": [
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
@@ -457,52 +433,7 @@
               ]
             },
             {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
               "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
