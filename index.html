@@ -1243,7 +1243,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // ===== SUPABASE =====
+    // ==================== SUPABASE ====================
     const SUPABASE_URL = 'https://rxfjwklbvqkwgzmpzwae.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4Zmp3a2xidnFrd2d6bXB6d2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDg2MDIsImV4cCI6MjA5MzU4NDYwMn0.dGtiy1S1Q7mn5mX_cV60KfQQgmOQ5_JIeA7y2SGmdhY';
     const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1288,7 +1288,7 @@
     }
 
     // URLs de les fonts de dades
-    // ===== UTILITATS =====
+    // ==================== UTILITATS ====================
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
       return String(str)
@@ -1300,16 +1300,6 @@
     }
 
     async function fetchAmbTimeout(url, ms = 12000) {
-      // Google Apps Script fa redirects i l'AbortSignal no es pot clonar
-      // Per URLs de GAS usem Promise.race amb un timer manual
-      const esGAS = url.includes('script.google.com') || url.includes('googleapis.com');
-      if (esGAS) {
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout: ' + url.substring(0,60))), ms)
-        );
-        return Promise.race([fetch(url), timeoutPromise]);
-      }
-      // Per la resta (Open-Meteo, Gist, etc.) usem AbortController
       const controller = new AbortController();
       const id = setTimeout(() => controller.abort(), ms);
       try {
@@ -1322,7 +1312,7 @@
       }
     }
 
-    // ===== LOG D'ERRORS =====
+    // ==================== LOG D'ERRORS ====================
     const errorLog = [];
     function logError(font, missatge, detall) {
       const entrada = {
@@ -1366,6 +1356,7 @@
       planspc: null
     };
     
+    // ==================== NAVEGACIÓ ====================
     function mostrarSeccio(ev, seccio) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -3545,7 +3536,7 @@
       }
     };
     
-    // ========== SECCIÓ RISC OPERACIONAL ==========
+    // ==================== RISC OPERACIONAL ====================
     
     let riscState = {
       yesterday: null,
@@ -4224,7 +4215,7 @@
       actualitzarRiscAuto();
     }
     
-    // ── Historial alertes SMP ──────────────────────────────────
+    // ==================== SMP HISTÒRIC ====================
     let smpHistoricMes = null;  // 'YYYY-MM' del mes mostrat
     let smpHistoricMesos = [];  // llista de 'YYYY-MM' amb dades, ordre desc
 
@@ -4549,6 +4540,7 @@
     // ───────────────────────────────────────────────────────────
 
     // ── Simulador SMP ──────────────────────────────────────────
+    // ==================== SIMULADOR SMP ====================
     let simFiles = [];
     let simIdCounter = 0;
 
@@ -4620,8 +4612,7 @@
         <strong style="font-size:1.1rem;color:${color};">SMP = ${valor} / 6</strong>
         <span style="color:#666;font-size:0.75rem;margin-left:0.5rem;">${explicacio}</span>`;
     }
-    // ───────────────────────────────────────────────────────────
-
+    // ==================== PARÀMETRES RISC ====================
     function resetRiscParams() {
       if (confirm('Segur que vols restablir els paràmetres per defecte?')) {
         riscParams = {
@@ -4660,7 +4651,7 @@
       }
     }
     
-    // Pàgina de configuració de paràmetres
+    // ==================== PÀGINA CONFIGURACIÓ ====================
     function obrirPaginaParametres() {
       document.getElementById('app-risc').innerHTML = renderPaginaParametres();
     }
@@ -4690,6 +4681,7 @@
           <button class="risc-btn" id="tab-canvi" onclick="mostrarTabParam('canvi')">🌦️ Canvi Temps</button>
           <button class="risc-btn" id="tab-historic" onclick="mostrarTabParam('historic')">📊 Històric</button>
           <button class="risc-btn" id="tab-errors" onclick="mostrarTabParam('errors')">🔴 Errors <span id="badge-errors" style="background:#e53935;color:white;border-radius:10px;padding:0 5px;font-size:0.7rem;display:none;margin-left:3px;"></span></button>
+          <button class="risc-btn" id="tab-enllacos" onclick="mostrarTabParam('enllacos')">🔗 Enllaços</button>
         </div>
         
         <!-- Tab SMP -->
@@ -4880,7 +4872,7 @@
             <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
               <input type="date" id="historic-data-input" style="padding:0.4rem 0.6rem; border:1px solid #ddd; border-radius:4px; font-size:0.85rem;">
               <button class="risc-btn risc-btn-primary" onclick="carregarDiaHistoric()">🔍 Carregar dia</button>
-              <button class="risc-btn" onclick="enviarRiscGAS()">💾 Guardar avui al GAS</button>
+              <button class="risc-btn" onclick="enviarRiscSupabase()">💾 Guardar avui a Supabase</button>
             </div>
 
             <div id="historic-resultat" style="font-size:0.85rem; color:#666;">
@@ -4888,6 +4880,106 @@
             </div>
 
             <div id="enviar-resultat" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div id="param-enllacos" class="param-tab" style="display: none;">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;gap:1.5rem;">
+            <h3 style="margin:0 0 0.25rem;font-size:1rem;color:#0082d9;">🔗 Fonts de dades i enllaços</h3>
+            <p style="margin:0;font-size:0.82rem;color:#666;">Tots els fitxers JSON i taules Supabase que utilitza l'app, amb la font d'origen i la freqüència d'actualització.</p>
+
+            <!-- JSON estàtics GitHub Pages -->
+            <div>
+              <div style="font-size:0.85rem;font-weight:700;color:#37474f;margin-bottom:0.6rem;border-bottom:1px solid #e0e0e0;padding-bottom:0.3rem;">📄 Fitxers JSON (GitHub Pages)</div>
+              <p style="margin:0 0 0.6rem;font-size:0.78rem;color:#888;">Instantànies actuals — es sobreescriuen en cada execució. Accessible públicament via URL.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                <thead>
+                  <tr style="background:#f5f5f5;color:#555;">
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Fitxer</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Font</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Actualització</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Enllaç</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_latest.json</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Meteocat API (episodis oberts)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (06:45, 09:00, 14:30 CET)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://correvents.github.io/Risc-Grae-v1/data/smp_latest.json" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">bpa_latest.json</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">ICGC BPA (butlletí global)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (06:45, 09:00, 14:30 CET)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://correvents.github.io/Risc-Grae-v1/data/bpa_latest.json" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">previsio_latest.json</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Meteocat API (predicció municipal)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (06:45, 09:00, 14:30 CET)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://correvents.github.io/Risc-Grae-v1/data/previsio_latest.json" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">planspc_latest.json</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Interior.cat (plans protecció civil)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (06:45, 09:00, 14:30 CET)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://correvents.github.io/Risc-Grae-v1/data/planspc_latest.json" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Taules Supabase -->
+            <div>
+              <div style="font-size:0.85rem;font-weight:700;color:#37474f;margin-bottom:0.6rem;border-bottom:1px solid #e0e0e0;padding-bottom:0.3rem;">🗄️ Taules Supabase (històric)</div>
+              <p style="margin:0 0 0.6rem;font-size:0.78rem;color:#888;">Acumulació de registres — no s'esborren. Permeten consultar dades de dies anteriors.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                <thead>
+                  <tr style="background:#f5f5f5;color:#555;">
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Taula</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Contingut</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">S'actualitza</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Supabase</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">risc_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Risc GRAE diari calculat</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">1× dia (22:00 CET) + manual</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Avisos SMP actius per dia/zona</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_override_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Overrides manuals SMP per la simulació</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Quan l'usuari fa un override</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">taula_config_Alertes_SMP</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Configuració de llindars i pesos SMP</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Manual (des de Configuració)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">bpa_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Butlletí de perill d'allaus per zona/dia</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">planspc_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Plans de protecció civil actius</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">previsio_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Predicció meteorològica per municipi</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">afluencia_edicions</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Registres d'afluència introduïts manualment</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Quan l'usuari guarda dades d'afluència</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">helicopters_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Estat helicòpters per dia (guardat manual)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Quan l'usuari guarda des de Helicòpters</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- GitHub Actions -->
+            <div>
+              <div style="font-size:0.85rem;font-weight:700;color:#37474f;margin-bottom:0.6rem;border-bottom:1px solid #e0e0e0;padding-bottom:0.3rem;">⚙️ GitHub Actions (automatitzacions)</div>
+              <p style="margin:0 0 0.6rem;font-size:0.78rem;color:#888;">Scripts que s'executen automàticament al servidor de GitHub per consultar les APIs i guardar les dades.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                <thead>
+                  <tr style="background:#f5f5f5;color:#555;">
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Workflow</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Què fa</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Horari (CET)</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Historial</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">data_diari.yml</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">SMP + BPA + Previsió + Plans PC → JSON + Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">06:45 · 09:00 · 14:30</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/actions/workflows/data_diari.yml" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">risc_diari.yml</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Calcula i guarda el Risc GRAE del dia → Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">22:00</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/actions/workflows/risc_diari.yml" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Codi font -->
+            <div>
+              <div style="font-size:0.85rem;font-weight:700;color:#37474f;margin-bottom:0.6rem;border-bottom:1px solid #e0e0e0;padding-bottom:0.3rem;">💻 Codi font (GitHub)</div>
+              <p style="margin:0 0 0.6rem;font-size:0.78rem;color:#888;">Tots els fitxers del repositori. L'app és un sol fitxer HTML; els scripts s'executen via GitHub Actions.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                <thead>
+                  <tr style="background:#f5f5f5;color:#555;">
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Fitxer</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Descripció</th>
+                    <th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Codi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">index.html</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">App completa — tota la lògica, UI i dades en un sol fitxer</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/index.html" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/utils.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Funcions compartides: Supabase upsert/insert, lectura/escriptura JSON</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/utils.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/fetch-smp.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Consulta Meteocat API i guarda avisos SMP a JSON + Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/fetch-smp.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/fetch-bpa.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Consulta ICGC API i guarda butlletí d'allaus a JSON + Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/fetch-bpa.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/fetch-previsio.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Consulta Meteocat API i guarda predicció per municipis a JSON + Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/fetch-previsio.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/fetch-planspc.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Consulta Interior.cat i guarda plans de protecció civil a JSON + Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/fetch-planspc.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                  <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">scripts/risc-diari.js</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Calcula el Risc GRAE diari a partir de SMP + BPA i el guarda a Supabase</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://github.com/correvents/Risc-Grae-v1/blob/main/scripts/risc-diari.js" target="_blank" style="color:#0082d9;">veure ↗</a></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       `;
@@ -5032,7 +5124,7 @@
 
     // ==================== HISTORIC RISC GRAE ====================
 
-    async function enviarRiscGAS(dataStr, edicions) {
+    async function enviarRiscSupabase(dataStr, edicions) {
       const data = dataStr || getRiscDateString(0);
       const dia = dataStr ? null : riscState.today;
       const risc = dia ? calcularRisc(dia) : null;
@@ -5070,7 +5162,7 @@
       const edicions = riscState.history || [];
       const avui = getRiscDateString(0);
       const edicionsAvui = edicions.filter(e => e.timestamp && e.timestamp.startsWith(avui));
-      await enviarRiscGAS(avui, edicionsAvui);
+      await enviarRiscSupabase(avui, edicionsAvui);
     }
 
     async function carregarDiaHistoric() {
@@ -5250,33 +5342,9 @@
         return;
       }
 
-      // Fallback GAS
-      const url = URLS.helicopters;
-      if (!url || url === 'HELICOPTERS_GAS_URL') {
-        helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
-        renderTaulaHelicopters();
-        document.getElementById('heli-status').textContent = 'Per defecte';
-        return;
-      }
-      try {
-        const resp = await fetchAmbTimeout(url + '?accio=getDia&data=' + dataStr);
-        const dades = await resp.json();
-        helicopterDadesActuals = dades.helicopters && dades.helicopters.length > 0
-          ? dades.helicopters
-          : JSON.parse(JSON.stringify(HELICOPTERS_BASE));
-        renderTaulaHelicopters();
-        if (!dades.noDades) {
-          document.getElementById('heli-status').textContent = '✅ ' + dataStr + ' (GAS)';
-        } else if (dades.fontData) {
-          document.getElementById('heli-status').textContent = '📋 Dades de ' + dades.fontData;
-        } else {
-          document.getElementById('heli-status').textContent = 'Per defecte';
-        }
-      } catch(e) {
-        helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
-        renderTaulaHelicopters();
-        document.getElementById('heli-status').textContent = '⚠️ Error GAS';
-      }
+      helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
+      renderTaulaHelicopters();
+      document.getElementById('heli-status').textContent = 'Per defecte';
     }
 
     function renderTaulaHelicopters() {
@@ -5430,7 +5498,7 @@
 
 
 
-    // ===== ÍNDEXS DISTRIBUCIÓ I OPERATIVITAT =====
+    // ==================== ÍNDEXS DISTRIBUCIÓ I OPERATIVITAT ====================
     function provinciaDeBase(base) {
       if (!base) return null;
       const b = base.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -5528,7 +5596,7 @@
         </details>`;
     }
 
-    // ===== OPEN-METEO PER HELICÒPTERS =====
+    // ==================== OPEN-METEO PER HELICÒPTERS ====================
     // Codis WMO rellevants per vol
     function wmoDescripcio(code) {
       if (code === 0) return 'Cel clar';
@@ -5758,18 +5826,6 @@
       } catch(e) {
         logError('HeliSupabase', e.message);
         document.getElementById('heli-status').textContent = '❌ ' + e.message;
-      }
-      // Guardat paral·lel al GAS com a backup
-      const url = URLS.helicopters;
-      if (url && url !== 'HELICOPTERS_GAS_URL') {
-        fetch(url, {
-          method: 'POST',
-          body: JSON.stringify({
-            accio: 'guardarDia',
-            data: helicopterDataActual,
-            helicopters: helicopterDadesActuals
-          })
-        }).catch(() => {});
       }
       btn.disabled = false;
     }
