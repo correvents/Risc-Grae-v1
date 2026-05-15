@@ -1814,8 +1814,8 @@
     };
     
     const getNivellBg = (nivell) => {
-      const colors = { 'Vermell': 'rgba(239,68,68,0.8)', 'Taronja': 'rgba(249,115,22,0.8)', 'Groc': 'rgba(250,204,21,0.8)' };
-      return colors[nivell] || 'rgba(34,197,94,0.3)';
+      const colors = { 'Vermell': '#f87171', 'Taronja': '#fb923c', 'Groc': '#fde047' };
+      return colors[nivell] || '#bbf7d0';
     };
     
     // Agrupació de zones
@@ -2066,7 +2066,7 @@
                 riscosOrdenats.forEach((r, idx) => {
                   const llindarKmh = formatLlindar(r.llindar);
                   const prob = formatProb(r.probabilitat);
-                  const bgColor = idx === 0 ? getNivellBg(cel.nivell) : getNivellBg(r.nivell);
+                  const bgColor = getNivellBg(r.nivell);
                   const border = idx > 0 ? 'border-top: 1px solid rgba(0,0,0,0.15);' : '';
                   html += `<div style="background:${bgColor};${border}padding:0.2rem 0.15rem;">
                     <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;"><span style="font-variant-emoji:emoji;">${r.emoji}</span>${probIcon(r.probabilitat)}</div>
