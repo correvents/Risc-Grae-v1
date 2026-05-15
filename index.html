@@ -5423,18 +5423,41 @@
     async function carregarDadesHelicoptersDia(dataStr) {
       heliEl('status').textContent = 'Carregant...';
 
-      // Supabase primer
-      const dadesSupabase = await carregarHelicoptersDiaSupabase(dataStr);
-      if (dadesSupabase) {
-        helicopterDadesActuals = dadesSupabase;
+      // Intentar avui
+      const dadesAvui = await carregarHelicoptersDiaSupabase(dataStr);
+      if (dadesAvui) {
+        helicopterDadesActuals = dadesAvui;
         renderTaulaHelicopters();
         heliEl('status').textContent = '✅ ' + dataStr;
         return;
       }
 
+      // Fallback: darrer registre disponible (qualsevol data)
+      try {
+        const { data } = await sbClient
+          .from('helicopters_historic')
+          .select('*')
+          .order('data', { ascending: false })
+          .order('heli_id')
+          .limit(20);
+        if (data && data.length > 0) {
+          const dataAnterior = data[0].data;
+          helicopterDadesActuals = data
+            .filter(r => r.data === dataAnterior)
+            .map(row => ({
+              id: row.heli_id, recurs: row.recurs, base: row.base,
+              lat: row.lat, lon: row.lon,
+              operativitat: row.operativitat, observacions: row.observacions
+            }));
+          renderTaulaHelicopters();
+          heliEl('status').textContent = `📋 Darrer registre: ${dataAnterior}`;
+          return;
+        }
+      } catch(e) { logError('HeliCarregar', e.message); }
+
       helicopterDadesActuals = JSON.parse(JSON.stringify(HELICOPTERS_BASE));
       renderTaulaHelicopters();
-      heliEl('status').textContent = 'Per defecte';
+      heliEl('status').textContent = 'Sense dades';
     }
 
     function renderTaulaHelicopters() {
