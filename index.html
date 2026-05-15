@@ -1862,6 +1862,12 @@
       return abrev[prob] || prob;
     };
     
+    const probIcon = (prob) => {
+      const icons = { 'Poc probable': '◔', 'Probable': '◑', 'Molt probable': '◕', 'Segur': '●' };
+      const ic = icons[prob];
+      return ic ? `<span style="color:#c62828;font-size:0.65rem;line-height:1;">${ic}</span>` : '';
+    };
+
     const renderSMP = (data) => {
       console.log('Dades SMP:', JSON.stringify(data, null, 2));
       // Actualitzar badge
@@ -2052,7 +2058,7 @@
                   const bgColor = idx === 0 ? getNivellBg(cel.nivell) : getNivellBg(r.nivell);
                   const border = idx > 0 ? 'border-top: 1px solid rgba(0,0,0,0.15);' : '';
                   html += `<div style="background:${bgColor};${border}padding:0.2rem 0.15rem;">
-                    <div class="cel-emoji" style="font-size:0.8rem;">${r.emoji}</div>
+                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;">${r.emoji}${probIcon(r.probabilitat)}</div>
                     <div class="cel-info" style="font-size:0.65rem;color:#000;-webkit-font-smoothing:antialiased;">${llindarKmh.replace('Ratxa màxima ','').replace('>','>')}</div>
                     ${prob ? `<div class="cel-prob" style="font-size:0.65rem;color:#000;-webkit-font-smoothing:antialiased;">${prob}</div>` : ''}
                   </div>`;
@@ -6430,7 +6436,7 @@
                 riscos.forEach((r, idx) => {
                   const border = idx > 0 ? 'border-top:1px solid rgba(0,0,0,0.15);' : '';
                   html += `<div style="background:${getNivellBg(r.nivell)};${border}padding:0.2rem 0.15rem;">
-                    <div class="cel-emoji" style="font-size:0.8rem;">${r.emoji}</div>
+                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;">${r.emoji}${probIcon(r.probabilitat)}</div>
                     <div class="cel-info" style="font-size:0.65rem;color:#000;">${formatLlindar(r.llindar).replace('Ratxa màxima ','').replace('>','>')}</div>
                     ${r.probabilitat ? `<div class="cel-prob" style="font-size:0.65rem;color:#000;">${formatProb(r.probabilitat)}</div>` : ''}
                   </div>`;
