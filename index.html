@@ -1801,9 +1801,11 @@
     const getSMPEmoji = (meteor) => {
       const emojis = {
         'Pluja': '🌧️', 'Neu': '❄️', 'Vent': '💨', 'Tempesta': '⛈️',
-        'Onatge': '🌊', 'Fred': '🥶', 'Calor': '🥵', 'Allaus': '🏔️'
+        'Onatge': '🌊', 'Fred': '🥶', 'Calor': '🥵', 'Allaus': '🏔️',
+        'Intensitat de pluja en 30 minuts': '🌧️', 'Intensitat de pluja': '🌧️',
+        'Neu a cotes baixes': '❄️', 'Neu': '❄️', 'Boira': '🌫️', 'Gelada': '🧊'
       };
-      return emojis[meteor] || '⚠️';
+      return emojis[meteor] || '⛅';
     };
     
     const getNivellColor = (nivell) => {
@@ -1863,9 +1865,18 @@
     };
     
     const probIcon = (prob) => {
-      const icons = { 'Poc probable': '◔', 'Probable': '◑', 'Molt probable': '◕', 'Segur': '●' };
-      const ic = icons[prob];
-      return ic ? `<span style="color:#c62828;font-size:0.65rem;line-height:1;">${ic}</span>` : '';
+      const c = '#c62828', r = 4, cx = 5, cy = 5;
+      const circle = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${c}" stroke-width="1.2"/>`;
+      const sector = (x1,y1,x2,y2,large) =>
+        `<path d="M${cx} ${cy} L${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${c}"/>`;
+      const svgs = {
+        'Poc probable':  circle + sector(5,1, 9,5, 0),
+        'Probable':      circle + sector(5,1, 5,9, 0),
+        'Molt probable': circle + sector(5,1, 1,5, 1),
+        'Segur':         `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${c}"/>`
+      };
+      const s = svgs[prob];
+      return s ? `<svg width="9" height="9" viewBox="0 0 10 10" style="vertical-align:middle;flex-shrink:0;">${s}</svg>` : '';
     };
 
     const renderSMP = (data) => {
@@ -2058,7 +2069,7 @@
                   const bgColor = idx === 0 ? getNivellBg(cel.nivell) : getNivellBg(r.nivell);
                   const border = idx > 0 ? 'border-top: 1px solid rgba(0,0,0,0.15);' : '';
                   html += `<div style="background:${bgColor};${border}padding:0.2rem 0.15rem;">
-                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;"><span>${r.emoji}</span>${probIcon(r.probabilitat)}</div>
+                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;"><span style="font-variant-emoji:emoji;">${r.emoji}</span>${probIcon(r.probabilitat)}</div>
                     <div class="cel-info" style="font-size:0.65rem;color:#000;-webkit-font-smoothing:antialiased;">${llindarKmh.replace('Ratxa màxima ','').replace('>','>')}</div>
                     ${prob ? `<div class="cel-prob" style="font-size:0.65rem;color:#000;-webkit-font-smoothing:antialiased;">${prob}</div>` : ''}
                   </div>`;
@@ -6436,7 +6447,7 @@
                 riscos.forEach((r, idx) => {
                   const border = idx > 0 ? 'border-top:1px solid rgba(0,0,0,0.15);' : '';
                   html += `<div style="background:${getNivellBg(r.nivell)};${border}padding:0.2rem 0.15rem;">
-                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;"><span>${r.emoji}</span>${probIcon(r.probabilitat)}</div>
+                    <div class="cel-emoji" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:0.15rem;"><span style="font-variant-emoji:emoji;">${r.emoji}</span>${probIcon(r.probabilitat)}</div>
                     <div class="cel-info" style="font-size:0.65rem;color:#000;">${formatLlindar(r.llindar).replace('Ratxa màxima ','').replace('>','>')}</div>
                     ${r.probabilitat ? `<div class="cel-prob" style="font-size:0.65rem;color:#000;">${formatProb(r.probabilitat)}</div>` : ''}
                   </div>`;
