@@ -1,4 +1,33 @@
 {
-  "actualitzat": "2026-05-14T15:38:35.810Z",
-  "plans": []
+  "actualitzat": "2026-05-15T08:30:54.986Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "14/05/2026 18:55",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123085_INICI--NOACTIVAT_INUNCAT_202605141925.pdf"
+      },
+      "descripcio": "Intensitat de pluja  - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
+      },
+      "plaacronim": "VENTCAT",
+      "planom": "Pla Especial d'Emergències per Risc de Vent a Catalunya",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "14/05/2026 19:25",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123104_INICI--NOACTIVAT_VENTCAT_202605141946.pdf"
+      },
+      "descripcio": "SMP Vent 15/05 - "
+    }
+  ]
 }

@@ -1,39 +1,41 @@
 {
-  "dataConsulta": "2026-05-14T15:38:33.922Z",
+  "dataConsulta": "2026-05-15T08:30:50.274Z",
   "avisos": [
     {
-      "meteor": "Acumulació de pluja",
+      "meteor": "Vent",
       "estat": "Ampliat",
-      "dataInici": "2026-05-14T06:00Z",
-      "dataFi": "2026-05-15T05:59Z",
-      "comentari": "",
+      "dataInici": "2026-05-15T06:00Z",
+      "dataFi": "2026-05-15T17:59Z",
+      "comentari": "El vent bufarà de component oest, tot i això, al llarg de la tarda girarà sobtadament a component est.",
       "dies": [
-        {
-          "dia": "2026-05-14",
-          "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        },
         {
           "dia": "2026-05-15",
           "afectacions": [
             {
-              "zona": "Empordà",
+              "zona": "Camp de Tarragona",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
               "periodes": [
-                "00-06"
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
               ]
             }
           ]
@@ -41,38 +43,40 @@
       ]
     },
     {
-      "meteor": "Acumulació de pluja",
+      "meteor": "Vent",
       "estat": "Vigent",
-      "dataInici": "2026-05-14T06:00Z",
-      "dataFi": "2026-05-15T05:59Z",
-      "comentari": "",
+      "dataInici": "2026-05-15T06:00Z",
+      "dataFi": "2026-05-15T17:59Z",
+      "comentari": "El vent bufarà de component oest, tot i això, al llarg de la tarda girarà sobtadament a component est.",
       "dies": [
-        {
-          "dia": "2026-05-14",
-          "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        },
         {
           "dia": "2026-05-15",
           "afectacions": [
             {
-              "zona": "Empordà",
+              "zona": "Camp de Tarragona",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
               "periodes": [
-                "00-06"
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
               ]
             }
           ]
@@ -80,28 +84,12 @@
       ]
     },
     {
-      "meteor": "Acumulació de pluja",
+      "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
-      "dataInici": "2026-05-14T06:00Z",
-      "dataFi": "2026-05-15T05:59Z",
-      "comentari": "",
+      "dataInici": "2026-05-15T00:00Z",
+      "dataFi": "2026-05-15T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa.",
       "dies": [
-        {
-          "dia": "2026-05-14",
-          "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        },
         {
           "dia": "2026-05-15",
           "afectacions": [
@@ -109,9 +97,178 @@
               "zona": "Empordà",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Acumulada > 100 mm /24 hores",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "00-06"
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-05-15T06:00Z",
+      "dataFi": "2026-05-15T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa.",
+      "dies": [
+        {
+          "dia": "2026-05-15",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-05-15T06:00Z",
+      "dataFi": "2026-05-15T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa.",
+      "dies": [
+        {
+          "dia": "2026-05-15",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
               ]
             }
           ]
