@@ -64,6 +64,13 @@ jobs:
           FORCE: ${{ steps.cfg.outputs.force }}
         run: node scripts/fetch-bpa.js
 
+      - name: Canvi Temps
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FORCE: ${{ steps.cfg.outputs.force }}
+        run: node scripts/fetch-canvi-temps.js
+
       - name: Commit JSON
         run: |
           git config user.name "github-actions[bot]"
