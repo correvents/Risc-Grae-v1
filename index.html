@@ -1168,6 +1168,9 @@
       <button class="nav-tab" onclick="mostrarSeccio(event, 'canvitemps')">
         🌦️ Canvi Temps
       </button>
+      <button class="nav-tab" onclick="mostrarSeccio(event, 'historial')">
+        📅 Historial
+      </button>
     </nav>
     
     <!-- Secció Risc Operacional -->
@@ -1244,6 +1247,12 @@
           <div class="loading-icon">🚁</div>
           <p style="margin-top:1rem;opacity:0.8;">Carregant helicòpters...</p>
         </div>
+      </div>
+    </section>
+
+    <section id="seccio-historial" class="section">
+      <div id="app-historial">
+        <div class="loading"><div class="loading-icon">📅</div></div>
       </div>
     </section>
   </div>
@@ -1382,6 +1391,7 @@
       
       if (seccio === 'helicopters') carregarHelicopters();
       if (seccio === 'canvitemps') carregarCanviTemps();
+      if (seccio === 'historial') carregarHistorial();
 
       // Carregar iframe BPA quan es mostra la secció per primer cop
       if (seccio === 'bpa' && !bpaIframeLoaded) {
@@ -6245,6 +6255,394 @@
         logError('CanviTemps', e.message);
         cont.innerHTML = `<div class="error"><div style="font-size:3rem;">⚠️</div><h2>Error carregant dades</h2><p style="opacity:0.8;">${e.message}</p><button onclick="carregarCanviTemps()">Tornar a provar</button></div>`;
       }
+    }
+
+    // ==================== HISTORIAL ====================
+
+    let histDataActiva = '';
+    let histSubTab = 'risc';
+
+    function carregarHistorial() {
+      const avui = new Date().toISOString().split('T')[0];
+      if (!histDataActiva) histDataActiva = avui;
+      renderHistorialShell();
+      carregarHistSubTab(histSubTab);
+    }
+
+    function renderHistorialShell() {
+      const d = new Date(histDataActiva + 'T12:00:00');
+      const dLabel = d.toLocaleDateString('ca-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const avui = new Date().toISOString().split('T')[0];
+      const esAvui = histDataActiva === avui;
+
+      const subtabs = [
+        { id: 'risc',       label: '⚠️ Risc' },
+        { id: 'smp',        label: '🔔 Alertes' },
+        { id: 'bpa',        label: '🏔️ Allaus' },
+        { id: 'heli',       label: '🚁 Helicòpters' },
+        { id: 'canvitemps', label: '🌦️ Canvi Temps' },
+        { id: 'planspc',    label: '🚨 Plans PC' },
+      ];
+
+      document.getElementById('app-historial').innerHTML = `
+        <div style="position:sticky;top:0;z-index:10;">
+          <div style="background:#b71c1c;color:#fff;padding:0.6rem 1rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+            <span style="font-size:1.1rem;font-weight:900;letter-spacing:0.03em;">📅 MODE HISTORIAL</span>
+            <span style="font-size:0.95rem;font-weight:700;flex:1;">${dLabel}</span>
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <button onclick="canviarDataHistorial(offsetData(histDataActiva,-1))" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:5px;padding:0.25rem 0.55rem;font-size:1rem;cursor:pointer;line-height:1;">◀</button>
+              <input type="date" id="hist-datepicker" value="${histDataActiva}" max="${new Date().toISOString().split('T')[0]}"
+                style="border:none;border-radius:5px;padding:0.25rem 0.5rem;font-size:0.85rem;background:#fff;color:#333;"
+                onchange="canviarDataHistorial(this.value)">
+              <button onclick="canviarDataHistorial(offsetData(histDataActiva,1))" ${esAvui?'disabled':''} style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:5px;padding:0.25rem 0.55rem;font-size:1rem;cursor:pointer;line-height:1;${esAvui?'opacity:0.35;cursor:default;':''}">▶</button>
+              ${!esAvui ? `<button onclick="canviarDataHistorial('${avui}')" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:#fff;border-radius:5px;padding:0.25rem 0.6rem;font-size:0.8rem;cursor:pointer;">Avui</button>` : ''}
+            </div>
+          </div>
+          <nav style="background:#fff;border-bottom:1px solid #e0e0e0;display:flex;overflow-x:auto;gap:0;">
+            ${subtabs.map(t => `
+              <button onclick="mostrarHistSubTab('${t.id}')" id="hist-tab-${t.id}"
+                style="padding:0.55rem 0.85rem;border:none;background:${histSubTab===t.id?'#b71c1c':'transparent'};color:${histSubTab===t.id?'#fff':'#444'};font-size:0.78rem;font-weight:600;white-space:nowrap;cursor:pointer;border-bottom:${histSubTab===t.id?'2px solid #b71c1c':'2px solid transparent'};">
+                ${t.label}
+              </button>`).join('')}
+          </nav>
+        </div>
+        <div id="hist-contingut" style="min-height:200px;"></div>`;
+    }
+
+    function offsetData(dataStr, dies) {
+      const d = new Date(dataStr + 'T12:00:00');
+      d.setDate(d.getDate() + dies);
+      const avui = new Date().toISOString().split('T')[0];
+      const nova = d.toISOString().split('T')[0];
+      return nova > avui ? avui : nova;
+    }
+
+    function canviarDataHistorial(dataStr) {
+      if (!dataStr) return;
+      histDataActiva = dataStr;
+      renderHistorialShell();
+      carregarHistSubTab(histSubTab);
+    }
+
+    function mostrarHistSubTab(tab) {
+      histSubTab = tab;
+      renderHistorialShell();
+      carregarHistSubTab(tab);
+    }
+
+    function carregarHistSubTab(tab) {
+      const cont = document.getElementById('hist-contingut');
+      if (!cont) return;
+      cont.innerHTML = '<div class="loading" style="padding:2rem;"><div class="loading-icon">⏳</div></div>';
+      switch(tab) {
+        case 'risc':       return renderHistRisc(cont);
+        case 'smp':        return renderHistSMP(cont);
+        case 'bpa':        return renderHistBPA(cont);
+        case 'heli':       return renderHistHeli(cont);
+        case 'canvitemps': return renderHistCanviTemps(cont);
+        case 'planspc':    return renderHistPlansPC(cont);
+      }
+    }
+
+    async function renderHistRisc(cont) {
+      try {
+        const { data, error } = await sbClient.from('risc_historic').select('*').eq('data', histDataActiva).single();
+        if (error || !data) { cont.innerHTML = buidatHistorial('Risc GRAE'); return; }
+        const dia = { planspc: data.planspc||0, smp: data.smp||0, allaus: data.allaus||0, afluencia: data.afluencia||0, hc: data.hc||0, canvi: data.canvi||0, boletaires: data.boletaires||0, data: histDataActiva, notes: data.notes||'' };
+        const risc = calcularRisc(dia);
+        const colorClass = getRiscColorClass(risc);
+        const label = getRiscLabel(risc);
+        cont.innerHTML = `
+          <div class="risc-header"><div class="risc-title">⚠️ Risc GRAE</div></div>
+          <div style="padding:0 1rem 1rem;">
+            <div class="risc-card today" style="max-width:420px;">
+              <div class="risc-card-header">
+                <div>
+                  <div class="risc-card-label">${formatRiscDate(histDataActiva)}</div>
+                  <div class="risc-card-date" style="font-size:0.7rem;color:#888;">Guardat: ${new Date(data.creat_at).toLocaleString('ca-ES')}</div>
+                </div>
+              </div>
+              <div class="risc-value">
+                <div class="risc-number ${colorClass}">${Math.round(risc)}</div>
+                <div class="risc-level ${colorClass}">${label}</div>
+              </div>
+              <div class="risc-bar"><div class="risc-bar-fill risc-bg-${Math.min(6,Math.floor(risc))}" style="width:${(risc/6)*100}%"></div></div>
+              <div class="risc-breakdown">
+                <div class="risc-breakdown-title">Desglossament</div>
+                ${[
+                  ['🚨 Plans PC', dia.planspc, 3, getPlanspcLabel(dia.planspc), dia.planspc>=3?'#ffebee,#c62828':dia.planspc>=2?'#fff3e0,#e65100':dia.planspc>=1?'#fffde7,#f57f17':'transparent,#666'],
+                  ['🔔 Alertes SMP', dia.smp, 6, getSMPLabelRisc(dia.smp), dia.smp>=5?'#ffebee,#c62828':dia.smp>=3?'#fff3e0,#e65100':dia.smp>=1?'#fffde7,#f57f17':'transparent,#666'],
+                  ['❄️ Risc allaus', dia.allaus, 5, getAllausLabel(dia.allaus), dia.allaus>=4?'#ffebee,#c62828':dia.allaus>=3?'#fff3e0,#e65100':dia.allaus>=1?'#fffde7,#f57f17':'transparent,#666'],
+                  ['👥 Afluència', dia.afluencia, 3, getAfluenciaLabel(dia.afluencia), dia.afluencia>=3?'#ffebee,#c62828':dia.afluencia>=2?'#fff3e0,#e65100':dia.afluencia>=1?'#fffde7,#f57f17':'transparent,#666'],
+                  ['🚁 Dificultat HC', dia.hc, 2, getHCLabel(dia.hc), dia.hc>=2?'#ffebee,#c62828':dia.hc>=1?'#fffde7,#f57f17':'transparent,#666'],
+                  ['🌦️ Canvi temps', dia.canvi, 2, getCanviLabel(dia.canvi), dia.canvi>=2?'#fff3e0,#e65100':dia.canvi>=1?'#fffde7,#f57f17':'transparent,#666'],
+                ].map(([lbl2,val,max,text,cols]) => { const [bg,tc] = cols.split(','); return `
+                  <div class="risc-breakdown-item">
+                    <span class="risc-breakdown-label">${lbl2}</span>
+                    <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;background:${bg};color:${tc};">${text}</span>
+                    <span class="risc-breakdown-value">${Math.round(val)}/${max}</span>
+                  </div>`; }).join('')}
+              </div>
+              ${dia.notes ? `<div style="margin-top:0.5rem;font-size:0.8rem;color:#555;background:#fffde7;border-radius:4px;padding:0.4rem 0.6rem;">📝 ${escapeHtml(dia.notes)}</div>` : ''}
+            </div>
+          </div>`;
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    async function renderHistSMP(cont) {
+      try {
+        const dema = offsetData(histDataActiva, 1);
+        const { data, error } = await sbClient.from('smp_historic').select('*')
+          .in('dia', [histDataActiva, dema]).order('meteor');
+        if (error) throw error;
+        if (!data || data.length === 0) { cont.innerHTML = buidatHistorial('Alertes SMP'); return; }
+
+        const periodes = ['00-06', '06-12', '12-18', '18-00'];
+        const formatDiaH = d => {
+          const dt = new Date(d + 'T12:00:00');
+          const dies = ['Dg','Dl','Dm','Dc','Dj','Dv','Ds'];
+          return `${dies[dt.getDay()]} ${dt.getDate()}`;
+        };
+
+        // Construir matriu zona → dia → periode → {nivell, riscos[]}
+        const matriu = {};
+        for (const r of data) {
+          const zona = zonaToGrup[r.zona] || r.zona;
+          const emoji = getSMPEmoji(r.meteor);
+          if (!matriu[zona]) matriu[zona] = {};
+          if (!matriu[zona][r.dia]) matriu[zona][r.dia] = {};
+          for (const p of (r.periodes || [])) {
+            if (!matriu[zona][r.dia][p]) matriu[zona][r.dia][p] = { nivell: r.nivell, riscos: [] };
+            const ja = matriu[zona][r.dia][p].riscos.find(x => x.meteor === r.meteor);
+            if (!ja) matriu[zona][r.dia][p].riscos.push({ meteor: r.meteor, emoji, nivell: r.nivell, llindar: r.llindar, probabilitat: r.probabilitat });
+            const ordre = { Vermell:3, Taronja:2, Groc:1 };
+            if ((ordre[r.nivell]||0) > (ordre[matriu[zona][r.dia][p].nivell]||0)) matriu[zona][r.dia][p].nivell = r.nivell;
+          }
+        }
+
+        const zonesActives = [...ZONES_ORDRE.filter(z => matriu[z]),
+          ...Object.keys(matriu).filter(z => !ZONES_ORDRE.includes(z))];
+
+        let html = `<div class="taula-container" style="margin-bottom:1.5rem;">
+          <table class="smp-taula"><thead>
+            <tr>
+              <th rowspan="2" style="vertical-align:bottom;">Zona</th>
+              <th colspan="4" style="text-align:center;border-bottom:1px solid rgba(255,255,255,0.2);">📅 ${formatDiaH(histDataActiva)}</th>
+              <th colspan="4" style="text-align:center;border-bottom:1px solid rgba(255,255,255,0.2);">📅 ${formatDiaH(dema)}</th>
+            </tr>
+            <tr>${[...periodes,...periodes].map(p=>`<th class="periode-header">${p}</th>`).join('')}</tr>
+          </thead><tbody>`;
+
+        zonesActives.forEach(zona => {
+          html += `<tr><td class="zona-nom">${zona}</td>`;
+          [histDataActiva, dema].forEach(dia => {
+            periodes.forEach(p => {
+              const cel = matriu[zona]?.[dia]?.[p];
+              if (cel) {
+                const ordre = { Vermell:3, Taronja:2, Groc:1 };
+                const riscos = [...cel.riscos].sort((a,b) => (ordre[b.nivell]||0)-(ordre[a.nivell]||0));
+                html += `<td class="cel-alerta" style="background:${getNivellBg(cel.nivell)};vertical-align:top;padding:0;">`;
+                riscos.forEach((r, idx) => {
+                  const border = idx > 0 ? 'border-top:1px solid rgba(0,0,0,0.15);' : '';
+                  html += `<div style="background:${getNivellBg(r.nivell)};${border}padding:0.2rem 0.15rem;">
+                    <div class="cel-emoji" style="font-size:0.8rem;">${r.emoji}</div>
+                    <div class="cel-info" style="font-size:0.65rem;color:#000;">${formatLlindar(r.llindar).replace('Ratxa màxima ','').replace('>','>')}</div>
+                    ${r.probabilitat ? `<div class="cel-prob" style="font-size:0.65rem;color:#000;">${formatProb(r.probabilitat)}</div>` : ''}
+                  </div>`;
+                });
+                html += `</td>`;
+              } else {
+                html += `<td class="cel-ok">🟢</td>`;
+              }
+            });
+          });
+          html += '</tr>';
+        });
+
+        html += `</tbody></table></div>
+          <div class="llegenda" style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;font-size:0.85rem;">
+            <span>🟢 Sense alerta</span>
+            <span style="background:rgba(250,204,21,0.8);padding:2px 8px;border-radius:4px;color:#000;">🟡 Groc</span>
+            <span style="background:rgba(249,115,22,0.8);padding:2px 8px;border-radius:4px;color:#000;">🟠 Taronja</span>
+            <span style="background:rgba(239,68,68,0.8);padding:2px 8px;border-radius:4px;color:#fff;">🔴 Vermell</span>
+          </div>`;
+
+        // Targetes de comentaris per meteor únic
+        const comentaris = {};
+        for (const r of data) {
+          if (r.comentari && !comentaris[r.meteor]) comentaris[r.meteor] = { meteor: r.meteor, comentari: r.comentari, zones: [] };
+          if (comentaris[r.meteor]) {
+            const z = `${r.dia === histDataActiva ? formatDiaH(histDataActiva) : formatDiaH(dema)} ${(r.periodes||[]).join(', ')}h: ${r.zona}`;
+            if (!comentaris[r.meteor].zones.includes(z)) comentaris[r.meteor].zones.push(z);
+          }
+        }
+        for (const c of Object.values(comentaris)) {
+          html += `<div class="card" style="margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong>${getSMPEmoji(c.meteor)} ${escapeHtml(c.meteor)}</strong></p>
+            <p style="margin-bottom:0.5rem;font-size:0.9rem;">${escapeHtml(c.comentari)}</p>
+            <p style="font-size:0.8rem;color:#666;">📍 ${c.zones.join(' · ')}</p>
+          </div>`;
+        }
+
+        cont.innerHTML = html;
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    async function renderHistBPA(cont) {
+      try {
+        const { data, error } = await sbClient.from('bpa_historic').select('*').eq('data', histDataActiva).order('perill', { ascending: false });
+        if (error) throw error;
+        if (!data || data.length === 0) { cont.innerHTML = buidatHistorial('BPA Allaus'); return; }
+        const maxPerill = Math.max(...data.map(z => z.perill||0));
+        const PERILL_NOM = {1:'FEBLE',2:'MODERAT',3:'MARCAT',4:'FORT',5:'MOLT FORT'};
+        const PERILL_BG  = {1:'#e8f5e9',2:'#f9fbe7',3:'#fff8e1',4:'#fbe9e7',5:'#fce4ec'};
+        let html = `
+          <div class="bpa-header-compact perill-${maxPerill}" style="padding:0.75rem 1rem;">
+            <div class="bpa-header-left">
+              <span class="header-icon">🏔️</span>
+              <div><h1>BPA Allaus</h1><p class="data">Pirineu de Catalunya — ${histDataActiva}</p></div>
+            </div>
+            <div class="bpa-header-right">
+              <div class="alerta-emoji">${getPerillEmoji(maxPerill)}</div>
+              <div><h2>PERILL MÀXIM: ${PERILL_NOM[maxPerill]||'—'} (${maxPerill})</h2></div>
+            </div>
+          </div>
+          <div style="padding:0.75rem 1rem;display:flex;flex-direction:column;gap:0.5rem;">`;
+        for (const z of data) {
+          const pn = z.perill||0;
+          const bg = PERILL_BG[pn]||'#f9f9f9';
+          html += `<div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;background:${bg};">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.75rem;background:rgba(0,0,0,0.04);border-bottom:1px solid #e0e0e0;">
+              <strong style="font-size:0.9rem;">${getPerillEmoji(pn)} ${escapeHtml(z.zona)}</strong>
+              <div style="display:flex;align-items:center;gap:0.5rem;">
+                ${z.cota_critica ? `<span style="font-size:0.68rem;color:#666;">Cota: ${escapeHtml(z.cota_critica)}</span>` : ''}
+                <span style="font-size:0.7rem;font-weight:700;padding:0.15rem 0.45rem;border-radius:3px;background:${['','#43a047','#fdd835','#ef6c00','#e53935','#7b1fa2'][pn]||'#333'};color:${pn==2?'#333':'#fff'};">${PERILL_NOM[pn]||'—'} (${pn})</span>
+              </div>
+            </div>
+            ${z.situacio_prim||z.situacio_sec ? `<div style="padding:0.4rem 0.75rem;font-size:0.78rem;color:#555;">
+              ${z.situacio_prim ? `<span style="margin-right:0.75rem;">Principal: <strong>${escapeHtml(z.situacio_prim)}</strong></span>` : ''}
+              ${z.situacio_sec  ? `<span>Secundari: <strong>${escapeHtml(z.situacio_sec)}</strong></span>`  : ''}
+            </div>` : ''}
+          </div>`;
+        }
+        cont.innerHTML = html + '</div>';
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    async function renderHistHeli(cont) {
+      try {
+        const { data, error } = await sbClient.from('helicopters_historic').select('*').eq('data', histDataActiva).order('heli_id');
+        if (error) throw error;
+        if (!data || data.length === 0) { cont.innerHTML = buidatHistorial('Helicòpters'); return; }
+        const opColor = op => op==='Total'?'#2e7d32':op==='Parcial'?'#e65100':op==='Sense grua'?'#f57f17':'#888';
+        let html = `<div style="padding:0.75rem 1rem;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead><tr style="background:#f5f5f5;border-bottom:2px solid #e0e0e0;">
+              <th style="padding:0.5rem 0.75rem;text-align:left;font-size:0.8rem;">Recurs</th>
+              <th style="padding:0.5rem;text-align:left;font-size:0.8rem;">Base</th>
+              <th style="padding:0.5rem;text-align:left;font-size:0.8rem;">Operativitat</th>
+              <th style="padding:0.5rem;text-align:left;font-size:0.8rem;">Observacions</th>
+            </tr></thead><tbody>`;
+        for (const h of data) {
+          html += `<tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:0.4rem 0.75rem;font-weight:600;">${escapeHtml(h.recurs||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;">${escapeHtml(h.base||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;color:${opColor(h.operativitat)};font-weight:600;">${escapeHtml(h.operativitat||'—')}</td>
+            <td style="padding:0.4rem 0.75rem;color:#666;">${escapeHtml(h.observacions||'')}</td>
+          </tr>`;
+        }
+        cont.innerHTML = html + '</tbody></table></div>';
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    async function renderHistCanviTemps(cont) {
+      try {
+        const { data, error } = await sbClient.from('canvi_temps_historic').select('*').eq('data', histDataActiva).order('tipus_dia').order('punt');
+        if (error) throw error;
+        if (!data || data.length === 0) { cont.innerHTML = buidatHistorial('Canvi de Temps'); return; }
+        const formatDiaHist = () => {
+          const d = new Date(histDataActiva + 'T12:00:00');
+          return d.toLocaleDateString('ca-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+        };
+        let html = `<div style="font-size:0.7rem;color:#aaa;padding:0.3rem 1rem;background:#fafafa;border-bottom:1px solid #eee;">
+          🌦️ Canvi de Temps · Dades guardades · ${histDataActiva}
+        </div><div style="display:flex;flex-wrap:wrap;align-items:flex-start;">`;
+        for (const tipus of ['avui','dema']) {
+          const rows = data.filter(r => r.tipus_dia === tipus);
+          if (!rows.length) continue;
+          const maxN = Math.max(...rows.map(r => r.nivell||0));
+          const titol = tipus === 'avui' ? `${formatDiaHist()} (previsió mateixa data)` : `Endemà (previsió)`;
+          const colMax = ['#388e3c','#e65100','#c62828'][maxN];
+          const txtMax = ['NO ES PREVEU CANVI','NIVELL 1 — MODERAT','NIVELL 2 — ALT'][maxN];
+          html += `<div style="flex:1;min-width:280px;border-right:1px solid #e0e0e0;">
+            <div style="border-bottom:1px solid #e0e0e0;padding:0.7rem 0.9rem;">
+              <div style="font-size:0.7rem;color:#888;margin-bottom:0.3rem;">📅 ${titol}</div>
+              <div style="background:${colMax};color:#fff;border-radius:7px;padding:0.35rem 0.9rem;font-size:0.88rem;font-weight:800;display:inline-block;">${['✅','⚠️','🔴'][maxN]} ${txtMax}</div>
+            </div>
+            <div style="padding:0.5rem 0.6rem;display:flex;flex-direction:column;gap:0.35rem;">
+              ${rows.map(r => {
+                const bg  = ['#f1f8e9','#fff8e1','#ffebee'][r.nivell||0];
+                const brd = ['#c5e1a5','#ffe082','#ef9a9a'][r.nivell||0];
+                const em  = ['🟢','🟠','🔴'][r.nivell||0];
+                const nt  = ['Cap canvi','Nivell 1 — Moderat','Nivell 2 — Alt'][r.nivell||0];
+                return `<details style="background:${bg};border:1px solid ${brd};border-radius:6px;">
+                  <summary style="padding:0.45rem 0.7rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;list-style:none;user-select:none;">
+                    <span>${em}</span>
+                    <span style="font-weight:700;font-size:0.84rem;flex:1;">${escapeHtml(r.punt)} <span style="font-weight:400;color:#888;font-size:0.75rem;">· ${r.alt}m</span></span>
+                    <span style="font-size:0.72rem;color:#555;">${nt}</span>
+                  </summary>
+                  ${r.factors?.length ? `<div style="padding:0.3rem 0.7rem 0.4rem;font-size:0.76rem;color:#555;">${r.factors.map(f=>escapeHtml(f)).join(' · ')}</div>` : ''}
+                </details>`;
+              }).join('')}
+            </div>
+          </div>`;
+        }
+        cont.innerHTML = html + '</div>';
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    async function renderHistPlansPC(cont) {
+      try {
+        const d = histDataActiva + 'T23:59:59Z';
+        const { data, error } = await sbClient.from('planspc_historic').select('*').lte('timestamp', d).order('timestamp', { ascending: false }).limit(1);
+        if (error) throw error;
+        if (!data || data.length === 0 || !data[0].plans?.length) { cont.innerHTML = buidatHistorial('Plans PC'); return; }
+        const plans = data[0].plans;
+        const ordre = { 'EMERGÈNCIA': 0, 'ALERTA': 1, 'PREALERTA': 2 };
+        const perPla = {};
+        plans.forEach(p => { const k = p.plaacronim||p.planom; if (!perPla[k]) perPla[k]=[]; perPla[k].push(p); });
+        const plaOrdenat = Object.entries(perPla).sort(([,a],[,b]) =>
+          Math.min(...a.map(p=>ordre[p.plafase]??9)) - Math.min(...b.map(p=>ordre[p.plafase]??9)));
+        let html = `<div style="font-size:0.72rem;color:#999;padding:0.4rem 0;margin-bottom:0.5rem;">Darrer registre abans d'aquest dia: ${new Date(data[0].timestamp).toLocaleString('ca-ES')}</div>`;
+        plaOrdenat.forEach(([nomPla, entrades]) => {
+          const pitjor = entrades.reduce((p,c) => (ordre[c.plafase]??9)<(ordre[p.plafase]??9)?c:p);
+          const cfg = FASE_CONFIG[pitjor.plafase] || { color:'#f5f5f5', border:'#ddd', text:'#333', emoji:'⚪' };
+          html += `<div class="alerta" style="background:${cfg.color};border-color:${cfg.border};margin-bottom:1rem;">
+            <div class="alerta-header">
+              <span class="alerta-emoji">${cfg.emoji}</span>
+              <div><h2 style="color:${cfg.text}">${nomPla}</h2><p>${cfg.emoji} <strong>${pitjor.plafase}</strong></p></div>
+            </div>
+            <div style="margin-top:0.5rem;">
+              ${entrades.map(e => { const cfgE = FASE_CONFIG[e.plafase]||cfg; return `
+                <div style="background:#fff;border-radius:4px;padding:0.5rem 0.75rem;margin-bottom:0.4rem;border-left:3px solid ${cfgE.border};">
+                  <div style="display:flex;justify-content:space-between;gap:0.5rem;flex-wrap:wrap;">
+                    <span style="font-size:0.8rem;font-weight:600;color:${cfgE.text}">${cfgE.emoji} ${e.plafase}</span>
+                    <span style="font-size:0.75rem;color:#888;">🕐 ${e.fasedatahora||'—'}</span>
+                  </div>
+                  ${e.descripcio ? `<p style="margin-top:0.3rem;font-size:0.85rem;color:#555;">${e.descripcio}</p>` : ''}
+                </div>`; }).join('')}
+            </div>
+          </div>`;
+        });
+        cont.innerHTML = html;
+      } catch(e) { cont.innerHTML = errorHistorial(e.message); }
+    }
+
+    function buidatHistorial(nom) {
+      return `<div style="padding:2rem;text-align:center;color:#aaa;"><div style="font-size:2.5rem;margin-bottom:0.5rem;">📭</div><div style="font-size:0.9rem;">Sense dades de <strong>${nom}</strong> per aquest dia</div></div>`;
+    }
+    function errorHistorial(msg) {
+      return `<div style="padding:2rem;text-align:center;color:#e53935;"><div style="font-size:2rem;">⚠️</div><div style="font-size:0.85rem;margin-top:0.5rem;">${escapeHtml(msg)}</div></div>`;
     }
 
     // ==================== PLANS PC ====================
