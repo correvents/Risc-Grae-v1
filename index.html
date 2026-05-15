@@ -1873,6 +1873,20 @@
         badge.style.display = 'inline';
       }
       
+      // Càlcul risc SMP (ahir / avui / demà) — es mostra a dalt
+      const avui = localDateStr(0);
+      const ahir  = localDateStr(-1);
+      const dema  = localDateStr(1);
+      const smpAhir = calcularSMPPonderat(ahir);
+      const smpAvui = calcularSMPPonderat(avui);
+      const smpDema = calcularSMPPonderat(dema);
+      const getColorClass = (valor) => {
+        if (valor === 0) return '#4caf50';
+        if (valor <= 2) return '#cddc39';
+        if (valor <= 4) return '#ff9800';
+        return '#f44336';
+      };
+
       let html = `
         <header>
           <div class="header-icon">⚠️</div>
@@ -1880,6 +1894,53 @@
           <p class="data">Situacions Meteorològiques de Perill</p>
           <p class="actualitzat">Consulta: ${new Date(data.dataConsulta).toLocaleString('ca-ES')}</p>
         </header>
+        <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;margin-bottom:1.5rem;">
+          <h3 style="margin:0 0 1rem;font-size:1rem;color:#e53935;display:flex;align-items:center;gap:0.5rem;">📊 Càlcul Risc SMP per GRAE</h3>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;">
+            <div style="text-align:center;padding:1rem;background:#fafafa;border-radius:8px;border:1px solid #eee;">
+              <div style="font-size:0.75rem;color:#888;text-transform:uppercase;">Ahir</div>
+              <div style="font-size:2.5rem;font-weight:700;color:${getColorClass(smpAhir.valor)};">${smpAhir.valor}</div>
+              <div style="font-size:0.7rem;color:#666;">${smpAhir.explicacio}</div>
+              <div style="font-size:0.65rem;color:#999;margin-top:0.25rem;">🟡${smpAhir.zones?.groc||0} 🟠${smpAhir.zones?.taronja||0} 🔴${smpAhir.zones?.vermell||0}</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:#fff;border-radius:8px;border:2px solid ${getColorClass(smpAvui.valor)};">
+              <div style="font-size:0.75rem;color:#e53935;text-transform:uppercase;font-weight:600;">Avui</div>
+              <div style="font-size:3rem;font-weight:700;color:${getColorClass(smpAvui.valor)};">${smpAvui.valor}</div>
+              <div style="font-size:0.75rem;color:#666;">${smpAvui.explicacio}</div>
+              <div style="font-size:0.7rem;color:#999;margin-top:0.25rem;">🟡${smpAvui.zones?.groc||0} 🟠${smpAvui.zones?.taronja||0} 🔴${smpAvui.zones?.vermell||0}</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:#fafafa;border-radius:8px;border:1px solid #eee;">
+              <div style="font-size:0.75rem;color:#888;text-transform:uppercase;">Demà</div>
+              <div style="font-size:2.5rem;font-weight:700;color:${getColorClass(smpDema.valor)};">${smpDema.valor}</div>
+              <div style="font-size:0.7rem;color:#666;">${smpDema.explicacio}</div>
+              <div style="font-size:0.65rem;color:#999;margin-top:0.25rem;">🟡${smpDema.zones?.groc||0} 🟠${smpDema.zones?.taronja||0} 🔴${smpDema.zones?.vermell||0}</div>
+            </div>
+          </div>
+          <details>
+            <summary style="font-size:0.82rem;color:#888;cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.3rem;">▶ 📐 Com es calcula</summary>
+            <div style="margin-top:0.75rem;">
+              <p style="font-size:0.85rem;color:#555;margin:0 0 0.5rem;line-height:1.6;">
+                Es compten les <strong>zones de muntanya</strong> afectades per alertes:<br>
+                <span style="display:inline-block;margin-top:0.5rem;">
+                  <span style="background:#4caf50;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;">0</span> Cap alerta
+                  <span style="background:#8bc34a;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:0.5rem;">1</span> &lt;3 zones groc
+                  <span style="background:#cddc39;color:#333;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:0.5rem;">2</span> ≥3 zones groc
+                </span><br>
+                <span style="display:inline-block;margin-top:0.25rem;">
+                  <span style="background:#ff9800;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;">3</span> &lt;3 zones taronja
+                  <span style="background:#ff5722;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:0.5rem;">4</span> ≥3 zones taronja
+                </span><br>
+                <span style="display:inline-block;margin-top:0.25rem;">
+                  <span style="background:#f44336;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;">5</span> &lt;3 zones vermell
+                  <span style="background:#b71c1c;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:0.5rem;">6</span> ≥3 zones vermell
+                </span>
+              </p>
+              <div style="background:#e3f2fd;border-radius:6px;padding:0.6rem 0.75rem;font-size:0.8rem;">
+                <strong>Zones considerades:</strong> Pirineu Occidental, Pirineu Oriental, Costa Brava, Litoral Central, Plana de Lleida, Camp de Tarragona, Terres de l'Ebre, Zona Marítima
+              </div>
+            </div>
+          </details>
+        </div>
       `;
       
       if (!data.avisos || data.avisos.length === 0) {
@@ -2103,87 +2164,11 @@
         `;
       }
       
-      // Secció càlcul risc SMP
-      const avui = localDateStr(0);
-      const ahir  = localDateStr(-1);
-      const dema  = localDateStr(1);
-      
-      const smpAhir = calcularSMPPonderat(ahir);
-      const smpAvui = calcularSMPPonderat(avui);
-      const smpDema = calcularSMPPonderat(dema);
-      
-      const getColorClass = (valor) => {
-        if (valor === 0) return '#4caf50';
-        if (valor <= 2) return '#cddc39';
-        if (valor <= 4) return '#ff9800';
-        return '#f44336';
-      };
-      
-      html += `
-        <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem;">
-          <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #e53935; display: flex; align-items: center; gap: 0.5rem;">
-            📊 Càlcul Risc SMP per GRAE
-          </h3>
-          
-          <div style="background: #f5f5f5; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
-            <h4 style="margin: 0 0 0.5rem; font-size: 0.9rem; color: #333;">📐 Fórmula</h4>
-            <p style="font-size: 0.85rem; color: #555; margin: 0; line-height: 1.6;">
-              Es compten les <strong>zones de muntanya</strong> afectades per alertes:<br>
-              <span style="display: inline-block; margin-top: 0.5rem;">
-                <span style="background: #4caf50; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">0</span> Cap alerta
-                <span style="background: #8bc34a; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">1</span> &lt;3 zones groc
-                <span style="background: #cddc39; color: #333; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">2</span> ≥3 zones groc
-              </span><br>
-              <span style="display: inline-block; margin-top: 0.25rem;">
-                <span style="background: #ff9800; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">3</span> &lt;3 zones taronja
-                <span style="background: #ff5722; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">4</span> ≥3 zones taronja
-              </span><br>
-              <span style="display: inline-block; margin-top: 0.25rem;">
-                <span style="background: #f44336; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">5</span> &lt;3 zones vermell
-                <span style="background: #b71c1c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">6</span> ≥3 zones vermell
-              </span>
-            </p>
-          </div>
-          
-          <div style="background: #e3f2fd; border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.8rem;">
-            <strong>Zones considerades:</strong> Pirineu Occidental, Pirineu Oriental, Costa Brava, Litoral Central, Plana de Lleida, Camp de Tarragona, Terres de l'Ebre, Zona Marítima
-          </div>
-          
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-            <div style="text-align: center; padding: 1rem; background: #fafafa; border-radius: 8px; border: 1px solid #eee;">
-              <div style="font-size: 0.75rem; color: #888; text-transform: uppercase;">Ahir</div>
-              <div style="font-size: 2.5rem; font-weight: 700; color: ${getColorClass(smpAhir.valor)};">${smpAhir.valor}</div>
-              <div style="font-size: 0.7rem; color: #666;">${smpAhir.explicacio}</div>
-              <div style="font-size: 0.65rem; color: #999; margin-top: 0.25rem;">
-                🟡${smpAhir.zones?.groc || 0} 🟠${smpAhir.zones?.taronja || 0} 🔴${smpAhir.zones?.vermell || 0}
-              </div>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #fff; border-radius: 8px; border: 2px solid ${getColorClass(smpAvui.valor)};">
-              <div style="font-size: 0.75rem; color: #e53935; text-transform: uppercase; font-weight: 600;">Avui</div>
-              <div style="font-size: 3rem; font-weight: 700; color: ${getColorClass(smpAvui.valor)};">${smpAvui.valor}</div>
-              <div style="font-size: 0.75rem; color: #666;">${smpAvui.explicacio}</div>
-              <div style="font-size: 0.7rem; color: #999; margin-top: 0.25rem;">
-                🟡${smpAvui.zones?.groc || 0} 🟠${smpAvui.zones?.taronja || 0} 🔴${smpAvui.zones?.vermell || 0}
-              </div>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: #fafafa; border-radius: 8px; border: 1px solid #eee;">
-              <div style="font-size: 0.75rem; color: #888; text-transform: uppercase;">Demà</div>
-              <div style="font-size: 2.5rem; font-weight: 700; color: ${getColorClass(smpDema.valor)};">${smpDema.valor}</div>
-              <div style="font-size: 0.7rem; color: #666;">${smpDema.explicacio}</div>
-              <div style="font-size: 0.65rem; color: #999; margin-top: 0.25rem;">
-                🟡${smpDema.zones?.groc || 0} 🟠${smpDema.zones?.taronja || 0} 🔴${smpDema.zones?.vermell || 0}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
       
       html += `
         <footer>
           <a href="https://www.meteo.cat/prediccio/general" target="_blank" rel="noopener noreferrer" class="btn-link">🌐 Veure a meteo.cat</a>
           <p class="font-info">Servei Meteorològic de Catalunya</p>
-          <button class="btn-refresh" onclick="carregarSMP()">🔄 Actualitzar</button>
-          <button class="btn-refresh" onclick="forcarActualitzacioSMP()" style="margin-left: 0.5rem; background: #ff9800;">⚡ Forçar consulta API</button>
         </footer>
       `;
       
