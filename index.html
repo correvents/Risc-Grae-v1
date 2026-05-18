@@ -1840,24 +1840,6 @@
       'Costa Brava', 'Litoral Central', 'Plana de Lleida', 'Camp de Tarragona', "Terres de l'Ebre"
     ];
     
-    const METEOCAT_COMARQUES = {
-      'Pirineu Occidental':          ['Val d\'Aran', 'Alta Ribagorça', 'Pallars Sobirà', 'Alt Urgell'],
-      'Pirineu Central':             ['Cerdanya', 'Pallars Jussà', 'Noguera', 'Solsonès'],
-      'Pirineu Oriental':            ['Ripollès', 'Garrotxa', 'Osona'],
-      'Prepirineu':                  ['Berguedà'],
-      'Empordà':                     ['Alt Empordà', 'Baix Empordà'],
-      'Gironès i Pla de l\'Estany':  ['Gironès', 'Pla de l\'Estany'],
-      'Litoral Nord':                ['Alt Empordà', 'Baix Empordà', 'Selva'],
-      'Litoral Central':             ['Barcelonès', 'Baix Llobregat', 'Garraf'],
-      'Vallès':                      ['Vallès Occidental', 'Vallès Oriental'],
-      'Penedès':                     ['Alt Penedès', 'Baix Penedès'],
-      'Plana de Lleida':             ['Segrià', 'Pla d\'Urgell', 'Urgell', 'Garrigues'],
-      'Catalunya Central':           ['Bages', 'Anoia', 'Segarra'],
-      'Camp de Tarragona':           ['Tarragonès', 'Baix Camp', 'Alt Camp'],
-      'Serres de Prades i Montsant': ['Conca de Barberà', 'Priorat'],
-      'Terres de l\'Ebre':           ['Baix Ebre', 'Montsià', 'Ribera d\'Ebre', 'Terra Alta'],
-    };
-
     // Mapeig invers: zona original -> grup
     const zonaToGrup = {};
     Object.entries(ZONES_GRUPS).forEach(([grup, zones]) => {
@@ -2001,21 +1983,18 @@
         
         // Construir matriu: zona -> dia -> periode -> {nivell, meteor, llindar}
         const matriu = {};
-        const matriuSubZones = {}; // zona -> Set de sub-zones Meteocat afectades
-        
+
         data.avisos.forEach(avis => {
           const meteor = avis.meteor;
           const emoji = getSMPEmoji(meteor);
-          
+
           avis.dies?.forEach(dia => {
             const diaKey = dia.dia;
             if (diaKey !== avui && diaKey !== dema) return; // Només avui i demà
-            
+
             dia.afectacions?.forEach(af => {
               const zonaOriginal = af.zona;
               const zona = zonaToGrup[zonaOriginal] || zonaOriginal; // Usar grup
-              if (!matriuSubZones[zona]) matriuSubZones[zona] = new Set();
-              matriuSubZones[zona].add(zonaOriginal);
               if (!matriu[zona]) matriu[zona] = {};
               if (!matriu[zona][diaKey]) matriu[zona][diaKey] = {};
               
@@ -2074,15 +2053,7 @@
         `;
         
         zonesActives.forEach(zona => {
-          const subZonesAfectades = matriuSubZones[zona] ? [...matriuSubZones[zona]] : [];
-          const comarquesAfectades = subZonesAfectades.flatMap(sz => METEOCAT_COMARQUES[sz] || [sz]);
-          const zonaCell = comarquesAfectades.length
-            ? `<details style="margin:0;">
-                <summary style="list-style:none;cursor:pointer;font-weight:600;">${zona}</summary>
-                <div style="font-size:0.65rem;color:#555;font-weight:400;margin-top:0.2rem;line-height:1.5;">${comarquesAfectades.join(' · ')}</div>
-               </details>`
-            : `<span style="font-weight:600;">${zona}</span>`;
-          html += `<tr><td class="zona-nom">${zonaCell}</td>`;
+          html += `<tr><td class="zona-nom">${zona}</td>`;
 
           [avui, dema].forEach(dia => {
             periodes.forEach(p => {
