@@ -1,7 +1,8 @@
 {
-  "data": "2026-05-15",
-  "actualitzat": "2026-05-18T13:29:36.281Z",
-  "font": "ICGC",
+  "data": "2026-05-18",
+  "actualitzat": "2026-05-18T11:49:49.754Z",
+  "font": "ICGC - Institut Cartogràfic i Geològic de Catalunya",
+  "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-05-18_cat.pdf",
   "zones": [
     {
       "nom": "Aran - Franja Nord Pallaresa",
@@ -48,7 +49,6 @@
     },
     {
       "nom": "Ribagorçana - Vall Fosca",
-      "id_zona": "2",
       "perill": "FEBLE (1)",
       "perill_numeric": 1,
       "cota_critica": "",
@@ -81,7 +81,6 @@
     },
     {
       "nom": "Pallaresa",
-      "id_zona": "3",
       "perill": "FEBLE (1)",
       "perill_numeric": 1,
       "cota_critica": "",
@@ -192,7 +191,6 @@
     },
     {
       "nom": "Ter-Freser",
-      "id_zona": "7",
       "perill": "FEBLE (1)",
       "perill_numeric": 1,
       "cota_critica": "",
