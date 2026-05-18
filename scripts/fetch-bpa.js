@@ -28,6 +28,7 @@ async function main() {
     const pn = parseInt(z.grau_perill_primari) || 0;
     return {
     nom:               z.nom_zona,
+    id_zona:           z.id_zona,
     perill:            pn ? `${PERILL_NOM[pn] || '?'} (${pn})` : '',
     perill_numeric:    pn,
     cota_critica:      z.cota_critica || '',
@@ -38,12 +39,22 @@ async function main() {
     problems:          z.problems || []
   };});
 
+  // Trobar l'últim PDF disponible (pot no existir per a la data actual)
+  let url_pdf = null;
+  for (let i = 0; i <= 7; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const pdfDate = d.toISOString().split('T')[0];
+    const pdfUrl = `https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_${pdfDate}_cat.pdf`;
+    const pdfResp = await fetch(pdfUrl, { method: 'HEAD' });
+    if (pdfResp.ok) { url_pdf = pdfUrl; break; }
+  }
+
   const maxPerill = Math.max(0, ...zonesF.map(z => z.perill_numeric));
   const bpa = {
     data: date,
     actualitzat: new Date().toISOString(),
     font: 'ICGC - Institut Cartogràfic i Geològic de Catalunya',
-    url_pdf: `https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_${date}_cat.pdf`,
+    url_pdf,
     zones: zonesF,
     resum: {
       perill_maxim:         PERILL_NOM[maxPerill] || 'Desconegut',

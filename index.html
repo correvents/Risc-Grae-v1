@@ -1465,27 +1465,29 @@
         const mida    = MIDA[prob.mida]        || '—';
         const tend    = TEND_IC[prob.tendencia] || '—';
         const tendCol = TEND_COLOR[prob.tendencia] || '#555';
-        const distribImg = (zona.id_zona && prob.id_tipus_situacio)
-          ? `<img src="${DISTRIB_BASE}Distribucio_${bpa.data}_Zona_${zona.id_zona}_Situacio_${prob.id_tipus_situacio}.png"
-               style="height:56px;border-radius:4px;margin-bottom:0.4rem;" onerror="this.style.display='none'">`
+        const zid = zona.id_zona || prob.id_zona;
+        const distribImg = (zid && prob.id_tipus_situacio)
+          ? `<img src="${DISTRIB_BASE}Distribucio_${bpa.data}_Zona_${zid}_Situacio_${prob.id_tipus_situacio}.png"
+               style="height:90px;border-radius:4px;display:block;"
+               onerror="(function(img){var t=+(img.dataset.t||0)+1;img.dataset.t=t;if(t>7){img.style.display='none';return;}var d=new Date('${bpa.data}');d.setDate(d.getDate()-t);img.src='${DISTRIB_BASE}Distribucio_'+d.toISOString().split('T')[0]+'_Zona_${zid}_Situacio_${prob.id_tipus_situacio}.png';})(this)">`
           : '';
         return `
           <div style="flex:1;padding:0.5rem 0.6rem;background:#f8f8f8;border-radius:6px;border-top:3px solid ${colorBorde};">
             <div style="font-size:0.65rem;font-weight:700;color:#546e7a;text-transform:uppercase;margin-bottom:0.35rem;">${etiqueta}</div>
-            ${distribImg}
-            <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;">
-              ${pic('situacio', prob.id_tipus_situacio)}
-              <span style="font-weight:600;font-size:0.8rem;">${prob.tipus_situacio || '—'}</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:0.25rem;">
-              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;">
-                ${pic('origen', prob.origen)}<span>Origen: <strong>${origen}</strong></span>
-              </div>
-              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;">
-                ${pic('mida', prob.mida)}<span>Mida: <strong>${mida}</strong></span>
-              </div>
-              <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:${tendCol};">
-                ${pic('tendencia', prob.tendencia)}<span>Tendència: <strong>${tend}</strong></span>
+            ${distribImg ? `<div style="margin-bottom:0.4rem;">${distribImg}</div>` : ''}
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;">
+              <div style="flex-shrink:0;">${pic('situacio', prob.id_tipus_situacio, 52)}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:700;font-size:0.8rem;margin-bottom:0.3rem;line-height:1.2;">${prob.tipus_situacio || '—'}</div>
+                <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;margin-bottom:0.15rem;">
+                  ${pic('origen', prob.origen, 24)}<span>Origen: <strong>${origen}</strong></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:#444;margin-bottom:0.15rem;">
+                  ${pic('mida', prob.mida, 24)}<span>Mida: <strong>${mida}</strong></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:${tendCol};">
+                  ${pic('tendencia', prob.tendencia, 24)}<span>Tendència: <strong>${tend}</strong></span>
+                </div>
               </div>
             </div>
           </div>`;
