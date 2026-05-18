@@ -1,0 +1,318 @@
+{
+  "data": "2026-05-18",
+  "actualitzat": "2026-05-18T11:49:52.092Z",
+  "resultats": [
+    {
+      "punt": {
+        "nom": "Boí Taüll",
+        "lat": 42.49,
+        "lon": 0.837,
+        "alt": 2500
+      },
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 1.1,
+          "precMati": 0,
+          "ventMaxMati": 7.8,
+          "wmoMati": 3,
+          "tminTarda": 1.9,
+          "tmaxTarda": 3.5,
+          "precTarda": 0.4,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.7,
+          "ventMaxDirTarda": 222,
+          "wmoTarda": 55,
+          "avg30d": 5.128124999999999
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 4.4,
+          "precMati": 0,
+          "ventMaxMati": 4.7,
+          "wmoMati": 3,
+          "tminTarda": 5.3,
+          "tmaxTarda": 7.6,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 6.3,
+          "ventMaxDirTarda": 211,
+          "wmoTarda": 3,
+          "avg30d": 5.128124999999999
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "Tavascan",
+        "lat": 42.658,
+        "lon": 1.215,
+        "alt": 1800
+      },
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 6.5,
+          "precMati": 0,
+          "ventMaxMati": 11.5,
+          "wmoMati": 3,
+          "tminTarda": 7,
+          "tmaxTarda": 8.2,
+          "precTarda": 2.05,
+          "neuTarda": 0,
+          "ventMaxTarda": 13.3,
+          "ventMaxDirTarda": 147,
+          "wmoTarda": 53,
+          "avg30d": 11.971875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 9.8,
+          "precMati": 0,
+          "ventMaxMati": 7.8,
+          "wmoMati": 3,
+          "tminTarda": 10.5,
+          "tmaxTarda": 12.5,
+          "precTarda": 2.1,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.3,
+          "ventMaxDirTarda": 126,
+          "wmoTarda": 61,
+          "avg30d": 11.971875
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "Port Bonaigua",
+        "lat": 42.534,
+        "lon": 1.014,
+        "alt": 2072
+      },
+      "avui": {
+        "nivell": 2,
+        "factors": [
+          "Neu a 2072m"
+        ],
+        "dades": {
+          "tmaxMati": 2.5,
+          "precMati": 0,
+          "ventMaxMati": 7.6,
+          "wmoMati": 51,
+          "tminTarda": 2.8,
+          "tmaxTarda": 4.6,
+          "precTarda": 1.8800000000000001,
+          "neuTarda": 0.35000000000000003,
+          "ventMaxTarda": 9,
+          "ventMaxDirTarda": 175,
+          "wmoTarda": 61,
+          "avg30d": 9.646875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 6,
+          "precMati": 0,
+          "ventMaxMati": 9.1,
+          "wmoMati": 3,
+          "tminTarda": 6.7,
+          "tmaxTarda": 8.4,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 6.6,
+          "ventMaxDirTarda": 221,
+          "wmoTarda": 3,
+          "avg30d": 9.646875
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "Espot Esquí",
+        "lat": 42.57,
+        "lon": 1.09,
+        "alt": 2200
+      },
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 4.1,
+          "precMati": 0,
+          "ventMaxMati": 6.4,
+          "wmoMati": 3,
+          "tminTarda": 4.9,
+          "tmaxTarda": 8.2,
+          "precTarda": 0.82,
+          "neuTarda": 0,
+          "ventMaxTarda": 10.2,
+          "ventMaxDirTarda": 228,
+          "wmoTarda": 53,
+          "avg30d": 8.793750000000003
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 7.2,
+          "precMati": 0,
+          "ventMaxMati": 5.7,
+          "wmoMati": 3,
+          "tminTarda": 9,
+          "tmaxTarda": 12,
+          "precTarda": 0.1,
+          "neuTarda": 0,
+          "ventMaxTarda": 11.4,
+          "ventMaxDirTarda": 145,
+          "wmoTarda": 51,
+          "avg30d": 8.793750000000003
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "La Molina",
+        "lat": 42.337,
+        "lon": 1.942,
+        "alt": 2050
+      },
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 5.7,
+          "precMati": 0,
+          "ventMaxMati": 10.3,
+          "wmoMati": 3,
+          "tminTarda": 4.5,
+          "tmaxTarda": 7.4,
+          "precTarda": 1.55,
+          "neuTarda": 0,
+          "ventMaxTarda": 10.6,
+          "ventMaxDirTarda": 215,
+          "wmoTarda": 61,
+          "avg30d": 10.553125000000001
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 7.7,
+          "precMati": 0,
+          "ventMaxMati": 6,
+          "wmoMati": 3,
+          "tminTarda": 9.3,
+          "tmaxTarda": 11.1,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.4,
+          "ventMaxDirTarda": 187,
+          "wmoTarda": 51,
+          "avg30d": 10.553125000000001
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "Vall de Núria",
+        "lat": 42.394,
+        "lon": 2.148,
+        "alt": 1967
+      },
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 6.2,
+          "precMati": 0,
+          "ventMaxMati": 7.2,
+          "wmoMati": 3,
+          "tminTarda": 4.3,
+          "tmaxTarda": 6.6,
+          "precTarda": 4.05,
+          "neuTarda": 0,
+          "ventMaxTarda": 8.1,
+          "ventMaxDirTarda": 167,
+          "wmoTarda": 63,
+          "avg30d": 10.346875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 8.7,
+          "precMati": 0,
+          "ventMaxMati": 8,
+          "wmoMati": 3,
+          "tminTarda": 8.4,
+          "tmaxTarda": 10,
+          "precTarda": 0.7999999999999999,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.2,
+          "ventMaxDirTarda": 154,
+          "wmoTarda": 55,
+          "avg30d": 10.346875
+        }
+      }
+    },
+    {
+      "punt": {
+        "nom": "Vallter 2000",
+        "lat": 42.393,
+        "lon": 2.345,
+        "alt": 2000
+      },
+      "avui": {
+        "nivell": 1,
+        "factors": [
+          "Pluja 5.8mm tarda"
+        ],
+        "dades": {
+          "tmaxMati": 5.2,
+          "precMati": 0,
+          "ventMaxMati": 11.4,
+          "wmoMati": 3,
+          "tminTarda": 4.5,
+          "tmaxTarda": 6.1,
+          "precTarda": 5.750000000000001,
+          "neuTarda": 0,
+          "ventMaxTarda": 11.4,
+          "ventMaxDirTarda": 198,
+          "wmoTarda": 63,
+          "avg30d": 8.834374999999998
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 8.4,
+          "precMati": 0,
+          "ventMaxMati": 5,
+          "wmoMati": 3,
+          "tminTarda": 8,
+          "tmaxTarda": 9.1,
+          "precTarda": 0.7,
+          "neuTarda": 0,
+          "ventMaxTarda": 6.4,
+          "ventMaxDirTarda": 142,
+          "wmoTarda": 51,
+          "avg30d": 8.834374999999998
+        }
+      }
+    }
+  ]
+}
