@@ -2241,6 +2241,13 @@
           document.getElementById('app-smp').innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">Les alertes s'actualitzaran demà a les 06:45h.</p><button onclick="carregarSMP()">Tornar a provar</button></div>`;
           return;
         }
+        // Avisar si les dades son de fa més d'1 dia
+        const diesAntigues = (Date.now() - new Date(data.dataConsulta).getTime()) / 86400000;
+        if (diesAntigues > 1) {
+          const dataLeg = new Date(data.dataConsulta).toLocaleString('ca', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+          document.getElementById('app-smp').innerHTML = `<div class="error" style="background:#fff3e0;border-color:#f57c00;"><div style="font-size:2rem;">⚠️</div><h2 style="color:#e65100;">Dades desactualitzades</h2><p style="opacity:0.9;">Les últimes dades disponibles són del <strong>${dataLeg}</strong>.<br>L'actualització automàtica pot haver fallat.</p><button onclick="carregarSMP()">Tornar a provar</button></div>`;
+          return;
+        }
         dadesCarregades.smp = data;  // Guardar dades
         renderSMP(data);
         actualitzarRiscAuto();  // Actualitzar risc amb noves dades
