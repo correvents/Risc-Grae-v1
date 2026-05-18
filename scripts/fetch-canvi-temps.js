@@ -53,20 +53,20 @@ function calcularRiscDia(prev, dataStr, avg30d, punt) {
 
   if (tmaxMati !== null && tminTarda !== null) {
     const drop = tmaxMati - tminTarda;
-    if (drop >= 10)     { nivellBase = Math.max(nivellBase, 2); factors.push(`Descens ${drop.toFixed(0)}°C`); }
-    else if (drop >= 5) { nivellBase = Math.max(nivellBase, 1); factors.push(`Descens ${drop.toFixed(0)}°C`); }
+    if (drop >= 15)      { nivellBase = Math.max(nivellBase, 2); factors.push(`Descens ${drop.toFixed(0)}°C`); }
+    else if (drop >= 10) { nivellBase = Math.max(nivellBase, 1); factors.push(`Descens ${drop.toFixed(0)}°C`); }
   }
-  if (avg30d !== null && tmaxTarda !== null && (avg30d - tmaxTarda) >= 10) {
+  if (avg30d !== null && tmaxTarda !== null && (avg30d - tmaxTarda) >= 15) {
     nivellBase = Math.max(nivellBase, 1);
     factors.push(`Anomalia tèrmica −${(avg30d - tmaxTarda).toFixed(0)}°C vs 30d`);
   }
-  if (neuTarda > 0.1) {
+  if (neuTarda >= 2) {
     const nv = punt.alt >= 2400 ? 1 : 2;
     nivellBase = Math.max(nivellBase, nv);
     factors.push(`Neu a ${punt.alt}m`);
   }
-  if (precTarda >= 10)     { nivellBase = Math.max(nivellBase, 2); factors.push(`Pluja ${precTarda.toFixed(1)}mm tarda`); }
-  else if (precTarda >= 5) { nivellBase = Math.max(nivellBase, 1); factors.push(`Pluja ${precTarda.toFixed(1)}mm tarda`); }
+  if (precTarda >= 15)     { nivellBase = Math.max(nivellBase, 2); factors.push(`Pluja ${precTarda.toFixed(1)}mm tarda`); }
+  else if (precTarda >= 7) { nivellBase = Math.max(nivellBase, 1); factors.push(`Pluja ${precTarda.toFixed(1)}mm tarda`); }
   if (wmoTarda >= 95) {
     nivellBase = Math.max(nivellBase, 2);
     factors.push(`Tempesta (WMO ${wmoTarda})`);
