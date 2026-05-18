@@ -2224,6 +2224,50 @@
       }
     };
 
+    // Llegeix smp_historic de Supabase i reconstrueix estructura d'avisos
+    const smpDesDeSupabase = async () => {
+      const avui = localDateStr(0);
+      const dema  = localDateStr(1);
+      const { data: rows, error } = await sbClient
+        .from('smp_historic')
+        .select('*')
+        .in('dia', [avui, dema])
+        .order('data_consulta', { ascending: false });
+      if (error) throw new Error(error.message);
+      if (!rows || rows.length === 0) return { dataConsulta: new Date().toISOString(), avisos: [] };
+      const dataConsulta = rows[0].data_consulta;
+      const avisosMap = new Map();
+      const vistos = new Set();
+      for (const row of rows) {
+        const avisKey = `${row.meteor}|||${row.estat}`;
+        if (!avisosMap.has(avisKey)) {
+          avisosMap.set(avisKey, {
+            meteor: row.meteor, estat: row.estat,
+            comentari: row.comentari || '',
+            dataInici: row.data_inici, dataFi: row.data_fi,
+            diesMap: new Map()
+          });
+        }
+        const avis = avisosMap.get(avisKey);
+        if (!avis.diesMap.has(row.dia)) avis.diesMap.set(row.dia, []);
+        const zonaKey = `${avisKey}|||${row.dia}|||${row.zona}`;
+        if (!vistos.has(zonaKey)) {
+          vistos.add(zonaKey);
+          avis.diesMap.get(row.dia).push({
+            zona: row.zona, nivell: row.nivell,
+            llindar: row.llindar, periodes: row.periodes,
+            probabilitat: row.probabilitat
+          });
+        }
+      }
+      const avisos = [...avisosMap.values()].map(a => ({
+        meteor: a.meteor, estat: a.estat, comentari: a.comentari,
+        dataInici: a.dataInici, dataFi: a.dataFi,
+        dies: [...a.diesMap.entries()].map(([dia, afectacions]) => ({ dia, afectacions }))
+      }));
+      return { dataConsulta, avisos };
+    };
+
     const carregarSMP = async () => {
       document.getElementById('app-smp').innerHTML = `
         <div class="loading">
@@ -2232,53 +2276,20 @@
         </div>
       `;
       try {
-        const avui = localDateStr(0);
-        const dema  = localDateStr(1);
-        const { data: rows, error } = await sbClient
-          .from('smp_historic')
-          .select('*')
-          .in('dia', [avui, dema])
-          .order('data_consulta', { ascending: false });
-
-        if (error) throw new Error(error.message);
-        if (!rows || rows.length === 0) {
-          document.getElementById('app-smp').innerHTML = `<div class="no-alertes"><div class="icon">✅</div><h3>Cap alerta activa</h3><p style="margin-top:0.5rem;opacity:0.8;">No hi ha situacions meteorològiques de perill vigents.</p></div>`;
-          return;
-        }
-
-        // Reconstruir estructura d'avisos des de les files de Supabase
-        const dataConsulta = rows[0].data_consulta;
-        const avisosMap = new Map();
-        const vistos = new Set();
-        for (const row of rows) {
-          const avisKey = `${row.meteor}|||${row.estat}`;
-          if (!avisosMap.has(avisKey)) {
-            avisosMap.set(avisKey, {
-              meteor: row.meteor, estat: row.estat,
-              comentari: row.comentari || '',
-              dataInici: row.data_inici, dataFi: row.data_fi,
-              diesMap: new Map()
-            });
+        // 1) Intentar JSON estàtic (ràpid, sense cost)
+        let data = null;
+        try {
+          const resp = await fetchAmbTimeout(URLS.smp + '?t=' + Date.now(), 8000);
+          if (resp.ok) {
+            const json = await resp.json();
+            const diesAntigues = (Date.now() - new Date(json.dataConsulta).getTime()) / 86400000;
+            if (json.dataConsulta && diesAntigues <= 1) data = json;
           }
-          const avis = avisosMap.get(avisKey);
-          if (!avis.diesMap.has(row.dia)) avis.diesMap.set(row.dia, []);
-          const zonaKey = `${avisKey}|||${row.dia}|||${row.zona}`;
-          if (!vistos.has(zonaKey)) {
-            vistos.add(zonaKey);
-            avis.diesMap.get(row.dia).push({
-              zona: row.zona, nivell: row.nivell,
-              llindar: row.llindar, periodes: row.periodes,
-              probabilitat: row.probabilitat
-            });
-          }
-        }
-        const avisos = [...avisosMap.values()].map(a => ({
-          meteor: a.meteor, estat: a.estat, comentari: a.comentari,
-          dataInici: a.dataInici, dataFi: a.dataFi,
-          dies: [...a.diesMap.entries()].map(([dia, afectacions]) => ({ dia, afectacions }))
-        }));
+        } catch(_) {}
 
-        const data = { dataConsulta, avisos };
+        // 2) Fallback a Supabase si el JSON és antic o no disponible
+        if (!data) data = await smpDesDeSupabase();
+
         dadesCarregades.smp = data;
         renderSMP(data);
         actualitzarRiscAuto();
