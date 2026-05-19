@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-05-18T16:37:48.324Z",
+  "actualitzat": "2026-05-19T08:48:09.385Z",
   "plans": [
     {
       "plaicona": {
@@ -7,13 +7,13 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "18/05/2026 10:12",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "18/05/2026 21:25",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123133_INICI--ACTIVAT_INUNCAT_202605181031.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123133_ACTUALITZACIO--NOACTIVAT_INUNCAT_202605191030.pdf"
       },
-      "descripcio": "Intensitat de pluja 18-19/5 "
+      "descripcio": "SMP Intensitat de pluja 17/5-18/5-19/5 - "
     }
   ]
 }

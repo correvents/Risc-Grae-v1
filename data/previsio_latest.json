@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-05-18T16:37:46.109Z",
+  "dataConsulta": "2026-05-19T08:48:05.293Z",
   "avui": {
-    "data": "2026-05-18",
-    "variables": {
-      "estatDelCel": "Durant el matí circularan núvols de tipus alt i mig d'oest a est, alhora que creixeran nuvolades al litoral i prelitoral. A partir de migdia les nuvolades s'estendran a la meitat nord i est del territori, on el cel quedarà entre mig i molt ennuvolat, puntualment cobert.",
-      "precipitacions": "A partir de mig matí s'esperen xàfecs al terç nord i a la meitat est, inicialment a zones de muntanya. A banda, és probable algun ruixat a la resta del prelitoral. La precipitació serà d'intensitat entre feble i moderada, si bé no es descarta que siguin localment d'intensitat forta; anirà localment acompanyada de tempesta i no es descarta de calamarsa. \nS'acumularan quantitats de precipitació entre minses i poc abundants, si bé localment podran ser abundants al quadrant nord-est i al prelitoral.\nLa cota de neu voltarà els 2.000 metres.",
-      "temperatures": "La temperatura màxima baixarà a la meitat est, pujarà lleugerament al terç oest, i es mantindrà sense grans canvis o baixarà lleugerament a la resta del país.",
-      "visibilitat": "Visibilitat bona en general, si bé quedarà regular a zones elevades de la meitat est i del terç nord, així com en moments de xàfec.",
-      "vent": "S'imposarà el vent de component sud i est a la meitat est i a la resta del litoral, mentre que a la resta del Principat s'imposarà el component oest. En general, bufaran amb intensitat entre feble i moderada.\nAl final del dia el vent serà fluix i de direcció variable, amb intervals de terral al litoral."
-    }
-  },
-  "dema": {
     "data": "2026-05-19",
     "variables": {
       "estatDelCel": "De matinada i durant el matí circularan núvols alts i mitjans d'oest a est que deixaran el cel mig ennuvolat, o puntualment molt ennuvolat, tot i que al llarg del matí s'obriran clarianes per l'oest. A banda, també hi haurà núvols baixos a punts del litoral fins a primeres hores del matí.\nA partir del final del matí, el cel quedarà serè o poc ennuvolat en general, tot i que creixeran nuvolades al Pirineu, Prepirineu i a la serralada prelitoral. Aquestes nuvolades deixaran el cel entre mig i molt ennuvolat en aquests indrets i a la resta del terç nord. A la tarda també arribaran algunes nuvolades al terç oest.\nIndependentment, el vessant nord del Pirineu quedarà molt ennuvolat a partir de la tarda.",
-      "precipitacions": "A partir del migdia s’esperen alguns xàfecs aïllats a punts de muntanya de l'interior del quadrant nord-est, resta del Pirineu, i en són possibles a punts de la serralada prelitoral. Seran d’intensitat feble o moderada i acumularan quantitats minses o localment poc abundants. Localment els xàfecs podran ser d'intensitat forta a l'interior del quadrant nord-est i acumular quantitats abundants.",
-      "temperatures": "La temperatura pujarà lleugerament o moderadament, tot i que localment la pujada de la màxima serà notable. A punts de Ponent se superaran els 28 ºC.",
-      "visibilitat": "La visibilitat serà bona o excel·lent. Per altra banda, de matinada serà regular o localment dolenta a fondalades del nord de la depressió Central, del Prepirineu i del quadrant nord-est, i fins a mig matí a punts del litoral i prelitoral sud. A banda, la visibilitat quedarà regular en moments de xàfec.",
-      "vent": "Fins a primera hora del matí i a partir del vespre el vent bufarà fluix i de direcció variable, amb intervals de terral fluix al litoral. La resta de la jornada s’imposarà vent entre fluix i moderat, de component sud al litoral, prelitoral i resta del quadrant nord-est, i de component oest al quadrant nord-oest."
+      "precipitacions": "A partir del final del matí s’esperen alguns xàfecs aïllats a punts de muntanya de l'interior del quadrant nord-est, resta del Pirineu, i en són possibles a punts de la serralada prelitoral. Seran d’intensitat feble o moderada i acumularan quantitats minses o localment poc abundants. Localment, els xàfecs podran ser d'intensitat forta a l'interior del quadrant nord-est i acumular quantitats abundants.",
+      "temperatures": "La temperatura pujarà lleugerament o moderadament, tot i que localment la pujada de la màxima serà notable. En punts de Ponent se superaran els 28 ºC.",
+      "visibilitat": "La visibilitat serà bona o excel·lent. Per altra banda, fins a primeres hores serà regular o localment dolenta a fondalades del nord de la depressió Central, del Prepirineu i del quadrant nord-est, i fins a mig matí a punts del litoral i prelitoral sud. A banda, la visibilitat quedarà regular en moments de xàfec.",
+      "vent": "Fins a primera hora del matí i a partir del vespre el vent bufarà fluix i de direcció variable, amb intervals de terral fluix al litoral. La resta de la jornada s’imposarà vent entre fluix i moderat, de component sud al litoral, prelitoral i resta del quadrant nord-est, i de component oest a l'interior de la meitat oest."
+    }
+  },
+  "dema": {
+    "data": "2026-05-20",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat pel pas de núvols alts en general, tot i que a primeres hores del matí i novament al final del dia hi haurà alguns núvols baixos a trams del litoral sud. A més, a partir del migdia creixeran nuvolades al Pirineu, Prepirineu i al quadrant nord-est, que deixaran el cel entre mig i molt ennuvolat.",
+      "precipitacions": "A partir del migdia s'esperen alguns ruixats dispersos a punts del Pirineu, sobretot al sector oriental. Seran d’intensitat feble i acumularan quantitats de precipitació minses o poc abundants.",
+      "temperatures": "La temperatura mínima serà lleugerament més alta. La màxima també ho serà, fins i tot moderadament. A punts de Ponent se superaran els 30 °C.",
+      "visibilitat": "La visibilitat serà bona o excel·lent en general. Amb tot, a primeres hores del matí serà regular a l'extrem sud del litoral així com en moments de xàfec.",
+      "vent": "De matinada i fins a primera hora del matí el vent bufarà fluix i variable. A partir d'aleshores s'imposarà el vent de component sud en general, si bé al quadrant nord-oest hi haurà estones de vent fluix i variable al centre del dia. Serà d'intensitat fluixa amb alguns cops moderats."
     }
   }
 }
