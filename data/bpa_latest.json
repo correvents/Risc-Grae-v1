@@ -1,181 +1,131 @@
 {
   "data": "2026-05-19",
-  "actualitzat": "2026-05-19T11:26:49.579Z",
+  "actualitzat": "2026-05-19T16:36:27.506Z",
   "font": "ICGC - Institut Cartogràfic i Geològic de Catalunya",
-  "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-05-15_cat.pdf",
+  "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-05-19_cat.pdf",
   "zones": [
     {
       "nom": "Aran - Franja Nord Pallaresa",
       "id_zona": "1",
-      "perill": "MODERAT (2)",
-      "perill_numeric": 2,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.100 m i a solanes per sobre de 2.300 m. Els gruixos són irregulars però estan al voltant de 60-80 cm a 2.300 m, lleugerament per sota dels habituals en aquestes dates. ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "Lliscaments basals",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14406,
-          "id_zona": "1",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14407,
+          "id_problema": 14408,
           "id_zona": "1",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         },
         {
-          "id_problema": 14405,
+          "id_problema": 14410,
           "id_zona": "1",
           "id_tipus_situacio": "5",
           "tipus_situacio": "Lliscaments basals",
           "origen": "1",
           "tendencia": "2",
           "mida": "2",
-          "priority": "3"
+          "priority": "2"
         }
       ]
     },
     {
       "nom": "Ribagorçana - Vall Fosca",
       "id_zona": "2",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però es mantenen al voltant dels 30-50 cm, per sota dels habituals en aquestes dates. La distribució i els gruixos de neu són majors al nord del sector. ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14388,
-          "id_zona": "2",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14389,
+          "id_problema": 14411,
           "id_zona": "2",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         }
       ]
     },
     {
       "nom": "Pallaresa",
       "id_zona": "3",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però es mantenen al voltant dels 30-50 cm. La distribució i els gruixos de neu són majors al nord del sector. ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14392,
-          "id_zona": "3",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14393,
+          "id_problema": 14413,
           "id_zona": "3",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         }
       ]
     },
     {
       "nom": "Perafita-Puigpedrós",
       "id_zona": "4",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són molt irregulars, a cotes altes per sota dels 40 cm. La distribució i els gruixos de neu són majors a l'extrem nord del sector. ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14396,
-          "id_zona": "4",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14397,
+          "id_problema": 14415,
           "id_zona": "4",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         }
       ]
     },
     {
       "nom": "Vessant Nord Cadí-Moixeró",
       "id_zona": "5",
-      "perill": "MODERAT (2)",
-      "perill_numeric": 2,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "El mantell vell en forma de congestes és present a obagues per sobre de 2.200 m i a solanes, molt discontínues, per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 20-40 cm, valors una mica per sobre de la mitjana.  ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14384,
-          "id_zona": "5",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14385,
+          "id_problema": 14417,
           "id_zona": "5",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         }
       ]
     },
@@ -194,50 +144,40 @@
     {
       "nom": "Ter-Freser",
       "id_zona": "7",
-      "perill": "FEBLE (1)",
-      "perill_numeric": 1,
+      "perill": "",
+      "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu ventada",
-      "situacio_secundaria": "Neu humida",
-      "distribucio_mantell": "Abans dels xàfecs de neu, el mantell és discontinu fins als cims a totes les orientacions. Les congestes són presents a obagues per sobre de 2.200 m i a solanes per sobre de 2.400 m. Els gruixos són irregulars però estan al voltant de 30-50 cm. ",
-      "tendencia": "La setmana del 18 al 24 de maig no es preveuen noves nevades. El mantell estarà encrostat i serà estable a primera hora del matí per regel nocturn, amb alguna allau de neu humida des de mig matí per fusió. Perill EN DESCENS. ",
+      "situacio_primaria": "Neu humida",
+      "situacio_secundaria": "Lliscaments basals",
+      "distribucio_mantell": "",
+      "tendencia": "",
       "problems": [
         {
-          "id_problema": 14401,
-          "id_zona": "7",
-          "id_tipus_situacio": "2",
-          "tipus_situacio": "Neu ventada",
-          "origen": "2",
-          "tendencia": "3",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14402,
+          "id_problema": 14419,
           "id_zona": "7",
           "id_tipus_situacio": "4",
           "tipus_situacio": "Neu humida",
           "origen": "1",
           "tendencia": "2",
           "mida": "1",
-          "priority": "2"
+          "priority": "1"
         },
         {
-          "id_problema": 14400,
+          "id_problema": 14421,
           "id_zona": "7",
           "id_tipus_situacio": "5",
           "tipus_situacio": "Lliscaments basals",
           "origen": "1",
           "tendencia": "2",
           "mida": "2",
-          "priority": "3"
+          "priority": "2"
         }
       ]
     }
   ],
   "resum": {
-    "perill_maxim": "MODERAT",
-    "perill_maxim_numeric": 2,
+    "perill_maxim": "Desconegut",
+    "perill_maxim_numeric": 0,
     "zones_alt_perill": [],
     "recomanacio": "Precaució en zones exposades."
   }
