@@ -4781,6 +4781,7 @@
           <button class="risc-btn" id="tab-helicopters" onclick="mostrarTabParam('helicopters');carregarHelicoptersCfg()">🚁 Helicòpters</button>
           <button class="risc-btn" id="tab-errors" onclick="mostrarTabParam('errors')">🔴 Errors <span id="badge-errors" style="background:#e53935;color:white;border-radius:10px;padding:0 5px;font-size:0.7rem;display:none;margin-left:3px;"></span></button>
           <button class="risc-btn" id="tab-enllacos" onclick="mostrarTabParam('enllacos')">🔗 Enllaços</button>
+          <button class="risc-btn" id="tab-manual" onclick="mostrarTabParam('manual')">📖 Manual</button>
         </div>
         
         <!-- Tab SMP -->
@@ -5091,9 +5092,357 @@
             </div>
           </div>
         </div>
+
+        <!-- Tab Manual -->
+        <div id="param-manual" class="param-tab" style="display:none;">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;gap:0;">
+
+            <div style="border-bottom:2px solid #0082d9;padding-bottom:0.75rem;margin-bottom:1.5rem;">
+              <h2 style="margin:0 0 0.25rem;font-size:1.2rem;color:#0082d9;">📖 Manual de funcionament — App GRAE</h2>
+              <p style="margin:0;font-size:0.8rem;color:#666;">Documentació completa. <strong>Part 1</strong>: per a l'usuari. <strong>Part 2</strong>: per al tècnic/informàtic.</p>
+            </div>
+
+            <!-- PART 1 -->
+            <div style="background:#e3f2fd;border-left:4px solid #0082d9;padding:0.6rem 0.9rem;border-radius:0 6px 6px 0;margin-bottom:1.25rem;">
+              <strong style="font-size:1rem;color:#0082d9;">PART 1 — Guia de l'usuari</strong>
+            </div>
+
+            <details open style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🎯 1.1 — Objectiu de l'aplicació</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;color:#333;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;">L'app <strong>Risc GRAE</strong> és una eina operacional per als equips GRAE (Grups de Recolzament d'Actuacions Especials) dels Bombers de la Generalitat de Catalunya. Centralitza tota la informació meteorològica i operacional rellevant per avaluar el risc de les intervencions de cada dia.</p>
+                <p style="margin:0;">Combina dades automàtiques de múltiples fonts (Meteocat, ICGC, Interior.cat, Open-Meteo) amb inputs manuals (afluència, helicòpters, overrides) per generar un <strong>índex de risc GRAE de 0 a 6</strong> per a avui i demà.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">📋 1.2 — Pestanyes principals</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <div style="display:grid;gap:0.6rem;">
+                  <div style="background:#fff3e0;border-radius:6px;padding:0.7rem 0.9rem;"><strong>🔴 Risc</strong> — Pestanya principal. Mostra l'índex de risc GRAE per a avui i demà (0–6) i els valors de cada factor. Permet ajustos manuals i guarda l'estat a Supabase. Vegeu l'apartat 1.4 per al detall del càlcul.</div>
+                  <div style="background:#e8f5e9;border-radius:6px;padding:0.7rem 0.9rem;"><strong>🌤️ Previsió</strong> — Predicció meteorològica horària per als municipis de referència GRAE (Vielha, Sort, Esterri d'Àneu, La Seu d'Urgell, Puigcerdà, Ripoll, Olot). Dades de l'API de Meteocat. S'actualitza 3× al dia.</div>
+                  <div style="background:#fff8e1;border-radius:6px;padding:0.7rem 0.9rem;"><strong>⚠️ SMP</strong> — Servei Meteorològic Predictiu de Meteocat. Taula de zones × períodes del dia (00-06 / 06-12 / 12-18 / 18-00) amb el nivell d'alerta (Groc / Taronja / Vermell) i el tipus de fenomen (pluja, vent, neu, tempesta, onatge). Inclou mapa embed de Meteocat i comentaris tècnics. Les zones es mostren agrupades per àmbit GRAE.</div>
+                  <div style="background:#e3f2fd;border-radius:6px;padding:0.7rem 0.9rem;"><strong>❄️ BPA</strong> — Butlletí de Perill d'Allaus de l'ICGC. Mostra el perill per zona pirinenca (escala 1–5: Feble → Molt Fort), la cota crítica, el tipus de situació d'allaus dominant i les imatges de distribució. Inclou un iframe de la web ICGC i un PDF descarregable.</div>
+                  <div style="background:#f3e5f5;border-radius:6px;padding:0.7rem 0.9rem;"><strong>👥 Afluència</strong> — Calendari anual d'afluència de públic a la muntanya (escala 0–3: Normal → Molt Alta). S'omple manualment o es genera automàticament a partir de festius, vacances i dates especials. Influeix directament en el càlcul del Risc.</div>
+                  <div style="background:#fce4ec;border-radius:6px;padding:0.7rem 0.9rem;"><strong>🗂️ Plans PC</strong> — Plans de Protecció Civil actius a Catalunya (INUNCAT, NEUCAT, VENTCAT, PROCICAT…). S'extreuen automàticament d'Interior.cat. Mostra nom del pla, fase (Prealerta / Alerta / Emergència) i municipis afectats.</div>
+                  <div style="background:#e8eaf6;border-radius:6px;padding:0.7rem 0.9rem;"><strong>🚁 Helicòpters</strong> — Estat operatiu diari dels helicòpters GRAE. S'introdueix manualment cada dia indicant la base, disponibilitat i observacions. Es guarda a Supabase.</div>
+                  <div style="background:#e0f2f1;border-radius:6px;padding:0.7rem 0.9rem;"><strong>🌦️ Canvi Temps</strong> — Índex de risc de canvi de temps brusc al Pirineu (0–2) per a avui i demà, calculat sobre 7 punts d'alta muntanya. Inclou desplegable amb els criteris de càlcul. Vegeu l'apartat 1.5.</div>
+                  <div style="background:#f1f8e9;border-radius:6px;padding:0.7rem 0.9rem;"><strong>📋 Historial</strong> — Consulta de l'índex de Risc GRAE de dies anteriors (des de Supabase). Mostra la taula amb data, risc i factors.</div>
+                  <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:0.7rem 0.9rem;"><strong>⚙️ Configuració</strong> — Paràmetres del càlcul de Risc (zones SMP actives, pesos allaus, HC, afluència, canvi de temps), overrides manuals SMP, historial de paràmetres, helicòpters, registre d'errors, enllaços i aquest manual.</div>
+                </div>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🕐 1.3 — Horaris d'actualització de dades</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.75rem;color:#555;">Les dades s'actualitzen automàticament via GitHub Actions. No cal fer res manualment per tenir les dades al dia.</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:0.75rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Hora (CET)</th><th style="text-align:left;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Que fa</th><th style="text-align:left;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Dades</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;"><strong>06:45</strong></td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Actualització forçada (guarda sempre)</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">SMP, BPA, Previsió, Plans PC, Canvi Temps</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;"><strong>09:00</strong></td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Actualitza si hi ha canvis</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">SMP, BPA, Previsió, Plans PC, Canvi Temps</td></tr>
+                    <tr><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;"><strong>14:30</strong></td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Actualitza si hi ha canvis</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">SMP, BPA, Previsió, Plans PC, Canvi Temps</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin:0;font-size:0.78rem;color:#888;">💡 Actualització manual: GitHub → Actions → "Dades diàries GRAE" → "Run workflow" → activar "Forçar guardat".</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🔢 1.4 — Com es calcula el Risc GRAE (0–6)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.75rem;">El Risc GRAE és la <strong>suma normalitzada</strong> de sis factors independents:</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:1rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Factor</th><th style="text-align:center;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Rang</th><th style="text-align:left;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Font</th><th style="text-align:center;padding:0.4rem 0.6rem;border:1px solid #e0e0e0;">Auto?</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">⚠️ Alertes SMP</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">0–6</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Meteocat SMP</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">✅</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">❄️ Risc Allaus (BPA)</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">1–5</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">ICGC BPA</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">✅</td></tr>
+                    <tr><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">🗂️ Plans PC</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">0–3</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Interior.cat</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">✅</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">🌦️ Canvi Temps</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">0–2</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Open-Meteo (7 punts Pirineu)</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">✅</td></tr>
+                    <tr><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">🚁 Dificultat Vol HC</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">0–2</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Meteocat SMP (vent/neu)</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">✅</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">👥 Afluència</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">0–3</td><td style="padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">Manual / calendari programat</td><td style="text-align:center;padding:0.35rem 0.6rem;border:1px solid #e0e0e0;">⚠️ Semi</td></tr>
+                  </tbody>
+                </table>
+                <div style="background:#f0f7ff;border:1px solid #90caf9;border-radius:6px;padding:0.75rem;margin-bottom:0.75rem;font-size:0.82rem;">
+                  <strong>📐 Fórmula:</strong> <code>Risc = arrodonir( (SMP + Allaus + PlansPC + Canvi + HC + Afluència) / 21 × 6 )</code><br>
+                  <span style="color:#555;font-size:0.78em;">El màxim teòric és 21 (6+5+3+2+2+3). Es normalitza a escala 0–6, limitat a 6.</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;font-size:0.8rem;margin-bottom:0.75rem;">
+                  <div style="background:#e8f5e9;border-radius:4px;padding:0.4rem 0.6rem;"><strong>0–1.5</strong> → BAIX</div>
+                  <div style="background:#fff8e1;border-radius:4px;padding:0.4rem 0.6rem;"><strong>1.5–3</strong> → MODERAT</div>
+                  <div style="background:#fff3e0;border-radius:4px;padding:0.4rem 0.6rem;"><strong>3–4.5</strong> → ALT</div>
+                  <div style="background:#ffebee;border-radius:4px;padding:0.4rem 0.6rem;"><strong>4.5–6</strong> → MOLT ALT</div>
+                </div>
+
+                <div style="padding-top:0.75rem;border-top:1px solid #eee;">
+                  <strong style="font-size:0.82rem;">Detall — Alertes SMP (0–6)</strong>
+                  <p style="margin:0.3rem 0 0.4rem;color:#555;font-size:0.82rem;">Compta les zones de muntanya GRAE activades (Configuració → Alertes SMP) que tenen alerta activa avui:</p>
+                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.3rem;font-size:0.78rem;text-align:center;">
+                    <span style="background:#e8f5e9;border-radius:4px;padding:0.2rem;"><strong>0</strong> cap alerta</span>
+                    <span style="background:#fffde7;border-radius:4px;padding:0.2rem;"><strong>1</strong> &lt;3 zones groc</span>
+                    <span style="background:#fffde7;border-radius:4px;padding:0.2rem;"><strong>2</strong> ≥3 zones groc</span>
+                    <span style="background:#fff3e0;border-radius:4px;padding:0.2rem;"><strong>3</strong> &lt;3 zones taronja</span>
+                    <span style="background:#fff3e0;border-radius:4px;padding:0.2rem;"><strong>4</strong> ≥3 zones taronja</span>
+                    <span style="background:#ffebee;border-radius:4px;padding:0.2rem;"><strong>5</strong> &lt;3 zones vermell</span>
+                    <span style="background:#ffebee;border-radius:4px;padding:0.2rem;"><strong>6</strong> ≥3 zones vermell</span>
+                    <span></span><span></span>
+                  </div>
+                  <p style="margin:0.3rem 0 0;font-size:0.75rem;color:#888;">Cada zona compta una sola vegada amb el seu nivell màxim del dia (qualsevol període).</p>
+                </div>
+
+                <div style="padding-top:0.75rem;border-top:1px solid #eee;margin-top:0.75rem;">
+                  <strong style="font-size:0.82rem;">Detall — Dificultat Vol HC (0–2)</strong>
+                  <ul style="margin:0.3rem 0 0;padding-left:1.2rem;font-size:0.8rem;color:#555;">
+                    <li><strong>2</strong> — Alerta Vermella de vent o neu en qualsevol zona</li>
+                    <li><strong>1</strong> — Alerta Taronja de qualsevol fenomen, o Groga de vent/neu</li>
+                    <li><strong>0</strong> — Cap alerta de vent, neu o pluja</li>
+                  </ul>
+                </div>
+
+                <div style="padding-top:0.75rem;border-top:1px solid #eee;margin-top:0.75rem;">
+                  <strong style="font-size:0.82rem;">Detall — Plans PC (0–3)</strong>
+                  <ul style="margin:0.3rem 0 0;padding-left:1.2rem;font-size:0.8rem;color:#555;">
+                    <li><strong>1</strong> — Prealerta &nbsp;|&nbsp; <strong>2</strong> — Alerta &nbsp;|&nbsp; <strong>3</strong> — Emergència</li>
+                  </ul>
+                  <p style="margin:0.3rem 0 0;font-size:0.75rem;color:#888;">Si hi ha diversos plans actius simultàniament, s'agafa el nivell màxim.</p>
+                </div>
+
+                <p style="margin:0.75rem 0 0;font-size:0.78rem;color:#666;">💡 Cada factor es pot sobreescriure manualment des de la pestanya Risc. El dia es marca com a "modificat manualment" i l'actualització automàtica deixa d'afectar-lo fins al reset diari.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🌦️ 1.5 — Càlcul Canvi de Temps (0–2)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;">Mesura si es preveu un deteriorament meteorològic brusc a alta muntanya. S'avalua sobre <strong>7 punts del Pirineu</strong>: Boí Taüll (2500 m), Tavascan (1800 m), Port Bonaigua (2072 m), Espot Esquí (2200 m), La Molina (2050 m), Vall de Núria (1967 m), Vallter 2000 (2000 m).</p>
+                <p style="margin:0 0 0.5rem;color:#555;">Dades d'Open-Meteo (previsió horària + arxiu 30 dies). Compara matí (06-12h) vs tarda (12-19h):</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:0.75rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Criteri</th><th style="text-align:center;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Nivell 1</th><th style="text-align:center;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Nivell 2</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Descens tèrmic (Tmàx matí → Tmín tarda)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 10°C</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 15°C</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Anomalia tèrmica (Tmitjana 30d − Tmàx tarda)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 15°C</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">—</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Precipitació acumulada a la tarda</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 7 mm</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 15 mm</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Nevada a la tarda</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 2 cm (alt ≥ 2400 m)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">≥ 2 cm (alt &lt; 2400 m)</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Tempesta (codi WMO ≥ 95)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">—</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Sí</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Bonus vent N/NE/NW (sumable als altres)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">+1 (≥ 40 km/h)</td><td style="text-align:center;padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">+2 (≥ 60 km/h)</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin:0;font-size:0.78rem;color:#888;">El resultat final és el màxim dels 7 punts, limitat a 2. Els codis WMO ≥95 corresponen a tempesta elèctrica, calamarsa o precipitació violenta.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">👥 1.6 — Calendari d'Afluència</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;">Indica el nivell d'afluència de persones a la muntanya per cada dia de l'any (0=Normal · 1=Moderada · 2=Alta · 3=Molt alta).</p>
+                <ul style="margin:0 0 0.5rem;padding-left:1.2rem;color:#555;">
+                  <li><strong>Automàtic:</strong> cap d'any, festius nacionals, setmana santa, agost, ponts.</li>
+                  <li><strong>Semi-automàtic:</strong> botó "Genera calendari" que importa festius del Consell d'Europa.</li>
+                  <li><strong>Manual:</strong> clica qualsevol dia per editar el nivell i afegir un motiu.</li>
+                </ul>
+                <p style="margin:0;font-size:0.78rem;color:#888;">Les edicions es guarden a Supabase (<code>afluencia_edicions</code>) i a localStorage com a còpia local.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1.5rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🚁 1.7 — Pestanya Helicòpters</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;">Registre manual de l'estat operatiu dels helicòpters GRAE per a cada dia. Indica base, disponibilitat i observacions. Es guarda a Supabase (<code>helicopters_historic</code>).</p>
+                <p style="margin:0;color:#555;font-size:0.82rem;">La dificultat de vol HC que entra al càlcul del Risc s'obté automàticament del SMP (vent/neu), no d'aquesta pestanya.</p>
+              </div>
+            </details>
+
+            <!-- PART 2 -->
+            <div style="background:#fce4ec;border-left:4px solid #e53935;padding:0.6rem 0.9rem;border-radius:0 6px 6px 0;margin-bottom:1.25rem;">
+              <strong style="font-size:1rem;color:#c62828;">PART 2 — Referència tècnica (informàtic)</strong>
+            </div>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🏗️ 2.1 — Arquitectura general</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:6px;padding:0.9rem;font-family:monospace;font-size:0.78rem;line-height:1.9;margin-bottom:0.75rem;overflow-x:auto;">
+                  APIs externes<br>
+                  &nbsp;Meteocat (SMP+Previsió) ─┐<br>
+                  &nbsp;ICGC (BPA) ──────────────┤──▶ GitHub Actions (Node.js) ──▶ data/*.json (GitHub Pages)<br>
+                  &nbsp;Interior.cat (Plans PC) ──┤&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──▶ Supabase (hist.)<br>
+                  &nbsp;Open-Meteo (Canvi) ───────┘<br>
+                  <br>
+                  index.html (browser) ──▶ fetch JSON ──▶ càlcul risc ──▶ UI<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──▶ Supabase JS SDK (guardar risc/helis/afluència)
+                </div>
+                <ul style="margin:0;padding-left:1.2rem;color:#555;font-size:0.82rem;">
+                  <li><strong>No hi ha servidor backend propi.</strong> Tot funciona amb GitHub Pages (estàtic) + GitHub Actions (cron) + Supabase (BD).</li>
+                  <li>L'app és un <strong>sol fitxer</strong> <code>index.html</code> (~6500 línies) amb HTML, CSS i JS inline.</li>
+                  <li>El frontend llegeix els JSON amb <code>fetch()</code> directament des de GitHub Pages.</li>
+                  <li>Frontend → Supabase: clau <code>anon</code> (pública). Scripts → Supabase: clau <code>service_role</code> (GitHub Secret).</li>
+                </ul>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">📁 2.2 — Estructura del repositori</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;">
+                <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:6px;padding:0.9rem;font-family:monospace;font-size:0.78rem;line-height:2;overflow-x:auto;">
+                  Risc-Grae-v1/<br>
+                  ├── index.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← App completa (HTML + CSS + JS)<br>
+                  ├── data/<br>
+                  │&nbsp;&nbsp;&nbsp;├── smp_latest.json<br>
+                  │&nbsp;&nbsp;&nbsp;├── bpa_latest.json<br>
+                  │&nbsp;&nbsp;&nbsp;├── previsio_latest.json<br>
+                  │&nbsp;&nbsp;&nbsp;├── planspc_latest.json<br>
+                  │&nbsp;&nbsp;&nbsp;└── canvi_temps_latest.json<br>
+                  ├── scripts/<br>
+                  │&nbsp;&nbsp;&nbsp;├── utils.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Helpers: Supabase upsert, R/W JSON<br>
+                  │&nbsp;&nbsp;&nbsp;├── fetch-smp.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Meteocat SMP API<br>
+                  │&nbsp;&nbsp;&nbsp;├── fetch-bpa.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← ICGC BPA API + Gist backup<br>
+                  │&nbsp;&nbsp;&nbsp;├── fetch-previsio.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Meteocat Previsió municipal<br>
+                  │&nbsp;&nbsp;&nbsp;├── fetch-planspc.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Interior.cat plans PC<br>
+                  │&nbsp;&nbsp;&nbsp;└── fetch-canvi-temps.js&nbsp;&nbsp;← Open-Meteo forecast + archive 30d<br>
+                  └── .github/workflows/<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── data_diari.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← Cron 06:45 / 09:00 / 14:30 CET
+                </div>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">⚙️ 2.3 — Scripts Node.js (fetch)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;color:#555;">Patró comú: <strong>fetch API → transforma → compara amb versió anterior → si canvi (o FORCE=true), escriu JSON + upsert Supabase</strong>.</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:0.5rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Script</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">API origen</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Taula Supabase</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">fetch-smp.js</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">api.meteo.cat/pronostic/v1/smp</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">smp_historic</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">fetch-bpa.js</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">bpa.icgc.cat/api/apiext/butlletiglobal</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">bpa_historic</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">fetch-previsio.js</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">api.meteo.cat/pronostic/v1/municipis</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">previsio_historic</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">fetch-planspc.js</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">interior.gencat.cat/protecciocivil/api</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">planspc_historic</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">fetch-canvi-temps.js</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">api.open-meteo.com/v1/forecast + /archive</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">canvi_temps_historic</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin:0;font-size:0.78rem;color:#888;">Secrets necessaris: <code>METEOCAT_API_KEY</code>, <code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_KEY</code>, <code>GIST_TOKEN</code> (opcional, per fer backup del BPA a GitHub Gist).</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🤖 2.4 — GitHub Actions (data_diari.yml)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;color:#555;">Cada execució: checkout → Node.js 20 → 5 scripts de fetch (continue-on-error) → git add data/ → commit si canvis → git push.</p>
+                <p style="margin:0 0 0.4rem;"><strong>FORCE:</strong> execució 06:45 → sempre guarda (<code>FORCE=true</code>). Execucions 09:00 i 14:30 → guarda només si hi ha canvis.</p>
+                <p style="margin:0;font-size:0.78rem;color:#888;">Per forçar manualment: GitHub → Actions → "Dades diàries GRAE" → "Run workflow" → activar "Forçar guardat".</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🗄️ 2.5 — Supabase (base de dades)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;color:#555;">Projecte: <code>rxfjwklbvqkwgzmpzwae</code>. Frontend: clau <code>anon</code> (incrustada al JS). Scripts GitHub Actions: clau <code>service_role</code>.</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Taula</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">PK</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Contingut</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Qui escriu</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>risc_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Risc GRAE diari + factors</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Frontend</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>smp_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+zona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Avisos SMP per dia i zona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">GitHub Actions</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>smp_override_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+ts</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Overrides manuals del valor SMP</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Frontend</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>taula_config_Alertes_SMP</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">—</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Paràmetres (zones actives, pesos)</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Frontend</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>bpa_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+zona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">BPA per dia i zona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">GitHub Actions</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>planspc_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+pla</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Plans PC actius per dia</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">GitHub Actions</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>previsio_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+municipi</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Predicció per municipi</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">GitHub Actions</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>afluencia_edicions</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Afluència manual per dia</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Frontend</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>helicopters_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Estat helicòpters per dia</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Frontend</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>canvi_temps_historic</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">data+punt</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Canvi temps per punt i dia</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">GitHub Actions</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">💻 2.6 — Estructura de index.html</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:6px;padding:0.9rem;font-family:monospace;font-size:0.78rem;line-height:2;overflow-x:auto;">
+                  L.1–1140&nbsp;&nbsp;&nbsp;&nbsp;CSS global (variables, layout, components)<br>
+                  L.1141–1265&nbsp;HTML estàtic (nav, seccions buides, iframes)<br>
+                  L.1266–1299&nbsp;Supabase SDK + client + funcions guardar/carregar risc<br>
+                  L.1300–1395&nbsp;fetchAmbTimeout · URLS · dadesCarregades · navegació<br>
+                  L.1396–1830&nbsp;BPA: renderitzar, carregar, guardar a Supabase<br>
+                  L.1831–2350&nbsp;SMP: ZONES_GRUPS · matriu zones×períodes · renderitzar<br>
+                  L.2351–3630&nbsp;Afluència: calendari, edicions, festius, generació any<br>
+                  L.3631–4080&nbsp;Risc: càrrega config · calcularValorsAuto · calcularRisc<br>
+                  L.4081–4270&nbsp;renderRisc: UI avui/demà, botons guardar/enviar<br>
+                  L.4271–4760&nbsp;SMP Historial · override · simulació · Previsió<br>
+                  L.4761–5110&nbsp;Configuració: paràmetres · errors · enllaços · manual<br>
+                  L.5111–5260&nbsp;Canvi Temps: renderitzar · carregar JSON<br>
+                  L.5261–5500&nbsp;enviarRiscSupabase · historial · geocodificació<br>
+                  L.5500–5900&nbsp;Helicòpters: carregar, guardar, renderitzar<br>
+                  L.5900–6500&nbsp;Previsió render · Plans PC: carregar/renderitzar
+                </div>
+                <p style="margin:0.5rem 0 0;font-size:0.78rem;color:#888;">💡 <kbd>Ctrl+F</kbd> → <code>// ==================== NOM ====================</code> per saltar a cada secció. Per funcions: <code>function nomFuncio</code>.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🔄 2.7 — Flux de dades en el frontend</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <ol style="margin:0;padding-left:1.3rem;color:#555;">
+                  <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
+                  <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>.</li>
+                  <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
+                  <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
+                </ol>
+                <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-top:0.75rem;font-size:0.8rem;">
+                  <strong>⚠️ localStorage (<code>riscGRAE</code>):</strong> guarda l'estat avui/demà entre sessions. Supabase preval sobre localStorage si hi ha connexió. Sense connexió, l'app funciona en mode completament local.
+                </div>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🔑 2.8 — Constants i variables globals clau</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Nom</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Tipus</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Descripció</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>URLS</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">const obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">URLs dels 5 JSON de dades (GitHub Pages)</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>dadesCarregades</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">let obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Cache de JSON carregats: <code>{bpa, smp, previsio, planspc, canvi}</code></td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>riscState</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">let obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Estat risc actual: <code>{today: {smp, allaus, hc, canvi, afluencia, planspc, …}, tomorrow: {…}}</code></td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>riscParams</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">let obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Paràmetres de càlcul de Supabase (zones actives, pesos, mapeig)</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>ZONES_GRUPS</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">const obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Mapa grup GRAE → zones Meteocat equivalents</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>afluenciaEdits</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">let obj</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>data → {nivell, motiu}</code> de totes les edicions d'afluència</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;"><code>sbClient</code></td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">const</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Client Supabase JS SDK (clau anon)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1.5rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🗺️ 2.9 — Agrupació de zones SMP (ZONES_GRUPS)</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;color:#555;">Les zones internes de Meteocat es normalitzen als àmbits GRAE via <code>ZONES_GRUPS</code>. El mapeig invers <code>zonaToGrup</code> es genera automàticament:</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Grup GRAE</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Zones Meteocat equivalents</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Pirineu Occidental</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Pirineu Occidental, Pirineu Central</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Pirineu Oriental</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Pirineu Oriental, Prepirineu</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Empordà</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Empordà, Alt Empordà, Baix Empordà</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Gironès</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Gironès i Pla de l'Estany, Gironès, Pla de l'Estany</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Costa Brava</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Costa Brava, Litoral Nord</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Litoral Central</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Litoral Central, Vallès, Penedès</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Plana de Lleida</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Plana de Lleida, Catalunya Central</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Camp de Tarragona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Camp de Tarragona, Serres de Prades i Montsant</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Terres de l'Ebre</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Terres de l'Ebre</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin:0.5rem 0 0;font-size:0.78rem;color:#888;">Nota: el càlcul SMP filtra per <code>riscParams.zones</code> (zones configurades com a "de muntanya") — Litoral Central, Costa Brava, etc. poden estar desactivades i no comptaran per al risc, tot i que la taula SMP les mostra sempre.</p>
+              </div>
+            </details>
+
+            <div style="border-top:1px solid #e0e0e0;padding-top:0.75rem;font-size:0.75rem;color:#aaa;text-align:center;">
+              Darrera revisió: maig 2026 · Repositori: <a href="https://github.com/correvents/Risc-Grae-v1" target="_blank" style="color:#0082d9;">correvents/Risc-Grae-v1</a>
+            </div>
+
+          </div>
+        </div>
+
       `;
     }
-    
+
     function netejarErrors() {
       if (confirm('Segur que vols esborrar tots els errors guardats?')) {
         errorLog.length = 0;
