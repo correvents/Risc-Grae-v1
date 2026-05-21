@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-05-20T16:33:55.471Z",
+  "dataConsulta": "2026-05-21T08:48:29.430Z",
   "avui": {
-    "data": "2026-05-20",
+    "data": "2026-05-21",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat pel pas de núvols alts en general, tot i que al final del dia hi haurà alguns núvols baixos a trams del litoral sud. A més, a partir del migdia creixeran nuvolades al Pirineu, Prepirineu i al quadrant nord-est, que deixaran el cel entre mig i molt ennuvolat.",
-      "precipitacions": "A partir del migdia s'esperen alguns ruixats dispersos a punts del Pirineu, sobretot al sector oriental. Seran d’intensitat feble i acumularan quantitats de precipitació minses o poc abundants.",
-      "temperatures": "La temperatura serà lleugerament més alta. En punts de Ponent i la vall de l'Ebre se superaran els 30 °C.",
-      "visibilitat": "La visibilitat serà bona o excel·lent en general. Amb tot, al final del dia serà regular a l'extrem sud del litoral així com en moments de xàfec.",
-      "vent": "S'imposarà el vent de component sud en general, si bé al quadrant nord-oest hi haurà estones de vent fluix i variable al centre del dia. Serà d'intensitat fluixa amb alguns cops moderats. Al final del dia, tornarà a quedar fluix i de direcció variable."
+      "estatDelCel": "El cel romandrà serè o transitòriament enteranyinat pel pas d'algunes bandes de núvols alts fins a migdia. A banda, a partir de migdia i durant la tarda apareixeran alguns núvols d'evolució diürna a punts del Pirineu i de l'interior del quadrant nord-est. Independentment, hi haurà intervals de núvols baixos al litoral sud al final del dia.",
+      "precipitacions": "No es descarta algun ruixat feble i entre inapreciable i minso a punts del Pirineu a la tarda.",
+      "temperatures": "La temperatura màxima serà entre lleugerament i moderadament més alta. En punts de Ponent se superaran els 33 °C.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent en general. Amb tot, serà transitòriament regular o dolenta al litoral sud per la presència d'alguns bancs de boira al final del dia.",
+      "vent": "El vent bufarà fluix amb cops moderats de components sud i est. Al vespre quedarà fluix i direcció variable en general."
     }
   },
   "dema": {
-    "data": "2026-05-21",
+    "data": "2026-05-22",
     "variables": {
-      "estatDelCel": "El cel romandrà serè o transitòriament enteranyinat pel pas d'algunes bandes de núvols alts. A banda, a partir de migdia apareixeran alguns núvols d'evolució diürna a punts del Pirineu i de l'interior del quadrant nord-est. Independentment, hi haurà intervals de núvols baixos a algunes valls del Pirineu de matinada i a la meitat sud del litoral al principi i al final del dia.",
-      "precipitacions": "No es descarta algun ruixat feble i minso a punts del Pirineu a la tarda.",
-      "temperatures": "La temperatura mínima serà similar o lleugerament més alta, mentre que la màxima serà entre lleugerament i moderadament més alta. A punts de Ponent se superaran els 33 °C.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent en general. Amb tot, serà transitòriament regular o dolenta al litoral sud per la presència d'algun bancs de boira al principi i al final del dia.",
-      "vent": "A l'inici del dia el vent serà fluix i direcció variable amb predomini del terral a la façana litoral. Durant les hores centrals del dia bufarà fluix amb cops moderats amb predomini dels components sud i est. Al vespre quedarà fluix i direcció variable en general."
+      "estatDelCel": "El cel romandrà serè en general. Amb tot, hi haurà alguns núvols baixos o bancs de boira a trams del litoral sud i nord. Al migdia, apareixeran núvols d'evolució diürna a punts del Pirineu, sobretot al sector oriental.",
+      "precipitacions": "No es descarta algun ruixat, aïllat, feble i minso a punts del Pirineu a la tarda.",
+      "temperatures": "La temperatura, tant la mínima com la màxima, serà lleugerament o moderadament més alta. En punts de Ponent la màxima podrà arribar als 35 ºC. ",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent en general. Amb tot, pot ser transitòriament regular o dolenta a punts del litoral sud i nord per la presència de bancs de boira. També empitjorarà, a cotes altes del Pirineu a la tarda.",
+      "vent": "El vent serà fluix i variable al principi i al final del dia. Al centre de la jornada, predominarà el component sud fluix amb cops moderats."
     }
   }
 }
