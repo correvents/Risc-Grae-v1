@@ -1714,8 +1714,7 @@
             diaHtml += `
               <div class="variable-card">
                 <h4>${nom}</h4>
-                <div class="valor">${valor.replace(/\
-/g, '<br>')}</div>
+                <div class="valor">${valor.replace(/\n/g, '<br>')}</div>
               </div>
             `;
           });
@@ -1854,11 +1853,11 @@
     const formatLlindar = (llindar) => {
       if (!llindar) return '';
       // Convertir m/s a km/h
-      const match = llindar.match(/>\\s*(\\d+)\\s*m\\/s/);
+      const match = llindar.match(/>\s*(\d+)\s*m\/s/);
       if (match) {
         const ms = parseInt(match[1]);
         const kmh = Math.round(ms * 3.6);
-        return llindar.replace(/>\\s*\\d+\\s*m\\/s/, `> ${kmh} km/h`);
+        return llindar.replace(/>\s*\d+\s*m\/s/, `> ${kmh} km/h`);
       }
       return llindar;
     };
@@ -6070,7 +6069,7 @@
     // ==================== ÍNDEXS DISTRIBUCIÓ I OPERATIVITAT ====================
     function provinciaDeBase(base) {
       if (!base) return null;
-      const b = base.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
+      const b = base.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       // Girona
       const girona = ["girona","figueres","olot","ripoll","vic","manlleu","banyoles","blanes","lloret","santa coloma de farners","la bisbal","palafrugell","palamos","roses","escala","la jonquera","puigcerda","cerdanya","camprodon","sant feliu"];
       if (girona.some(x => b.includes(x))) return "Girona";
