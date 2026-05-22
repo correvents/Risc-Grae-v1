@@ -82,7 +82,7 @@
 
 <div class="controls">
   <button class="btn-capa comar actiu" id="btnComar" onclick="toggleCapa('comar')">Comarques</button>
-  <button class="btn-capa munis" id="btnMunis" onclick="toggleCapa('munis')">Municipis</button>
+  <button class="btn-capa munis actiu" id="btnMunis" onclick="toggleCapa('munis')">Municipis</button>
   <button class="btn-reset" onclick="resetView()">⊙ Recentrar</button>
 </div>
 
@@ -107,7 +107,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
 
 var layerComar = null, layerMunis = null;
-var capesActives = { comar: true, munis: false };
+var capesActives = { comar: true, munis: true };
 var infoPanel = document.getElementById('info-panel');
 
 function mostrarInfo(tipus, nom, sub) {
