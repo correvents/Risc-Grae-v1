@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRAE — Mapa Territorial</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; display: flex; flex-direction: column; height: 100vh; background: #f5f5f5; }
+
+    .header {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 10px 16px;
+      background: #0082d9; color: white;
+      border-bottom: 2px solid #006bb3;
+      flex-shrink: 0;
+    }
+    .header h1 { font-size: 1rem; font-weight: 700; }
+    .header a {
+      margin-left: auto; padding: 5px 12px;
+      background: rgba(255,255,255,0.2); border-radius: 20px;
+      color: white; text-decoration: none; font-size: 0.82rem;
+    }
+    .header a:hover { background: rgba(255,255,255,0.35); }
+
+    .controls {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 8px 16px; background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .btn-capa {
+      padding: 5px 12px; border: 1.5px solid #cbd5e0; border-radius: 20px;
+      background: #fff; font-size: 0.82rem; cursor: pointer; color: #4a5568;
+      transition: all 0.15s;
+    }
+    .btn-capa:hover { border-color: #0082d9; color: #0082d9; }
+    .btn-capa.actiu.comar { color: #c05621; background: #fff8f1; border-color: #dd6b20; font-weight: 600; }
+    .btn-capa.actiu.munis { color: #276749; background: #f0fff4; border-color: #38a169; font-weight: 600; }
+    .btn-reset {
+      margin-left: auto; padding: 5px 12px;
+      border: 1.5px solid #cbd5e0; border-radius: 20px;
+      background: #fff; font-size: 0.82rem; cursor: pointer; color: #718096;
+    }
+    .btn-reset:hover { border-color: #0082d9; color: #0082d9; }
+
+    #map { flex: 1; }
+
+    #info-panel {
+      position: fixed; bottom: 20px; left: 16px; z-index: 1000;
+      background: white; padding: 10px 14px; border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15); font-size: 0.82rem;
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+      min-width: 160px;
+    }
+    #info-panel .tipus { color: #718096; font-size: 0.72rem; text-transform: uppercase; }
+    #info-panel .nom   { font-weight: 700; font-size: 0.95rem; margin-top: 2px; }
+    #info-panel .sub   { color: #718096; font-size: 0.78rem; margin-top: 1px; }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(255,255,255,0.85);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; font-size: 0.95rem; color: #4a5568;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 4px solid #e2e8f0; border-top-color: #0082d9;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🗺️ Mapa Territorial — GRAE</h1>
+  <a href="index.html">← Tornar</a>
+</div>
+
+<div class="controls">
+  <button class="btn-capa comar actiu" id="btnComar" onclick="toggleCapa('comar')">Comarques</button>
+  <button class="btn-capa munis" id="btnMunis" onclick="toggleCapa('munis')">Municipis</button>
+  <button class="btn-reset" onclick="resetView()">⊙ Recentrar</button>
+</div>
+
+<div id="map"></div>
+<div id="info-panel">
+  <div class="tipus" id="info-tipus"></div>
+  <div class="nom"   id="info-nom"></div>
+  <div class="sub"   id="info-sub"></div>
+</div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span>Carregant dades territorials…</span>
+</div>
+
+<script>
+var map = L.map('map').setView([41.72, 1.74], 8);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CartoDB</a>',
+  subdomains: 'abcd', maxZoom: 18
+}).addTo(map);
+
+var layerComar = null, layerMunis = null;
+var capesActives = { comar: true, munis: false };
+var infoPanel = document.getElementById('info-panel');
+
+function mostrarInfo(tipus, nom, sub) {
+  document.getElementById('info-tipus').textContent = tipus;
+  document.getElementById('info-nom').textContent   = nom;
+  document.getElementById('info-sub').textContent   = sub || '';
+  infoPanel.style.opacity = '1';
+}
+function amagarInfo() { infoPanel.style.opacity = '0'; }
+
+function reconstruirOrdre() {
+  if (layerMunis && map.hasLayer(layerMunis)) map.removeLayer(layerMunis);
+  if (layerComar && map.hasLayer(layerComar)) map.removeLayer(layerComar);
+  if (capesActives.munis && layerMunis) map.addLayer(layerMunis);
+  if (capesActives.comar && layerComar) map.addLayer(layerComar);
+}
+
+function toggleCapa(tipus) {
+  capesActives[tipus] = !capesActives[tipus];
+  var btn = document.getElementById(tipus === 'comar' ? 'btnComar' : 'btnMunis');
+  if (capesActives[tipus]) btn.classList.add('actiu');
+  else btn.classList.remove('actiu');
+  reconstruirOrdre();
+}
+
+function resetView() { map.setView([41.72, 1.74], 8); }
+
+async function carregar() {
+  try {
+    var [resC, resM, resCat] = await Promise.all([
+      fetch('comarques_simplificat_500m.geojson'),
+      fetch('municipis_simplificat_500m.geojson'),
+      fetch('catalunya_simplificat_100m.geojson')
+    ]);
+    var [dataC, dataM, dataCat] = await Promise.all([
+      resC.json(), resM.json(), resCat.json()
+    ]);
+
+    // Catalunya: perfil fix, sempre visible, no interactiu
+    L.geoJSON(dataCat, {
+      style: {
+        color: '#1a365d', weight: 2.5, opacity: 0.85,
+        dashArray: '6,4', fillOpacity: 0
+      },
+      interactive: false
+    }).addTo(map);
+
+    // Municipis (sota)
+    layerMunis = L.geoJSON(dataM, {
+      style: () => ({ color: '#999', weight: 0.8, opacity: 1, fillColor: '#fff', fillOpacity: 1 }),
+      onEachFeature: function(f, layer) {
+        layer.on({
+          mouseover: function(e) {
+            e.target.setStyle({ color: '#555', weight: 1.5, fillColor: '#eef2ff' });
+            mostrarInfo('Municipi', f.properties.NOMMUNI, f.properties.NOMCOMAR);
+          },
+          mouseout: function(e) {
+            layerMunis.resetStyle(e.target);
+            amagarInfo();
+          },
+          click: function(e) {
+            map.fitBounds(e.target.getBounds(), { padding: [40, 40] });
+          }
+        });
+      }
+    });
+
+    // Comarques (sobre, transparent)
+    layerComar = L.geoJSON(dataC, {
+      style: () => ({ color: '#444', weight: 3, opacity: 1, fillOpacity: 0 }),
+      onEachFeature: function(f, layer) {
+        layer.on({
+          mouseover: function(e) {
+            e.target.setStyle({ color: '#111', weight: 4 });
+            mostrarInfo('Comarca', f.properties.NOMCOMAR, '');
+          },
+          mouseout: function(e) {
+            layerComar.resetStyle(e.target);
+            amagarInfo();
+          },
+          click: function(e) {
+            map.fitBounds(e.target.getBounds(), { padding: [40, 40] });
+          }
+        });
+      }
+    });
+
+    reconstruirOrdre();
+
+  } catch(err) {
+    document.getElementById('loading').innerHTML =
+      '<div style="color:#e53935;font-weight:600;">Error carregant les dades</div>' +
+      '<div style="font-size:0.8rem;color:#718096;margin-top:4px;">' + err.message + '</div>';
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+}
+
+carregar();
+</script>
+</body>
+</html>
