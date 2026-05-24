@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-05-24T08:07:30.397Z",
+  "dataConsulta": "2026-05-24T10:00:22.219Z",
   "avui": {
     "data": "2026-05-24",
     "variables": {
-      "estatDelCel": "Predomini de l'ambient assolellat arreu del territori, amb alguns núvols alts i mitjans a punts del terç oest del territori fins a migdia. A més, a partir de migdia creixeran algunes nuvolades al Pirineu i Prepirineu occidental, i en són possibles al sector oriental. Independentment, no es descarta algun banc de boira puntual al llarg del dia a punts del litoral.",
+      "estatDelCel": "Predomini de l'ambient assolellat arreu del territori, amb alguns núvols alts a punts del terç oest del territori fins a migdia. A més, a partir de migdia creixeran algunes nuvolades al Pirineu i Prepirineu occidental, i en són possibles al sector oriental. Independentment, no es descarta algun banc de boira puntual a partir de la tarda a punts de la costa.",
       "precipitacions": "A partir de migdia i durant la tarda és probable algun ruixat aïllat, feble i entre inapreciable i minso al Pirineu occidental.",
-      "temperatures": "Temperatura màxima serà lleugerament més alta, especialment al litoral, mentre que a Ponent i punts del Pirineu occidental quedarà semblant o lleugerament més baixa. Fregaran el 35 ºC a Ponent i l'interior de les Terres de l'Ebre.",
+      "temperatures": "Temperatura màxima serà lleugerament més alta, especialment al litoral i prelitoral, mentre que a Ponent i punts del Pirineu occidental quedarà semblant o lleugerament més baixa. Arribaran fins als 35 ºC a Ponent i l'interior de les Terres de l'Ebre.",
       "visibilitat": "Visibilitat excel·lent en general, si bé serà puntualment regular o dolenta a punts del litoral, sobretot fins a mig matí i a darrera hora de la jornada.",
-      "vent": "Vent fluix i de direcció variable al principi i final del dia, amb predomini del terral al litoral. La resta de la jornada predominarà el vent de component sud fluix amb algun cop moderat, sobretot a l'interior, si bé a punts de la Costa Brava hi haurà estones de vent fluix de component est."
+      "vent": "S'establirà el vent de component sud fluix amb algun cop moderat, sobretot a l'interior, si bé a punts del quadrant nord-est hi haurà estones de vent fluix de component est. Al final del dia quedarà fluix i de direcció variable, amb predomini del terral al litoral. "
     }
   },
   "dema": {
     "data": "2026-05-25",
     "variables": {
-      "estatDelCel": "Cel serè amb algunes bandes de núvols alts i prims. Durant la tarda també creixeran algunes nuvolades aïllades al Pirineu i Prepirineu, més probables al sector occidental i de forma més aïllada altres punts del quadrant nord-occidental.",
-      "precipitacions": "NO s'espera precipitació.",
-      "temperatures": "Temperatura mínima similar, i màxima similar o lleugerament més alta. Fregaran el 35 ºC a Ponent i l'interior de les Terres de l'Ebre.",
-      "visibilitat": "Visibilitat excel·lent en general. De matinada no es descarta algun banc de boira puntual al nord de la Costa Brava, i durant la tarda a punts del litoral sud.",
-      "vent": "Vent fluix i de direcció variable al principi i final del dia, amb intervals de terral al litoral. La resta de la jornada predominarà el vent de component sud i est entre fluix i moderat, amb alguns cops forts a la tarda a la depressió Central i al prelitoral central i sud."
+      "estatDelCel": "Cel serè o poc ennuvolat per algunes bandes de núvols alts i prims. Durant la tarda també creixeran algunes nuvolades al Pirineu i Prepirineu, més probables al sector occidental i de forma més aïllada a altres punts del quadrant nord-occidental. A l'inici i a partir del vespre no es descarta que es pugui formar algun núvol baix o banc de boira al Delta de l'Ebre. ",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "Temperatura mínima similar, i màxima similar o lleugerament més baixa. Fregaran els 35 °C a Ponent i a l'interior de les Terres de l'Ebre.",
+      "visibilitat": "Visibilitat excel·lent en general. De matinada i al final del dia no es descarta algun banc de boira a l'extrem sud del litoral.",
+      "vent": "Vent fluix i de direcció variable al principi i final del dia, amb intervals de terral al litoral. La resta de la jornada predominarà el vent de component sud i est entre fluix i moderat, amb alguns cops forts a la tarda a la meitat sud del prelitoral i a Ponent."
     }
   }
 }
