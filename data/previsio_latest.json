@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-05-27T11:43:17.878Z",
+  "dataConsulta": "2026-05-27T16:47:44.495Z",
   "avui": {
     "data": "2026-05-27",
     "variables": {
-      "estatDelCel": "El cel romandrà serè o poc ennuvolat pel pas d'alguns núvols alts al llarg del dia. A banda, a la tarda creixeran nuvolades al Pirineu.",
+      "estatDelCel": "El cel romandrà serè, amb algun núvol d'evolució a punts del Pirineu fins al vespre.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà lleugerament més alta. Assolirà valors entorn dels 30 ºC a tot l'interior, entorn dels 32-34 ºC al Prelitoral i depressió Central, i entre 35-36 ºC a Ponent.",
+      "temperatures": "La temperatura serà lleugerament més alta.",
       "visibilitat": "La visibilitat serà excel·lent en general.",
-      "vent": "Al principi i novament al final del dia el vent serà fluix i variable, amb el predomini del terral a trams del litoral. A partir del migdia, bufarà vent de component sud i serà d'intensitat entre fluixa i moderada, amb algun cop entre moderat i fort a la meitat nord del litoral."
+      "vent": "Al final del dia el vent serà fluix i variable. Fins aleshores, però, bufarà el vent de component sud i serà d'intensitat entre fluixa i moderada."
     }
   },
   "dema": {
     "data": "2026-05-28",
     "variables": {
-      "estatDelCel": "El cel romandrà serè o poc ennuvolat per alguns núvols alts i prims. A més, a partir de migdia creixeran algunes nuvolades a punts del Pirineu, així com alguns núvols d'evolució a l'interior del quadrant nord-est, i més aïlladament a altres punts del prelitoral.",
-      "precipitacions": "A la tarda s'espera algun ruixat aïllat, feble i minso al Pirineu i Prepirineu.",
-      "temperatures": "La temperatura tant mínima com màxima serà lleugerament o moderadament més alta. La nit serà tropical al litoral i prelitoral. La màxima voltarà entre 29 i 34 ºC, si bé a punts de l'interior podrà arribar a 38 ºC.",
+      "estatDelCel": "El cel romandrà serè. A més, a partir de migdia creixeran algunes nuvolades a punts del Pirineu, així com alguns núvols d'evolució a l'interior del quadrant nord-est, i més aïlladament a altres punts del prelitoral.",
+      "precipitacions": "A la tarda s'espera algun ruixat aïllat, feble i minso a punts del Pirineu i Prepirineu.",
+      "temperatures": "La temperatura, tant mínima com màxima, serà lleugerament o moderadament més alta. La nit serà tropical a trams del litoral i a zones elevades del prelitoral (no es baixarà dels 20 ºC), sobretot al nord de l'Alt Empordà i a l'àrea metropolitana de Barcelona. La màxima voltarà entre 29 i 34 ºC al litoral, entre els 32 i 36 ºC a la resta, localment més alta a l'interior de les Terres de l'Ebre on es podrà arribar a 38 ºC.",
       "visibilitat": "La visibilitat serà excel·lent en general.",
-      "vent": "Al principi i final del dia el vent serà fluix i variable, amb el predomini del terral a trams del litoral de matinada. A partir de mig matí s'imposarà el vent de component sud fluix amb alguns cops moderats al litoral. Independentment, fins a mitja tarda hi haurà lleugera tramuntana al nord de l'Alt Empordà."
+      "vent": "Al principi i final del dia el vent serà fluix i variable, amb el predomini del terral a trams del litoral de matinada. A partir de mig matí s'imposarà el vent de component sud fluix amb alguns cops moderats al litoral, mentre que al llarg de la tarda s'estendrà cap a l'interior, amb algun cop fort al vespre al prelitoral sud i Ponent. \nIndependentment, fins a mitja tarda hi haurà lleugera tramuntana al nord de l'Alt Empordà."
     }
   }
 }
