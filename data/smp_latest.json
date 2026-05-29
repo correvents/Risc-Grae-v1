@@ -1,4 +1,31 @@
 {
-  "dataConsulta": "2026-05-29T11:34:42.817Z",
-  "avisos": []
+  "dataConsulta": "2026-05-29T16:55:38.710Z",
+  "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-05-29T14:48Z",
+      "dataFi": "2026-05-29T16:48Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-05-29",
+          "afectacions": [
+            {
+              "zona": "Prepirineu",
+              "nivell": "Taronja",
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
