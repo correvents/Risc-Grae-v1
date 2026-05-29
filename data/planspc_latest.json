@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-05-29T08:58:03.802Z",
+  "actualitzat": "2026-05-29T11:34:49.622Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,17 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123444_ACTUALITZACIO--NOACTIVAT_PROCICAT_202605290738.pdf"
       },
       "descripcio": "Incendi industrial Proquinat Òrrius (anterior IF Òrrius)"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "29/05/2026 12:31",
+      "descripcio": "Tren militar avariat - Transport viatgers ferrocarril"
     }
   ]
 }
