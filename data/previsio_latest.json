@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-05-28T17:04:29.617Z",
+  "dataConsulta": "2026-05-29T08:58:00.736Z",
   "avui": {
-    "data": "2026-05-28",
+    "data": "2026-05-29",
     "variables": {
-      "estatDelCel": "El cel romandrà serè tret de punts del quadrant nord-est, resta del Pirineu, del Prepirineu i en grau més baix del prelitoral on estarà transitòriament mig ennuvolat pel creixement i desfeta d'algunes nuvolades.",
-      "precipitacions": "No es descarta algun ruixat aïllat, feble i minso a punts del Pirineu o Prepirineu.",
-      "temperatures": "La temperatura quedarà lleugerament o moderadament més alta al litoral i prelitoral i semblant o lleugerament més alta a la resta.",
-      "visibilitat": "La visibilitat quedarà excel·lent en general.",
-      "vent": "Bufarà el vent de component sud fluix amb cops moderats i algun de fort al prelitoral sud. Al final del dia quedarà fluix i variable."
+      "estatDelCel": "El cel romandrà serè arreu fins a migdia. A partir de llavors, hi haurà alguns núvols d'evolució al prelitoral, i algunes nuvolades a punts del Pirineu i Prepirineu que deixaran el cel mig o molt ennuvolat en aquests sectors. A banda, a partir de la tarda es formaran alguns bancs de boira al litoral nord.",
+      "precipitacions": "A partir de migdia s'esperen alguns ruixats febles, locals i minsos a punts de Pirineu i Prepirineu. És probable que vagin acompanyats de tempesta.",
+      "temperatures": "La màxima serà semblant, si bé serà lleugerament més baixa al quadrant nord-est i al litoral, mentre que podrà pujar lleugerament a Ponent i interior de les Terres de l'Ebre. Voltarà entre 29 i 34 ºC, si bé a punts de Ponent i l'interior de les Terres de l'Ebre podrà arribar a 38 o 39 ºC.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent, tret dels moments de ruixat que quedarà transitòriament regular.",
+      "vent": "Al principi i final del dia el vent serà fluix i variable. A partir de mig matí s'imposarà el vent de component sud i oest a l'interior de la meitat oest, fluix amb cops moderats a la tarda, i sud i est a la meitat est i resta del litoral fluix amb algun cop moderat. Independentment, al vessant nord del Pirineu bufarà el vent de component nord fluix amb cops moderats."
     }
   },
   "dema": {
-    "data": "2026-05-29",
+    "data": "2026-05-30",
     "variables": {
-      "estatDelCel": "El cel romandrà serè fins a migdia. A partir de llavors, hi haurà alguns núvols d'evolució al prelitoral, i algunes nuvolades a punts del Pirineu i Prepirineu que deixaran el cel mig o molt ennuvolat; a partir del vespre la nuvolositat es podrà desplaçar cap a altres punts de la meitat sud. A banda, a partir de la tarda es formaran alguns bancs de boira al litoral nord. ",
-      "precipitacions": "A partir de migdia s'esperen alguns ruixats febles, locals i minsos a punts de Pirineu i Prepirineu. És probable que vagin acompanyats de tempesta i de manera puntual serà seca. ",
-      "temperatures": "La temperatura mínima serà lleugerament més alta. De matinada se situarà per sobre de 20ºC principalment a la ciutat de Barcelona i zones elevades del litoral i prelitoral. Per la seva banda, la màxima serà semblant, si bé serà lleugerament més baixa al quadrant nord-est i al litoral, mentre que podrà pujar lleugerament a Ponent i interior de les Terres de l'Ebre. Voltarà entre 29 i 34 ºC, si bé a punts de Ponent i l'interior de les Terres de l'Ebre podrà arribar a 38 o 39 ºC.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent, tret dels moments de ruixat que quedarà transitòriament regular.",
-      "vent": "Al principi i final del dia el vent serà fluix i variable. A partir de mig matí s'imposarà el vent de component sud i oest a l'interior de la meitat oest, fluix amb cops moderats a la tarda, i sud i est a la meitat est i resta del litoral fluix amb algun cop moderat. Independentment, al vessant nord del Pirineu bufarà el vent de component nord fluix amb cops moderats."
+      "estatDelCel": "Cel serè, tot i que fins al matí es formaran alguns bancs de núvols baixos o de boira al litoral, sobretot al sector nord. Al centre del dia creixeran nuvolades al Pirineu i Prepirineu i altres punts del terç nord que deixaran el cel molt ennuvolat en aquests sectors.",
+      "precipitacions": "S'esperen xàfecs acompanyats de tempesta durant la tarda a punts del Pirineu i Prepirineu i altres punts de l'interior del terç nord. Seran d'intensitat entre feble i moderada i localment aniran acompanyats de calamarsa o pedra. S'acumularan quantitats de precipitació entre minses i poc abundants.",
+      "temperatures": "La temperatura mínima baixarà entre lleugerament i moderadament, sobretot al litoral i prelitoral. La màxima també baixarà arreu lleugerament o moderadament.",
+      "visibilitat": "Visibilitat excel·lent, si bé de matinada localment serà regular a punts de l'Empordà i del delta de l'Ebre per algun banc de boira o boirina. A més, en moments de xàfec empitjorarà i quedarà entre regular i dolenta.",
+      "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent de component sud fluix amb cops moderats, tret de punts de delta de l'Ebre i de la Costa Brava on durant les hores centrals de la jornada predominarà el vent de component est fluix, si bé a la Costa Brava nord acabarà girant a migjorn a partir de mitja tarda.\nA banda, en moments de xàfec el vent serà ratxejat i hi haurà cops forts."
     }
   }
 }

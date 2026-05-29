@@ -1,33 +1,19 @@
 {
-  "actualitzat": "2026-05-28T17:04:33.128Z",
+  "actualitzat": "2026-05-29T08:58:03.802Z",
   "plans": [
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
       },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "28/05/2026 13:41",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123444_ACTUALITZACIO--ACTIVAT_INFOCAT_202605281622.pdf"
-      },
-      "descripcio": "Incendi vegetació - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PLASEQCAT.png"
-      },
-      "plaacronim": "PLASEQTA",
-      "planom": "Pla risc químic comarques Tarragona",
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
       "plafase": "PREALERTA",
       "plaactivat": "NO",
-      "fasedatahora": "28/05/2026 18:05",
+      "fasedatahora": "29/05/2026 07:32",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123460_INICI--NOACTIVAT_PLASEQTA_202605281855.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123444_ACTUALITZACIO--NOACTIVAT_PROCICAT_202605290738.pdf"
       },
-      "descripcio": "Flama a la torxa - DOW Chemical Ibérica (Polígon Nord) (Plaseqta)"
+      "descripcio": "Incendi industrial Proquinat Òrrius (anterior IF Òrrius)"
     }
   ]
 }
