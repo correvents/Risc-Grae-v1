@@ -1,4 +1,55 @@
 {
-  "dataConsulta": "2026-05-30T08:09:25.325Z",
-  "avisos": []
+  "dataConsulta": "2026-05-30T10:05:07.842Z",
+  "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-05-30T12:00Z",
+      "dataFi": "2026-05-30T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa o pedra petita.  A la Garrotxa i a Osona, el llindar d'avís és possible que se superi al nord-oest.",
+      "dies": [
+        {
+          "dia": "2026-05-30",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
