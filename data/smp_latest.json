@@ -1,41 +1,9 @@
 {
-  "dataConsulta": "2026-06-02T17:51:36.313Z",
+  "dataConsulta": "2026-06-03T10:25:22.266Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
-      "dataInici": "2026-06-02T12:00Z",
-      "dataFi": "2026-06-02T17:59Z",
-      "comentari": "La precipitació anirà localment acompanyada de tempesta, i calamarsa o pedra.",
-      "dies": [
-        {
-          "dia": "2026-06-02",
-          "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
       "dataInici": "2026-06-02T12:00Z",
       "dataFi": "2026-06-04T23:59Z",
       "comentari": "La precipitació anirà acompanyada de tempesta, i localment de calamarsa o pedra.",
@@ -167,29 +135,6 @@
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "18-00"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Ampliat",
-      "dataInici": "2026-06-02T12:00Z",
-      "dataFi": "2026-06-02T17:59Z",
-      "comentari": "La precipitació anirà localment acompanyada de tempesta, i calamarsa o pedra.",
-      "dies": [
-        {
-          "dia": "2026-06-02",
-          "afectacions": [
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
               ]
             }
           ]
