@@ -1,4 +1,33 @@
 {
-  "actualitzat": "2026-06-05T11:33:06.520Z",
-  "plans": []
+  "actualitzat": "2026-06-05T16:10:23.169Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
+      },
+      "plaacronim": "TRANSCAT",
+      "planom": "Nou transcat",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "05/06/2026 16:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123736_INICI--NOACTIVAT_TRANSCAT_202606051641.pdf"
+      },
+      "descripcio": "Tren de MMPP amb flama en un vago - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "05/06/2026 16:41",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123734_INICI--NOACTIVAT_PROCICAT_202606051707.pdf"
+      },
+      "descripcio": "Incendi indústria Montesa Honda - "
+    }
+  ]
 }
