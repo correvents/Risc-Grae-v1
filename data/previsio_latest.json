@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-06-06T08:15:01.584Z",
+  "dataConsulta": "2026-06-06T10:10:39.955Z",
   "avui": {
     "data": "2026-06-06",
     "variables": {
-      "estatDelCel": "Cel enteranyinat per núvols alts i alguns de mitjans fins a mitja tarda, més compactes a la meitat sud; a partir d'aleshores minvaran. A més, hi haurà núvols baixos tot el dia al litoral sud, així com fins a mig matí i a partir del vespre a la Catalunya central i al litoral central.\nPer altra banda, al centre de la jornada creixeran nuvolades a la meitat nord del prelitoral, serralada Transversal, al Pirineu i al Prepirineu i en aquests sectors el cel quedarà entre mig i molt ennuvolat.",
-      "precipitacions": "Durant la tarda s'esperen alguns ruixats o xàfecs locals a punts del Prepirineu, al Pirineu i a l'interior del quadrant nord-est; i són probables de locals a la resta del prelitoral i nord de la depressió Central. Seran d'intensitat entre feble i moderada. Acumularan quantitats de precipitació minses o localment poc abundants. A més, localment podran anar acompanyats de tempesta, és probable que també amb calamarsa i, més esporàdicament, és possible que amb pedra petita.",
-      "temperatures": "Temperatura mínima similar o en ascens lleuger al terç oest. La temperatura màxima experimentarà un ascens moderat, si bé serà lleuger al litoral central i sud.",
-      "visibilitat": "La visibilitat serà bona o excel·lent, tot i que serà localment regular o dolenta fins a l'inici del matí en fondalades de l'interior i a punts del litoral i prelitoral sud. A banda, durant la tarda empitjorarà a zones elevades del Prepirineu i del Pirineu. ",
-      "vent": "Fins a mig matí i al final del dia, el vent bufarà fluix i de direcció variable, amb intervals de terral matinal al litoral. La resta del dia bufarà de component sud a l'interior i sud i est al litoral entre fluix i moderat, amb algun cop fort a l'interior de la vall de l'Ebre i al pla de Lleida."
+      "estatDelCel": "Cel enteranyinat per núvols alts i mitjans fins a mitja tarda; a partir d'aleshores minvaran progressivament. A més, hi haurà núvols baixos tot el dia al litoral sud, més compactes fins a mig matí i a partir del vespre, així com fins a partir del vespre a la Catalunya central i al litoral central.\nPer altra banda, al centre de la jornada creixeran nuvolades a la serralada prelitoral, sobretot central i nord, a la serralada Transversal, al Pirineu i al Prepirineu i en aquests sectors el cel quedarà entre mig i molt ennuvolat, amb intervals de cobert.",
+      "precipitacions": "A partir de mitja tarda s'esperen alguns ruixats o xàfecs locals a punts del Prepirineu, del Pirineu i a l'interior del quadrant nord-est; i són probables de locals a la resta del prelitoral i nord de la depressió Central. Seran d'intensitat entre feble i moderada i acumularan quantitats de precipitació minses o localment poc abundants; tot i això, al Prepirineu i a la Catalunya central és possible que siguin d'intensitat forta i acumulin quantitats abundants. A més, localment podran anar acompanyats de tempesta, és probable que també amb calamarsa.",
+      "temperatures": "La temperatura màxima experimentarà un ascens entre lleugera i moderat arreu, si bé serà entre moderat i acusat a punts del litoral i prelitoral nord.",
+      "visibilitat": "La visibilitat serà bona o excel·lent. Ara bé, durant la tarda empitjorarà a zones elevades del Prepirineu i del Pirineu i en moments de xàfec.",
+      "vent": "El vent bufarà de component sud i est al litoral i prelitoral i de component sud a la resta de l'interior entre fluix i moderat, amb algun cop fort a l'interior de la vall de l'Ebre i al pla de Lleida a la tarda. Al final del dia el vent quedarà fluix i de direcció variable, amb trams de terral al litoral."
     }
   },
   "dema": {
     "data": "2026-06-07",
     "variables": {
-      "estatDelCel": "Domini de l'ambient assolellat en conjunt, si bé de matinada hi haurà la presència d'alguns estrats baixos al terç sud del país. A més, a partir de migdia creixeran nuvolades a punts del Pirineu que deixaran el cel mig o molt ennuvolat. ",
-      "precipitacions": "De matinada, són probables alguns ruixats a vessant sud del Pirineu Occidental. Mentre que, a partir de migdia en són possibles a punts del Pirineu i Prepirineu, sobretot al sector occidental. En general, seran febles i deixaran quantitats minses o poc abundants.",
+      "estatDelCel": "Domini de l'ambient assolellat o enteranyinat pel pas de núvols alts i alguns de mitjans. Tot i això, de matinada i fins a primera hora del matí hi haurà la presència d'alguns estrats baixos al terç sud del país. A més, a partir de migdia creixeran nuvolades a punts del Pirineu, sobretot extrem nord, del Prepirineu i de la serralada prelitoral que deixaran el cel mig o molt ennuvolat. ",
+      "precipitacions": "De matinada, són probables alguns ruixats a vessant sud del Pirineu occidental. Mentre que, a partir de migdia en són possibles a punts del Pirineu i Prepirineu, si bé són probables a l'extrem nord de la serralada. En general, seran febles i deixaran quantitats minses o poc abundants.",
       "temperatures": "Temperatura similar o lleugerament més alta, tant la mínima com la màxima.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Fins a mig matí i al final del dia, el vent bufarà fluix i de direcció variable, amb predomini del terral matinal al litoral. La resta del dia bufarà de component est, entre fluix i moderat."
+      "visibilitat": "La visibilitat serà entre bona i excel·lent, tret del matí que serà entre bona i regular a les Terres de l'Ebre.",
+      "vent": "Fins a mig matí i al final del dia, el vent bufarà fluix i de direcció variable, si bé predominarà el terral matinal al litoral. La resta del dia bufarà de component sud i est, entre fluix i moderat, amb algun cop fort a l'interior de la vall de l'Ebre i sud de Ponent."
     }
   }
 }
