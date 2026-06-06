@@ -1,4 +1,49 @@
 {
-  "dataConsulta": "2026-06-05T16:10:21.253Z",
-  "avisos": []
+  "dataConsulta": "2026-06-06T08:14:59.924Z",
+  "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-06-06T12:00Z",
+      "dataFi": "2026-06-06T23:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment no es descarta calamarsa.",
+      "dies": [
+        {
+          "dia": "2026-06-06",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
