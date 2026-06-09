@@ -1,9 +1,9 @@
 {
-  "dataConsulta": "2026-06-08T16:54:44.609Z",
+  "dataConsulta": "2026-06-09T08:50:08.457Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-06-08T18:00Z",
       "dataFi": "2026-06-09T17:59Z",
       "comentari": "Els xàfecs aniran acompanyats de tempesta i localment no es descarta de calamarsa.",
@@ -61,6 +61,29 @@
                 "00-06"
               ]
             },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-06-09T12:00Z",
+      "dataFi": "2026-06-09T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats localment de tempesta.",
+      "dies": [
+        {
+          "dia": "2026-06-09",
+          "afectacions": [
             {
               "zona": "Pirineu Oriental",
               "nivell": "Groc",

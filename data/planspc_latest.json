@@ -1,19 +1,33 @@
 {
-  "actualitzat": "2026-06-08T16:54:47.845Z",
+  "actualitzat": "2026-06-09T08:50:12.108Z",
   "plans": [
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_AEROCAT.png"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
       },
-      "plaacronim": "AEROCAT",
-      "planom": "AEROCAT",
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "08/06/2026 22:00",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123726_INICI--ACTIVAT_PROCICAT_202606082218.pdf"
+      },
+      "descripcio": "Visita Sant Pare Lleó XIV - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
       "plafase": "PREALERTA",
       "plaactivat": "NO",
-      "fasedatahora": "08/06/2026 18:46",
+      "fasedatahora": "09/06/2026 06:43",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123811_INICI--NOACTIVAT_AEROCAT_202606081853.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123816_ACTUALITZACIO--NOACTIVAT_PROCICAT_202606090724.pdf"
       },
-      "descripcio": "alerta local Aeroport el Prat  - Aeroport de Barcelona"
+      "descripcio": "Foc palès recinte exterior Arcofrut Lleida"
     }
   ]
 }
