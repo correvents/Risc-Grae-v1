@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-06-10T11:42:34.670Z",
+  "actualitzat": "2026-06-10T16:45:45.003Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123726_INICI--ACTIVAT_PROCICAT_202606082218.pdf"
       },
       "descripcio": "Visita Sant Pare Lleó XIV - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "10/06/2026 16:44",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123857_INICI--NOACTIVAT_PROCICAT_202606101702.pdf"
+      },
+      "descripcio": "Fuita de gas exterior "
     }
   ]
 }
