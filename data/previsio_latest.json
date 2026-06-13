@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-06-12T16:29:21.075Z",
+  "dataConsulta": "2026-06-13T08:40:55.122Z",
   "avui": {
-    "data": "2026-06-12",
+    "data": "2026-06-13",
     "variables": {
-      "estatDelCel": "Cel serè o molt poc ennuvolat.",
+      "estatDelCel": "Fins a migdia predominarà l'ambient assolellat arreu, tret de la meitat sud del país on arribaran franges de núvols alts. Durant la tarda els núvols alts arribaran a altres indrets del territori, alhora que es faran més abundants i compactes pel terç sud i oest. Independentment, durant la tarda hi haurà alguns núvols d'evolució a punts del Pirineu i l'interior del quadrant nord-est que deixaran el cel poc ennuvolat.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "Temperatura entre lleugerament i moderadament més alta.",
+      "temperatures": "La temperatura màxima serà entre lleugerament i moderadament més alta. Els valors màxims se situarà per sobre dels 30 °C a bona part de l'interior i en algun sector del litoral, mentre que a punts de Ponent es podrà arribar als 35 °C.",
       "visibilitat": "Visibilitat excel·lent.",
-      "vent": "Predominarà el vent de component sud d'intensitat entre feble i moderada en general. A banda, hi haurà tramuntana d'intensitat entre feble i moderada al nord de l'Alt Empordà. Amb tot, al final del dia hi haurà vent fluix i variable a l'interior i terral al litoral."
+      "vent": "Bufarà fluix i de direcció variable fins a primera hora del matí i de nou al final del dia, amb intervals de terral al litoral al vespre. La resta de la jornada s'imposarà el component sud d'intensitat entre fluixa i moderada, amb estones de component est a la plana empordanesa, tot i que a la tarda hi haurà algun cop fort a l'interior de les Terres de l'Ebre i al sud de Ponent. Per altra banda, al nord de l'Alt Empordà bufarà tramuntana entre fluixa i moderada fins a mig matí."
     }
   },
   "dema": {
-    "data": "2026-06-13",
+    "data": "2026-06-14",
     "variables": {
-      "estatDelCel": "Fins a migdia predominarà l'ambient assolellat arreu. A partir de llavors hi haurà alguns núvols d'evolució a punts del Pirineu i l'interior del quadrant nord-est que deixaran el cel poc ennuvolat. A banda, a partir del vespre creuaran algunes bandes de núvols alts de sud a nord del territori.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "Temperatura mínima en lleu ascens amb valors per sobre dels 20 ºC a punts del litoral. Per la seva banda, la temperatura màxima entre lleugerament i moderadament més alta. Els valors màxims es situarà per sobre dels 30 ºC a l'interior i entorn dels 35 ºC a punts de Ponent.",
-      "visibilitat": "Visibilitat excel·lent.",
-      "vent": "Bufarà fluix i de direcció variable fins a primera hora del matí i de nou al final del dia, amb predomini del terral al litoral de matinada. La resta de la jornada s'imposarà el component sud d'intensitat entre fluixa i moderada. A més, al nord de l'Alt Empordà bufarà tramuntana entre fluixa i moderada fins a mig matí, i de component sud a partir de llavors."
+      "estatDelCel": "Cel entre poc i mig ennuvolat per bandes de núvols alts i mitjans que aniran travessant el país de sud a nord al llarg del dia. A banda, també creuaran algunes nuvolades, de base elevada, de sud a nord del territori. Per altra banda, a partir de migdia i durant la tarda creixeran nuvolades al Pirineu, i de manera més aïllada a altres punts del Prepirineu i a punts de muntanya de l'interior del quadrant nord-est.",
+      "precipitacions": "S'esperen ruixats al Pirineu, principalment al nord de la serralada. Seran d'intensitat entre feble i moderada, i s'acumularan quantitats minses o poc abundants, i localment aniran acompanyats de tempesta.",
+      "temperatures": "La temperatura serà lleugerament més alta, tant la mínima com la màxima. La màxima arribarà als 30 °C a punts del litoral, mentre que a l'interior rondarà entre 32 i 34 °C arreu i assolirà els 36 °C a Ponent.",
+      "visibilitat": "La visibilitat serà excel·lent en general, si bé hi haurà algun banc de boirina matinal al prelitoral nord.",
+      "vent": "El vent bufarà fluix i de direcció variable de matinada i de nou al final del dia a l'interior; al litoral bufarà el terral fluix, si bé dominarà la tramuntana al nord del cap de Creus durant la matinada. La resta de la jornada s'imposarà el component sud fluix amb cops moderats, amb algun de fort durant la tarda a l'interior de les Terres de l'Ebre i al sud de Ponent; independentment, al litoral nord hi haurà intervals de component est."
     }
   }
 }
