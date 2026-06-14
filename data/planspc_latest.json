@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-06-14T10:51:39.684Z",
+  "actualitzat": "2026-06-14T15:22:38.117Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,17 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-123940_INICI--NOACTIVAT_PROCICAT_202606130829.pdf"
       },
       "descripcio": "GP de Formula 1 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "14/06/2026 16:48",
+      "descripcio": "Foc cultius ACTIU - "
     }
   ]
 }
