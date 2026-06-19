@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-06-19T12:13:14.404Z",
+  "actualitzat": "2026-06-19T16:16:06.008Z",
   "plans": [
     {
       "plaicona": {
@@ -10,6 +10,9 @@
       "plafase": "ALERTA",
       "plaactivat": "SI",
       "fasedatahora": "19/06/2026 13:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124123_INICI--ACTIVAT_PROCICAT_202606191412.pdf"
+      },
       "descripcio": "Preavís SMP calor intensa del 21 al 23/06 - Calor"
     }
   ]
