@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-06-22T17:58:38.353Z",
+  "actualitzat": "2026-06-23T08:47:41.738Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "22/06/2026 08:25",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124291_INICI--NOACTIVAT_INFOCAT_202606220837.pdf"
-      },
-      "descripcio": "Previsió risc d'incendi 22/06 - "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
@@ -25,7 +11,7 @@
       "plaactivat": "SI",
       "fasedatahora": "19/06/2026 13:17",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124123_ACTUALITZACIO--ACTIVAT_PROCICAT_202606221037.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124123_ACTUALITZACIO--ACTIVAT_PROCICAT_202606231038.pdf"
       },
       "descripcio": "Preavís SMP calor intensa del 21 al 24/06 - Calor"
     }
