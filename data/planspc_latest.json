@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-06-24T10:56:16.063Z",
+  "actualitzat": "2026-06-24T15:39:44.785Z",
   "plans": [
     {
       "plaicona": {
@@ -17,17 +17,39 @@
     },
     {
       "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "24/06/2026 13:06",
+      "descripcio": "R3 circulació suspesa - Transport viatgers ferrocarril"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "24/06/2026 13:07",
+      "descripcio": "Tall circulació R2 Montcada i reixat i sagrera - Transport viatgers ferrocarril"
+    },
+    {
+      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
       },
       "plaacronim": "INFOCAT",
       "planom": "INFOCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "23/06/2026 10:23",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "24/06/2026 15:29",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124353_ACTUALITZACIO--NOACTIVAT_INFOCAT_202606241037.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124353_ACTUALITZACIO--ACTIVAT_INFOCAT_202606241622.pdf"
       },
-      "descripcio": "Previsió incendi forestal 23/06 - "
+      "descripcio": "Incendi actiu Sant Quirze Safaja "
     }
   ]
 }
