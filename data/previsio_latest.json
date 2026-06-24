@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-06-23T16:07:54.389Z",
+  "dataConsulta": "2026-06-24T08:44:35.370Z",
   "avui": {
-    "data": "2026-06-23",
+    "data": "2026-06-24",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat per la circulació d'algunes franges de núvols alts i prims. Independentment, a partir del final del matí creixeran algunes nuvolades sobretot al sector occidental del Pirineu i Prepirineu, que deixaran el cel entre mig i molt ennuvolat, i que al llarg de la tarda podran arribar al nord de la depressió Central.\nPer altra banda, al final del dia es podran formar alguns núvols baixos al litoral.",
-      "precipitacions": "S'esperen alguns ruixats de tarda al Pirineu i al Prepirineu que de forma molt aïllada podrien arribar a punts del nord de la Catalunya central. Seran d'intensitat feble o localment moderada i acumularan quantitats minses o poc abundants. Localment aniran acompanyats de tempesta.",
-      "temperatures": "La temperatura màxima serà similar o lleugerament més baixa en general amb valors entre 30 i 37 ºC, tret de Ponent, Prepirineu occidental i punts de Catalunya central on es mouran entre 36 i 41 ºC.",
-      "visibilitat": "La visibilitat serà entre bona i regular. Hi haurà calitja, que tendirà a minvar al llarg del dia.",
-      "vent": "S'imposarà el vent de components sud i est entre fluix i moderat, si bé a partir del migdia el vent s'intensificarà al terç sud i Ponent, on hi haurà alguns cops forts durant la tarda. També hi haurà ràfegues de vent fort durant la tarda durant les tempestes. Al final del dia quedarà fluix i de direcció variable."
+      "estatDelCel": "Cel serè o poc ennuvolat pel pas de franges de núvols alts i prims. Tot i això, a partir del final del matí i fins al vespre creixeran nuvolades al Pirineu i a punts del Prepirineu, que deixaran el cel mig o molt ennuvolat, amb algunes estones de cobert, i que al llarg de la tarda arribaran al nord de la depressió Central. A banda, hi haurà alguns intervals de núvols baixos matinals a punts del litoral, sobretot al delta de l'Ebre.",
+      "precipitacions": "A partir de migdia i fins al vespre s'esperen alguns ruixats al Pirineu i punts del Prepirineu. Seran d'intensitat feble o moderada i acumularan quantitats minses o poc abundants. A més, aniran acompanyats de tempesta.",
+      "temperatures": "La temperatura màxima serà lleugerament més baixa, tret de l'Empordà on pujarà lleument; oscil·larà entre 34 i 38 °C a bona part de l'interior i arribarà als 40 °C a Ponent.",
+      "visibilitat": "La visibilitat serà entre bona i regular. Tot i això, quedarà puntualment regular o dolenta fins a primera hora del matí a trams del litoral, preferentment a punts del delta de l'Ebre i de la Costa Brava. Persistirà la pols en suspensió.",
+      "vent": "Fins a primera hora del matí bufarà vent fluix i de direcció variable, amb intervals de terral matinal al litoral. Des de llavors i fins al vespre s'imposarà vent de sud d'intensitat entre feble i moderada, amb cops forts durant la tarda a Ponent, a les Terres de l'Ebre i al litoral empordanès. Al final del dia el tornarà a quedar fluix i de direcció variable, tret de trams del litoral de l'Empordà on persistirà el vent de component sud fluix amb cops moderats."
     }
   },
   "dema": {
-    "data": "2026-06-24",
+    "data": "2026-06-25",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat pel pas de franges de núvols alts i prims. Tot i això, a partir del final del matí i fins al vespre creixeran algunes nuvolades al Pirineu i punts del Prepirineu, que deixaran el cel mig o molt ennuvolat, amb algunes estones de cobert, i que al llarg de la tarda arribaran al nord de la depressió Central. A banda, hi haurà alguns intervals de núvols baixos matinals a punts del litoral, sobretot al delta de l'Ebre i al nord de la Costa Brava.",
-      "precipitacions": "A partir de migdia i fins al vespre s'esperen alguns ruixats al Pirineu i punts del Prepirineu. Seran d'intensitat feble o moderada i acumularan quantitats minses o poc abundants. A més, aniran acompanyats de tempesta.",
-      "temperatures": "Temperatura mínima similar o lleugerament més baixa, amb valors per sobre dels 20 °C al litoral, i a punts del prelitoral i de l'altiplà Central. Temperatura màxima lleugerament més baixa, tret de l'Empordà on pujarà lleument; superarà els 35 ºC a bona part de l'interior i els 38 °C a Ponent i Prepirineu occidental.",
-      "visibilitat": "La visibilitat serà entre bona i regular. Tot i això, quedarà puntualment regular o dolenta de matinada amb alguns bancs de boirina o boira a trams del litoral, preferentment a punts del delta de l'Ebre i de la Costa Brava.",
-      "vent": "De matinada i a darreres hores del dia bufarà vent fluix i de direcció variable, amb intervals de terral matinal al litoral. La resta del dia s'imposarà vent de sud d'intensitat entre feble i moderada, amb cops forts durant la tarda a Ponent, a les Terres de l'Ebre i al nord del Cap de Creus."
+      "estatDelCel": "Cel serè, si bé quedarà transitòriament poc o mig ennuvolat pel pas de bandes de núvols alts i mitjans de sud-oest a nord-est a partir de migdia. A banda, al centre del dia creixeran nuvolades al Pirineu i Prepirineu que deixaran el cel mig ennuvolat, o puntualment molt ennuvolat preferentment al vessant nord del Pirineu, i n'arribaran a la tarda a altres punts del terç oest.",
+      "precipitacions": "Durant la tarda són possibles alguns ruixats al Pirineu, sobretot a l'extrem nord. Seran febles i minsos en general, però localment moderats i poc abundants. Puntualment aniran acompanyats de tempesta.",
+      "temperatures": "Temperatura mínima similar o lleugerament més baixa, si bé a punts del litoral i prelitoral pujarà lleugerament. Temperatura màxima lleugerament més baixa, si bé l'ambient continuarà molt calorós al centre del dia, amb valors màxims per sobre dels 35 ºC a la depressió Central.",
+      "visibilitat": "Visibilitat bona en general. Malgrat això, serà puntualment regular a trams del litoral al final del dia.",
+      "vent": "De matinada i a darreres hores del dia bufarà vent fluix i de direcció variable, amb intervals de terral al litoral. La resta de la jornada s'imposarà vent de component sud, d'intensitat entre feble i moderada, amb cops forts a la tarda, sobretot al sud de Ponent, al prelitoral sud i a la Costa Brava."
     }
   }
 }
