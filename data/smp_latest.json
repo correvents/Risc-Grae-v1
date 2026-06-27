@@ -1,28 +1,4 @@
 {
-  "dataConsulta": "2026-06-26T15:35:07.240Z",
-  "avisos": [
-    {
-      "meteor": "Calor",
-      "estat": "Vigent",
-      "dataInici": "2026-06-26T12:00Z",
-      "dataFi": "2026-06-26T17:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-06-26",
-          "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "dataConsulta": "2026-06-27T08:18:04.435Z",
+  "avisos": []
 }
