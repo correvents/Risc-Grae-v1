@@ -1,4 +1,116 @@
 {
-  "dataConsulta": "2026-06-27T14:57:51.261Z",
-  "avisos": []
+  "dataConsulta": "2026-06-28T08:35:12.311Z",
+  "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-06-28T12:00Z",
+      "dataFi": "2026-06-29T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i possiblement també de fenòmens de temps violent.",
+      "dies": [
+        {
+          "dia": "2026-06-28",
+          "afectacions": [
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-06-29",
+          "afectacions": [
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-06-28T12:00Z",
+      "dataFi": "2026-06-29T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i possiblement també de fenòmens de temps violent.",
+      "dies": [
+        {
+          "dia": "2026-06-28",
+          "afectacions": [
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-06-29",
+          "afectacions": [
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-06-28T12:00Z",
+      "dataFi": "2026-06-29T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i possiblement també de fenòmens de temps violent.",
+      "dies": [
+        {
+          "dia": "2026-06-28",
+          "afectacions": [
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-06-29",
+          "afectacions": [
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
