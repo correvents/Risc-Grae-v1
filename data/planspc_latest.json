@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-06-29T12:39:13.011Z",
-  "plans": []
+  "actualitzat": "2026-06-29T16:43:51.092Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "29/06/2026 16:57",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124618_ACTUALITZACIO--NOACTIVAT_INUNCAT_202606291708.pdf"
+      },
+      "descripcio": "ACA. Hidrocomarca La Selva-Tordera - "
+    }
+  ]
 }
