@@ -1,6 +1,43 @@
 {
-  "dataConsulta": "2026-06-29T10:12:46.136Z",
+  "dataConsulta": "2026-06-29T12:39:09.377Z",
   "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-06-29T11:33Z",
+      "dataFi": "2026-06-29T13:33Z",
+      "comentari": "La zona afectada es correspon al nord-est del Ripollès, a l'extrem nord de la Garrotxa i a l'extrem oest de l'Alt Empordà.",
+      "dies": [
+        {
+          "dia": "2026-06-29",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
