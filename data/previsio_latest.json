@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-01T16:00:49.805Z",
+  "dataConsulta": "2026-07-02T08:37:17.588Z",
   "avui": {
-    "data": "2026-07-01",
+    "data": "2026-07-02",
     "variables": {
-      "estatDelCel": "Cel serè en general, tret del nord de la costa Central on quedarà mig, localment molt ennuvolat per intervals de núvols baixos, sobretot al matí. A partir del final del matí creixeran nuvolades i núvols d'evolució al Pirineu, al Prepirineu, al quadrant nord-est i altres punts del prelitoral central que deixaran el cel transitòriament entre mig i molt ennuvolat, o entre molt ennuvolat i cobert durant la tarda. Al final del dia, la nuvolositat minvarà, tot i que es formaran núvols baixos al vessant nord del Pirineu, interior de la meitat est i punts del prelitoral.",
-      "precipitacions": "Al matí no es descarta algun ruixat feble i minso a punts del nord del litoral central. Entre el final del matí i el vespre, s'esperen ruixats i xàfecs de distribució irregular al sector oriental del Pirineu i del Prepirineu, a l'interior del quadrant nord-est i la resta del nord de la Catalunya Central. En general, seran d'intensitat entre feble i moderada, tot i que localment és possible que siguin forts. És probable que localment vagin acompanyats de tempesta i és possible que de calamarsa. S'acumularan quantitats minses o poc abundants, tot i que localment podran ser abundants.",
-      "temperatures": "La temperatura màxima baixarà lleugerament. Malgrat això, a punts del litoral quedarà semblant, sobretot a la Costa Daurada on els valors màxims es mouran entre els 33 i 36 ºC i es podria superar el llindar d'avís de temperatura màxima de la zona.",
-      "visibilitat": "La visibilitat serà bona o excel·lent, si bé en moment de ruixat empitjorarà.",
-      "vent": "Fins a migdia bufarà el vent de components nord i oest amb tramuntana i mestral moderats amb cops forts i algun de molt fort a l'Empordà i les Terres de l'Ebre. Al llar del matí s'imposarà progressivament el vent de component sud, amb predomini del xaloc al sector central del litoral i prelitoral i l'est de la Catalunya central, entre fluix i moderat. Malgrat això, a Ponent i Terres de l'Ebre es mantindrà el component oest amb alguns cops forts, així com al Pirineu el component nord. A més, a l'Alt Empordà continuarà bufant la tramuntana fins al final del dia amb ratxes fortes o molt fortes."
+      "estatDelCel": "Cel serè o enteranyinat per núvols alts i prims al matí en general, tot i que durant la tarda es formaran alguns núvols d'evolució al Pirineu i punts de muntanya de l'interior de la meitat est.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura màxima serà lleugerament més alta.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "Fins a migdia el vent serà fluix i de direcció variable. A partir de llavors s'imposarà progressivament el component sud entre fluix i moderat amb alguns cops forts a punts de l'extrem sud i de la meitat sud del prelitoral. Independentment, fins al final del matí bufarà el mestral a les Terres de l'Ebre, entre fluix i moderat amb cops forts. A més, fins al final del dia bufarà la tramuntana a l'Empordà, moderada amb cops forts i el vent de component nord al Pirineu entre fluix i moderat."
     }
   },
   "dema": {
-    "data": "2026-07-02",
+    "data": "2026-07-03",
     "variables": {
-      "estatDelCel": "De matinada i fins a primera hora del matí hi haurà alguns núvols baixos a punts del sector central del litoral, interior de quadrant nord-est i al vessant nord del Pirineu. A partir de llavors el cel quedarà serè en general, tot i que durant la tarda es formaran alguns núvols d'evolució al Pirineu i punts de muntanya de l'interior de la meitat est.",
+      "estatDelCel": "El cel romandrà serè amb la presència d'alguns núvols alts en general. Amb tot, durant les hores centrals del dia apareixeran alguns núvols d'evolució al Pirineu, sobretot a l'oriental. Independentment, es formaran núvols baixos al vessant nord del Pirineu al vespre.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima serà similar o lleugerament més baixa, mentre que la màxima serà lleugerament més alta.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que de matinada i fins a primera hora del matí hi haurà alguna boirina a punts de l'interior del quadrant nord-est.",
-      "vent": "Fins a migdia el vent serà fluix i de direcció variable. A partir de llavors s'imposarà progressivament el component sud entre fluix i moderat amb alguns cops forts a punts de l'extrem sud i de la meitat sud del prelitoral. Independentment, fins al final del matí bufarà el mestral a les Terres de l'Ebre, entre fluix i moderat amb cops forts. A més, fins al final del dia bufarà la tramuntana a l'Empordà, moderada amb cops forts i el vent de component nord al Pirineu entre fluix i moderat."
+      "temperatures": "La temperatura, tant la mínima com la màxima, serà lleugerament més alta.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "Fins a mig matí el vent serà fluix i de direcció variable amb predomini del terral al litoral. A partir de llavors s'imposarà progressivament el component sud entre fluix i moderat amb alguns cops forts a punts de l'extrem sud i de la meitat sud del prelitoral. Independentment, fins al final del matí bufarà el mestral a les Terres de l'Ebre, entre fluix i moderat amb cops forts. A més, durant tot el dia bufarà la tramuntana a l'Empordà, moderada amb cops forts, i algun de molt fort al nord del cap de Creus de matinada, i el vent de component nord al Pirineu entre fluix i moderat."
     }
   }
 }
