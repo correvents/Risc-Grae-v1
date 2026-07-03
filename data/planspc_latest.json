@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-03T08:39:47.541Z",
+  "actualitzat": "2026-07-03T10:43:14.591Z",
   "plans": [
     {
       "plaicona": {
@@ -10,6 +10,9 @@
       "plafase": "ALERTA",
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 10:20",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/InstruccionsalapoblacióincendilaBisbald'Empordà2nconfinament.pdf"
+      },
       "descripcio": "Incendi vegetació - "
     }
   ]
