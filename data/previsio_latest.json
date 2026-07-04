@@ -1,13 +1,13 @@
 {
-  "dataConsulta": "2026-07-04T08:14:25.767Z",
+  "dataConsulta": "2026-07-04T10:16:25.966Z",
   "avui": {
     "data": "2026-07-04",
     "variables": {
       "estatDelCel": "El cel romandrà serè, si bé durant les hores centrals del dia es formaran alguns núvols d'evolució a punts de muntanya del Prepirineu, Pirineu i de l'interior del quadrant nord-est. Independentment, hi haurà núvols baixos al vessant nord del Pirineu al matí.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà semblant o lleugerament més alta al terç nord i semblant o lleugerament més baixa a la resta.",
+      "temperatures": "La temperatura màxima serà semblant o lleugerament més alta al terç nord i semblant o lleugerament més baixa a la resta. Els valors màxims es donaran a Ponent, l'interior de les Terres de l'Ebre i l'Empordà, i es mouran entre els 35 ºC i 38 ºC.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Al principi, i novament al final del dia, el vent serà fluix i de direcció variable amb terral fluix amb cops moderats al litoral. Durant les hores centrals del dia bufarà vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral i del sud de Ponent a la tarda i vespre.\nIndependentment, bufarà la tramuntana a l'Empordà, al Baix Empordà fins a migdia i fins  a mitja tarda a la resta, si bé a l'extrem nord es mantindrà tot el jorn. Serà moderada amb cops forts, i alguns de molt forts fins a mig matí al nord del cap de Creus. A banda, dominarà el vent de component nord al Pirineu entre fluix i moderat."
+      "vent": "Al llarg del matí s'imposarà el vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral i del sud de Ponent a la tarda i vespre. Al final del dia, el vent serà fluix i de direcció variable.\nIndependentment, bufarà la tramuntana a l'Empordà, al Baix Empordà fins a migdia i fins a mitja tarda a la resta, si bé a l'extrem nord es mantindrà tot el jorn. Serà moderada amb cops forts, i alguns de molt forts fins a mig matí al nord del cap de Creus. A banda, dominarà el vent de component nord al Pirineu entre fluix i moderat."
     }
   },
   "dema": {
@@ -15,7 +15,7 @@
     "variables": {
       "estatDelCel": "El cel romandrà serè, si bé durant les hores centrals del dia es formaran alguns núvols d'evolució al Pirineu, Prepirineu i prelitoral.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima serà semblant, la màxima lleugerament més alta.",
+      "temperatures": "La temperatura mínima serà semblant o lleugerament més alta. Per la seva banda, la màxima pujarà lleugerament arreu, els valors màxims es donaran a Ponent, l'interior de les Terres, l'Empordà i punts de la Catalunya central, i voltaran entre els 36 i 39 ºC.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent.",
       "vent": "Al principi, i novament al final del dia, el vent serà fluix i de direcció variable amb domini del terral de matinada al litoral. Durant les hores centrals del dia bufarà vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral. Independentment, bufarà la tramuntana a l'Empordà, a partir de migdia afectarà només a l'Alt Empordà. Serà moderada amb cops forts fins a mig matí, i alguns de molt forts al nord del cap de Creus."
     }
