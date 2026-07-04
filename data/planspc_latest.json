@@ -1,6 +1,20 @@
 {
-  "actualitzat": "2026-07-03T15:31:29.214Z",
+  "actualitzat": "2026-07-04T08:14:29.581Z",
   "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "03/07/2026 18:59",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_INICI--ACTIVAT_PROCICAT_202607031932.pdf"
+      },
+      "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
+    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
@@ -11,9 +25,37 @@
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 15:35",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607031708.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607032320.pdf"
       },
       "descripcio": "Incendi vegetació - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "04/07/2026 08:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124808_ACTUALITZACIO--NOACTIVAT_PROCICAT_202607040839.pdf"
+      },
+      "descripcio": "Incendi Planta de Reciclatge FERIMET - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "04/07/2026 09:54",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124745_INICI--NOACTIVAT_PROCICAT_202607040959.pdf"
+      },
+      "descripcio": "Tour de França 2026 - "
     }
   ]
 }
