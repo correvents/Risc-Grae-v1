@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-05T08:31:25.018Z",
+  "actualitzat": "2026-07-05T10:21:46.410Z",
   "plans": [
     {
       "plaicona": {
@@ -53,9 +53,23 @@
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 15:35",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607041934.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/20260705_11.34_InstruccionsalapoblacióDESCONFINAMENT.pdf"
       },
       "descripcio": "Incendi vegetació - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "05/07/2026 11:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124838_INICI--NOACTIVAT_PROCICAT_202607051200.pdf"
+      },
+      "descripcio": "Incendi indústria - Planta reciclatge paper - "
     }
   ]
 }
