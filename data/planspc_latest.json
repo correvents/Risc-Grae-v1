@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-05T10:21:46.410Z",
+  "actualitzat": "2026-07-05T14:55:47.098Z",
   "plans": [
     {
       "plaicona": {
@@ -21,25 +21,11 @@
       },
       "plaacronim": "PROCICAT",
       "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "04/07/2026 08:17",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/20260704_RecomanacioGranollers.pdf"
-      },
-      "descripcio": "Incendi Planta de Reciclatge FERIMET - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
       "plafase": "ALERTA",
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 18:59",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607041116.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607051304.pdf"
       },
       "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
     },
@@ -53,23 +39,9 @@
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 15:35",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/20260705_11.34_InstruccionsalapoblacióDESCONFINAMENT.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607051307.pdf"
       },
       "descripcio": "Incendi vegetació - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "05/07/2026 11:17",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124838_INICI--NOACTIVAT_PROCICAT_202607051200.pdf"
-      },
-      "descripcio": "Incendi indústria - Planta reciclatge paper - "
     }
   ]
 }
