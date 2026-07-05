@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-04T14:47:47.501Z",
+  "dataConsulta": "2026-07-05T08:31:22.680Z",
   "avui": {
-    "data": "2026-07-04",
-    "variables": {
-      "estatDelCel": "El cel romandrà serè, si bé durant les hores centrals del dia es formaran alguns núvols d'evolució a punts de muntanya del Prepirineu, Pirineu i de l'interior del quadrant nord-est. Independentment, hi haurà núvols baixos al vessant nord del Pirineu al matí.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà semblant o lleugerament més alta al terç nord i semblant o lleugerament més baixa a la resta. Els valors màxims es donaran a Ponent, l'interior de les Terres de l'Ebre i l'Empordà, i es mouran entre els 35 ºC i 38 ºC.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Al llarg del matí s'imposarà el vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral i del sud de Ponent a la tarda i vespre. Al final del dia, el vent serà fluix i de direcció variable.\nIndependentment, bufarà la tramuntana a l'Empordà, al Baix Empordà fins a migdia i fins a mitja tarda a la resta, si bé a l'extrem nord es mantindrà tot el jorn. Serà moderada amb cops forts, i alguns de molt forts fins a mig matí al nord del cap de Creus. A banda, dominarà el vent de component nord al Pirineu entre fluix i moderat."
-    }
-  },
-  "dema": {
     "data": "2026-07-05",
     "variables": {
       "estatDelCel": "El cel romandrà serè, si bé durant les hores centrals del dia es formaran alguns núvols d'evolució al Pirineu, Prepirineu i prelitoral.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima serà semblant o lleugerament més alta. Per la seva banda, la màxima pujarà lleugerament arreu, els valors màxims es donaran a Ponent, l'interior de les Terres, l'Empordà i punts de la Catalunya central, i voltaran entre els 36 i 39 ºC.",
+      "temperatures": "La temperatura màxima pujarà lleugerament arreu, els valors màxims es donaran a Ponent, l'interior de les Terres, l'Empordà i punts de la Catalunya central, i voltaran entre els 36 i 39 ºC.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Al principi, i novament al final del dia, el vent serà fluix i de direcció variable amb domini del terral de matinada al litoral. Durant les hores centrals del dia bufarà vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral. Independentment, bufarà la tramuntana a l'Empordà, a partir de migdia afectarà només a l'Alt Empordà. Serà moderada amb cops forts fins a mig matí, i alguns de molt forts al nord del cap de Creus."
+      "vent": "S'imposarà el vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral. Independentment, bufarà la tramuntana a l'Empordà, a partir de migdia afectarà només l'Alt Empordà. Serà moderada amb cops forts fins a mig matí, i alguns de molt forts al nord del cap de Creus. Al final del dia, el vent serà fluix i de direcció variable amb domini del terral al litoral."
+    }
+  },
+  "dema": {
+    "data": "2026-07-06",
+    "variables": {
+      "estatDelCel": "El cel romandrà serè o transitòriament poc ennuvolat per núvols d'evolució diürna i alguna nuvolada a punts del Pirineu, Prepirineu i prelitoral.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura, tant la mínima com la màxima serà, lleugerament més alta. L'ambient serà extremadament calorós arreu, i els registres més elevats superaran els 40 ºC i es donaran al Pla de Lleida i a la Ribera d'Ebre.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
+      "vent": "A l'inici de la jornada el vent serà fluix i direcció variable amb predomini del terral a trams de litoral de matinada. Durant les hores centrals del dia s'imposarà el vent de component sud entre fluix i moderat i més reforçat a la tarda a les Terres de l'Ebre i sud de Ponent on hi podrà haver algun cop fort. Al vespre quedarà fluix i direcció variable amb predomini del component sud a la franja costanera. Amb tot, a estones bufarà el vent de component nord al Pirineu, fluix amb algun cop moderat."
     }
   }
 }
