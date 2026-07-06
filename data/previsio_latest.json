@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-05T14:55:44.992Z",
+  "dataConsulta": "2026-07-06T09:44:36.334Z",
   "avui": {
-    "data": "2026-07-05",
-    "variables": {
-      "estatDelCel": "El cel romandrà serè, si bé durant les hores centrals del dia es formaran alguns núvols d'evolució al Pirineu, Prepirineu i prelitoral.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima pujarà lleugerament arreu, els valors màxims es donaran a Ponent, l'interior de les Terres, l'Empordà i punts de la Catalunya central, i voltaran entre els 36 i 39 ºC.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "S'imposarà el vent component sud entre fluix i moderat amb alguns cops forts a punts de la meitat sud del prelitoral i del sud de Ponent. Independentment, bufarà la tramuntana moderada, amb algun cop fort fins a migdia, a l'Alt Empordà. Al final del dia, el vent quedarà fluix i de direcció variable amb domini del terral al litoral."
-    }
-  },
-  "dema": {
     "data": "2026-07-06",
     "variables": {
       "estatDelCel": "El cel romandrà serè o transitòriament poc ennuvolat per núvols d'evolució diürna i alguna nuvolada a punts del Pirineu, Prepirineu i prelitoral.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura, tant la mínima com la màxima serà, lleugerament més alta. L'ambient serà extremadament calorós arreu, i els registres més elevats superaran els 40 ºC i es donaran al Pla de Lleida i a la Ribera d'Ebre.",
+      "temperatures": "La temperatura màxima serà, lleugerament més alta, sobretot a l'interior i al terç sud. L'ambient serà extremadament calorós arreu, i els registres més elevats superaran els 40 ºC i es donaran al Pla de Lleida i a la Ribera d'Ebre.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "A l'inici de la jornada el vent serà fluix i direcció variable amb predomini del terral a trams de litoral de matinada. Durant les hores centrals del dia s'imposarà el vent de component sud entre fluix i moderat i més reforçat a la tarda a les Terres de l'Ebre i sud de Ponent on hi podrà haver algun cop fort. Al vespre quedarà fluix i direcció variable amb predomini del component sud a la franja costanera. Amb tot, a estones bufarà el vent de component nord al Pirineu, fluix amb algun cop moderat."
+      "vent": "S'imposarà el vent de component sud entre fluix i moderat i més reforçat a la tarda a les Terres de l'Ebre i sud de Ponent on hi podrà haver algun cop fort. Al vespre quedarà fluix i direcció variable, amb predomini del component sud a la franja costanera. Amb tot, a estones bufarà el vent de component nord al Pirineu, fluix amb algun cop moderat."
+    }
+  },
+  "dema": {
+    "data": "2026-07-07",
+    "variables": {
+      "estatDelCel": "El cel romandrà serè o transitòriament poc ennuvolat per núvols d'evolució diürna i alguna nuvolada a punts del Pirineu. Amb tot, a partir de la tarda arribaran bandes de núvols alts i mitjans pel sud del país.",
+      "precipitacions": "A la tarda no es descarta algun ruixat feble i minso al sector occidental del Pirineu i Prepirineu. ",
+      "temperatures": "La temperatura mínima serà lleugerament més alta. La màxima serà lleugerament més alta a l'interior i semblant a la resta del país. L'ambient serà molt calorós amb registres de temperatura màxima superior als 40 ºC a la depressió Central, a la vall de l'Ebre i valls del Prepirineu occidental.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
+      "vent": "A l'inici de la jornada el vent serà fluix i direcció variable. Durant les hores centrals del dia s'imposarà el vent de component sud entre fluix i moderat i més reforçat a la tarda a les Terres de l'Ebre, Ponent, resta del prelitoral sud i litoral de l'Empordà on hi podrà haver algun cop fort. Independentment, al quadrant nord-est hi haurà estones de vent fluix de component est. A més, al Pirineu bufarà el vent de component nord, fluix amb algun cop moderat. Al vespre quedarà fluix i direcció variable amb predomini del component sud a la franja costanera. "
     }
   }
 }

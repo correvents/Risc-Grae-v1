@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-05T14:55:47.098Z",
+  "actualitzat": "2026-07-06T09:44:38.676Z",
   "plans": [
     {
       "plaicona": {
@@ -17,20 +17,6 @@
     },
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "03/07/2026 18:59",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607051304.pdf"
-      },
-      "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
-    },
-    {
-      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
       },
       "plaacronim": "INFOCAT",
@@ -39,9 +25,23 @@
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 15:35",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607051307.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607052234.pdf"
       },
       "descripcio": "Incendi vegetació - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "03/07/2026 18:59",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607061038.pdf"
+      },
+      "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
     }
   ]
 }
