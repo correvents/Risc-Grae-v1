@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-06T16:33:13.668Z",
+  "actualitzat": "2026-07-07T08:55:27.335Z",
   "plans": [
     {
       "plaicona": {
@@ -7,13 +7,13 @@
       },
       "plaacronim": "PROCICAT",
       "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "04/07/2026 09:54",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "03/07/2026 18:59",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124745_INICI--NOACTIVAT_PROCICAT_202607040959.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607062045.pdf"
       },
-      "descripcio": "Tour de França 2026 - "
+      "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
     },
     {
       "plaicona": {
@@ -25,23 +25,9 @@
       "plaactivat": "SI",
       "fasedatahora": "03/07/2026 15:35",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607052234.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607062203.pdf"
       },
       "descripcio": "Incendi vegetació - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "03/07/2026 18:59",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607061038.pdf"
-      },
-      "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
     }
   ]
 }
