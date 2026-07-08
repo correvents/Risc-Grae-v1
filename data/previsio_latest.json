@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-07-08T07:58:50.482Z",
+  "dataConsulta": "2026-07-08T10:24:19.513Z",
   "avui": {
     "data": "2026-07-08",
     "variables": {
@@ -7,7 +7,7 @@
       "precipitacions": "A la tarda s'esperen alguns ruixats a punts del Pirineu i Prepirineu, sobretot occidental, i massís dels Ports. Seran febles o localment moderadats, i acumularan quantitats de precipitació minses, i localment poc abundants. Puntualment aniran acompanyats de tempesta, que en algun cas podrà ser de tipus seca.",
       "temperatures": "La temperatura màxima serà lleugerament més alta al litoral i al prelitoral, sobretot a l'extrem nord-est, on l'ascens serà localment moderat, mentre que es mantindrà similar a la resta del territori. L'ambient serà extremadament calorós arreu, amb registres de temperatura màxima superior als 40 ºC a la depressió Central, a l'extrem nord-est, a la vall de l'Ebre i a valls del Prepirineu occidental, i fins i tot superiors als 42 ºC al Pla de Lleida i a la Ribera d'Ebre.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "S'imposarà el vent de component sud entre fluix i moderat i més reforçat a la tarda a les Terres de l'Ebre, Ponent, resta del prelitoral sud i litoral de l'Empordà on hi podrà haver algun cop fort. Independentment, al Pirineu hi haurà vent de component nord fluix amb algun cop moderat, així com al nord de l'Alt Empordà fins a migdia. A més, al Pla de Lleida bufarà de component oest fluix fins a l'inici de la tarda. Al vespre quedarà fluix i direcció variable en general, amb predomini del component sud a la costa."
+      "vent": "S'imposarà el vent de component sud entre fluix i moderat, més reforçat a la tarda al litoral nord i al prelitoral. Independentment, al Pirineu hi haurà vent de component nord fluix amb algun cop moderat, així com al nord de l'Alt Empordà fins a mitja tarda. A més, a Ponent i al prelitoral sud bufarà de component oest fluix fins a l'inici de la tarda. Al vespre quedarà fluix i direcció variable en general, amb predomini del component sud a la costa. Independentment, en moments de xàfec hi haurà alguns cops forts o molt forts de vent. "
     }
   },
   "dema": {
@@ -15,9 +15,9 @@
     "variables": {
       "estatDelCel": "Durant el matí el cel estarà serè arreu, o transitòriament poc ennuvolat a l'oest del país per algunes franges de núvols alts i prims. A la tarda, creixeran nuvolades al Pirineu i Prepirineu que deixaran el cel mig o molt ennuvolat en aquests sectors, mentre que a la resta del país es mantindrà serè o poc ennuvolat per alguns núvols alts que arribaran per l'oest, més nombrosos a la meitat occidental del país, on també n'hi haurà alguns de mitjans.",
       "precipitacions": "A la tarda s'esperen alguns ruixats o xàfecs a punts del Pirineu i Prepirineu, i no es descarten al vespre a punts del terç oest. Seran d'intensitat feble, o puntualment moderada, i acumularan quantitats minses, o localment poc abundants, de precipitació. Són probables algunes tempestes.",
-      "temperatures": "La temperatura mínima serà semblant al Pirineu i lleugerament més alta a la resta del país. \nLa temperatura màxima serà semblant a Ponent i lleugerament més baixa a la resta del territori, però persistirà l'ambient extremadament calorós arreu; arribarà a valors superiors als 40 ºC a l'oest de la depressió Central, a la vall de l'Ebre i a valls del Prepirineu occidental, i novament es podrà superar els 42 ºC al Pla de Lleida i a l'interior de la Ribera d'Ebre.",
+      "temperatures": "La temperatura mínima serà semblant al Pirineu i lleugerament més alta a la resta del país. \nLa temperatura màxima serà semblant a Ponent i semblant o lleugerament més baixa a la resta del territori, si bé a punts del litoral central i nord podrà pujar lleugerament. Persistirà l'ambient extremadament calorós arreu; arribarà a valors superiors als 40 ºC a l'oest de la depressió Central, a la vall de l'Ebre i a valls del Prepirineu occidental, i novament es podrà superar els 42 ºC al Pla de Lleida i a l'interior de la Ribera d'Ebre.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "A l'inici i al final de la jornada el vent serà fluix i direcció variable, si bé persistirà el component sud fluix al final del dia al litoral sud.\nDurant les hores centrals del jorn s'imposarà el vent de component sud i est entre fluix i moderat, més reforçat a la tarda a les Terres de l'Ebre, a Ponent, a la resta del prelitoral sud i també al litoral de l'Empordà, on hi podrà haver alguns cops forts. \nIndependentment, a l'extrem nord del Pirineu bufarà vent de component nord, fluix amb algun cop moderat fins a migdia."
+      "vent": "A l'inici i al final de la jornada el vent serà fluix i direcció variable, si bé persistirà el component sud fluix al final del dia al litoral sud.\nDurant les hores centrals del jorn s'imposarà el vent de component sud i est entre fluix i moderat, més reforçat a la tarda al prelitoral, a Ponent i al litoral de l'Empordà, on hi podrà haver alguns cops forts. \nIndependentment, bufarà vent fluix amb algun cop moderat fins a migdia a l'extrem nord del Pirineu, així com a l'extrem nord de l'Alt Empordà fins a mig matí."
     }
   }
 }
