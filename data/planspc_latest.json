@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-09T08:59:48.431Z",
+  "actualitzat": "2026-07-09T11:10:05.601Z",
   "plans": [
     {
       "plaicona": {
@@ -17,20 +17,6 @@
     },
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "EMERGÈNCIA",
-      "plaactivat": "SI",
-      "fasedatahora": "08/07/2026 18:34",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124986_INICI--ACTIVAT_INFOCAT_202607081841.pdf"
-      },
-      "descripcio": "IF Aiguamúrcia - Pla de Manlleu "
-    },
-    {
-      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
       },
       "plaacronim": "PROCICAT",
@@ -42,6 +28,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607082206.pdf"
       },
       "descripcio": "SMP- Calor intensa 05-06 Juliol - Calor"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "EMERGÈNCIA",
+      "plaactivat": "SI",
+      "fasedatahora": "08/07/2026 18:34",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/20260709_11.53_DesconfinamentPladeManlleu.pdf"
+      },
+      "descripcio": "IF Aiguamúrcia - Pla de Manlleu "
     },
     {
       "plaicona": {
