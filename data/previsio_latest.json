@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-09T16:10:51.247Z",
+  "dataConsulta": "2026-07-10T08:50:48.491Z",
   "avui": {
-    "data": "2026-07-09",
-    "variables": {
-      "estatDelCel": "Creixeran nuvolades al Pirineu i Prepirineu que deixaran el cel mig o molt ennuvolat en aquests sectors, mentre que a la resta del país es mantindrà serè o poc ennuvolat per alguns núvols alts que arribaran per l'oest, més nombrosos a la meitat occidental del país, on també n'hi haurà alguns de mitjans.",
-      "precipitacions": "S'esperen alguns ruixats o xàfecs a punts del Pirineu i Prepirineu, i no es descarten al vespre a punts del terç oest. Seran d'intensitat feble, o puntualment moderada, i acumularan quantitats minses, o localment poc abundants, de precipitació. Són probables algunes tempestes.",
-      "temperatures": "La temperatura serà semblant o lleugerament més baixa, tret de punts del quadrant nord-oes on pujarà lleugerament.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "S'imposarà el vent de component sud i est entre fluix i moderat, més al prelitoral, a Ponent i al litoral de l'Empordà, on hi podrà haver alguns cops forts. Al final de la jornada el vent serà fluix i direcció variable, si bé persistirà el component sud fluix al litoral sud."
-    }
-  },
-  "dema": {
     "data": "2026-07-10",
     "variables": {
       "estatDelCel": "Cel poc o mig ennuvolat a la meitat oest l'oest del territori i serè o poc ennuvolat a la resta del país; al llarg de la tarda la nuvolositat tendirà a minvar de sud a nord. Independentment, a partir de mig matí creixeran nuvolades al Pirineu i Prepirineu que deixaran el cel mig o molt ennuvolat en aquests sectors, mentre que a partir del vespre també n'arribaran pel terç sud del país.",
       "precipitacions": "Fins a migdia són possibles alguns ruixats aïllats al terç oest del país. A partir de llavors, són probables ruixats o xàfecs locals a punts del Pirineu i del Prepirineu. Seran d'intensitat feble, o puntualment moderada, i acumularan quantitats minses, o localment poc abundants, de precipitació. Localment aniran acompanyats de tempesta.",
-      "temperatures": "Temperatura mínima lleugerament més baixa, si bé puntualment a l'oest de Catalunya podrà pujar lleugerament. La temperatura màxima experimentarà un descens entre lleuger i moderat al litoral i al prelitoral i lleuger a la resta del territori. A Ponent, la temperatura màxima podrà arribar als 40 °C.",
+      "temperatures": "La temperatura màxima experimentarà un descens entre lleuger i moderat al litoral i al prelitoral i lleuger a la resta del territori. Malgrat tot, a Ponent la màxima se situarà entre 38 i 40 °C.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "De matinada i al final del dia el vent bufarà fluix i variable. Al llarg de la jornada bufarà vent de component sud i est al litoral i de component sud a la resta del país, entre fluix i moderat amb alguns cops forts a la tarda. En moments de ruixat o xàfec podrà bufar amb ratxes fortes o puntualment molt fortes. "
+      "vent": "S'imposarà el vent de component sud i est al litoral i de component sud a la resta del país, entre fluix i moderat amb alguns cops forts a la tarda. En moments de ruixat o xàfec podrà bufar amb ratxes fortes o puntualment molt fortes. Al final del dia el vent bufarà fluix i variable."
+    }
+  },
+  "dema": {
+    "data": "2026-07-11",
+    "variables": {
+      "estatDelCel": "De matinada i fins a mig matí creuaran algunes bandes de núvols alts i mitjans de sud-oest a nord-est que deixaran transitòriament el cel mig o molt ennuvolat. La resta del matí es mantindrà el cel serè. A partir de migdia creixeran algunes nuvolades a punts de muntanya del quadrant nord-est i a la resta del Pirineu, així com alguns núvols d'evolució aïllats a la meitat nord de la serralada prelitoral. A partir de final de la tarda, arribaran bandes de núvols alts pel sud del país. Independentment, fins a mig matí hi haurà intervals de núvols baixos als dos extrems del litoral.",
+      "precipitacions": "A partir de migdia s'esperen alguns ruixats a l'interior del quadrant nord-est. Seran d'intensitat entre feble i moderada i aniran acompanyats de tempesta. S'acumularan quantitats minses o poc abundants de precipitació.",
+      "temperatures": "Temperatura mínima i màxima lleugerament més baixa. A Ponent, la temperatura màxima se situarà entorn dels 40°C. ",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
+      "vent": "De matinada i a últimes hores del dia bufarà vent fluix i variable. La resta del dia s'imposarà vent de component sud i est en general, d'intensitat entre fluixa i moderada amb algun cop fort al final de la tarda a Ponent. Amb tot a l'extrem nord-est predominarà el vent de component nord i est fluix."
     }
   }
 }
