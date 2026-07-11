@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-11T07:26:41.079Z",
+  "dataConsulta": "2026-07-11T09:42:54.767Z",
   "avui": {
     "data": "2026-07-11",
     "variables": {
-      "estatDelCel": "Fins a mig matí hi haurà intervals de núvols que deixaran transitòriament el cel mig o molt ennuvolat a la meitat est del país i a la resta de la Catalunya central. A partir de llavors tendirà a quedar serè o poc ennuvolat. A partir de migdia creixeran algunes nuvolades a punts de muntanya del quadrant nord-est i a la resta del Pirineu, així com alguns núvols d'evolució aïllats a la serralada Prelitoral. A partir de la tarda, arribaran bandes de núvols alts pel sud del país. Independentment, hi haurà intervals de núvols baixos locals a punts del litoral, sobretot als dos extrems del sector i en especial fins a mig matí i al final del dia; la resta del dia seran més aïllats. ",
-      "precipitacions": "De matinada i fins a mig matí hi haurà alguna precipitació feble i aïllada a la meitat est del país i a la resta de la Catalunya central. A partir de migdia s'esperen alguns ruixats a l'interior del quadrant nord-est i en altres indrets del Prepirineu oriental. Seran d'intensitat entre feble i moderada i aniran acompanyats de tempesta. S'acumularan quantitats minses o poc abundants de precipitació.",
+      "estatDelCel": "Cel serè o poc ennuvolat en general, amb intervals de núvols a l'extrem nord-est fins al final del matí. A partir de migdia creixeran algunes nuvolades a punts de muntanya del quadrant nord-est i a la resta del Pirineu i Prepirineu oriental que localment deixaran el cel entre mig i molt ennuvolat; també hi haurà alguns núvols d'evolució aïllats a la resta de la serralada Prelitoral. A partir de la tarda, arribaran bandes de núvols alts pel sud del país. Independentment, hi haurà intervals de núvols baixos locals a punts del litoral, sobretot a partir del vespre i en especial als dos extrems del sector.",
+      "precipitacions": "A partir de migdia s'esperen alguns ruixats a l'interior del quadrant nord-est, així com en altres indrets del Prepirineu oriental a partir del vespre. Seran d'intensitat entre feble i moderada i localment aniran acompanyats de tempesta i de calamarsa o pedra petita. Acumularan quantitats minses o poc abundants de pluja. De nit desapareixeran. ",
       "temperatures": "Temperatura mínima i màxima lleugerament més baixa. A Ponent, la temperatura màxima se situarà entorn dels 39°C. ",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. ",
-      "vent": "Fins a l'inici del matí i a últimes hores del dia bufarà vent fluix i de direcció variable. La resta del dia s'imposarà vent de component est al quadrant nord-est, de component sud i est al litoral i prelitoral i de component sud a la resta del país. Bufarà entre fluix i moderat en general, amb algun cop fort a la tarda a Ponent i al prelitoral sud. "
+      "vent": "S'imposarà el vent de component est al quadrant nord-est, el component sud i est a la resta del litoral i prelitoral i el component sud a la resta del país. Bufarà entre fluix i moderat en general, amb algun cop fort a la tarda a Ponent i al prelitoral sud. Al final del dia bufarà el component est fluix a la costa, mentre que a la resta del país quedarà fluix i de direcció variable.  "
     }
   },
   "dema": {
     "data": "2026-07-12",
     "variables": {
-      "estatDelCel": "Cel enteranyinat pel pas de núvols alts que circularan de sud-oest a nord-est al llarg de la jornada. A banda, fins a mig matí i de nou al final del dia hi haurà intervals de núvols baixos als dos extrems del litoral; malgrat això, no es descarta que de manera aïllada puguin persistir tot el dia.",
+      "estatDelCel": "Cel enteranyinat pel pas de núvols alts que circularan de sud-oest a nord-est al llarg de la jornada. A banda, fins a mig matí i de nou al final del dia hi haurà intervals de núvols baixos als dos extrems del litoral i no se'n descarten a la resta del sector; de manera aïllada podran persistir durant tot el dia al litoral sud.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "Temperatura mínima similar o lleugerament més baixa, si bé a punts de l'interior de la meitat oest podrà pujar lleugerament. Temperatura màxima similar o lleugerament més alta, amb valors màxims a Ponent entorn dels 40 °C.",
-      "visibilitat": "Visibilitat bona en general. Hi haurà pols en suspensió que deixarà puntualment la visibilitat regular.",
-      "vent": "Durant les hores diürnes s'imposarà vent de component est al litoral central i sud, així com el component sud i est a la resta del país. Bufarà entre fluix i moderat en general, amb cops forts a Ponent, a la meitat sud del litoral i del prelitoral i al Pirineu occidental a partir de migdia. La resta de la jornada el vent serà fluix i de direcció variable, amb estones de vent en calma."
+      "temperatures": "Temperatura mínima similar o lleugerament més baixa, si bé a punts de la meitat oest podrà pujar lleugerament. Temperatura màxima similar o lleugerament més alta, amb valors màxims a Ponent entorn dels 39 °C.",
+      "visibilitat": "Visibilitat bona en general, localment regular a punts del litoral fins a mig matí i al final del dia. Hi haurà pols en suspensió. ",
+      "vent": "Durant les hores diürnes s'imposarà vent de component est al litoral central i sud, així com el component sud i est a la resta del país. Bufarà entre fluix i moderat en general, amb cops forts a Ponent, a la meitat sud del litoral i del prelitoral i al Pirineu occidental a partir de migdia. La resta de la jornada el vent serà fluix i de direcció variable, amb estones de vent en calma, si bé a la costa sud i central bufarà de component est fluix."
     }
   }
 }
