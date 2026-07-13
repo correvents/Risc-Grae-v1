@@ -1,64 +1,9 @@
 {
-  "dataConsulta": "2026-07-13T08:35:56.936Z",
+  "dataConsulta": "2026-07-13T11:18:43.637Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
-      "dataInici": "2026-07-13T00:00Z",
-      "dataFi": "2026-07-14T05:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-13",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-14",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor nocturna",
-      "estat": "Vigent",
       "dataInici": "2026-07-13T00:00Z",
       "dataFi": "2026-07-15T05:59Z",
       "comentari": "",
@@ -111,6 +56,61 @@
         },
         {
           "dia": "2026-07-15",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor nocturna",
+      "estat": "Ampliat",
+      "dataInici": "2026-07-13T00:00Z",
+      "dataFi": "2026-07-14T05:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-13",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-14",
           "afectacions": [
             {
               "zona": "Camp de Tarragona",
