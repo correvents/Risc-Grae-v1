@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-13T11:18:46.750Z",
+  "actualitzat": "2026-07-13T16:01:31.826Z",
   "plans": [
     {
       "plaicona": {
@@ -28,6 +28,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607131139.pdf"
       },
       "descripcio": "SMP- Calor intensa 13 de Juliol - Calor"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "13/07/2026 14:24",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125143_ACTUALITZACIO--ACTIVAT_INFOCAT_202607131449.pdf"
+      },
+      "descripcio": "0.1_IF. Incendi vegetació Aiguamúrcia - ACTIU"
     }
   ]
 }
