@@ -1,34 +1,6 @@
 {
-  "actualitzat": "2026-07-14T10:03:32.439Z",
+  "actualitzat": "2026-07-14T15:05:54.228Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "10/07/2026 13:17",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607121743.pdf"
-      },
-      "descripcio": "INFOCAT EMERGÈNCIA"
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "12/07/2026 11:03",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607131935.pdf"
-      },
-      "descripcio": "SMP- Calor intensa 13 de Juliol - Calor"
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
@@ -42,6 +14,34 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125143_ACTUALITZACIO--ACTIVAT_INFOCAT_202607132103.pdf"
       },
       "descripcio": "0.1_IF. Incendi vegetació Aiguamúrcia - Estabilitzat"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "12/07/2026 11:03",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124787_ACTUALITZACIO--ACTIVAT_PROCICAT_202607141202.pdf"
+      },
+      "descripcio": "SMP- Calor intensa 13 de Juliol - Calor"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "10/07/2026 13:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607141321.pdf"
+      },
+      "descripcio": "INFOCAT Alerta "
     }
   ]
 }
