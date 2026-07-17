@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-16T15:15:38.707Z",
+  "dataConsulta": "2026-07-17T07:46:02.160Z",
   "avui": {
-    "data": "2026-07-16",
+    "data": "2026-07-17",
     "variables": {
-      "estatDelCel": "Fins a mitja tarda, el cel estarà mig ennuvolat o puntualment molt ennuvolat en conjunt amb el creixement d'algunes nuvolades, sobretot al Pirineu i especialment al quadrant nord-oest del país durant el matí. A partir d'aleshores s'obriran clarianes d'oest a est del territori. Independentment, hi haurà bancs de núvols baixos als dos extrems del litoral fins a primeres hores del matí i al final del dia.",
-      "precipitacions": "Al llarg de les pròximes hores s'esperen ruixats febles, localment moderats a punts del Pirineu i Prepirineu, i de forma més aïllada també afectaran altres punts de la meitat oest del país. De cara a la tarda quedaran restringits al Pirineu i Prepirineu. La quantitat de precipitació serà minsa, si bé al Pirineu i Prepirineu podran ser poc abundants. La precipitació anirà acompanyada de fang i localment de tempesta. ",
-      "temperatures": "La temperatura màxima baixarà entre lleugerament i moderadament arreu, excepte punts del litoral on quedarà similar o baixarà lleugerament.",
-      "visibilitat": "La visibilitat serà entre bona i regular. Hi haurà pols en suspensió.",
-      "vent": "S'imposarà el component sud i est, entre fluix i moderat arreu, amb cops forts a cotes altes del Pirineu i Prepirineu, acom també a la tarda a punts del prelitoral i al sud de Ponent. A la nit, el vent tornarà a quedar fluix i de direcció variable. "
+      "estatDelCel": "Ambient assolellat en general, si bé a partir del final del matí, i sobretot durant la tarda, creixeran nuvolades a punts de muntanya del prelitoral, interior del quadrant nord-est, Pirineu i Prepirineu. A més, al llarg de la tarda i vespre podran arribar algunes nuvolades pel terç sud del país, que es mouran direcció NE. Independentment, fins a mig matí hi haurà alguns estrats baixos a punts del litoral i prelitoral central i a la Catalunya Central, com també, de cara al final del dia, se'n formaran a punts del litoral.",
+      "precipitacions": "A la tarda no es descarta algun ruixat feble i aïllat a punts de l'extrem nord del Pirineu.",
+      "temperatures": "La temperatura màxima serà similar o lleugerament més baixa, en general.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. La pols en suspensió minvarà fins a desaparèixer, però al matí encara n'hi haurà sobretot cap al litoral i prelitoral.",
+      "vent": "El vent bufarà fluix i de direcció variable fins a primeres hores del matí, amb predomini del component nord i est a punts del litoral. A partir d'aleshores, s'imposarà el component est al litoral i a les comarques del prelitoral nord. A la resta, s'imposarà el component oest entre fluix i moderat, tot i que a partir de migdia tendirà a bufar de component sud entre fluix i moderat, amb alguns cops forts al prelitoral sud i al sud de Ponent. Al final del dia, el vent tornarà a quedar fluix i variable arreu."
     }
   },
   "dema": {
-    "data": "2026-07-17",
+    "data": "2026-07-18",
     "variables": {
-      "estatDelCel": "Ambient assolellat en general. Tot i això, a partir del final del matí, i sobretot durant la tarda, creixeran nuvolades a punts de muntanya del prelitoral, interior del quadrant nord-est, Pirineu i Prepirineu. A banda, al llarg de la tarda i vespre podran arribar algunes nuvolades al terç oest.",
-      "precipitacions": "A la tarda no es descarta algun ruixat feble i aïllat a punts de l'interior del quadrant nord-est o al terç oest, sobretot entorn del massís del Port.",
-      "temperatures": "La temperatura mínima baixarà lleugerament o localment de forma moderada. La temperatura màxima serà similar o lleugerament més baixa, en general, tot i que a l'interior de la vall de l'Ebre i punts del litoral i prelitoral sud pujarà lleugerament.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. La pols en suspensió minvarà fins a desaparèixer, però al matí encara n'hi haurà sobretot cap al litoral i prelitoral.",
-      "vent": "El vent bufarà fluix i de direcció variable fins a primeres hores del matí, amb predomini del component nord i est al litoral. A partir d'aleshores, s'imposarà el component est al litoral i a les comarques del prelitoral nord. A la resta, s'imposarà el component oest entre fluix i moderat, tot i que a partir de migdia tendirà a bufar de component sud entre fluix i moderat, amb alguns cops forts al prelitoral sud i al sud de Ponent. Al final del dia, el vent tornarà a quedar fluix i variable arreu."
+      "estatDelCel": "Ambient assolellat fins al migdia. A partir d'aleshores, creixeran algunes nuvolades a punts del Pirineu, sobretot al sector oriental, i de forma més aïllada a altres punts de muntanya. A banda, a partir de la tarda arribaran núvols alts i prims per l'oest del país, més compactes al sud del territori.",
+      "precipitacions": "Entre el migdia i la tarda són probables alguns ruixats al Pirineu Occidental. Seran entre febles i moderats, i aniran acompanyats de tempesta.",
+      "temperatures": "La temperatura mínima serà similar, en general. La temperatura màxima serà similar o lleugerament més baixa.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "Vent fluix i variable fins a primeres hores del matí, amb predomini del gregal al litoral. A partir d'aleshores, s'imposarà el component est entre fluix i moderat a tot el litoral i al prelitoral nord, mentre que a la resta del país s'imposarà el component sud entre fluix i moderat, amb cops forts durant la tarda a punts del prelitoral i al sud de Ponent. A banda, fins al final del matí hi haurà tramuntana entre fluixa i moderada al nord de la Costa Brava, amb alguns cops forts al nord del Cap de Creus de matinada. Al final del dia, tornarà a quedar fluix i de direcció variable."
     }
   }
 }
