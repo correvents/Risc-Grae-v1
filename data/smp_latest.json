@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-07-17T07:46:00.632Z",
+  "dataConsulta": "2026-07-17T10:03:21.876Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
@@ -11,6 +11,24 @@
         {
           "dia": "2026-07-17",
           "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
             {
               "zona": "Pirineu Central",
               "nivell": "Groc",
@@ -67,7 +85,7 @@
     },
     {
       "meteor": "Calor nocturna",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-07-17T00:00Z",
       "dataFi": "2026-07-18T05:59Z",
       "comentari": "",
@@ -75,24 +93,6 @@
         {
           "dia": "2026-07-17",
           "afectacions": [
-            {
-              "zona": "Empordà",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
             {
               "zona": "Pirineu Central",
               "nivell": "Groc",
