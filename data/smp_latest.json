@@ -1,6 +1,170 @@
 {
-  "dataConsulta": "2026-07-17T14:54:51.251Z",
+  "dataConsulta": "2026-07-18T07:19:29.262Z",
   "avisos": [
+    {
+      "meteor": "Calor nocturna",
+      "estat": "Ampliat",
+      "dataInici": "2026-07-18T00:00Z",
+      "dataFi": "2026-07-19T05:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-18",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-19",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor nocturna",
+      "estat": "Ampliat",
+      "dataInici": "2026-07-18T00:00Z",
+      "dataFi": "2026-07-19T05:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-18",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-19",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
