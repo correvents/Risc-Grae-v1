@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-18T14:32:55.570Z",
+  "actualitzat": "2026-07-19T07:49:11.593Z",
   "plans": [
     {
       "plaicona": {
@@ -28,20 +28,6 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607171442.pdf"
       },
       "descripcio": "INFOCAT Alerta "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_AEROCAT.png"
-      },
-      "plaacronim": "AEROCAT",
-      "planom": "AEROCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "18/07/2026 16:15",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125368_INICI--NOACTIVAT_AEROCAT_202607181629.pdf"
-      },
-      "descripcio": "Alerta local Aeroport del Prat - Aeroport de Barcelona"
     }
   ]
 }
