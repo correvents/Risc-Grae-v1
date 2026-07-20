@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-20T11:06:22.497Z",
+  "actualitzat": "2026-07-20T15:24:20.776Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607191342.pdf"
       },
       "descripcio": "INFOCAT Alerta "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_AEROCAT.png"
+      },
+      "plaacronim": "AEROCAT",
+      "planom": "AEROCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "20/07/2026 17:06",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125449_INICI--NOACTIVAT_AEROCAT_202607201715.pdf"
+      },
+      "descripcio": "Alerta Local per incendi instal·lació - Aeroport Josep Tarradellas Barcelona-El Prat - Aeroport de Barcelona"
     }
   ]
 }

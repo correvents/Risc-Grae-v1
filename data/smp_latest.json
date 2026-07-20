@@ -1,6 +1,68 @@
 {
-  "dataConsulta": "2026-07-20T11:06:19.586Z",
+  "dataConsulta": "2026-07-20T15:24:17.108Z",
   "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-07-20T14:45Z",
+      "dataFi": "2026-07-20T16:45Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-20",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Taronja",
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Calor",
       "estat": "Ampliat",
