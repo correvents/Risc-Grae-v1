@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-20T08:28:26.227Z",
+  "dataConsulta": "2026-07-20T11:06:19.698Z",
   "avui": {
     "data": "2026-07-20",
     "variables": {
-      "estatDelCel": "Cel serè en general. Malgrat això durant el matí es mantindran alguns núvols baixos a punts de les Terres de l'Ebre que, localment, deixaran el cel entre poc i mig ennuvolat. Independentment, a partir de migdia creixeran algunes nuvolades al Pirineu, punts de muntanya de l'interior del quadrant nord-est i al massís dels Ports que deixaran el cel mig ennuvolat en aquests sectors.",
-      "precipitacions": "No es descarta algun ruixat feble, aïllat i minso al Pirineu sobretot a sector Oriental, així com al massís dels Ports. Podran anar acompanyats de tempesta.",
-      "temperatures": "La temperatura màxima serà similar en general, tot i que serà lleugerament més alta a Ponent, on es podran fregar els 40ºC.",
-      "visibilitat": "La visibilitat serà bona. Hi haurà pols en suspensió principalment cap al sud del país.",
-      "vent": "Fins al final del matí hi haurà tramuntana entre fluixa i moderada al nord de la Costa Brava. Al llarg del matí, s'imposarà el component est entre fluix i moderat a tot el litoral i al prelitoral nord, amb cops forts al sector central del litoral. A la resta del país, s'imposarà el component sud entre fluix i moderat, amb cops forts durant la tarda a punts del prelitoral, Terres de l'Ebre i al sud de Ponent. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
+      "estatDelCel": "Cel romandrà serè o poc ennuvolat en general pel pas d'alguns núvols alts i prims al llarg del dia, com també per alguns estrats baixos a l'extrem sud del litoral, sobretot a partir del final del dia. \nTot i això, a partir del migdia creixeran algunes nuvolades al Pirineu i n'arribaran al massís del Port, mentre que també arribaran bandes de núvols mitjans espessos a bona part del litoral i prelitoral que deixaran el cel mig o puntualment molt ennuvolat en aquests sectors.\n",
+      "precipitacions": "A la tarda és probable algun ruixat aïllat al Pirineu, sobretot a l'extrem nord, i al massís del Port, mentre que no es descarta alguna gotellada a la meitat sud del litoral i prelitoral. La precipitació serà d'intensitat feble en general i acumularà quantitats entre inapreciables i minses; puntualment anirà acompanyada de tempesta, que localment podrà ser seca, i també de fang.",
+      "temperatures": "La temperatura màxima serà similar en general, tot i que serà lleugerament més alta a Ponent, on es podrà fregar els 40 ºC.",
+      "visibilitat": "La visibilitat serà bona, per presència de pols en suspensió. Amb tot, al final del dia es podrà fora primera boirina a punts de l'extrem sud del litoral.",
+      "vent": "S'imposarà el vent de component est entre fluix i moderat a tot el litoral i al prelitoral nord; a la resta del país dominarà el component sud entre fluix i moderat, amb cops forts durant la tarda a punts del prelitoral sud, Terres de l'Ebre, al sud de Ponent i als cims del Pirineu. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
     }
   },
   "dema": {
     "data": "2026-07-21",
     "variables": {
-      "estatDelCel": "Ambient assolellat en general. A partir de migdia, bandes de núvols alts i mitjans que es mouran de sud a nord. A banda, a la tarda creixeran algunes nuvolades al Pirineu, i al massís del Port que deixaran el cel entre mig i molt ennuvolat en aquests sectors.",
-      "precipitacions": "És possible algun ruixat de tarda al Pirineu Oriental com també al voltant del massís dels Ports. Aquests ruixats podran anar acompanyats de tempesta.",
-      "temperatures": "La temperatura mínima serà semblant. La temperatura màxima pujarà a lleugerament a l'interior amb màximes que podran superar els 40ºC a Ponent. ",
+      "estatDelCel": "Cel serè o poc ennuvolat de matinada i a partir de mitja tarda. La resta del dia creuaran bandes de núvols alts i mitjans d'oest a est que deixaran el cel entre mig i molt ennuvolat, tot i que amb menys núvols a l'extrem nord del país. A banda, a la tarda creixeran algunes nuvolades al Pirineu, sobretot al sector oriental i a l'extrem nord, i al massís del Port que també deixaran el cel entre mig i molt ennuvolat en aquests sectors.",
+      "precipitacions": "A la tarda s'espera algun ruixat al Pirineu Oriental, mentre que és probable al massís del Port i a la resta de l'extrem nord del Pirineu; a més, no es descarta alguna gotellada a la meitat sud del país. La precipitació serà d'intensitat feble en general i acumularà quantitats entre inapreciables i minses; a més, puntualment anirà acompanyada de tempesta, que localment podrà ser seca, com també de fang.",
+      "temperatures": "La temperatura mínima serà semblant. La temperatura màxima pujarà a lleugerament a l'interior amb màximes que podran arribar als 40 ºC a Ponent. ",
       "visibilitat": "La visibilitat serà bona. Tot i això, es mantindrà la pols en suspensió.",
-      "vent": "Vent fluix i variable fins a primeres hores del matí, amb predomini del gregal al litoral. A partir d'aleshores, s'imposarà el component est entre fluix i moderat a tot el litoral i al prelitoral nord, amb cops forts al sector central del litoral. A la resta del país, s'imposarà el component sud entre fluix i moderat, amb cops forts durant la tarda a punts del prelitoral i al sud de Ponent. A banda, fins al final del matí hi haurà tramuntana entre fluixa i moderada al nord de la Costa Brava. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
+      "vent": "Vent fluix i variable fins a primeres hores del matí, amb predomini de component nord i est al litoral. A partir d'aleshores, s'imposarà el component est entre fluix i moderat a tot el litoral i al prelitoral nord, amb alguns cops forts al sector central del litoral; a la resta del país, s'imposarà el component sud entre fluix i moderat, amb cops forts durant la tarda a punts del prelitoral i al sud de Ponent i al centre del dia als cims del Pirineu. Al final del dia, el vent tornarà a quedar fluix i de direcció variable.\nA banda, fins al final del matí hi haurà tramuntana entre fluixa i moderada al nord de la Costa Brava. "
     }
   }
 }
