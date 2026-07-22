@@ -4101,19 +4101,13 @@
       if (meteoVolCache[key]) return meteoVolCache[key];
       try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
-          '&hourly=visibility,wind_gusts_10m&daily=sunrise,sunset&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
+          '&hourly=visibility,wind_gusts_10m&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
         const resp = await fetch(url);
         const data = await resp.json();
         const H = data.hourly;
-        // Franja de llum del dia
-        let hIni = 6, hFi = 21;
-        const di = (data.daily?.time || []).indexOf(dataStr);
-        if (di >= 0) {
-          hIni = parseInt(data.daily.sunrise[di].slice(11, 13));
-          hFi = parseInt(data.daily.sunset[di].slice(11, 13));
-        }
+        // Tot el dia (24 h) — GRAE també opera de nit
         let seguides = 0, maxSeguides = 0;
-        for (let hh = hIni; hh <= hFi; hh++) {
+        for (let hh = 0; hh <= 23; hh++) {
           const idx = H.time.indexOf(dataStr + 'T' + String(hh).padStart(2, '0') + ':00');
           if (idx < 0) continue;
           const ratxa = H.wind_gusts_10m[idx];
@@ -5197,7 +5191,7 @@
               <ol style="margin:0.5rem 0 0;padding-left:1.2rem;">
                 <li><strong>Estat = "Total"</strong> a la pestanya Helicòpters.<br>
                   <span style="color:#666;">Parcial, Sense grua o Baixa → NO operatiu.</span></li>
-                <li><strong>La meteo permet enlairar-se</strong> de la seva base: hi ha una finestra de <strong>≥ 3 h seguides</strong>, dins les <strong>hores de llum</strong> (sortida–posta de sol), amb:
+                <li><strong>La meteo permet enlairar-se</strong> de la seva base: hi ha una finestra de <strong>≥ 3 h seguides</strong> a qualsevol hora del dia (<strong>24 h, també de nit</strong>), amb:
                   <ul style="margin:0.3rem 0 0;padding-left:1.1rem;">
                     <li>ratxa de vent <strong>≤ 50 km/h</strong>, i</li>
                     <li>visibilitat <strong>≥ 2 km</strong>.</li>
@@ -5216,7 +5210,7 @@
               </ul>
             </div>
 
-            <p style="color:#888;font-size:0.78rem;margin:0;">Llindars actuals: ratxa ≤ 50 km/h · visibilitat ≥ 2 km · ≥ 3 h seguides de llum. (Definits al codi: <code>OP_RATXA_MAX</code>, <code>OP_VIS_MIN</code>, <code>OP_HORES_MIN</code>.)</p>
+            <p style="color:#888;font-size:0.78rem;margin:0;">Llindars actuals: ratxa ≤ 50 km/h · visibilitat ≥ 2 km · ≥ 3 h seguides (24 h). (Definits al codi: <code>OP_RATXA_MAX</code>, <code>OP_VIS_MIN</code>, <code>OP_HORES_MIN</code>.)</p>
           </div>
         </div>
         
