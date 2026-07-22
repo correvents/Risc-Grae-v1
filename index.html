@@ -4133,12 +4133,21 @@
 
     // Avalua l'operativitat d'una data agrupant per zona (base): una zona queda coberta
     // si té ≥1 heli operatiu (estat Total + meteo OK). Retorna zones cobertes i el detall.
-    async function avaluarOperativitat(dataStr) {
+    // Memoritzat per dia: actualitzarRiscAuto es crida moltes vegades (a cada JSON que
+    // carrega), i sense cau faria desenes de consultes redundants a Supabase/Open-Meteo.
+    const operativitatCache = {};
+    function avaluarOperativitat(dataStr) {
+      if (!operativitatCache[dataStr]) operativitatCache[dataStr] = _avaluarOperativitat(dataStr);
+      return operativitatCache[dataStr];
+    }
+    function invalidarOperativitat() {
+      Object.keys(operativitatCache).forEach(k => delete operativitatCache[k]);
+      Object.keys(meteoVolCache).forEach(k => delete meteoVolCache[k]);
+    }
+    async function _avaluarOperativitat(dataStr) {
       const helis = await carregarHelisPerRisc(dataStr);
-      const zones = {}; // base → { coberta, motiusBaixa[] }
+      const detall = [];
       for (const h of helis) {
-        const zona = h.base || h.recurs || '?';
-        if (!zones[zona]) zones[zona] = { coberta: false, motiusBaixa: [] };
         let operatiu = true, motiu = '';
         if ((h.operativitat || 'Total') !== 'Total') {
           operatiu = false; motiu = 'estat ' + (h.operativitat || '?').toLowerCase();
@@ -4146,14 +4155,9 @@
           const m = await meteoPermetVol(h.lat, h.lon, dataStr);
           if (!m.ok) { operatiu = false; motiu = m.motiu; }
         }
-        if (operatiu) zones[zona].coberta = true;
-        else zones[zona].motiusBaixa.push(motiu);
+        detall.push({ nom: h.recurs || h.base || '?', base: h.base || '', operatiu, motiu });
       }
-      const detall = Object.entries(zones).map(([zona, z]) => ({
-        zona, coberta: z.coberta, nBaixa: z.motiusBaixa.length,
-        motiu: z.coberta ? '' : (z.motiusBaixa[0] || 'no operatiu')
-      }));
-      return { count: detall.filter(d => d.coberta).length, total: detall.length, detall };
+      return { count: detall.filter(d => d.operatiu).length, total: detall.length, detall };
     }
 
     // Punts que aporta l'operativitat segons nº d'helis operatius (per mostrar al desglossament)
@@ -4259,15 +4263,18 @@
         const bgClass = getRiscBgClass(risc);
         const label = getRiscLabel(risc);
         const canEdit = dayKey !== 'yesterday';
-        const totHelis = dia.operativitatTotal || 4;
-        const nHelis = (dia.operativitatHelis == null) ? totHelis : dia.operativitatHelis;
-        const opPts = puntsOperativitat(nHelis);
-        const opDetall = dia.operativitatDetall || [];
-        const opBaixes = opDetall.filter(d => !d.coberta);
-        const opTotBaixa = opDetall.reduce((s, d) => s + (d.nBaixa || 0), 0);
-        const opMotiuTxt = opBaixes.length
-          ? opBaixes.map(d => `${d.zona}: ${d.motiu}`).join(' · ')
-          : (opTotBaixa > 0 ? `Totes cobertes (${opTotBaixa} de baixa)` : 'Plena');
+        const opActiu = riscFormula.operativitat.actiu;
+        const opDetall = dia.operativitatDetall || null;
+        const totHelis = dia.operativitatTotal;
+        const nHelis = dia.operativitatHelis;
+        const opTeDades = !!opDetall && totHelis != null && nHelis != null;
+        const opPts = (opActiu && opTeDades) ? puntsOperativitat(nHelis) : 0;
+        const opBaixes = opTeDades ? opDetall.filter(d => !d.operatiu) : [];
+        const opMotiuTxt = !opActiu ? 'desactivat'
+          : !opTeDades ? 'sense dades'
+          : opBaixes.length ? opBaixes.map(d => `${d.nom}: ${d.motiu}`).join(' · ')
+          : 'Tots operatius';
+        const opValorTxt = opTeDades ? `${nHelis}/${totHelis}` : '—';
         
         cardsHtml += `
           <div class="risc-card ${dayKey}">
@@ -4305,7 +4312,7 @@
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">🚁 Operativitat</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(opMotiuTxt)}${opPts>0?` · +${opPts}`:''}</span>
-                <span class="risc-breakdown-value">${nHelis}/${totHelis} <span style="font-size:0.6rem;color:#aaa;">zones</span></span>
+                <span class="risc-breakdown-value">${opValorTxt} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
               </div>
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">🌦️ Canvi temps</span>
@@ -4960,11 +4967,11 @@
               <td style="${tdL}">🚁 <strong>Operativitat</strong></td>
               <td style="${tdL}text-align:center;"><input type="checkbox" id="f-operativitat-actiu" ${chk(F.operativitat.actiu)}></td>
               <td style="${tdL}color:#666;">
-                Segons zones cobertes per helis operatius (2+ → 0):
+                Segons HC operatius que poden volar (2+ → 0):
                 <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
-                  <label>0 zones ${num('f-op-0', F.operativitat.punts[0])}</label>
-                  <label>1 zona ${num('f-op-1', F.operativitat.punts[1])}</label>
-                  <label>2 zones ${num('f-op-2', F.operativitat.punts[2])}</label>
+                  <label>0 HC ${num('f-op-0', F.operativitat.punts[0])}</label>
+                  <label>1 HC ${num('f-op-1', F.operativitat.punts[1])}</label>
+                  <label>2 HC ${num('f-op-2', F.operativitat.punts[2])}</label>
                 </span>
                 <br><span style="font-size:0.75rem;color:#999;">Veure pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>
               </td>
@@ -5182,7 +5189,7 @@
             <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #0082d9;">🚁 Com es calcula l'Operativitat HC</h3>
 
             <div style="background:#f0f7ff;border:1px solid #0082d9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.5;">
-              <strong>Què és:</strong> el nombre de <strong>zones cobertes</strong> per helicòpters realment operatius. Aquest valor entra a la fórmula del risc de manera <strong>invertida</strong> (com menys cobertura, més risc).
+              <strong>Què és:</strong> el nombre d'<strong>HC operatius que poden volar</strong>, sobre el total (p. ex. <strong>3/4</strong>). Aquests són els HC realment distribuïts i disponibles. Aquest valor entra a la fórmula del risc de manera <strong>invertida</strong> (com menys HC disponibles, més risc).
             </div>
 
             <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
@@ -5203,7 +5210,7 @@
               <strong>Detalls:</strong>
               <ul style="margin:0.4rem 0 0;padding-left:1.2rem;">
                 <li><strong>Franja d'alerta</strong> (ratxa 30–50 km/h o visibilitat 2–5 km): <strong>segueix comptant com operatiu</strong> — és només un avís. Els límits durs que el treuen del recompte són <strong>ratxa &gt; 50 km/h</strong> o <strong>visibilitat &lt; 2 km</strong>.</li>
-                <li><strong>Distribució (cobertura per zones):</strong> cada base = una zona. L'operativitat = nombre de zones amb ≥ 1 heli operatiu. Si una base té diversos helis, la zona queda coberta mentre almenys un sigui operatiu (els altres de baixa es mostren com a informació).</li>
+                <li><strong>Distribució:</strong> es compten els HC operatius sobre el total (p. ex. 3/4). Cada HC que no pot volar (per estat o meteo) resta del recompte, encara que estigui a la mateixa base que un altre. Al desglossament s'indica quin HC no vola i per què.</li>
                 <li><strong>Dades meteo:</strong> Open-Meteo per cada base (avui i demà). Si la consulta falla, l'heli <strong>no es penalitza</strong> per meteo (només el treu l'estat).</li>
                 <li><strong>Punts al risc:</strong> es configuren a la pestanya <strong>🧮 Fórmula de risc</strong> (per defecte: 0 zones → +2, 1 zona → +1, 2 o més → 0).</li>
               </ul>
@@ -6698,6 +6705,8 @@
       try {
         await guardarHelicoptersSupabase(helicopterDataActual, helicopterDadesActuals);
         if (st) st.textContent = '✅ Guardat';
+        invalidarOperativitat();   // recalcula l'operativitat amb el nou estat dels helis
+        actualitzarRiscAuto();
       } catch(e) {
         logError('HeliSupabase', e.message);
         if (st) st.textContent = '❌ ' + e.message;
