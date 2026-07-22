@@ -3980,49 +3980,119 @@
     }
     
     // Funció per actualitzar risc automàticament quan es carreguen dades
-    function actualitzarRiscAuto() {
+    async function actualitzarRiscAuto() {
       if (!riscState.today && !riscState.tomorrow) return;
-      
+
       const avui = getRiscDateString(0);
       const dema = getRiscDateString(1);
-      
+
       // Actualitzar avui
-      if (riscState.today && !riscState.today.modificatManualment) {
-        const valsAvui = calcularValorsAuto(avui);
-        riscState.today.smp = valsAvui.smp;
-        riscState.today.allaus = valsAvui.allaus;
-        riscState.today.hc = valsAvui.hc;
-        riscState.today.canvi = valsAvui.canvi;
-        riscState.today.planspc = valsAvui.planspc || 0;
-        if (valsAvui.notes.length > 0 && !riscState.today.notes) {
-          riscState.today.notes = valsAvui.notes.join('. ');
+      if (riscState.today) {
+        if (!riscState.today.modificatManualment) {
+          const valsAvui = calcularValorsAuto(avui);
+          riscState.today.smp = valsAvui.smp;
+          riscState.today.allaus = valsAvui.allaus;
+          riscState.today.hc = valsAvui.hc;
+          riscState.today.canvi = valsAvui.canvi;
+          riscState.today.planspc = valsAvui.planspc || 0;
+          if (valsAvui.notes.length > 0 && !riscState.today.notes) {
+            riscState.today.notes = valsAvui.notes.join('. ');
+          }
         }
+        riscState.today.operativitatHelis = await comptarHelisOperatius(avui);
       }
-      
+
       // Actualitzar demà
-      if (riscState.tomorrow && !riscState.tomorrow.modificatManualment) {
-        const valsDema = calcularValorsAuto(dema);
-        riscState.tomorrow.smp = valsDema.smp;
-        riscState.tomorrow.allaus = valsDema.allaus;
-        riscState.tomorrow.hc = valsDema.hc;
-        riscState.tomorrow.canvi = valsDema.canvi;
-        riscState.tomorrow.planspc = valsDema.planspc || 0;
-        if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
-          riscState.tomorrow.notes = valsDema.notes.join('. ');
+      if (riscState.tomorrow) {
+        if (!riscState.tomorrow.modificatManualment) {
+          const valsDema = calcularValorsAuto(dema);
+          riscState.tomorrow.smp = valsDema.smp;
+          riscState.tomorrow.allaus = valsDema.allaus;
+          riscState.tomorrow.hc = valsDema.hc;
+          riscState.tomorrow.canvi = valsDema.canvi;
+          riscState.tomorrow.planspc = valsDema.planspc || 0;
+          if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
+            riscState.tomorrow.notes = valsDema.notes.join('. ');
+          }
         }
+        riscState.tomorrow.operativitatHelis = await comptarHelisOperatius(dema);
       }
-      
+
       // Guardar i renderitzar
       localStorage.setItem('riscGRAE', JSON.stringify(riscState));
       renderRisc();
     }
     
+    // ==================== FÓRMULA DE RISC (configurable) ====================
+    // Risc = SMP + Afluència + Operativitat + Allaus + Canvi (sense límit superior).
+    // Plans PC i Boletaires són només informatius (no sumen).
+    const RISC_FORMULA_DEFAULT = {
+      smp:          { actiu: true },
+      afluencia:    { actiu: true },
+      operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0 } }, // nº helis operatius; 3-4 → 0
+      allaus:       { actiu: true, punts: { 3: 1, 4: 2, 5: 3 } },  // nivells 1-2 → 0
+      canvi:        { actiu: true },
+    };
+    let riscFormula = JSON.parse(JSON.stringify(RISC_FORMULA_DEFAULT));
+
+    function carregarRiscFormula() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('riscGRAE_formula') || 'null');
+        if (saved) {
+          riscFormula = {
+            smp:       { actiu: saved.smp?.actiu !== false },
+            afluencia: { actiu: saved.afluencia?.actiu !== false },
+            operativitat: { actiu: saved.operativitat?.actiu !== false,
+              punts: { 0: +(saved.operativitat?.punts?.[0] ?? 2), 1: +(saved.operativitat?.punts?.[1] ?? 1), 2: +(saved.operativitat?.punts?.[2] ?? 0) } },
+            allaus: { actiu: saved.allaus?.actiu !== false,
+              punts: { 3: +(saved.allaus?.punts?.[3] ?? 1), 4: +(saved.allaus?.punts?.[4] ?? 2), 5: +(saved.allaus?.punts?.[5] ?? 3) } },
+            canvi:     { actiu: saved.canvi?.actiu !== false },
+          };
+        }
+      } catch(e) { logError('RiscFormula', e.message); }
+    }
+
+    function guardarRiscFormula() {
+      try { localStorage.setItem('riscGRAE_formula', JSON.stringify(riscFormula)); } catch(e) {}
+    }
+
+    // Compta helicòpters operatius (tot el que NO estigui en estat "Baixa") per a una data.
+    // Sense dades → 4 (plena operativitat, no penalitza).
+    async function comptarHelisOperatius(dataStr) {
+      try {
+        const dades = await carregarHelicoptersDiaSupabase(dataStr);
+        const arr = (dades && dades.length) ? dades : HELICOPTERS_BASE;
+        return arr.filter(h => (h.operativitat || 'Total') !== 'Baixa').length;
+      } catch(e) { return 4; }
+    }
+
+    // Punts que aporta l'operativitat segons nº d'helis operatius (per mostrar al desglossament)
+    function puntsOperativitat(nHelis) {
+      const n = (nHelis == null) ? 4 : parseInt(nHelis);
+      return +(riscFormula.operativitat.punts[n] ?? 0);
+    }
+
     function calcularRisc(dia) {
-      // Rangs: planspc 0-3, smp 0-6, allaus 0-5, afluencia 0-3, hc 0-2, canvi 0-2
-      // Total màxim teòric: 3+6+5+3+2+2 = 21, normalitzem a 0-6
-      const total = parseFloat(dia.planspc||0) + parseFloat(dia.smp||0) + parseFloat(dia.allaus||0) +
-                    parseFloat(dia.afluencia||0) + parseFloat(dia.hc||0) + parseFloat(dia.canvi||0);
-      return Math.min(6, Math.round((total / 21) * 6));
+      const F = riscFormula || RISC_FORMULA_DEFAULT;
+      let total = 0;
+      // SMP (0-6) — suma el seu valor
+      if (F.smp.actiu) total += parseFloat(dia.smp || 0);
+      // Afluència (0-3) — suma el seu valor
+      if (F.afluencia.actiu) total += parseFloat(dia.afluencia || 0);
+      // Operativitat — nº d'helis operatius, invertit (menys helis = més risc); 3-4 → 0
+      if (F.operativitat.actiu) {
+        const n = (dia.operativitatHelis == null) ? 4 : parseInt(dia.operativitatHelis);
+        total += +(F.operativitat.punts[n] ?? 0);
+      }
+      // Risc allaus — nivells 1-2 → 0; 3/4/5 segons punts
+      if (F.allaus.actiu) {
+        const a = parseInt(dia.allaus || 0);
+        total += +(F.allaus.punts[a] ?? 0);
+      }
+      // Canvi de temps (0-2) — suma el seu valor
+      if (F.canvi.actiu) total += parseFloat(dia.canvi || 0);
+      // Plans PC i Boletaires: només informatius (no sumen)
+      return Math.max(0, Math.round(total)); // sense límit superior
     }
     
     function getRiscLabel(risc) {
@@ -4099,6 +4169,8 @@
         const bgClass = getRiscBgClass(risc);
         const label = getRiscLabel(risc);
         const canEdit = dayKey !== 'yesterday';
+        const nHelis = (dia.operativitatHelis == null) ? 4 : dia.operativitatHelis;
+        const opPts = puntsOperativitat(nHelis);
         
         cardsHtml += `
           <div class="risc-card ${dayKey}">
@@ -4114,15 +4186,10 @@
               <div class="risc-level ${colorClass}">${label}</div>
             </div>
             <div class="risc-bar">
-              <div class="risc-bar-fill ${bgClass}" style="width: ${(risc / 6) * 100}%"></div>
+              <div class="risc-bar-fill ${bgClass}" style="width: ${Math.min(100, (risc / 6) * 100)}%"></div>
             </div>
             <div class="risc-breakdown">
               <div class="risc-breakdown-title">Desglossament</div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">🚨 Plans PC</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.planspc||0)>=3?'background:#ffebee;color:#c62828':((dia.planspc||0)>=2?'background:#fff3e0;color:#e65100':((dia.planspc||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getPlanspcLabel(dia.planspc||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.planspc||0)}/3</span>
-              </div>
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">⚠️ Alertes SMP</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}</span>
@@ -4139,14 +4206,19 @@
                 <span class="risc-breakdown-value">${Math.round(dia.afluencia||0)}/3</span>
               </div>
               <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">🚁 Dificultat HC</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.hc||0)>=2?'background:#ffebee;color:#c62828':((dia.hc||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getHCLabel(dia.hc||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.hc||0)}/2</span>
+                <span class="risc-breakdown-label">🚁 Operativitat</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${nHelis}/4 helis operatius${opPts>0?` · +${opPts}`:''}</span>
+                <span class="risc-breakdown-value">${nHelis}/4</span>
               </div>
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">🌦️ Canvi temps</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2</span>
+              </div>
+              <div class="risc-breakdown-item" style="opacity:0.6;">
+                <span class="risc-breakdown-label">🚨 Plans PC</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;color:#aaa;">${getPlanspcLabel(dia.planspc||0)}</span>
+                <span class="risc-breakdown-value">${Math.round(dia.planspc||0)}/3 <span style="font-size:0.6rem;color:#aaa;">info</span></span>
               </div>
               <div class="risc-breakdown-item" style="opacity:0.6;">
                 <span class="risc-breakdown-label">🍄 Boletaires</span>
@@ -4755,6 +4827,101 @@
     // ==================== PÀGINA CONFIGURACIÓ ====================
     function obrirPaginaParametres() {
       document.getElementById('app-risc').innerHTML = renderPaginaParametres();
+      renderFormulaTaula();
+    }
+
+    // ---- Taula configurable de la Fórmula de risc ----
+    function renderFormulaTaula() {
+      const cont = document.getElementById('formula-taula');
+      if (!cont) return;
+      const F = riscFormula;
+      const chk = on => on ? 'checked' : '';
+      const num = (id, val) => `<input type="number" step="0.5" value="${val}" id="${id}" style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;">`;
+      const tdL = 'padding:0.5rem;border-bottom:1px solid #f0f0f0;';
+      cont.innerHTML = `
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:520px;">
+          <thead>
+            <tr style="background:#fafafa;text-align:left;">
+              <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;">Factor</th>
+              <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;text-align:center;width:70px;">Actiu</th>
+              <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;">Valors de suma</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="${tdL}">⚠️ <strong>SMP</strong></td>
+              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-smp-actiu" ${chk(F.smp.actiu)}></td>
+              <td style="${tdL}color:#666;">Suma el seu valor (0–6)</td>
+            </tr>
+            <tr>
+              <td style="${tdL}">📅 <strong>Afluència</strong></td>
+              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-afluencia-actiu" ${chk(F.afluencia.actiu)}></td>
+              <td style="${tdL}color:#666;">Suma el seu valor (0–3)</td>
+            </tr>
+            <tr>
+              <td style="${tdL}">🚁 <strong>Operativitat</strong></td>
+              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-operativitat-actiu" ${chk(F.operativitat.actiu)}></td>
+              <td style="${tdL}color:#666;">
+                Segons helis operatius (3–4 helis → 0):
+                <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
+                  <label>0 helis ${num('f-op-0', F.operativitat.punts[0])}</label>
+                  <label>1 heli ${num('f-op-1', F.operativitat.punts[1])}</label>
+                  <label>2 helis ${num('f-op-2', F.operativitat.punts[2])}</label>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td style="${tdL}">❄️ <strong>Risc allaus</strong></td>
+              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-allaus-actiu" ${chk(F.allaus.actiu)}></td>
+              <td style="${tdL}color:#666;">
+                Segons nivell BPA (nivells 1–2 → 0):
+                <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
+                  <label>Nivell 3 ${num('f-al-3', F.allaus.punts[3])}</label>
+                  <label>Nivell 4 ${num('f-al-4', F.allaus.punts[4])}</label>
+                  <label>Nivell 5 ${num('f-al-5', F.allaus.punts[5])}</label>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td style="${tdL}">🌦️ <strong>Canvi de temps</strong></td>
+              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-canvi-actiu" ${chk(F.canvi.actiu)}></td>
+              <td style="${tdL}color:#666;">Suma el seu valor (0–2)</td>
+            </tr>
+            <tr style="opacity:0.55;">
+              <td style="${tdL}">🚨 Plans PC</td>
+              <td style="${tdL}text-align:center;color:#aaa;">—</td>
+              <td style="${tdL}color:#aaa;">Només informatiu (no suma)</td>
+            </tr>
+            <tr style="opacity:0.55;">
+              <td style="padding:0.5rem;">🍄 Boletaires</td>
+              <td style="padding:0.5rem;text-align:center;color:#aaa;">—</td>
+              <td style="padding:0.5rem;color:#aaa;">Només informatiu (no suma)</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>`;
+    }
+
+    function guardarFormulaConfig(btn) {
+      const gv = id => { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; };
+      const gc = id => { const el = document.getElementById(id); return el ? el.checked : true; };
+      riscFormula = {
+        smp:          { actiu: gc('f-smp-actiu') },
+        afluencia:    { actiu: gc('f-afluencia-actiu') },
+        operativitat: { actiu: gc('f-operativitat-actiu'), punts: { 0: gv('f-op-0'), 1: gv('f-op-1'), 2: gv('f-op-2') } },
+        allaus:       { actiu: gc('f-allaus-actiu'), punts: { 3: gv('f-al-3'), 4: gv('f-al-4'), 5: gv('f-al-5') } },
+        canvi:        { actiu: gc('f-canvi-actiu') },
+      };
+      guardarRiscFormula();
+      renderFormulaTaula();
+      if (btn) { const t = btn.textContent; btn.textContent = '✅ Guardat'; setTimeout(() => { btn.textContent = t; }, 1500); }
+    }
+
+    function restaurarFormulaDefault() {
+      riscFormula = JSON.parse(JSON.stringify(RISC_FORMULA_DEFAULT));
+      guardarRiscFormula();
+      renderFormulaTaula();
     }
 
     function obrirConfigGlobal() {
@@ -4775,7 +4942,8 @@
         </div>
         
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-          <button class="risc-btn risc-btn-primary" id="tab-smp" onclick="mostrarTabParam('smp')">⚠️ Alertes SMP</button>
+          <button class="risc-btn risc-btn-primary" id="tab-formula" onclick="mostrarTabParam('formula')">🧮 Fórmula de risc</button>
+          <button class="risc-btn" id="tab-smp" onclick="mostrarTabParam('smp')">⚠️ Alertes SMP</button>
           <button class="risc-btn" id="tab-allaus" onclick="mostrarTabParam('allaus')">❄️ Allaus BPA</button>
           <button class="risc-btn" id="tab-hc" onclick="mostrarTabParam('hc')">🚁 Vol HC</button>
           <button class="risc-btn" id="tab-afluencia" onclick="mostrarTabParam('afluencia')">👥 Afluència</button>
@@ -4787,8 +4955,25 @@
           <button class="risc-btn" id="tab-manual" onclick="mostrarTabParam('manual')">📖 Manual</button>
         </div>
         
+        <!-- Tab Fórmula de risc -->
+        <div id="param-formula" class="param-tab">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
+            <h3 style="margin:0 0 0.5rem;font-size:1rem;color:#e53935;">🧮 Fórmula del Risc Principal</h3>
+            <p style="font-size:0.82rem;color:#555;margin:0 0 1rem;">
+              El valor de risc que surt a la pàgina principal = <strong>suma dels factors actius</strong>.
+              Activa o para cada factor i ajusta els punts que suma. No hi ha límit superior.
+              <br><strong>Plans PC</strong> i <strong>Boletaires</strong> són només informatius (no sumen).
+            </p>
+            <div id="formula-taula"></div>
+            <div style="display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end;">
+              <button class="risc-btn" onclick="restaurarFormulaDefault()">↺ Valors per defecte</button>
+              <button class="risc-btn risc-btn-primary" onclick="guardarFormulaConfig(this)">💾 Guardar</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Tab SMP -->
-        <div id="param-smp" class="param-tab">
+        <div id="param-smp" class="param-tab" style="display: none;">
           <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem;">
             <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #e53935;">⚠️ Paràmetres Alertes SMP</h3>
 
@@ -5483,6 +5668,9 @@
       // Mostrar el tab seleccionat
       document.getElementById('param-' + tab).style.display = 'block';
       document.getElementById('tab-' + tab).classList.add('risc-btn-primary');
+      if (tab === 'formula') {
+        renderFormulaTaula();
+      }
       if (tab === 'smp') {
         renderCalcRealAvui();
         carregarSMPOverrideHistoric();
@@ -5597,6 +5785,7 @@
     }
 
     // Carregar tot al iniciar
+    carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
     carregarRiscConfig().then(() => renderRisc());  // Config de Supabase primer, després renderitza risc
     carregarBPA();
     carregarPrevisio();
