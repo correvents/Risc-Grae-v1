@@ -1,118 +1,9 @@
 {
-  "dataConsulta": "2026-07-22T07:58:18.539Z",
+  "dataConsulta": "2026-07-22T10:29:50.743Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
-      "dataInici": "2026-07-22T00:00Z",
-      "dataFi": "2026-07-23T05:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-22",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-23",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor nocturna intensa",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor nocturna",
-      "estat": "Vigent",
       "dataInici": "2026-07-22T00:00Z",
       "dataFi": "2026-07-24T05:59Z",
       "comentari": "",
@@ -242,6 +133,115 @@
               "zona": "Terres de l'Ebre",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor nocturna",
+      "estat": "Ampliat",
+      "dataInici": "2026-07-22T00:00Z",
+      "dataFi": "2026-07-23T05:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-22",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-23",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
               "llindar": "Calor nocturna intensa",
               "periodes": [
                 "00-06"
