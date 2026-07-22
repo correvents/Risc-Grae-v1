@@ -3999,7 +3999,10 @@
             riscState.today.notes = valsAvui.notes.join('. ');
           }
         }
-        riscState.today.operativitatHelis = await comptarHelisOperatius(avui);
+        const opAvui = await avaluarOperativitat(avui);
+        riscState.today.operativitatHelis = opAvui.count;
+        riscState.today.operativitatTotal = opAvui.total;
+        riscState.today.operativitatDetall = opAvui.detall;
       }
 
       // Actualitzar demà
@@ -4015,7 +4018,10 @@
             riscState.tomorrow.notes = valsDema.notes.join('. ');
           }
         }
-        riscState.tomorrow.operativitatHelis = await comptarHelisOperatius(dema);
+        const opDema = await avaluarOperativitat(dema);
+        riscState.tomorrow.operativitatHelis = opDema.count;
+        riscState.tomorrow.operativitatTotal = opDema.total;
+        riscState.tomorrow.operativitatDetall = opDema.detall;
       }
 
       // Guardar i renderitzar
@@ -4056,14 +4062,98 @@
       try { localStorage.setItem('riscGRAE_formula', JSON.stringify(riscFormula)); } catch(e) {}
     }
 
-    // Compta helicòpters operatius (tot el que NO estigui en estat "Baixa") per a una data.
-    // Sense dades → 4 (plena operativitat, no penalitza).
-    async function comptarHelisOperatius(dataStr) {
+    // ---- OPERATIVITAT HC (estat + meteo per base) ----
+    // Un HC és operatiu si: (1) estat = "Total" i (2) la meteo permet enlairar-se
+    // (finestra de ≥3 h seguides de llum de dia amb ratxa ≤ 50 km/h i visibilitat ≥ 2 km).
+    // "Distribuït" = cobertura per zones: cada base = 1 zona; operativitat = zones amb ≥1 heli operatiu.
+    const OP_RATXA_MAX = 50;   // km/h — per sobre, no vola
+    const OP_VIS_MIN = 2000;   // m — per sota, no vola
+    const OP_HORES_MIN = 3;    // hores seguides de llum amb condicions dins límits
+
+    // Carrega els helis d'una data amb el mateix fallback que la pestanya Helicòpters
+    // (data exacta → últim registre desat → base per defecte). No toca el DOM.
+    async function carregarHelisPerRisc(dataStr) {
+      const exacte = await carregarHelicoptersDiaSupabase(dataStr);
+      if (exacte && exacte.length) return exacte;
       try {
-        const dades = await carregarHelicoptersDiaSupabase(dataStr);
-        const arr = (dades && dades.length) ? dades : HELICOPTERS_BASE;
-        return arr.filter(h => (h.operativitat || 'Total') !== 'Baixa').length;
-      } catch(e) { return 4; }
+        const { data } = await sbClient
+          .from('helicopters_historic')
+          .select('*')
+          .order('data', { ascending: false })
+          .order('heli_id')
+          .limit(20);
+        if (data && data.length) {
+          const ultimaData = data[0].data;
+          return data.filter(r => r.data === ultimaData).map(row => ({
+            id: row.heli_id, recurs: row.recurs, base: row.base,
+            lat: row.lat, lon: row.lon, operativitat: row.operativitat, observacions: row.observacions
+          }));
+        }
+      } catch(e) { logError('HelisRisc', e.message); }
+      return JSON.parse(JSON.stringify(HELICOPTERS_BASE));
+    }
+
+    // La meteo permet volar des d'una base aquell dia? (≥3 h seguides de llum dins límits)
+    const meteoVolCache = {};
+    async function meteoPermetVol(lat, lon, dataStr) {
+      if (lat == null || lon == null) return { ok: true, motiu: '' }; // sense coords → no penalitza
+      const key = `${(+lat).toFixed(2)},${(+lon).toFixed(2)},${dataStr}`;
+      if (meteoVolCache[key]) return meteoVolCache[key];
+      try {
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+          '&hourly=visibility,wind_gusts_10m&daily=sunrise,sunset&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const H = data.hourly;
+        // Franja de llum del dia
+        let hIni = 6, hFi = 21;
+        const di = (data.daily?.time || []).indexOf(dataStr);
+        if (di >= 0) {
+          hIni = parseInt(data.daily.sunrise[di].slice(11, 13));
+          hFi = parseInt(data.daily.sunset[di].slice(11, 13));
+        }
+        let seguides = 0, maxSeguides = 0;
+        for (let hh = hIni; hh <= hFi; hh++) {
+          const idx = H.time.indexOf(dataStr + 'T' + String(hh).padStart(2, '0') + ':00');
+          if (idx < 0) continue;
+          const ratxa = H.wind_gusts_10m[idx];
+          const vis = H.visibility[idx];
+          const bo = (ratxa != null && ratxa <= OP_RATXA_MAX) && (vis != null && vis >= OP_VIS_MIN);
+          if (bo) { seguides++; maxSeguides = Math.max(maxSeguides, seguides); }
+          else seguides = 0;
+        }
+        const ok = maxSeguides >= OP_HORES_MIN;
+        const res = { ok, motiu: ok ? '' : 'no vola (meteo)' };
+        meteoVolCache[key] = res;
+        return res;
+      } catch(e) {
+        return { ok: true, motiu: '' }; // fallo de xarxa → no penalitza
+      }
+    }
+
+    // Avalua l'operativitat d'una data agrupant per zona (base): una zona queda coberta
+    // si té ≥1 heli operatiu (estat Total + meteo OK). Retorna zones cobertes i el detall.
+    async function avaluarOperativitat(dataStr) {
+      const helis = await carregarHelisPerRisc(dataStr);
+      const zones = {}; // base → { coberta, motiusBaixa[] }
+      for (const h of helis) {
+        const zona = h.base || h.recurs || '?';
+        if (!zones[zona]) zones[zona] = { coberta: false, motiusBaixa: [] };
+        let operatiu = true, motiu = '';
+        if ((h.operativitat || 'Total') !== 'Total') {
+          operatiu = false; motiu = 'estat ' + (h.operativitat || '?').toLowerCase();
+        } else {
+          const m = await meteoPermetVol(h.lat, h.lon, dataStr);
+          if (!m.ok) { operatiu = false; motiu = m.motiu; }
+        }
+        if (operatiu) zones[zona].coberta = true;
+        else zones[zona].motiusBaixa.push(motiu);
+      }
+      const detall = Object.entries(zones).map(([zona, z]) => ({
+        zona, coberta: z.coberta, nBaixa: z.motiusBaixa.length,
+        motiu: z.coberta ? '' : (z.motiusBaixa[0] || 'no operatiu')
+      }));
+      return { count: detall.filter(d => d.coberta).length, total: detall.length, detall };
     }
 
     // Punts que aporta l'operativitat segons nº d'helis operatius (per mostrar al desglossament)
@@ -4169,8 +4259,15 @@
         const bgClass = getRiscBgClass(risc);
         const label = getRiscLabel(risc);
         const canEdit = dayKey !== 'yesterday';
-        const nHelis = (dia.operativitatHelis == null) ? 4 : dia.operativitatHelis;
+        const totHelis = dia.operativitatTotal || 4;
+        const nHelis = (dia.operativitatHelis == null) ? totHelis : dia.operativitatHelis;
         const opPts = puntsOperativitat(nHelis);
+        const opDetall = dia.operativitatDetall || [];
+        const opBaixes = opDetall.filter(d => !d.coberta);
+        const opTotBaixa = opDetall.reduce((s, d) => s + (d.nBaixa || 0), 0);
+        const opMotiuTxt = opBaixes.length
+          ? opBaixes.map(d => `${d.zona}: ${d.motiu}`).join(' · ')
+          : (opTotBaixa > 0 ? `Totes cobertes (${opTotBaixa} de baixa)` : 'Plena');
         
         cardsHtml += `
           <div class="risc-card ${dayKey}">
@@ -4207,8 +4304,8 @@
               </div>
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">🚁 Operativitat</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${nHelis}/4 helis operatius${opPts>0?` · +${opPts}`:''}</span>
-                <span class="risc-breakdown-value">${nHelis}/4</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(opMotiuTxt)}${opPts>0?` · +${opPts}`:''}</span>
+                <span class="risc-breakdown-value">${nHelis}/${totHelis} <span style="font-size:0.6rem;color:#aaa;">zones</span></span>
               </div>
               <div class="risc-breakdown-item">
                 <span class="risc-breakdown-label">🌦️ Canvi temps</span>
@@ -4863,12 +4960,13 @@
               <td style="${tdL}">🚁 <strong>Operativitat</strong></td>
               <td style="${tdL}text-align:center;"><input type="checkbox" id="f-operativitat-actiu" ${chk(F.operativitat.actiu)}></td>
               <td style="${tdL}color:#666;">
-                Segons helis operatius (3–4 helis → 0):
+                Segons zones cobertes per helis operatius (2+ → 0):
                 <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
-                  <label>0 helis ${num('f-op-0', F.operativitat.punts[0])}</label>
-                  <label>1 heli ${num('f-op-1', F.operativitat.punts[1])}</label>
-                  <label>2 helis ${num('f-op-2', F.operativitat.punts[2])}</label>
+                  <label>0 zones ${num('f-op-0', F.operativitat.punts[0])}</label>
+                  <label>1 zona ${num('f-op-1', F.operativitat.punts[1])}</label>
+                  <label>2 zones ${num('f-op-2', F.operativitat.punts[2])}</label>
                 </span>
+                <br><span style="font-size:0.75rem;color:#999;">Veure pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>
               </td>
             </tr>
             <tr>
@@ -4945,7 +5043,7 @@
           <button class="risc-btn risc-btn-primary" id="tab-formula" onclick="mostrarTabParam('formula')">🧮 Fórmula de risc</button>
           <button class="risc-btn" id="tab-smp" onclick="mostrarTabParam('smp')">⚠️ Alertes SMP</button>
           <button class="risc-btn" id="tab-allaus" onclick="mostrarTabParam('allaus')">❄️ Allaus BPA</button>
-          <button class="risc-btn" id="tab-hc" onclick="mostrarTabParam('hc')">🚁 Vol HC</button>
+          <button class="risc-btn" id="tab-hc" onclick="mostrarTabParam('hc')">🚁 Operativitat HC</button>
           <button class="risc-btn" id="tab-afluencia" onclick="mostrarTabParam('afluencia')">👥 Afluència</button>
           <button class="risc-btn" id="tab-canvi" onclick="mostrarTabParam('canvi')">🌦️ Canvi Temps</button>
           <button class="risc-btn" id="tab-historic" onclick="mostrarTabParam('historic')">📊 Històric</button>
@@ -5078,21 +5176,40 @@
           </div>
         </div>
         
-        <!-- Tab HC -->
+        <!-- Tab Operativitat HC -->
         <div id="param-hc" class="param-tab" style="display: none;">
           <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem;">
-            <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #0082d9;">🚁 Paràmetres Dificultat Vol HC</h3>
-            
-            <div style="background: #e3f2fd; border: 1px solid #0082d9; border-radius: 6px; padding: 0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
-              <strong>📐 Fórmula actual:</strong><br>
-              Si alertes de vent/neu/pluja fortes → dificultat o impossibilitat de vol<br><br>
-              <strong>Pes màxim:</strong> 1.5 punts sobre el total de 6
+            <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #0082d9;">🚁 Com es calcula l'Operativitat HC</h3>
+
+            <div style="background:#f0f7ff;border:1px solid #0082d9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.5;">
+              <strong>Què és:</strong> el nombre de <strong>zones cobertes</strong> per helicòpters realment operatius. Aquest valor entra a la fórmula del risc de manera <strong>invertida</strong> (com menys cobertura, més risc).
             </div>
-            
-            <p style="color: #666; font-style: italic; font-size: 0.9rem;">
-              🚧 Paràmetres de vol HC - Pròximament<br>
-              Aquí es podran configurar llindars de vent, visibilitat, precipitació, etc.
-            </p>
+
+            <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
+              <strong>Un HC compta com a OPERATIU si es compleixen les 2 condicions:</strong>
+              <ol style="margin:0.5rem 0 0;padding-left:1.2rem;">
+                <li><strong>Estat = "Total"</strong> a la pestanya Helicòpters.<br>
+                  <span style="color:#666;">Parcial, Sense grua o Baixa → NO operatiu.</span></li>
+                <li><strong>La meteo permet enlairar-se</strong> de la seva base: hi ha una finestra de <strong>≥ 3 h seguides</strong>, dins les <strong>hores de llum</strong> (sortida–posta de sol), amb:
+                  <ul style="margin:0.3rem 0 0;padding-left:1.1rem;">
+                    <li>ratxa de vent <strong>≤ 50 km/h</strong>, i</li>
+                    <li>visibilitat <strong>≥ 2 km</strong>.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+
+            <div style="background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
+              <strong>Detalls:</strong>
+              <ul style="margin:0.4rem 0 0;padding-left:1.2rem;">
+                <li><strong>Franja d'alerta</strong> (ratxa 30–50 km/h o visibilitat 2–5 km): <strong>segueix comptant com operatiu</strong> — és només un avís. Els límits durs que el treuen del recompte són <strong>ratxa &gt; 50 km/h</strong> o <strong>visibilitat &lt; 2 km</strong>.</li>
+                <li><strong>Distribució (cobertura per zones):</strong> cada base = una zona. L'operativitat = nombre de zones amb ≥ 1 heli operatiu. Si una base té diversos helis, la zona queda coberta mentre almenys un sigui operatiu (els altres de baixa es mostren com a informació).</li>
+                <li><strong>Dades meteo:</strong> Open-Meteo per cada base (avui i demà). Si la consulta falla, l'heli <strong>no es penalitza</strong> per meteo (només el treu l'estat).</li>
+                <li><strong>Punts al risc:</strong> es configuren a la pestanya <strong>🧮 Fórmula de risc</strong> (per defecte: 0 zones → +2, 1 zona → +1, 2 o més → 0).</li>
+              </ul>
+            </div>
+
+            <p style="color:#888;font-size:0.78rem;margin:0;">Llindars actuals: ratxa ≤ 50 km/h · visibilitat ≥ 2 km · ≥ 3 h seguides de llum. (Definits al codi: <code>OP_RATXA_MAX</code>, <code>OP_VIS_MIN</code>, <code>OP_HORES_MIN</code>.)</p>
           </div>
         </div>
         
