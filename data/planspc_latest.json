@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-07-22T15:18:35.037Z",
+  "actualitzat": "2026-07-23T08:01:44.419Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "21/07/2026 20:38",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125497_INICI--NOACTIVAT_PROCICAT_202607212104.pdf"
-      },
-      "descripcio": "Foc d'indústria SOMAB Exportaciones- "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
@@ -31,6 +17,20 @@
     },
     {
       "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "22/07/2026 23:10",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125534_INICI--NOACTIVAT_PROCICAT_202607222358.pdf"
+      },
+      "descripcio": "Deflagració gas plaça de Sants Barcelona"
+    },
+    {
+      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
       },
       "plaacronim": "INFOCAT",
@@ -39,7 +39,7 @@
       "plaactivat": "SI",
       "fasedatahora": "10/07/2026 13:17",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607221606.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607230725.pdf"
       },
       "descripcio": "INFOCAT Alerta "
     }
