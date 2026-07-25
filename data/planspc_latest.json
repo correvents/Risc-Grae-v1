@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-25T09:54:14.153Z",
+  "actualitzat": "2026-07-25T14:43:25.332Z",
   "plans": [
     {
       "plaicona": {
@@ -42,6 +42,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125597_ACTUALITZACIO--ACTIVAT_INUNCAT_202607251147.pdf"
       },
       "descripcio": "SMP Intensitat Pluja - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PLASEQCAT.png"
+      },
+      "plaacronim": "PLASEQTA",
+      "planom": "Pla risc químic comarques Tarragona",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "25/07/2026 13:45",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125637_INICI--NOACTIVAT_PLASEQTA_202607251356.pdf"
+      },
+      "descripcio": "Incendi de canyes prop de SEVESO i vies del tren - Repsol Refineria CI (Polígon Nord, antiga Repsol Petroleo)"
     }
   ]
 }
