@@ -1,130 +1,24 @@
 {
-  "dataConsulta": "2026-07-25T14:43:22.046Z",
+  "dataConsulta": "2026-07-26T07:57:29.457Z",
   "avisos": [
     {
-      "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Ampliat",
-      "dataInici": "2026-07-25T00:00Z",
-      "dataFi": "2026-07-26T05:59Z",
-      "comentari": "La precipitació anirà acompanyada de tempesta i calamarsa o pedra petita.",
+      "meteor": "Estat de la mar",
+      "estat": "Vigent",
+      "dataInici": "2026-07-26T00:00Z",
+      "dataFi": "2026-07-26T11:59Z",
+      "comentari": "La direcció d'onatge predominant serà del NNW. És possible que se superi al nord del Cap de Creus. Hi haurà tramuntana amb cops entre forts i molt forts.",
       "dies": [
-        {
-          "dia": "2026-07-25",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
         {
           "dia": "2026-07-26",
           "afectacions": [
             {
-              "zona": "Camp de Tarragona",
+              "zona": "Comarca 99",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "00-06"
+                "00-06",
+                "06-12"
               ]
             }
           ]
@@ -133,7 +27,7 @@
     },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-07-25T00:00Z",
       "dataFi": "2026-07-26T17:59Z",
       "comentari": "La precipitació anirà acompanyada de tempesta i pedra petita.",
@@ -319,6 +213,152 @@
     },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-07-25T18:00Z",
+      "dataFi": "2026-07-26T17:59Z",
+      "comentari": "La precipitació anirà acompanyada de tempesta i pedra petita.",
+      "dies": [
+        {
+          "dia": "2026-07-25",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-26",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
       "dataInici": "2026-07-25T00:00Z",
       "dataFi": "2026-07-26T05:59Z",
@@ -448,11 +488,11 @@
       ]
     },
     {
-      "meteor": "Calor",
+      "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
-      "dataInici": "2026-07-25T06:00Z",
-      "dataFi": "2026-07-25T17:59Z",
-      "comentari": "",
+      "dataInici": "2026-07-25T00:00Z",
+      "dataFi": "2026-07-26T05:59Z",
+      "comentari": "La precipitació anirà acompanyada de tempesta i calamarsa o pedra petita.",
       "dies": [
         {
           "dia": "2026-07-25",
@@ -460,280 +500,83 @@
             {
               "zona": "Camp de Tarragona",
               "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor",
-      "estat": "Vigent",
-      "dataInici": "2026-07-25T06:00Z",
-      "dataFi": "2026-07-25T17:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-25",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor",
-      "estat": "Ampliat",
-      "dataInici": "2026-07-24T12:00Z",
-      "dataFi": "2026-07-25T17:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-24",
-          "afectacions": [
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-25",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor",
-      "estat": "Ampliat",
-      "dataInici": "2026-07-24T12:00Z",
-      "dataFi": "2026-07-25T17:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-24",
-          "afectacions": [
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-25",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor",
-      "estat": "Ampliat",
-      "dataInici": "2026-07-23T12:00Z",
-      "dataFi": "2026-07-25T17:59Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-07-23",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
+                "18-00"
               ]
             },
             {
               "zona": "Catalunya Central",
               "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "12-18"
+                "12-18",
+                "18-00"
               ]
             },
             {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
+              "zona": "Gironès i Pla de l'Estany",
               "nivell": "Groc",
               "probabilitat": "Probable",
-              "llindar": "Calor intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
               ]
             },
             {
-              "zona": "Plana de Lleida",
+              "zona": "Litoral Central",
               "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
               ]
             },
             {
-              "zona": "Plana de Lleida",
-              "nivell": "Taronja",
-              "probabilitat": "Prob 5",
-              "llindar": "Calor molt intensa",
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "12-18"
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
               ]
             },
             {
               "zona": "Prepirineu",
               "nivell": "Groc",
               "probabilitat": "Probable",
-              "llindar": "Calor intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "12-18"
+                "12-18",
+                "18-00"
               ]
             },
             {
-              "zona": "Serres de Prades i Montsant",
+              "zona": "Vallès",
               "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "nivell": "Taronja",
-              "probabilitat": "Segur",
-              "llindar": "Calor molt intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Taronja",
-              "probabilitat": "Prob 5",
-              "llindar": "Calor molt intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Terres de l'Ebre",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
               ]
@@ -741,58 +584,33 @@
           ]
         },
         {
-          "dia": "2026-07-24",
-          "afectacions": [
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-25",
+          "dia": "2026-07-26",
           "afectacions": [
             {
               "zona": "Camp de Tarragona",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "06-12",
-                "12-18"
+                "00-06"
               ]
             },
             {
-              "zona": "Terres de l'Ebre",
+              "zona": "Litoral Central",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "06-12",
-                "12-18"
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
               ]
             }
           ]
