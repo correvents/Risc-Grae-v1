@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-27T11:30:31.864Z",
+  "actualitzat": "2026-07-27T15:56:42.998Z",
   "plans": [
     {
       "plaicona": {
@@ -11,9 +11,20 @@
       "plaactivat": "SI",
       "fasedatahora": "10/07/2026 13:17",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607260956.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202607271338.pdf"
       },
       "descripcio": "INFOCAT Alerta "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "27/07/2026 17:53",
+      "descripcio": "Foc catenària Metro L1 entre Clot i Glòries.  - Transport viatgers ferrocarril"
     }
   ]
 }
