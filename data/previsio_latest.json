@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-27T15:56:39.409Z",
+  "dataConsulta": "2026-07-28T08:06:10.854Z",
   "avui": {
-    "data": "2026-07-27",
+    "data": "2026-07-28",
     "variables": {
-      "estatDelCel": "Cel serè en general, tot i que amb alguns intervals de núvols baixos a punts del nord del litoral central fins a migdia. A banda, fins al vespre hi haurà núvols d'evolució al Pirineu i a punts de muntanya del quadrant nord-est, que deixaran el cel mig ennuvolat.",
-      "precipitacions": "No es descarta algun ruixat feble i minso a punts de l'interior del quadrat nord-est fins al vespre.",
-      "temperatures": "La temperatura pujarà lleugerament o, localment de manera moderada.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Fins al final de la tarda s'imposarà el vent fluix amb cops moderats de component sud arreu, amb algun cop fort a la tarda al sud de Ponent i l'interior de les Terres de l'Ebre. Al final del dia el vent tornarà a quedar fluix i de direcció variable."
+      "estatDelCel": "Cel serè en general. Tot i això, de matinada i fins a mig matí són probables alguns intervals de núvols baixos al litoral i prelitoral sud i, de forma més local, a altres punts del litoral i de l'interior del quadrant nord-est; per altra banda, a partir del final del matí creixeran núvols d'evolució a punts de muntanya, que minvaran a partir del vespre.",
+      "precipitacions": "No es descarta algun ruixat feble i minso a punts de l'interior del quadrat nord-est durant la tarda.",
+      "temperatures": "La temperatura mínima serà similar al litoral i prelitoral central i lleugerament més alta a la resta del territori, tot i que a punts de la meitat oest podrà pujar moderadament. La màxima pujarà de forma lleugera, tot i que en alguns sectors serà moderadament més alta. Només a punts del litoral es mantindrà similar.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent en general, localment regular de matinada i al matí al litoral sud.",
+      "vent": "El vent serà fluix i de direcció variable de matinada i de nou al final del dia. La resta de la jornada predominarà el component sud fluix amb algun cop moderat, tot i que es reforçarà lleugerament al prelitoral sud i al sud de Ponent durant la tarda, on hi podrà haver algun cop fort."
     }
   },
   "dema": {
-    "data": "2026-07-28",
+    "data": "2026-07-29",
     "variables": {
-      "estatDelCel": "Cel serè en general. Tot i això, de matinada i fins a primera hora del matí són probables alguns intervals de núvols baixos al litoral i prelitoral sud i, de forma més local, a altres punts del litoral i de l'interior del quadrant nord-est; per altra banda, a partir del final del matí creixeran núvols d'evolució a punts de muntanya, que minvaran a partir del vespre.",
-      "precipitacions": "No es descarta algun ruixat feble i minso a punts de l'interior del quadrat nord-est durant la tarda.",
-      "temperatures": "La temperatura mínima serà similar al litoral i prelitoral central i lleugerament més alta a la resta del territori, tot i que a punts de la meitat oest podrà pujar moderadament. La màxima pujarà de forma lleugera, tot i que en alguns sectors serà moderada, tret de punts del litoral on es mantindrà similar.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent en general, localment regular de matinada i al matí al litoral sud.",
-      "vent": "El vent serà fluix i de direcció variable de matinada i de nou al final del dia. La resta de la jornada predominarà el component sud fluix amb cops moderats, per bé que es reforçarà lleugerament al prelitoral sud i al sud de Ponent durant la tarda, on hi podrà haver algun cop fort."
+      "estatDelCel": "Cel serè en general. Tot i això, al matí i de nou al final del dia són probables alguns núvols baixos al litoral sud, com també alguns núvols d'evolució diürna al Pirineu oriental.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura, tant la mínima com la màxima, pujarà de forma lleugera arreu, tot i que en alguns sectors ho farà de manera moderada. La màxima podrà arribar i fins i tot superar molt puntualment els 40 °C a sectors de Ponent.\n\n",
+      "visibilitat": "La visibilitat serà excel·lent en general, tret de punts del litoral nord i sud durant estones de la matinada, on serà bona.",
+      "vent": "El vent serà fluix i de direcció variable de matinada i de nou al final del dia. La resta de la jornada predominarà el component sud fluix amb cops moderats, per bé que es reforçarà lleugerament al prelitoral sud i, sobretot, al sud de Ponent durant la tarda, quan hi podrà haver algun cop fort."
     }
   }
 }
