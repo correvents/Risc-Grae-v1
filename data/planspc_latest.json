@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-07-29T08:10:36.860Z",
+  "actualitzat": "2026-07-29T10:43:57.681Z",
   "plans": [
     {
       "plaicona": {
@@ -24,6 +24,9 @@
       "plafase": "ALERTA",
       "plaactivat": "SI",
       "fasedatahora": "28/07/2026 19:21",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125681_ACTUALITZACIO--ACTIVAT_PROCICAT_202607291027.pdf"
+      },
       "descripcio": "Avís SMP Calor 29-31/07 - Calor"
     }
   ]
