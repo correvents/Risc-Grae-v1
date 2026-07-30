@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-07-30T07:57:18.218Z",
+  "dataConsulta": "2026-07-30T10:29:46.160Z",
   "avui": {
     "data": "2026-07-30",
     "variables": {
-      "estatDelCel": "Cel serè en general. Tot i això, fins a mig matí i de nou al final del dia hi haurà alguns núvols baixos a diferents sectors del litoral, sobretot al sud i a l'Empordà. A banda, creixeran alguns núvols d'evolució diürna al Pirineu oriental i de manera més aïllada a altres punts de l'interior del quadrant nord-est.",
+      "estatDelCel": "Cel serè en general. A banda, creixeran alguns núvols d'evolució diürna al Pirineu oriental i de manera més aïllada a altres punts de l'interior del quadrant nord-est i al final del dia hi haurà alguns intervals de núvols baixos al litoral sud.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura, tant mínima com màxima, serà semblant, tot i que en alguns sectors podrà ser lleugerament més alta. Amb tot, la màxima pujarà moderadament a l'extrem nord del quadrant nord-est. De nou, es podran arribar i, fins i tot superar, els 40 °C a punts de Ponent i a la Conca de Tremp.",
-      "visibilitat": "La visibilitat serà excel·lent en general, tret del litoral sud i l'Empordà, on serà bona durant la matinada i la nit, a causa dels estrats baixos.",
-      "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia. Al centre del dia bufarà de component sud entre fluix i moderat, més reforçat al litoral nord i a l'interior de les Terres de l'Ebre on bufarà amb cops forts durant la tarda. "
+      "temperatures": "La temperatura, tant mínima com màxima, serà semblant, tot i que en alguns sectors podrà ser lleugerament més alta. Amb tot, la màxima pujarà moderadament a l'extrem nord del quadrant nord-est. Es podrà arribar i, fins i tot superar, els 40 °C a punts de Ponent i a la Conca de Tremp.",
+      "visibilitat": "La visibilitat serà excel·lent en general, si bé empitjorarà a les cotes altes i mitjanes del Pirineu i Prepirineu, sobretot occidental a partir de mitja tarda a causa de l'augment de pols en suspensió.",
+      "vent": "Al matí bufarà de component sud entre fluix i moderat, més reforçat al litoral nord i a l'interior de les Terres de l'Ebre on bufarà amb cops forts durant la tarda. Al final del dia quedarà fluix i de direcció variable."
     }
   },
   "dema": {
     "data": "2026-07-31",
     "variables": {
-      "estatDelCel": "Fins a migdia dominarà l'ambient assolellat, tot i la circulació de bandes de núvols alts. A partir de llavors creixeran nuvolades al Pirineu i Prepirineu i n'arribaran per l'oest que acabaran per afectar arreu, deixant el cel entre mig i molt ennuvolat a la meitat oest i poc o mig ennuvolat a la resta. A banda, hi haurà intervals de núvols baixos als dos extrems del litoral fins a mig matí i de nou a partir del vespre quan seran més extensos.",
-      "precipitacions": "S'esperen ruixats i xàfecs a partir de migdia al Pirineu i Prepirineu, i en podran arribar al llarg de la tarda per l'oest de Catalunya. Seran d'intensitat entre feble i moderada, s'acumularan quantitats minses o poc abundants de precipitació i aniran acompanyats de tempesta, de fang i localment de fortes ratxes de vent i calamarsa o pedra.",
+      "estatDelCel": "Fins a migdia dominarà l'ambient assolellat, tot i la circulació de bandes de núvols alts i alguns de mitjans, sobretot al quadrant nord-oest. A partir de llavors creixeran nuvolades al Pirineu i Prepirineu i n'arribaran per l'oest que acabaran per afectar arreu, deixant el cel entre mig i molt ennuvolat a la meitat oest i poc o mig ennuvolat a la resta. A banda, hi haurà intervals de núvols baixos als dos extrems del litoral fins a mig matí i de nou a partir del vespre quan seran més extensos.",
+      "precipitacions": "S'esperen ruixats i xàfecs a partir de migdia al Pirineu i Prepirineu, i en podran arribar al llarg de la tarda per l'oest de Catalunya i afectar també a la Catalunya central. Seran d'intensitat entre feble i moderada, s'acumularan quantitats minses o poc abundants de precipitació i aniran acompanyats de tempesta, de fang i localment de fortes ratxes de vent i de calamarsa o pedra.",
       "temperatures": "La temperatura serà semblant, si bé en diferents sectors la màxima baixarà lleugerament. L'ambient serà molt calorós i amb xafogor durant la tarda, de nou els valors màxims es mouran entre els 38 i 40 °C a Ponent, sobretot al nord, i a la Conca de Tremp.",
-      "visibilitat": "La visibilitat serà bona en general, si bé tendirà a empitjorar a partir de migdia quan s'incrementarà la pols en suspensió, en especial a les cotes altes del Pirineu i Prepirineu.",
-      "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia. Al centre del dia bufarà de component sud entre fluix i moderat, més reforçat al litoral nord i a l'interior de les Terres de l'Ebre on bufarà amb cops forts durant la tarda. A banda, amb l'arribada de les tempestes per ponent, és possible alguna ratxa molt forta de vent a partir de mitja tarda, especialment al sud de la Plana de Lleida, com també en el quadrant nord-occidental."
+      "visibilitat": "La visibilitat serà bona o localment regular per la presència de pols en suspensió, en especial a les cotes altes i mitjanes del Pirineu i Prepirineu.",
+      "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia. Al centre del dia bufarà de component sud entre fluix i moderat, més reforçat al litoral nord i a l'interior de les Terres de l'Ebre on bufarà amb cops forts durant la tarda. A banda, amb l'arribada de les tempestes per ponent, és possible alguna ratxa forta o molt forta de vent a partir de mitja tarda, especialment al sud de la Plana de Lleida, com també en el quadrant nord-occidental."
     }
   }
 }
