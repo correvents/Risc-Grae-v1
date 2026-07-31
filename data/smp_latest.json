@@ -1,15 +1,15 @@
 {
-  "dataConsulta": "2026-07-30T15:27:49.672Z",
+  "dataConsulta": "2026-07-31T08:21:04.866Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
-      "dataInici": "2026-07-30T00:00Z",
-      "dataFi": "2026-07-30T05:59Z",
+      "dataInici": "2026-07-31T00:00Z",
+      "dataFi": "2026-08-01T05:59Z",
       "comentari": "",
       "dies": [
         {
-          "dia": "2026-07-30",
+          "dia": "2026-07-31",
           "afectacions": [
             {
               "zona": "Camp de Tarragona",
@@ -22,6 +22,15 @@
             },
             {
               "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Calor nocturna intensa",
@@ -57,18 +66,41 @@
               ]
             }
           ]
+        },
+        {
+          "dia": "2026-08-01",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
         }
       ]
     },
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
-      "dataInici": "2026-07-30T00:00Z",
-      "dataFi": "2026-07-30T05:59Z",
+      "dataInici": "2026-07-31T00:00Z",
+      "dataFi": "2026-07-31T05:59Z",
       "comentari": "",
       "dies": [
         {
-          "dia": "2026-07-30",
+          "dia": "2026-07-31",
           "afectacions": [
             {
               "zona": "Camp de Tarragona",
@@ -81,6 +113,15 @@
             },
             {
               "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Calor nocturna intensa",
@@ -122,15 +163,15 @@
     {
       "meteor": "Calor",
       "estat": "Ampliat",
-      "dataInici": "2026-07-30T12:00Z",
-      "dataFi": "2026-07-31T17:59Z",
-      "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és molt probable que es correspongui a una onada de calor.",
+      "dataInici": "2026-07-31T12:00Z",
+      "dataFi": "2026-08-01T17:59Z",
+      "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és probable que es correspongui a una onada de calor.",
       "dies": [
         {
-          "dia": "2026-07-30",
+          "dia": "2026-07-31",
           "afectacions": [
             {
-              "zona": "Catalunya Central",
+              "zona": "Pirineu Central",
               "nivell": "Groc",
               "probabilitat": "Probable",
               "llindar": "Calor intensa",
@@ -139,45 +180,9 @@
               ]
             },
             {
-              "zona": "Empordà",
+              "zona": "Pirineu Occidental",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Taronja",
-              "probabilitat": "Segur",
-              "llindar": "Calor molt intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Taronja",
-              "probabilitat": "Segur",
-              "llindar": "Calor molt intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
               "llindar": "Calor intensa",
               "periodes": [
                 "12-18"
@@ -186,25 +191,7 @@
             {
               "zona": "Plana de Lleida",
               "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
+              "probabilitat": "Probable",
               "llindar": "Calor intensa",
               "periodes": [
                 "12-18"
@@ -213,10 +200,10 @@
           ]
         },
         {
-          "dia": "2026-07-31",
+          "dia": "2026-08-01",
           "afectacions": [
             {
-              "zona": "Pirineu Central",
+              "zona": "Catalunya Central",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Calor intensa",
@@ -225,7 +212,7 @@
               ]
             },
             {
-              "zona": "Pirineu Occidental",
+              "zona": "Pirineu Central",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Calor intensa",
@@ -249,6 +236,61 @@
     {
       "meteor": "Calor",
       "estat": "Vigent",
+      "dataInici": "2026-07-31T12:00Z",
+      "dataFi": "2026-08-01T17:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-07-31",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-01",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor",
+      "estat": "Ampliat",
       "dataInici": "2026-07-30T12:00Z",
       "dataFi": "2026-08-01T17:59Z",
       "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és probable que es correspongui a una onada de calor.",
@@ -417,6 +459,133 @@
     {
       "meteor": "Calor",
       "estat": "Ampliat",
+      "dataInici": "2026-07-30T12:00Z",
+      "dataFi": "2026-07-31T17:59Z",
+      "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és molt probable que es correspongui a una onada de calor.",
+      "dies": [
+        {
+          "dia": "2026-07-30",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Calor molt intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Calor molt intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-07-31",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor",
+      "estat": "Ampliat",
       "dataInici": "2026-07-29T12:00Z",
       "dataFi": "2026-07-31T17:59Z",
       "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és molt probable que es correspongui a una onada de calor.",
@@ -786,133 +955,6 @@
               "zona": "Plana de Lleida",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Calor",
-      "estat": "Ampliat",
-      "dataInici": "2026-07-29T12:00Z",
-      "dataFi": "2026-07-30T17:59Z",
-      "comentari": "L'episodi s'allargarà com a mínim fins dimecres  5 d'agost i és molt probable que es correspongui a una onada de calor.",
-      "dies": [
-        {
-          "dia": "2026-07-29",
-          "afectacions": [
-            {
-              "zona": "Catalunya Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-07-30",
-          "afectacions": [
-            {
-              "zona": "Catalunya Central",
-              "nivell": "Groc",
-              "probabilitat": "Poc probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
-              "llindar": "Calor intensa",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "nivell": "Groc",
-              "probabilitat": "Probable",
               "llindar": "Calor intensa",
               "periodes": [
                 "12-18"
