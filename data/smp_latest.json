@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-07-31T10:44:28.769Z",
+  "dataConsulta": "2026-07-31T15:33:21.522Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
@@ -318,18 +318,18 @@
             },
             {
               "zona": "Pirineu Central",
-              "nivell": "Groc",
-              "probabilitat": "Molt probable",
-              "llindar": "Calor intensa",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Calor molt intensa",
               "periodes": [
                 "12-18"
               ]
             },
             {
               "zona": "Pirineu Central",
-              "nivell": "Taronja",
-              "probabilitat": "Segur",
-              "llindar": "Calor molt intensa",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Calor intensa",
               "periodes": [
                 "12-18"
               ]
