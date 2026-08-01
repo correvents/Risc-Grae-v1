@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-01T07:51:38.751Z",
+  "actualitzat": "2026-08-01T10:03:34.882Z",
   "plans": [
     {
       "plaicona": {
@@ -21,13 +21,27 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "31/07/2026 18:38",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "01/08/2026 10:17",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125839_INICI--NOACTIVAT_INUNCAT_202607311859.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125839_ACTUALITZACIO--ACTIVAT_INUNCAT_202608011039.pdf"
       },
-      "descripcio": "Prealerta INUNCAT per intensitat de pluja 01/08."
+      "descripcio": "Alerta INUNCAT per intensitat de pluja 01/08."
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "01/08/2026 11:40",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125881_INICI--ACTIVAT_PROCICAT_202608011156.pdf"
+      },
+      "descripcio": "Fuita Amoníac_Empresa Panamar Bakery Group - "
     }
   ]
 }
