@@ -1,50 +1,111 @@
 {
-  "dataConsulta": "2026-08-02T07:53:03.905Z",
+  "dataConsulta": "2026-08-02T10:01:45.017Z",
   "avisos": [
     {
-      "meteor": "Calor nocturna",
-      "estat": "Ampliat",
-      "dataInici": "2026-08-02T00:00Z",
-      "dataFi": "2026-08-02T05:59Z",
-      "comentari": "",
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-08-02T12:00Z",
+      "dataFi": "2026-08-03T23:59Z",
+      "comentari": "Els xàfecs seran aïllats i aniran acompanyats de tempesta i de calamarsa o pedra petita.",
       "dies": [
         {
           "dia": "2026-08-02",
           "afectacions": [
             {
-              "zona": "Camp de Tarragona",
+              "zona": "Pirineu Central",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "00-06"
+                "12-18"
               ]
             },
             {
-              "zona": "Litoral Central",
+              "zona": "Pirineu Occidental",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "00-06"
+                "12-18"
               ]
             },
             {
-              "zona": "Penedès",
+              "zona": "Pirineu Oriental",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "00-06"
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-03",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
               ]
             },
             {
               "zona": "Terres de l'Ebre",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
-              "llindar": "Calor nocturna intensa",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
-                "00-06"
+                "12-18"
               ]
             }
           ]
@@ -53,7 +114,7 @@
     },
     {
       "meteor": "Calor nocturna",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-08-02T00:00Z",
       "dataFi": "2026-08-03T05:59Z",
       "comentari": "",
@@ -104,6 +165,56 @@
           "afectacions": [
             {
               "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor nocturna",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-02T00:00Z",
+      "dataFi": "2026-08-02T05:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-08-02",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Calor nocturna intensa",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
               "nivell": "Groc",
               "probabilitat": "Poc probable",
               "llindar": "Calor nocturna intensa",
