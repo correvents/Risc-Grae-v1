@@ -5918,11 +5918,14 @@
     // perquè no es confongui amb el web operatiu.
     function marcarWebDeProves() {
       if (!location.pathname.includes('/proves/')) return;
+      // Fons verd a tota la pàgina: d'un cop d'ull ja es veu que no és l'operativa
+      document.body.style.background = '#e3f2e3';
       const avis = document.createElement('div');
-      avis.style.cssText = 'background:#ff9800;color:#3e2723;padding:0.5rem 1rem;border-radius:6px;' +
-        'margin-bottom:1rem;font-size:0.85rem;font-weight:600;text-align:center;';
-      avis.innerHTML = '🧪 Banc de proves — aquesta còpia surt de la branca <code>proves</code>. ' +
-        'El web operatiu és <a href="../" style="color:#3e2723;">aquí</a>.';
+      avis.style.cssText = 'background:#2e7d32;color:#fff;padding:0.6rem 1rem;border-radius:6px;' +
+        'margin-bottom:1rem;font-size:0.9rem;font-weight:700;text-align:center;';
+      avis.innerHTML = '🧪 WEB DE PROVES — branca <code style="background:rgba(255,255,255,0.2);' +
+        'padding:0 0.25rem;border-radius:3px;">proves</code>. Els canvis d\'aquí no són els que veu la gent. ' +
+        '<a href="../" style="color:#fff;">Anar al web operatiu →</a>';
       const cont = document.querySelector('.container');
       if (cont) cont.insertBefore(avis, cont.firstChild);
       document.title = '🧪 PROVES — ' + document.title;

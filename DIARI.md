@@ -14,6 +14,10 @@ Fins ara l'única manera de veure un canvi era fusionar-lo a `main`, és a dir, 
 
 **Fet:** workflow `pages.yml` que publica `main` a l'arrel i la branca `proves` a `/proves/`. La còpia de proves mostra un avís taronja i porta `🧪 PROVES` al títol (`marcarWebDeProves()`), per no confondre-les.
 
+La còpia de proves es distingeix amb **fons verd**, una franja verda a dalt i `🧪 PROVES` al títol de la pestanya.
+
+**Norma de treball a partir d'ara:** tot canvi va primer a `proves`, es mira funcionant a `/proves/` i només després es porta a `main`.
+
 **Compte:** els dos webs comparteixen dades. `data/*.json` i Supabase són els mateixos, així que provar-hi coses que escriguin a Supabase toca les taules de veritat.
 
 **Cal fer un cop a mà:** Settings → Pages → Source = "GitHub Actions". Fins que no es faci, el web es continua publicant com abans i el workflow falla al pas de desplegar.
