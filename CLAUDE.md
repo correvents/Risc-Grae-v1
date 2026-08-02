@@ -54,6 +54,14 @@ Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet vo
 - Si no hi ha coordenades o falla la xarxa, **no es penalitza** (`ok: true`).
 - Hi ha cau (`operativitatCache`, `meteoVolCache`); si canvies dades d'helis, crida `invalidarOperativitat()`.
 
+## Dos webs: operatiu i proves
+
+`pages.yml` publica `main` a l'arrel i la branca `proves` a `/proves/`. Els dos webs comparteixen dades (`data/*.json` i Supabase): la còpia de proves **no** és un entorn aïllat, i si hi guardes coses a Supabase les escrius a les taules de veritat. Tingues-ho present abans de provar-hi res que escrigui.
+
+`marcarWebDeProves()` (a `index.html`) detecta `/proves/` a la ruta i hi posa l'avís taronja. Si algun dia es canvia la ruta de publicació, cal tocar aquesta funció.
+
+Flux per a canvis d'interfície: branca `proves` → mirar-ho a `/proves/` → portar-ho a `main`.
+
 ## Convencions
 
 - **Codi**: JS pla, sense frameworks ni dependències. Node 20+ (`fetch` natiu). Als scripts, els helpers compartits van a `scripts/utils.js`.

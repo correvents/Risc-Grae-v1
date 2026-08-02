@@ -1,0 +1,68 @@
+name: Publicar web
+
+# Publica dues versions del mateix web:
+#   arrel     → branca main    (operatiu)
+#   /proves/  → branca proves  (banc de proves)
+#
+# Requereix Settings → Pages → Source = "GitHub Actions".
+
+on:
+  push:
+    branches: [main, proves]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un desplegament a la vegada; no cancel·lar els que ja corren
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.desplegar.outputs.page_url }}
+
+    steps:
+      - name: Web operatiu (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+
+      - name: Comprovar si existeix la branca proves
+        id: proves
+        run: |
+          if git ls-remote --exit-code --heads "${{ github.server_url }}/${{ github.repository }}.git" proves >/dev/null 2>&1; then
+            echo "existeix=true" >> $GITHUB_OUTPUT
+          else
+            echo "existeix=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No hi ha branca proves: només es publica el web operatiu."
+          fi
+
+      - name: Web de proves (branca proves)
+        if: steps.proves.outputs.existeix == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: proves
+          path: site/proves
+
+      - name: Treure el que no s'ha de publicar
+        run: rm -rf site/.git site/.github site/proves/.git site/proves/.github site/proves/proves
+
+      - name: Preparar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Pujar el web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Desplegar
+        id: desplegar
+        uses: actions/deploy-pages@v4

@@ -4,7 +4,8 @@ Quadre de comandament per valorar el **risc operacional diari dels GRAE** (Grup 
 
 L'aplicació agrega diàriament avisos meteorològics, butlletins d'allaus, plans de protecció civil i previsió, en calcula un índex de risc de 0 a 6 i el mostra en una interfície web estàtica.
 
-- **Aplicació:** https://correvents.github.io/Risc-Grae-v1
+- **Aplicació (operativa):** https://correvents.github.io/Risc-Grae-v1
+- **Banc de proves:** https://correvents.github.io/Risc-Grae-v1/proves/
 - **Mapa territorial:** https://correvents.github.io/Risc-Grae-v1/mapa.html
 
 ## Com funciona
@@ -81,6 +82,21 @@ Si per al dia en curs ja hi ha una entrada a `risc_historic` amb una `font` dife
 **`risc_diari.yml` — Risc diari GRAE**
 
 - Horari (UTC): `0 21`. També es pot llançar manualment.
+
+**`pages.yml` — Publicar web**
+
+Publica dues versions del mateix web a GitHub Pages:
+
+| URL | Branca | Ús |
+| --- | --- | --- |
+| `/Risc-Grae-v1/` | `main` | Versió operativa |
+| `/Risc-Grae-v1/proves/` | `proves` | Banc de proves |
+
+S'executa a cada push a `main` o a `proves`. La còpia de proves mostra un avís taronja a dalt i porta `🧪 PROVES` al títol de la pestanya, per no confondre-la amb l'operativa. Llegeix les mateixes dades que l'operativa (`data/*.json` i Supabase són compartits).
+
+Perquè funcioni cal tenir **Settings → Pages → Source = "GitHub Actions"**. Si la branca `proves` no existeix, el workflow publica només la versió operativa.
+
+Per provar un canvi: puja'l a la branca `proves`, mira'l a `/proves/` i, quan et convenci, porta'l a `main`.
 
 ### Secrets necessaris
 

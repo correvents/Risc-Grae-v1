@@ -5914,6 +5914,21 @@
       } catch(_) {}
     }
 
+    // Avís quan s'obre la còpia de proves (publicada a /proves/ des de la branca `proves`),
+    // perquè no es confongui amb el web operatiu.
+    function marcarWebDeProves() {
+      if (!location.pathname.includes('/proves/')) return;
+      const avis = document.createElement('div');
+      avis.style.cssText = 'background:#ff9800;color:#3e2723;padding:0.5rem 1rem;border-radius:6px;' +
+        'margin-bottom:1rem;font-size:0.85rem;font-weight:600;text-align:center;';
+      avis.innerHTML = '🧪 Banc de proves — aquesta còpia surt de la branca <code>proves</code>. ' +
+        'El web operatiu és <a href="../" style="color:#3e2723;">aquí</a>.';
+      const cont = document.querySelector('.container');
+      if (cont) cont.insertBefore(avis, cont.firstChild);
+      document.title = '🧪 PROVES — ' + document.title;
+    }
+    marcarWebDeProves();
+
     // Carregar tot al iniciar
     carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
     carregarRiscConfig().then(() => renderRisc());  // Config de Supabase primer, després renderitza risc

@@ -8,6 +8,16 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-02 — Web de proves separat de l'operatiu
+
+Fins ara l'única manera de veure un canvi era fusionar-lo a `main`, és a dir, publicar-lo directament al web operatiu.
+
+**Fet:** workflow `pages.yml` que publica `main` a l'arrel i la branca `proves` a `/proves/`. La còpia de proves mostra un avís taronja i porta `🧪 PROVES` al títol (`marcarWebDeProves()`), per no confondre-les.
+
+**Compte:** els dos webs comparteixen dades. `data/*.json` i Supabase són els mateixos, així que provar-hi coses que escriguin a Supabase toca les taules de veritat.
+
+**Cal fer un cop a mà:** Settings → Pages → Source = "GitHub Actions". Fins que no es faci, el web es continua publicant com abans i el workflow falla al pas de desplegar.
+
 ## 2026-08-02 — Les caselles de la fórmula de risc no feien res
 
 Reportat: a Configuració → Fórmula de risc hi ha una casella per desactivar cada factor, però desactivar-ne un no canviava el risc.
