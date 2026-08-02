@@ -4264,11 +4264,14 @@
         const opTeDades = !!opDetall && totHelis != null && nHelis != null;
         const opPts = (opActiu && opTeDades) ? puntsOperativitat(nHelis) : 0;
         const opBaixes = opTeDades ? opDetall.filter(d => !d.operatiu) : [];
-        const opMotiuTxt = !opActiu ? 'desactivat'
+        const opMotiuTxt = !opActiu ? '—'
           : !opTeDades ? 'sense dades'
           : opBaixes.length ? opBaixes.map(d => `${d.nom}: ${d.motiu}`).join(' · ')
           : 'Tots operatius';
         const opValorTxt = opTeDades ? `${nHelis}/${totHelis}` : '—';
+        // Un factor desactivat no suma: el desglossament ho ha de deixar veure
+        const fOff  = on => on ? '' : 'opacity:0.45;';
+        const fMarca = on => on ? '' : ' <span style="font-size:0.6rem;color:#999;font-weight:400;">desactivat</span>';
         
         cardsHtml += `
           <div class="risc-card ${dayKey}">
@@ -4288,28 +4291,28 @@
             </div>
             <div class="risc-breakdown">
               <div class="risc-breakdown-title">Desglossament</div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">⚠️ Alertes SMP</span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
+                <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.smp||0)}/6</span>
               </div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">❄️ Risc allaus</span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu)}">
+                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.allaus||0)>=4?'background:#ffebee;color:#c62828':((dia.allaus||0)>=3?'background:#fff3e0;color:#e65100':((dia.allaus||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(dia.allaus||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5</span>
               </div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">📅 Afluència</span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
+                <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.afluencia||0)}/3</span>
               </div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">🚁 Operativitat</span>
+              <div class="risc-breakdown-item" style="${fOff(opActiu)}">
+                <span class="risc-breakdown-label">🚁 Operativitat${fMarca(opActiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(opMotiuTxt)}${opPts>0?` · +${opPts}`:''}</span>
                 <span class="risc-breakdown-value">${opValorTxt} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
               </div>
-              <div class="risc-breakdown-item">
-                <span class="risc-breakdown-label">🌦️ Canvi temps</span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
+                <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2</span>
               </div>
@@ -4933,8 +4936,9 @@
       const cont = document.getElementById('formula-taula');
       if (!cont) return;
       const F = riscFormula;
-      const chk = on => on ? 'checked' : '';
-      const num = (id, val) => `<input type="number" step="0.5" value="${val}" id="${id}" style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;">`;
+      // Els canvis s'apliquen a l'instant (onchange), sense haver de prémer Guardar
+      const chk = (on, id) => `<input type="checkbox" id="${id}" ${on ? 'checked' : ''} onchange="aplicarFormulaConfig()">`;
+      const num = (id, val) => `<input type="number" step="0.5" value="${val}" id="${id}" onchange="aplicarFormulaConfig()" style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;">`;
       const tdL = 'padding:0.5rem;border-bottom:1px solid #f0f0f0;';
       cont.innerHTML = `
         <div style="overflow-x:auto;">
@@ -4949,17 +4953,17 @@
           <tbody>
             <tr>
               <td style="${tdL}">⚠️ <strong>SMP</strong></td>
-              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-smp-actiu" ${chk(F.smp.actiu)}></td>
+              <td style="${tdL}text-align:center;">${chk(F.smp.actiu, 'f-smp-actiu')}</td>
               <td style="${tdL}color:#666;">Suma el seu valor (0–6)</td>
             </tr>
             <tr>
               <td style="${tdL}">📅 <strong>Afluència</strong></td>
-              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-afluencia-actiu" ${chk(F.afluencia.actiu)}></td>
+              <td style="${tdL}text-align:center;">${chk(F.afluencia.actiu, 'f-afluencia-actiu')}</td>
               <td style="${tdL}color:#666;">Suma el seu valor (0–3)</td>
             </tr>
             <tr>
               <td style="${tdL}">🚁 <strong>Operativitat</strong></td>
-              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-operativitat-actiu" ${chk(F.operativitat.actiu)}></td>
+              <td style="${tdL}text-align:center;">${chk(F.operativitat.actiu, 'f-operativitat-actiu')}</td>
               <td style="${tdL}color:#666;">
                 Segons HC operatius que poden volar (2+ → 0):
                 <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
@@ -4972,7 +4976,7 @@
             </tr>
             <tr>
               <td style="${tdL}">❄️ <strong>Risc allaus</strong></td>
-              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-allaus-actiu" ${chk(F.allaus.actiu)}></td>
+              <td style="${tdL}text-align:center;">${chk(F.allaus.actiu, 'f-allaus-actiu')}</td>
               <td style="${tdL}color:#666;">
                 Segons nivell BPA (nivells 1–2 → 0):
                 <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
@@ -4984,7 +4988,7 @@
             </tr>
             <tr>
               <td style="${tdL}">🌦️ <strong>Canvi de temps</strong></td>
-              <td style="${tdL}text-align:center;"><input type="checkbox" id="f-canvi-actiu" ${chk(F.canvi.actiu)}></td>
+              <td style="${tdL}text-align:center;">${chk(F.canvi.actiu, 'f-canvi-actiu')}</td>
               <td style="${tdL}color:#666;">Suma el seu valor (0–2)</td>
             </tr>
             <tr style="opacity:0.55;">
@@ -5002,7 +5006,9 @@
         </div>`;
     }
 
-    function guardarFormulaConfig(btn) {
+    // Llegeix la taula i aplica els canvis a l'instant. No refà la taula: si ho fes,
+    // l'usuari perdria el focus mentre escriu als camps de punts.
+    function aplicarFormulaConfig() {
       const gv = id => { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; };
       const gc = id => { const el = document.getElementById(id); return el ? el.checked : true; };
       riscFormula = {
@@ -5013,6 +5019,10 @@
         canvi:        { actiu: gc('f-canvi-actiu') },
       };
       guardarRiscFormula();
+    }
+
+    function guardarFormulaConfig(btn) {
+      aplicarFormulaConfig();
       renderFormulaTaula();
       if (btn) { const t = btn.textContent; btn.textContent = '✅ Guardat'; setTimeout(() => { btn.textContent = t; }, 1500); }
     }
@@ -5061,6 +5071,8 @@
             <p style="font-size:0.82rem;color:#555;margin:0 0 1rem;">
               El valor de risc que surt a la pàgina principal = <strong>suma dels factors actius</strong>.
               Activa o para cada factor i ajusta els punts que suma. No hi ha límit superior.
+              <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
+              Un factor desactivat surt atenuat al desglossament del risc.
               <br><strong>Plans PC</strong> i <strong>Boletaires</strong> són només informatius (no sumen).
             </p>
             <div id="formula-taula"></div>
