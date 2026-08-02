@@ -12,9 +12,9 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 Fins ara l'única manera de veure un canvi era fusionar-lo a `main`, és a dir, publicar-lo directament al web operatiu.
 
-**Fet:** workflow `pages.yml` que publica `main` a l'arrel i la branca `proves` a `/proves/`. La còpia de proves mostra un avís taronja i porta `🧪 PROVES` al títol (`marcarWebDeProves()`), per no confondre-les.
+**Fet:** workflow `pages.yml` que publica `main` a l'arrel i la branca `proves` a `/proves/`.
 
-La còpia de proves es distingeix amb **fons verd**, una franja verda a dalt i `🧪 PROVES` al títol de la pestanya.
+La còpia de proves es distingeix sola (`marcarWebDeProves()`): **fons verd**, franja verda a dalt i `🧪 PROVES` al títol de la pestanya.
 
 **Norma de treball a partir d'ara:** tot canvi va primer a `proves`, es mira funcionant a `/proves/` i només després es porta a `main`.
 
