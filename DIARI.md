@@ -8,6 +8,20 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-02 — Les caselles de la fórmula de risc no feien res
+
+Reportat: a Configuració → Fórmula de risc hi ha una casella per desactivar cada factor, però desactivar-ne un no canviava el risc.
+
+**Causa:** les caselles només s'aplicaven en prémer el botó "Guardar". Qui desmarcava un factor i tornava enrere amb "← Tornar" veia el mateix número, i la casella tornava a sortir marcada. La fórmula (`calcularRisc`) sempre havia estat correcta.
+
+**Fet:**
+
+- Les caselles i els camps de punts s'apliquen i es desen en canviar-los (`aplicarFormulaConfig`); el botó Guardar es manté i només confirma.
+- L'aplicació automàtica no refà la taula: si ho fes, es perdria el focus mentre s'escriu als camps de punts.
+- Al desglossament de cada dia, els factors desactivats surten atenuats i marcats com a "desactivat" — abans no hi havia cap pista visual de per què no sumaven.
+
+Comprovat amb Playwright sobre l'app servida en local: amb SMP 3 i allaus 4, el risc passa de 9 a 4 en desmarcar aquests dos factors sense prémer Guardar, es manté després de recarregar, i "Valors per defecte" el torna a 9.
+
 ## 2026-07-27 — Documentació del projecte
 
 El repositori no tenia cap documentació. S'hi afegeix:
