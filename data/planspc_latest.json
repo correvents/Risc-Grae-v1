@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-08-03T08:51:05.460Z",
+  "actualitzat": "2026-08-03T11:31:35.966Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "10/07/2026 13:17",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202608021159.pdf"
-      },
-      "descripcio": "INFOCAT Alerta "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
@@ -25,7 +11,7 @@
       "plaactivat": "NO",
       "fasedatahora": "02/08/2026 17:58",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125912_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608021903.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125912_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608031100.pdf"
       },
       "descripcio": "Avís intensitat pluja 30' de 14h a 20h - "
     }
