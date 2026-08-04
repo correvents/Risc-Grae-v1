@@ -1,19 +1,19 @@
 {
-  "actualitzat": "2026-08-03T15:58:58.615Z",
+  "actualitzat": "2026-08-04T08:09:37.139Z",
   "plans": [
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
       },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
       "plafase": "ALERTA",
       "plaactivat": "SI",
-      "fasedatahora": "03/08/2026 14:22",
+      "fasedatahora": "04/08/2026 09:40",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-124785_ACTUALITZACIO--ACTIVAT_INFOCAT_202608031754.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125990_INICI--ACTIVAT_PROCICAT_202608040959.pdf"
       },
-      "descripcio": "GENERIC INFOCAT - "
+      "descripcio": "Caiguda 112 (Telef supervisió 112 638 68 73 00) - "
     },
     {
       "plaicona": {
@@ -24,6 +24,9 @@
       "plafase": "ALERTA",
       "plaactivat": "SI",
       "fasedatahora": "03/08/2026 17:57",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125912_ACTUALITZACIO--ACTIVAT_INUNCAT_202608031851.pdf"
+      },
       "descripcio": "Avís intensitat pluja 30' de 14h a 20h - "
     }
   ]
