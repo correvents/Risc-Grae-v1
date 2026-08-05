@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-08-04T15:41:35.063Z",
+  "dataConsulta": "2026-08-05T08:08:27.993Z",
   "avui": {
-    "data": "2026-08-04",
-    "variables": {
-      "estatDelCel": "Dominarà l'ambient assolellat, si bé circularan algunes bandes de núvols alts d'oest a est fins a mig matí i hi haurà intervals de núvols baixos al litoral sud. A banda, a partir de mig matí creixeran nuvolades al Pirineu i Prepirineu, sobretot al sector oriental, i de més aïllades al prelitoral i altres zones del nord-est que deixaran el cel molt ennuvolat en aquests sectors.\n",
-      "precipitacions": "A partir de migdia s'esperen xàfecs entre febles i moderats, si bé localment seran forts al prelitoral, a la Catalunya Central i al Pirineu i Prepirineu, sobretot al sector oriental, i en són possibles d'aïllats a altres sectors del quadrant nord-oest a partir de mitja tarda. Els xàfecs aniran acompanyats de tempesta i no es descarta de fenòmens de temps violent, especialment pedra. L'acumulació serà entre minsa i poc abundant, puntualment abundant o molt abundant al quadrant nord-est i punts del prelitoral. ",
-      "temperatures": "La temperatura màxima serà similar o pujarà lleugerament.",
-      "visibilitat": "La visibilitat serà bona. A partir de la tarda tendirà a empitjorar en moment de ruixat i quedarà transitòriament dolenta.",
-      "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia, amb predomini del component est al litoral. La resta del jorn bufarà de component sud i est fluix amb cops moderats al litoral i prelitoral, mentre que a la resta bufarà de components sud i oest fluix. Tot i això, també n'acabarà arribant el sud-est a partir de mitja tarda."
-    }
-  },
-  "dema": {
     "data": "2026-08-05",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat, tot i que durant el matí hi haurà alguns intervals de núvols baixos a punts del terç sud. A la tarda creixeran nuvolades a punts de muntanya de l'interior, sobretot de l'extrem nord i al massís del Port, que deixaran el cel molt ennuvolat en aquests sectors.",
       "precipitacions": "A la tarda s'espera precipitació en forma de xàfec al Pirineu, i a punts del Prepirineu, sobretot al sector oriental. És probable que també afectin altres punts de l'interior del nord-est, i és possible el sector del Port. Seran d'intensitat entre feble i moderada, i s'acumularan quantitats de precipitació entre minses i poc abundants, si bé podran ser localment abundants al Pirineu Oriental. Aniran acompanyats de tempesta i localment de calamarsa.",
-      "temperatures": "La temperatura mínima serà semblant o lleugerament més alta. Per altra banda, la màxima serà semblant, si bé pujarà lleugerament al litoral i prelitoral.",
-      "visibilitat": "La visibilitat serà bona. A partir de mitja tarda, tendirà a empitjorar en moments de ruixat i podrà ser localment dolenta.",
+      "temperatures": "La temperatura màxima serà semblant, si bé pujarà lleugerament al litoral i prelitoral.",
+      "visibilitat": "La visibilitat serà bona. A partir de mitja tarda, tendirà a empitjorar en moments de ruixat i podrà ser localment dolenta. Fins a primera hora del matí hi haurà boirines a punts de la Catalunya central. ",
       "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia, amb terral al litoral. La resta del jorn bufarà de component sud, fluix amb cops moderats. Independentment, al nord de l'Empordà bufarà la tramuntana moderada amb alguns cops forts fins al final del matí."
+    }
+  },
+  "dema": {
+    "data": "2026-08-06",
+    "variables": {
+      "estatDelCel": "La nuvolositat augmentarà i tendirà a deixar el cel mig o molt ennuvolat. A partir del final del matí creixeran nuvolades que deixaran el cel molt ennuvolat, sobretot en zones de muntanya i àrees pròximes. ",
+      "precipitacions": "Fins a mig matí és probable precipitació a punts del terç oest del país. A partir de llavors s'esperen xàfecs extensos a qualsevol punt del país essent menys probables al terç sud. La precipitació serà  entre feble i moderada, i forta a la zona avisada. Pot anar acompanyada de tempesta i pedra. S'acumularan quantitats entre minses i poc abundants en general, i localment abundants (fins a 50 mm) o molt abundants (més de 50 mm) a punts de l'interior de la meitat nord del país.",
+      "temperatures": "La temperatura mínima serà similar en general, tret del Pirineu on baixarà lleugerament i es podria donar al final de la jornada. Tot i això, a Ponent i el terç sud pujarà lleugerament.\nLa temperatura màxima baixarà entre lleugerament i moderadament. ",
+      "visibilitat": "La visibilitat serà bona en general, i regular o dolenta en moments de xàfec. ",
+      "vent": "Fins a primera hora del matí el vent bufarà fluix i variable amb predomini de terral. A partir de llavors s'imposarà el vent de component sud entre fluix i moderat, amb algun cop fort en moments de tempesta.  \nIndependentment, fins a migdia bufarà tramuntana entre fluixa i moderada al nord de la Costa Brava. "
     }
   }
 }
