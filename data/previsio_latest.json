@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-08-05T08:08:27.993Z",
+  "dataConsulta": "2026-08-05T10:41:33.785Z",
   "avui": {
     "data": "2026-08-05",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat, tot i que durant el matí hi haurà alguns intervals de núvols baixos a punts del terç sud. A la tarda creixeran nuvolades a punts de muntanya de l'interior, sobretot de l'extrem nord i al massís del Port, que deixaran el cel molt ennuvolat en aquests sectors.",
-      "precipitacions": "A la tarda s'espera precipitació en forma de xàfec al Pirineu, i a punts del Prepirineu, sobretot al sector oriental. És probable que també afectin altres punts de l'interior del nord-est, i és possible el sector del Port. Seran d'intensitat entre feble i moderada, i s'acumularan quantitats de precipitació entre minses i poc abundants, si bé podran ser localment abundants al Pirineu Oriental. Aniran acompanyats de tempesta i localment de calamarsa.",
+      "estatDelCel": "Cel serè. A la tarda creixeran nuvolades a punts de muntanya de l'interior, sobretot de l'extrem nord i al massís del Port, que deixaran el cel molt ennuvolat en aquests sectors.",
+      "precipitacions": "A la tarda s'espera precipitació en forma de xàfec al Pirineu, i a punts del Prepirineu, sobretot al sector oriental. És possible que també afectin altres punts de l'interior del nord-est, i al sector del Port. Seran d'intensitat entre feble i moderada, i s'acumularan quantitats de precipitació entre minses i poc abundants, si bé podran ser localment abundants al Pirineu Oriental. Aniran acompanyats de tempesta i localment de calamarsa o pedra.",
       "temperatures": "La temperatura màxima serà semblant, si bé pujarà lleugerament al litoral i prelitoral.",
-      "visibilitat": "La visibilitat serà bona. A partir de mitja tarda, tendirà a empitjorar en moments de ruixat i podrà ser localment dolenta. Fins a primera hora del matí hi haurà boirines a punts de la Catalunya central. ",
-      "vent": "El vent serà fluix i de direcció variable fins a mig matí i de nou al final del dia, amb terral al litoral. La resta del jorn bufarà de component sud, fluix amb cops moderats. Independentment, al nord de l'Empordà bufarà la tramuntana moderada amb alguns cops forts fins al final del matí."
+      "visibilitat": "La visibilitat serà bona. A partir de mitja tarda, tendirà a empitjorar en moments de ruixat i podrà ser localment dolenta.",
+      "vent": "S'imposarà el vent de component sud, fluix amb cops moderats. Independentment, al nord de l'Empordà bufarà la tramuntana moderada amb alguns cops forts fins al migdia.\nEl vent quedarà fluix i de direcció variable al final del dia."
     }
   },
   "dema": {
     "data": "2026-08-06",
     "variables": {
-      "estatDelCel": "La nuvolositat augmentarà i tendirà a deixar el cel mig o molt ennuvolat. A partir del final del matí creixeran nuvolades que deixaran el cel molt ennuvolat, sobretot en zones de muntanya i àrees pròximes. ",
-      "precipitacions": "Fins a mig matí és probable precipitació a punts del terç oest del país. A partir de llavors s'esperen xàfecs extensos a qualsevol punt del país essent menys probables al terç sud. La precipitació serà  entre feble i moderada, i forta a la zona avisada. Pot anar acompanyada de tempesta i pedra. S'acumularan quantitats entre minses i poc abundants en general, i localment abundants (fins a 50 mm) o molt abundants (més de 50 mm) a punts de l'interior de la meitat nord del país.",
-      "temperatures": "La temperatura mínima serà similar en general, tret del Pirineu on baixarà lleugerament i es podria donar al final de la jornada. Tot i això, a Ponent i el terç sud pujarà lleugerament.\nLa temperatura màxima baixarà entre lleugerament i moderadament. ",
+      "estatDelCel": "Inici del dia amb alguns intervals de núvols a les Terres de l'Ebre i a punts del Pirineu occidental. A partir del final del matí creixeran núvols de desenvolupament vertical que deixaran el cel entre molt ennuvolat i cobert, inicialment a la meitat nord i posteriorment a la meitat sud.",
+      "precipitacions": "Fins a mig matí no es descarta alguna precipitació feble a punts del terç oest del país. A partir de llavors s'esperen xàfecs extensos i intensos a qualsevol punt del país, essent menys probables a la Costa Brava i al Delta de l'Ebre. Durant l'inici de la tarda afectaran preferentment la meitat nord i est del país, i a partir de mitja tarda i vespre es desplaçaran a la meitat sud i oest.\nLa precipitació serà entre feble i moderada, si bé podrà ser entre forta i torrencial a la zona avisada. Anirà acompanyada de tempesta i localment de fenòmens de temps violent, especialment de ratxes molt fortes de vent i pedra. \nS'acumularan quantitats entre minses i poc abundants en general, i localment abundants (fins a 50 mm) o molt abundants (més de 50 mm) a punts de l'interior del país.",
+      "temperatures": "La temperatura mínima serà similar en general, tret del Pirineu on baixarà lleugerament i es podria donar al final de la jornada. Tot i això, al terç sud i l'Alt Empordà pujarà lleugerament. No obstant això, en alguns casos la mínima es donarà a mitja tarda amb l'arribada de les tempestes.\nLa temperatura màxima baixarà entre lleugerament i moderadament. ",
       "visibilitat": "La visibilitat serà bona en general, i regular o dolenta en moments de xàfec. ",
-      "vent": "Fins a primera hora del matí el vent bufarà fluix i variable amb predomini de terral. A partir de llavors s'imposarà el vent de component sud entre fluix i moderat, amb algun cop fort en moments de tempesta.  \nIndependentment, fins a migdia bufarà tramuntana entre fluixa i moderada al nord de la Costa Brava. "
+      "vent": "Fins a primera hora del matí el vent bufarà fluix i variable, amb predomini de terral al sector central del litoral. A partir de llavors s'imposarà el vent de component sud entre fluix i moderat. Així i tot, en moments de tempesta el vent serà ratxejat i hi haurà cops molt forts.  \nIndependentment, fins a migdia bufarà tramuntana entre fluixa i moderada al nord de la Costa Brava. "
     }
   }
 }
