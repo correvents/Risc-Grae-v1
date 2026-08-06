@@ -1,6 +1,1171 @@
 {
-  "dataConsulta": "2026-08-05T15:33:54.212Z",
+  "dataConsulta": "2026-08-06T08:06:51.952Z",
   "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 3 hores",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-06T12:00Z",
+      "dataFi": "2026-08-06T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot de ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 3 hores",
+      "estat": "Vigent",
+      "dataInici": "2026-08-06T12:00Z",
+      "dataFi": "2026-08-06T23:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot de ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 90 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 90 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 90 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 3 hores",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-06T12:00Z",
+      "dataFi": "2026-08-06T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot de ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-06T12:00Z",
+      "dataFi": "2026-08-07T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-07",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-08-06T06:00Z",
+      "dataFi": "2026-08-08T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-07",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-08",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-06T12:00Z",
+      "dataFi": "2026-08-07T17:59Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent, sobretot ratxes molt fortes de vent i pedra.",
+      "dies": [
+        {
+          "dia": "2026-08-06",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "nivell": "Groc",
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "nivell": "Taronja",
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-07",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "nivell": "Groc",
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
