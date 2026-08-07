@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-07T09:04:52.648Z",
+  "actualitzat": "2026-08-07T14:28:56.156Z",
   "plans": [
     {
       "plaicona": {
@@ -7,11 +7,11 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "07/08/2026 08:16",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "07/08/2026 12:03",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125912_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608070905.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125912_ACTUALITZACIO--ACTIVAT_INUNCAT_202608071221.pdf"
       },
       "descripcio": "00_Avís intensitat pluja fins el 07/08  - "
     }
