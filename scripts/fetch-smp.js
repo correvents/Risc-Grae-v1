@@ -1,4 +1,4 @@
-const { supabaseInsert, readJSON, writeJSON, nomComarca } = require('./utils');
+const { supabaseInsert, readJSON, writeJSON, nomComarca, COMARQUES } = require('./utils');
 
 const API_KEY = process.env.METEOCAT_API_KEY;
 const FORCE = process.env.FORCE === 'true';
@@ -47,8 +47,9 @@ function afegirAfectacio(diesMap, diaISO, afectacio, nomPeriode) {
   const periodes = nomPeriode ? [nomPeriode] : ['00-06', '06-12', '12-18', '18-00'];
   if (existent) {
     periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
-    if (afectacio.perill > ordreProbabilitat(existent.probabilitat)) {
-      existent.probabilitat = PROBABILITATS[afectacio.perill];
+    if (afectacio.perill > (existent.grauPerill || 0)) {
+      existent.grauPerill   = afectacio.perill;
+      existent.probabilitat = PROBABILITATS[afectacio.perill] || `Prob ${afectacio.perill}`;
     }
   } else {
     diesMap[diaISO].push({
@@ -56,6 +57,10 @@ function afegirAfectacio(diesMap, diaISO, afectacio, nomPeriode) {
       comarca:      idComarca,
       comarcaNom:   nomComarca(idComarca),
       nivell:       NIVELLS[afectacio.nivell]       || `Nivell ${afectacio.nivell}`,
+      // `perill` és el grau de perill de l'SMP (1-6) que Meteocat dona per
+      // comarca i franja de 6 h. Es desa cru perquè el risc de Bombers el faci
+      // servir tal com ve, en comptes de deduir-lo del color.
+      grauPerill:   afectacio.perill,
       probabilitat: PROBABILITATS[afectacio.perill] || `Prob ${afectacio.perill}`,
       llindar:      afectacio.llindar,
       periodes
@@ -78,8 +83,24 @@ function agruparPerZona(afectacions) {
     if (ordreProbabilitat(af.probabilitat) > ordreProbabilitat(existent.probabilitat)) {
       existent.probabilitat = af.probabilitat;
     }
+    if ((af.grauPerill || 0) > (existent.grauPerill || 0)) existent.grauPerill = af.grauPerill;
   }
   return [...perClau.values()];
+}
+
+// Els codis de comarca que no són cap de les 43 (l'SMP també avisa per zones
+// marítimes) es registren crus al log del workflow. Encara no sabem quins codis
+// fa servir ni si porten camps que aquí s'ignoren: la primera alerta d'onatge
+// que passi per aquí ens ho dirà.
+function registrarCodisDesconeguts(dades) {
+  const vistos = new Map();
+  for (const avis of dades.avisos)
+    for (const dia of avis.dies)
+      for (const af of dia.afectacions)
+        if (!COMARQUES[af.comarca] && !vistos.has(af.comarca)) vistos.set(af.comarca, af);
+  if (vistos.size === 0) return;
+  console.log('⚠️ Codis de comarca desconeguts (probablement zones marítimes):');
+  for (const [codi, af] of vistos) console.log(`   ${codi} → ${JSON.stringify(af)}`);
 }
 
 function processarSMP(dades) {
@@ -156,6 +177,7 @@ async function main() {
   });
   if (!resp.ok) throw new Error(`Meteocat SMP ${resp.status}: ${await resp.text()}`);
   const dades = processarSMP(await resp.json());
+  registrarCodisDesconeguts(dades);
   const anterior = readJSON('smp_latest.json');
   const changed = hasChanged(dades, anterior);
   writeJSON('smp_latest.json', dades);
@@ -173,4 +195,4 @@ if (require.main === module) {
   main().catch(e => { console.error(e.message); process.exit(1); });
 }
 
-module.exports = { processarSMP, agruparPerZona, toRows, ZONES };
+module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts, ZONES };

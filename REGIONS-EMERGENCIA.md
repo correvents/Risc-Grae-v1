@@ -57,9 +57,12 @@ els altres 25 (Igualada, Piera, Capellades…) són de la Metropolitana Sud.
 continua depenent de la sala de Manresa, i això és el que s'ha decidit reflectir.
 Canviar-ho és tocar una línia de `REGIONS_BOMBERS` a `index.html`.
 
-**Zones marítimes.** L'SMP també emet avisos per zones marítimes (`idComarca` 88-99,
-que el codi actual anomena `Comarca 88`…`Comarca 99`). No tenen regió d'emergència.
-Cal decidir si es descarten o si es pengen de les regions costaneres.
+**Zones marítimes.** L'SMP també emet avisos per zones marítimes, que no són
+comarques. Cada zona s'adjunta a la comarca costanera que té al davant
+(`MARITIMES_A_COMARCA` a `index.html`) i la comarca es queda el valor més alt dels
+dos. Els codis 88-99 són els que ja hi havia al projecte i **no estan verificats**:
+no hem vist mai una alerta marítima passar-hi. `fetch-smp.js` ara registra al log
+del workflow qualsevol codi desconegut amb tots els seus camps.
 
 ---
 
@@ -101,19 +104,23 @@ Terres de l'Ebre (Ports) tenen massís però són d'una peça; **proposta: no pa
 Pestanya **SMP Bombers** d'`index.html`. És un càlcul independent del risc del
 GRAE: no entra a la fórmula de `Risc GRAE` ni es desa a `risc_historic`.
 
-**Risc d'una comarca (0-6).** El nivell de l'avís marca el tram i la probabilitat
-hi suma un punt quan és *Molt probable* o *Segur*:
+**Risc d'una comarca (0-6).** No se'l calcula el projecte: **Meteocat ja publica
+un grau de perill de 0 a 6** per comarca i franja de 6 h, que surt de creuar el
+llindar del fenomen amb la probabilitat que passi. El color de l'avís (verd, groc,
+taronja, vermell) només n'és l'agrupació. Ve al camp `perill` de cada afectació i
+`fetch-smp.js` el desa cru com a `grauPerill`.
 
-| Nivell | Prob. baixa | Molt probable / Segur |
-| --- | --- | --- |
-| Cap avís | 0 | 0 |
-| Groc | 1 | 2 |
-| Taronja | 3 | 4 |
-| Vermell | 5 | 6 |
+Per a dades anteriors a aquest canvi, que no porten `grauPerill`, hi ha una escala
+de reserva deduïda del color (Groc 1, Taronja 3, Vermell 5, +1 si la probabilitat
+és alta). És una aproximació i desapareixerà sola.
 
-Aquesta escala és la peça que el cap del GRAE no va especificar. Està aïllada a
-les constants `RISC_BASE_NIVELL` i `PROB_ALTA`, o sigui que canviar-la és tocar
-dues línies.
+> **Ull:** el camp `perill` es mostrava fins ara com una probabilitat
+> (*Poc probable*…*Segur*) a la pestanya Alertes. Segons la documentació de
+> Meteocat és el grau de perill 1-6, no la probabilitat. Dues coses ho reforcen:
+> Meteocat documenta **tres** bandes de probabilitat (10-30 %, 30-70 %, >70 %) i
+> no quatre, i a les dades reals el llindar alt sempre surt com a "Segur" mentre
+> que el baix no hi surt mai — que és l'inrevés del que hauria de passar si fos
+> una probabilitat. Les etiquetes de la pestanya Alertes s'han de revisar.
 
 **Risc d'una regió i de Catalunya (`agregarRisc`).** El valor més alt que
 assoleix **la meitat + 1** de les unitats. Els valors s'engloben: una comarca amb
@@ -149,12 +156,17 @@ GeoJSON només es baixa quan s'obre la pestanya.
 2. **Risc SMP per municipis.** Si algun dia l'SMP arriba amb gra de municipi, el
    mateix `agregarRisc` funciona un nivell més avall, i les assignacions
    aproximades de l'Anoia i el Barcelonès deixen de ser aproximades.
-3. **Zones marítimes.** Decidir si es descarten o si es pengen de les regions
-   costaneres. Ara mateix es descarten.
+3. **Verificar els codis de les zones marítimes.** Ja s'adjunten a la comarca
+   costanera que tenen al davant, però la taula 88-99 és heretada i sense
+   comprovar. La primera alerta d'onatge sortirà al log del workflow amb tots els
+   camps i llavors es podrà corregir.
 4. **Històric.** `smp_historic` desa la zona, no la comarca. Si es vol poder
    reconstruir el risc per regions cap enrere, cal afegir-hi la comarca i decidir
    què es fa amb les files antigues.
-5. **Unificar les dues fórmules de risc** (pendent de fa temps, vegeu `DIARI.md`).
+5. **Revisar les etiquetes de probabilitat de la pestanya Alertes**, que fan
+   servir el camp `perill` com si fos una probabilitat quan sembla ser el grau de
+   perill 1-6.
+6. **Unificar les dues fórmules de risc** (pendent de fa temps, vegeu `DIARI.md`).
 
 ---
 

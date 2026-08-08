@@ -8,6 +8,18 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — El 0-6 el dona Meteocat, i les zones marítimes van a la seva comarca
+
+Dues correccions sobre la pestanya SMP Bombers acabada de fer.
+
+**El grau de perill no cal calcular-lo.** Meteocat ja publica un **grau de perill de 0 a 6** per comarca i franja de 6 h, que surt de creuar el llindar del fenomen amb la probabilitat. El color de l'avís només n'és l'agrupació. Ve al camp `perill` de cada afectació, que `fetch-smp.js` ara desa cru com a `grauPerill`, i el risc de Bombers el fa servir tal com ve. L'escala inventada ahir (color + probabilitat) queda només com a reserva per a dades antigues i desapareixerà sola.
+
+**El camp `perill` estava mal etiquetat.** El projecte el mostrava com una probabilitat (*Poc probable*…*Segur*) a la pestanya Alertes. Dues coses diuen que no ho és: Meteocat documenta **tres** bandes de probabilitat (10-30 %, 30-70 %, >70 %) i el codi en té quatre; i a les dades reals el llindar alt sempre surt com a "Segur" i el baix mai, que és just l'inrevés del que hauria de passar amb una probabilitat. Les etiquetes de la pestanya Alertes queden pendents de revisar — aquesta sessió no les toca.
+
+**Zones marítimes.** Cada zona s'adjunta ara a la comarca costanera que té al davant, i la comarca es queda el valor més alt dels dos. Els codis 88-99 són els que ja hi havia al projecte i **no estan verificats**: no hem vist mai una alerta marítima passar-hi. Per això `fetch-smp.js` registra al log del workflow qualsevol codi de comarca desconegut amb tots els seus camps; la primera alerta d'onatge ens dirà si la llista és correcta.
+
+Comprovat amb Playwright: el `grauPerill` cru mana per sobre de l'escala de reserva, i una alerta a la zona marítima 91 acaba comptant com a Maresme amb el valor correcte.
+
 ## 2026-08-08 — Pestanya SMP Bombers: risc per regions d'emergència
 
 El cap del GRAE vol un risc SMP **de Bombers**, separat del risc del GRAE, perquè cada cap de regió pugui veure el risc del seu territori. Nova pestanya **SMP Bombers**, amb taula per franges horàries (avui i demà) i mapa pintat.

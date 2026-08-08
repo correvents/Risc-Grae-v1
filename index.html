@@ -2363,16 +2363,45 @@
       codis.forEach(c => comarcaARegio[c] = regio);
     });
 
-    // Risc 0-6 d'una comarca: el nivell de l'avís marca el tram i la probabilitat
-    // hi suma un punt quan l'avís és molt probable o segur.
+    // Meteocat ja publica un grau de perill de 0 a 6 per comarca i franja de 6 h
+    // (el color n'és només l'agrupació). Ve al camp `perill` de cada afectació i
+    // `fetch-smp.js` el desa cru com a `grauPerill`: es fa servir tal com ve.
+    //
+    // L'escala de reserva de sota només actua amb dades antigues, anteriors al
+    // canvi de `fetch-smp.js`, que encara no porten `grauPerill`.
     const RISC_BASE_NIVELL = { 'Groc': 1, 'Taronja': 3, 'Vermell': 5 };
     const PROB_ALTA = ['Molt probable', 'Segur'];
 
     function riscDeAfectacio(af) {
+      if (Number.isFinite(af.grauPerill)) return Math.max(0, Math.min(6, af.grauPerill));
       const base = RISC_BASE_NIVELL[af.nivell];
       if (!base) return 0;
       return base + (PROB_ALTA.includes(af.probabilitat) ? 1 : 0);
     }
+
+    // L'SMP també avisa per zones marítimes, que no són comarques. Cada zona
+    // s'adjunta a la comarca costanera que té al davant: si hi ha risc a la zona
+    // marítima, la comarca se'l queda (es pren el valor més alt dels dos).
+    //
+    // ⚠️ Els codis 88-99 són els que ja hi havia al projecte, però no s'han pogut
+    // verificar: no hem vist mai una alerta marítima passar per aquí. Ara
+    // `fetch-smp.js` registra al log del workflow qualsevol codi desconegut amb
+    // tots els seus camps, així que la primera alerta d'onatge ens dirà si la
+    // llista és aquesta i en quin ordre.
+    const MARITIMES_A_COMARCA = {
+      88: 2,   // Alt Empordà
+      89: 10,  // Baix Empordà
+      90: 34,  // Selva
+      91: 21,  // Maresme
+      92: 13,  // Barcelonès
+      93: 11,  // Baix Llobregat
+      94: 17,  // Garraf
+      95: 12,  // Baix Penedès
+      96: 36,  // Tarragonès
+      97: 8,   // Baix Camp
+      98: 9,   // Baix Ebre
+      99: 22   // Montsià
+    };
 
     // Risc d'un conjunt (comarques d'una regió, o regions de Catalunya): el valor
     // més alt que assoleix la meitat + 1 de les unitats. Els valors s'engloben,
@@ -2395,11 +2424,12 @@
         const meteor = avis.meteor || '';
         for (const dia of (avis.dies || [])) {
           for (const af of (dia.afectacions || [])) {
-            const codi = af.comarca;
-            if (!codi || !comarcaARegio[codi]) continue;  // marítimes i dades antigues fora
+            // Una zona marítima es compta com la comarca costanera que té al davant
+            const codi = MARITIMES_A_COMARCA[af.comarca] || af.comarca;
+            if (!codi || !comarcaARegio[codi]) continue;  // dades antigues sense comarca
             const valor = riscDeAfectacio(af);
             if (!valor) continue;
-            if (!matriu[codi]) matriu[codi] = { nom: af.comarcaNom || `Comarca ${codi}`, dies: {} };
+            if (!matriu[codi]) matriu[codi] = { nom: nomComarcaLocal(codi) || af.comarcaNom, dies: {} };
             if (!matriu[codi].dies[dia.dia]) matriu[codi].dies[dia.dia] = {};
             for (const p of (af.periodes || [])) {
               const cel = matriu[codi].dies[dia.dia][p] || { valor: 0, riscos: [] };
@@ -6125,16 +6155,11 @@
                 <p style="margin:0 0 0.5rem;color:#555;">Pestanya <strong>SMP Bombers</strong>. És un càlcul <strong>independent</strong> del risc del GRAE: no entra a la fórmula de <code>Risc GRAE</code> ni es desa a <code>risc_historic</code>. Serveix perquè cada cap de regió vegi el risc SMP del seu territori.</p>
 
                 <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Risc d'una comarca (0-6)</p>
-                <p style="margin:0 0 0.5rem;color:#555;">El nivell de l'avís marca el tram i la probabilitat hi suma un punt quan és <em>Molt probable</em> o <em>Segur</em>:</p>
-                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Nivell</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Probabilitat baixa</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Molt probable / Segur</th></tr></thead>
-                  <tbody>
-                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Cap avís</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;" colspan="2">0</td></tr>
-                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Groc</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">1</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">2</td></tr>
-                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Taronja</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">3</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">4</td></tr>
-                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Vermell</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">5</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">6</td></tr>
-                  </tbody>
-                </table>
+                <p style="margin:0 0 0.5rem;color:#555;">No se'l calcula el projecte: <strong>Meteocat ja publica un grau de perill de 0 a 6</strong> per comarca i franja de 6 h, que surt de creuar el llindar del fenomen amb la probabilitat que passi. El color de l'avís només n'és l'agrupació (verd, groc, taronja, vermell). Ve al camp <code>perill</code> de cada afectació i <code>fetch-smp.js</code> el desa cru com a <code>grauPerill</code>.</p>
+                <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-bottom:0.5rem;font-size:0.8rem;">
+                  <strong>⚠️ Escala de reserva:</strong> per a dades anteriors al canvi de <code>fetch-smp.js</code>, que no porten <code>grauPerill</code>, es dedueix del color: Groc 1, Taronja 3, Vermell 5, i +1 punt si la probabilitat és <em>Molt probable</em> o <em>Segur</em>. És una aproximació i desapareixerà sola quan tot l'històric porti el grau real.
+                </div>
+                <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Nota: el camp <code>perill</code> es mostrava fins ara com una probabilitat (<em>Poc probable</em>…<em>Segur</em>) a la pestanya Alertes. Segons la documentació de Meteocat és el grau de perill 1-6, no la probabilitat, o sigui que aquelles etiquetes s'han de revisar.</p>
 
                 <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Risc d'una regió i de Catalunya (<code>agregarRisc</code>)</p>
                 <p style="margin:0 0 0.5rem;color:#555;">El valor més alt que assoleix <strong>la meitat + 1</strong> de les unitats. Els valors s'engloben: una comarca amb un 4 també compta per al 3 i per al 2. El risc de Catalunya és el mateix càlcul aplicat sobre les 8 regions.</p>
@@ -6157,6 +6182,8 @@
                   </tbody>
                 </table>
                 <p style="margin:0.5rem 0 0;font-size:0.78rem;color:#888;">El <strong>Barcelonès</strong> i l'<strong>Anoia</strong> estan partits de veritat entre dues regions, però per municipis; com que l'SMP arriba per comarca, s'assignen sencers a la Sud. La <strong>Cerdanya</strong> va al Centre: el decret la posa a Pirineus però operativament depèn de la sala de Manresa.</p>
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Zones marítimes</p>
+                <p style="margin:0 0 0.5rem;color:#555;">L'SMP també avisa per zones marítimes, que no són comarques. Cada zona s'adjunta a la comarca costanera que té al davant (<code>MARITIMES_A_COMARCA</code>) i la comarca es queda el valor més alt dels dos. <strong>Els codis 88-99 no estan verificats:</strong> són els que ja hi havia al projecte i no hem vist mai una alerta marítima passar-hi. <code>fetch-smp.js</code> registra al log del workflow qualsevol codi desconegut amb tots els seus camps, així que la primera alerta d'onatge ho aclarirà.</p>
                 <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-top:0.75rem;font-size:0.8rem;">
                   <strong>⚠️ Depèn de <code>fetch-smp.js</code>:</strong> el càlcul necessita que cada afectació de <code>smp_latest.json</code> porti el camp <code>comarca</code>. El <em>fallback</em> a <code>smp_historic</code> de Supabase no el té (la taula desa la zona, no la comarca), i llavors la taula surt buida amb un avís.
                 </div>
