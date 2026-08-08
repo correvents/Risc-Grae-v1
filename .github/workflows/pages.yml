@@ -11,19 +11,32 @@ on:
     branches: [main, proves]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Un desplegament a la vegada; no cancel·lar els que ja corren
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  publicar:
+  # L'entorn github-pages només accepta desplegaments de la branca per defecte,
+  # així que un push a `proves` no pot publicar directament: demana a `main` que
+  # ho faci. La publicació de main ja recull la branca `proves` i la posa a /proves/.
+  demanar-publicacio:
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Llançar la publicació des de main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main
+
+  publicar:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.desplegar.outputs.page_url }}
