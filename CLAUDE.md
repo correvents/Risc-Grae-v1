@@ -19,15 +19,19 @@ Frontend estàtic (GitHub Pages) + scripts Node que s'executen per GitHub Action
 
 **1. Hi ha DUES fórmules de risc diferents, i no coincideixen.**
 
-| | Frontend (`index.html`, `calcularRisc`) | Backend (`scripts/risc-diari.js`) |
+| | Frontend (`index.html`, `detallarRisc`) | Backend (`scripts/risc-diari.js`) |
 | --- | --- | --- |
-| Factors | SMP + afluència + operativitat HC + allaus + canvi | planspc + smp + allaus + afluència + hc + canvi |
-| Allaus | nivells 1–2 → 0; 3→1, 4→2, 5→3 | `round((perill − 1) × 1,25)` |
-| Plans PC | només informatiu, no suma | suma 0–3 |
-| Escala | suma directa, **sense límit superior** | `min(6, round((suma / 21) × 6))` |
+| Model | **factor dominant + increments** | suma ponderada |
+| Base | màxim entre SMP (0–6) i allaus (1→0, 2→1, 3→3, 4→4, 5→6) | — |
+| Increments | operativitat HC, afluència, canvi, boletaires | — |
+| Factors | SMP, allaus, operativitat, afluència, canvi, boletaires | planspc, smp, allaus, afluència, hc, canvi |
+| Plans PC | informatiu, no suma | suma 0–3 |
+| Escala | `min(6, base + increments)`, amb decimals | `min(6, round((suma / 21) × 6))` |
 | Configurable | sí, per l'usuari (localStorage) | no |
 
-La del frontend és la nova (22-07-2026); la del backend és l'antiga i és **la que es desa cada nit a `risc_historic`**. Migrar-la és feina pendent. Si toques una de les dues, comprova si l'altra també ho necessita.
+La del frontend és la nova (08-08-2026); la del backend és l'antiga i és **la que es desa cada nit a `risc_historic`**. Migrar-la és la feina pendent, i arrossega els altres dos pendents: el backend no calcula ni `canvi` ni l'operativitat dels helis. Si toques una de les dues, comprova si l'altra també ho necessita.
+
+Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
 
 **2. `risc-diari.js` no fa servir `canvi_temps_latest.json`.**
 

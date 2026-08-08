@@ -8,6 +8,25 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — Fórmula de risc repensada: factor dominant + increments
+
+Atacant el pendent d'unificar les dues fórmules, es va decidir no adoptar cap de les dues sinó repensar-la. **Aquest canvi és només al frontend; el script nocturn encara calcula amb l'antiga.**
+
+**Què fallava a la fórmula del 22-07:** sumava rangs incomparables i la suma podia arribar a 16, però colors, barra i etiquetes estan calibrats a 0–6. Resultat: de 5 en amunt tot es veia igual, i casos molt diferents donaven el mateix número. El més greu: **perill d'allaus 5 tot sol donava 3 (MODERAT)**.
+
+**Model nou:** `risc = min(6, base + increments)`
+
+- **Base** = el més greu dels factors de perill: SMP (ja ve 0–6) o allaus (1→0, 2→1, 3→3, 4→4, **5→6**). Es pren el màxim, així un perill extrem no queda diluït.
+- **Increments**: operativitat HC (cap heli +1, un heli +0,5), afluència (+0,25 / +0,5 / +1), canvi de temps (+0,5 / +1) i boletaires (+1).
+- **Plans PC** queda informatiu: una fase activada ja es reflecteix als avisos SMP.
+- El factor antic `hc` desapareix del càlcul; el substitueix l'operativitat.
+
+Tot continua sent editable des de Configuració → Fórmula de risc, i al desglossament el factor que marca la base surt etiquetat com a **BASE**.
+
+**Comprovat** amb Playwright sobre set escenaris: allaus 5 passa de 3 a 6; groc en una zona amb cap de setmana d'agost dona 1,5; vermell a tres zones amb allaus 4 i cap heli topa a 6.
+
+**Pendent de calibrar:** els increments poden sumar fins a +4, així que un dia sense cap perill però amb tot en contra arriba a 4 (ALT) amb base 0. Cal decidir si es limita el total d'increments.
+
 ## 2026-08-08 — Web de proves separat de l'operatiu
 
 Començat el 02-08 (`2d54f79`, `69774db`, `1fa4b81`) i acabat el 08-08 (`a7778b3` fins a `202e303`).
