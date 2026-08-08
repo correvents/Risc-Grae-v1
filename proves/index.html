@@ -1151,6 +1151,9 @@
         🔔 Alertes
         <span class="badge" id="badge-smp" style="display:none;"></span>
       </button>
+      <button class="nav-tab" onclick="mostrarSeccio(event, 'smpbombers')">
+        🚒 SMP Bombers
+      </button>
       <button class="nav-tab" onclick="mostrarSeccio(event, 'bpa')">
         🏔️ Allaus
         <span class="badge" id="badge-bpa" style="display:none;"></span>
@@ -1203,6 +1206,16 @@
       </div>
     </section>
     
+    <!-- Secció SMP Bombers -->
+    <section id="seccio-smpbombers" class="section">
+      <div id="app-smpbombers">
+        <div class="loading">
+          <div class="loading-icon">🚒</div>
+          <p style="margin-top: 1rem; opacity: 0.8;">Carregant risc SMP per regions…</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Secció BPA -->
     <section id="seccio-bpa" class="section">
       <div id="app-bpa">
@@ -1397,6 +1410,8 @@
       if (seccio === 'helicopters') carregarHelicopters();
       if (seccio === 'canvitemps') carregarCanviTemps();
       if (seccio === 'historial') carregarHistorial();
+      // El GeoJSON de comarques (120 KB) només es baixa quan es mira la pestanya
+      if (seccio === 'smpbombers') carregarSMPBombers();
 
       // Carregar iframe BPA quan es mostra la secció per primer cop
       if (seccio === 'bpa' && !bpaIframeLoaded) {
@@ -2216,6 +2231,7 @@
         if (data.error) throw new Error(data.error);
         dadesCarregades.smp = data;
         renderSMP(data);
+        renderSMPBombers();
         actualitzarRiscAuto();
         alert('✅ Dades actualitzades des de meteo.cat');
       } catch (error) {
@@ -2299,6 +2315,7 @@
 
         dadesCarregades.smp = data;
         renderSMP(data);
+        renderSMPBombers();
         actualitzarRiscAuto();
       } catch (error) {
         logError('SMP', error.message);
@@ -2313,6 +2330,387 @@
       }
     };
     
+    // ==================== SMP BOMBERS (per regions d'emergència) ====================
+    // Risc SMP agrupat per regions d'emergència de Bombers, independent del risc
+    // del GRAE: serveix perquè cada cap de regió vegi el risc del seu territori.
+    // Més endavant el GRAE en farà servir un de similar partint les regions en
+    // subregions (muntanya / plana), i si algun dia l'SMP arriba per municipis
+    // el mateix càlcul es podrà fer amb un gra més fi.
+
+    // Comarques de cada regió, per codi oficial (= idComarca de Meteocat).
+    // Dues comarques estan partides de veritat entre regions, però l'SMP arriba
+    // per comarca i no s'hi pot baixar més, així que s'assignen senceres:
+    //   · Barcelonès (13) → Sud (a la Nord hi són Badalona, Sant Adrià i Sta. Coloma)
+    //   · Anoia (06)      → Sud (l'Alta Anoia, 8 municipis, és del Centre)
+    // La Cerdanya (15) va al Centre: el decret la posa a Pirineus, però
+    // operativament depèn de la sala de Manresa.
+    const REGIONS_BOMBERS = {
+      'Metropolitana Nord': [21, 40, 41],
+      'Metropolitana Sud':  [13, 11, 3, 17, 6],
+      'Girona':             [2, 10, 20, 28, 34, 19, 31],
+      'Centre':             [7, 24, 14, 35, 42, 43, 15],
+      'Lleida':             [33, 23, 38, 27, 18, 32],
+      'Pirineus':           [39, 5, 26, 25, 4],
+      'Tarragona':          [36, 8, 1, 12, 16, 29],
+      "Terres de l'Ebre":   [9, 22, 30, 37]
+    };
+
+    const REGIONS_ORDRE = Object.keys(REGIONS_BOMBERS);
+    const PERIODES_SMP = ['00-06', '06-12', '12-18', '18-00'];
+
+    const comarcaARegio = {};
+    Object.entries(REGIONS_BOMBERS).forEach(([regio, codis]) => {
+      codis.forEach(c => comarcaARegio[c] = regio);
+    });
+
+    // Meteocat ja publica un grau de perill de 0 a 6 per comarca i franja de 6 h
+    // (el color n'és només l'agrupació). Ve al camp `perill` de cada afectació i
+    // `fetch-smp.js` el desa cru com a `grauPerill`: es fa servir tal com ve.
+    //
+    // L'escala de reserva de sota només actua amb dades antigues, anteriors al
+    // canvi de `fetch-smp.js`, que encara no porten `grauPerill`.
+    const RISC_BASE_NIVELL = { 'Groc': 1, 'Taronja': 3, 'Vermell': 5 };
+    const PROB_ALTA = ['Molt probable', 'Segur'];
+
+    function riscDeAfectacio(af) {
+      if (Number.isFinite(af.grauPerill)) return Math.max(0, Math.min(6, af.grauPerill));
+      const base = RISC_BASE_NIVELL[af.nivell];
+      if (!base) return 0;
+      return base + (PROB_ALTA.includes(af.probabilitat) ? 1 : 0);
+    }
+
+    // L'SMP també avisa per zones marítimes, que no són comarques. Cada zona
+    // s'adjunta a la comarca costanera que té al davant: si hi ha risc a la zona
+    // marítima, la comarca se'l queda (es pren el valor més alt dels dos).
+    //
+    // ⚠️ Els codis 88-99 són els que ja hi havia al projecte, però no s'han pogut
+    // verificar: no hem vist mai una alerta marítima passar per aquí. Ara
+    // `fetch-smp.js` registra al log del workflow qualsevol codi desconegut amb
+    // tots els seus camps, així que la primera alerta d'onatge ens dirà si la
+    // llista és aquesta i en quin ordre.
+    const MARITIMES_A_COMARCA = {
+      88: 2,   // Alt Empordà
+      89: 10,  // Baix Empordà
+      90: 34,  // Selva
+      91: 21,  // Maresme
+      92: 13,  // Barcelonès
+      93: 11,  // Baix Llobregat
+      94: 17,  // Garraf
+      95: 12,  // Baix Penedès
+      96: 36,  // Tarragonès
+      97: 8,   // Baix Camp
+      98: 9,   // Baix Ebre
+      99: 22   // Montsià
+    };
+
+    // Risc d'un conjunt (comarques d'una regió, o regions de Catalunya): el valor
+    // més alt que assoleix la meitat + 1 de les unitats. Els valors s'engloben,
+    // és a dir que una unitat amb un 4 també compta per al 3 i per al 2.
+    // Exemple del cap del GRAE: 8 regions amb 3,3,3,2,2,2,4,4 → llindar 5;
+    // n'hi ha 5 amb ≥3 i només 2 amb ≥4, o sigui que el total és 3.
+    function agregarRisc(valors) {
+      if (!valors.length) return 0;
+      const llindar = Math.floor(valors.length / 2) + 1;
+      for (let v = 6; v >= 1; v--) {
+        if (valors.filter(x => x >= v).length >= llindar) return v;
+      }
+      return 0;
+    }
+
+    // comarca → dia → període → { valor, riscos: [{meteor, nivell, probabilitat, llindar}] }
+    function matriuRiscComarques(data) {
+      const matriu = {};
+      for (const avis of (data?.avisos || [])) {
+        const meteor = avis.meteor || '';
+        for (const dia of (avis.dies || [])) {
+          for (const af of (dia.afectacions || [])) {
+            // Una zona marítima es compta com la comarca costanera que té al davant
+            const codi = MARITIMES_A_COMARCA[af.comarca] || af.comarca;
+            if (!codi || !comarcaARegio[codi]) continue;  // dades antigues sense comarca
+            const valor = riscDeAfectacio(af);
+            if (!valor) continue;
+            if (!matriu[codi]) matriu[codi] = { nom: nomComarcaLocal(codi) || af.comarcaNom, dies: {} };
+            if (!matriu[codi].dies[dia.dia]) matriu[codi].dies[dia.dia] = {};
+            for (const p of (af.periodes || [])) {
+              const cel = matriu[codi].dies[dia.dia][p] || { valor: 0, riscos: [] };
+              if (valor > cel.valor) cel.valor = valor;
+              cel.riscos.push({ meteor, nivell: af.nivell, probabilitat: af.probabilitat, llindar: af.llindar });
+              matriu[codi].dies[dia.dia][p] = cel;
+            }
+          }
+        }
+      }
+      return matriu;
+    }
+
+    // Valor d'una comarca en un dia i franja (0 si no hi ha avís).
+    const riscComarca = (matriu, codi, dia, periode) =>
+      matriu[codi]?.dies?.[dia]?.[periode]?.valor || 0;
+
+    function valorsRegio(matriu, regio, dia, periode) {
+      return REGIONS_BOMBERS[regio].map(c => riscComarca(matriu, c, dia, periode));
+    }
+
+    const COLORS_RISC = ['#4caf50', '#8bc34a', '#cddc39', '#ff9800', '#ff5722', '#f44336', '#b71c1c'];
+    const colorRisc = (v) => COLORS_RISC[Math.max(0, Math.min(6, v))];
+    const textSobreRisc = (v) => (v >= 5 ? '#fff' : '#000');
+
+    let smpBombersEstat = { dia: null, periode: '12-18', vista: 'regions' };
+    let geoComarques = null;
+
+    async function carregarGeoComarques() {
+      if (geoComarques) return geoComarques;
+      const base = location.pathname.includes('/proves/') ? '../' : '';
+      const resp = await fetch(base + 'comarques_simplificat_500m.geojson');
+      if (!resp.ok) throw new Error('No s\'ha pogut carregar el mapa de comarques');
+      geoComarques = await resp.json();
+      return geoComarques;
+    }
+
+    // Mapa de comarques en SVG pla, sense dependències: es projecta amb una
+    // equirectangular corregida per la latitud perquè no surti aixafat.
+    // vista='comarques' pinta el valor de cada comarca; vista='regions' pinta
+    // totes les comarques d'una regió amb el valor agregat de la regió, que és
+    // el que mira un cap de regió.
+    function svgComarques(matriu, dia, periode, vista) {
+      if (!geoComarques) return '<p style="color:#888;font-size:0.85rem;">Carregant mapa…</p>';
+
+      const valorRegio = {};
+      if (vista === 'regions') {
+        REGIONS_ORDRE.forEach(r => { valorRegio[r] = agregarRisc(valorsRegio(matriu, r, dia, periode)); });
+      }
+
+      const AMPLE = 760, MARGE = 8;
+      let minLon = 180, maxLon = -180, minLat = 90, maxLat = -90;
+      const recorrer = (coords, fn) => {
+        if (typeof coords[0] === 'number') fn(coords);
+        else coords.forEach(c => recorrer(c, fn));
+      };
+      geoComarques.features.forEach(f => recorrer(f.geometry.coordinates, ([lon, lat]) => {
+        if (lon < minLon) minLon = lon;
+        if (lon > maxLon) maxLon = lon;
+        if (lat < minLat) minLat = lat;
+        if (lat > maxLat) maxLat = lat;
+      }));
+
+      const cosLat = Math.cos((minLat + maxLat) / 2 * Math.PI / 180);
+      const escala = (AMPLE - 2 * MARGE) / ((maxLon - minLon) * cosLat);
+      const alt = (maxLat - minLat) * escala + 2 * MARGE;
+      const px = (lon) => (MARGE + (lon - minLon) * cosLat * escala).toFixed(1);
+      const py = (lat) => (MARGE + (maxLat - lat) * escala).toFixed(1);
+
+      const anell = (coords) => 'M' + coords.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join('L') + 'Z';
+      const camins = (geom) => geom.type === 'Polygon'
+        ? geom.coordinates.map(anell).join('')
+        : geom.coordinates.map(pol => pol.map(anell).join('')).join('');
+
+      let paths = '';
+      geoComarques.features.forEach(f => {
+        const codi = parseInt(f.properties.CODICOMAR, 10);
+        const nom = f.properties.NOMCOMAR;
+        const regio = comarcaARegio[codi];
+        const valorCom = riscComarca(matriu, codi, dia, periode);
+        const valor = (vista === 'regions' && regio) ? valorRegio[regio] : valorCom;
+        const titol = (vista === 'regions' && regio)
+          ? `${regio} — risc ${valor} · ${nom}: ${valorCom}`
+          : `${nom} — risc ${valorCom}${regio ? ' · ' + regio : ''}`;
+        paths += `<path d="${camins(f.geometry)}" fill="${colorRisc(valor)}" stroke="#fff" stroke-width="0.8">` +
+                 `<title>${titol}</title></path>`;
+      });
+
+      // Contorn de cada regió per sobre, per veure-les separades
+      let contorns = '';
+      geoComarques.features.forEach(f => {
+        const codi = parseInt(f.properties.CODICOMAR, 10);
+        if (!comarcaARegio[codi]) return;
+        contorns += `<path d="${camins(f.geometry)}" fill="none" stroke="#37474f" stroke-width="0.4" opacity="0.5"/>`;
+      });
+
+      return `<svg viewBox="0 0 ${AMPLE} ${alt.toFixed(0)}" style="width:100%;height:auto;display:block;">${paths}${contorns}</svg>`;
+    }
+
+    function renderSMPBombers() {
+      const cont = document.getElementById('app-smpbombers');
+      if (!cont) return;
+
+      const data = dadesCarregades.smp;
+      if (!data) {
+        cont.innerHTML = '<div class="loading"><div class="loading-icon">🚒</div><p style="margin-top:1rem;opacity:0.8;">Carregant risc SMP per regions…</p></div>';
+        return;
+      }
+
+      const matriu = matriuRiscComarques(data);
+      const avui = localDateStr(0);
+      const dema = localDateStr(1);
+      if (!smpBombersEstat.dia) smpBombersEstat.dia = avui;
+
+      const senseComarques = Object.keys(matriu).length === 0 && (data.avisos || []).length > 0;
+
+      const formatDia = (d) => {
+        const date = new Date(d + 'T12:00:00');
+        const dies = ['Dg', 'Dl', 'Dm', 'Dc', 'Dj', 'Dv', 'Ds'];
+        return `${dies[date.getDay()]} ${date.getDate()}`;
+      };
+
+      const cel = (v, extra = '') => `<td style="background:${colorRisc(v)};color:${textSobreRisc(v)};text-align:center;font-weight:700;padding:0.35rem;border:1px solid #fff;${extra}">${v}</td>`;
+
+      let html = `
+        <div class="card" style="margin-bottom:1rem;">
+          <h3 style="margin:0 0 0.5rem;font-size:1rem;color:#e53935;">🚒 Risc SMP per regions d'emergència</h3>
+          <p style="margin:0;font-size:0.85rem;color:#555;">
+            Risc de Bombers, independent del risc del GRAE. Cada comarca té un risc de 0 a 6
+            i el de la regió és el valor que assoleix la meitat + 1 de les seves comarques.
+          </p>
+        </div>
+      `;
+
+      if (senseComarques) {
+        html += `
+          <div class="card" style="margin-bottom:1rem;background:#fff8e1;border:1px solid #f59e0b;">
+            <p style="margin:0;font-size:0.85rem;">
+              ⚠️ Les dades SMP carregades encara no porten la comarca de cada avís.
+              El càlcul per regions necessita que <code>fetch-smp.js</code> hagi tornat a
+              generar <code>data/smp_latest.json</code>. Mentrestant la taula surt buida.
+            </p>
+          </div>
+        `;
+      }
+
+      // Totals de Catalunya per franja
+      const totalPerFranja = {};
+      [avui, dema].forEach(dia => {
+        totalPerFranja[dia] = {};
+        PERIODES_SMP.forEach(p => {
+          totalPerFranja[dia][p] = agregarRisc(REGIONS_ORDRE.map(r => agregarRisc(valorsRegio(matriu, r, dia, p))));
+        });
+      });
+
+      html += `
+        <div class="taula-container" style="margin-bottom:1.5rem;">
+          <table class="smp-taula">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:bottom;">Regió d'emergències</th>
+                <th colspan="4" style="text-align:center;border-bottom:1px solid rgba(255,255,255,0.2);">📅 ${formatDia(avui)} (Avui)</th>
+                <th colspan="4" style="text-align:center;border-bottom:1px solid rgba(255,255,255,0.2);">📅 ${formatDia(dema)} (Demà)</th>
+              </tr>
+              <tr>
+                ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+                ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      REGIONS_ORDRE.forEach(regio => {
+        html += `<tr><td class="zona-nom">${regio}</td>`;
+        [avui, dema].forEach(dia => {
+          PERIODES_SMP.forEach(p => {
+            html += cel(agregarRisc(valorsRegio(matriu, regio, dia, p)));
+          });
+        });
+        html += '</tr>';
+      });
+
+      html += `<tr><td class="zona-nom" style="font-weight:800;background:#eceff1;">CATALUNYA</td>`;
+      [avui, dema].forEach(dia => {
+        PERIODES_SMP.forEach(p => {
+          html += cel(totalPerFranja[dia][p], 'font-size:1.05rem;');
+        });
+      });
+      html += `</tr></tbody></table></div>`;
+
+      // Detall per comarques
+      html += `<details style="margin-bottom:1.5rem;"><summary style="cursor:pointer;font-weight:700;padding:0.5rem 0;">🔍 Detall per comarques</summary><div style="padding-top:0.5rem;">`;
+      REGIONS_ORDRE.forEach(regio => {
+        html += `<div class="card" style="margin-bottom:0.75rem;">
+          <p style="margin:0 0 0.4rem;font-weight:700;font-size:0.9rem;">${regio}</p>
+          <div class="taula-container"><table class="smp-taula"><thead><tr>
+            <th rowspan="2" style="vertical-align:bottom;">Comarca</th>
+            <th colspan="4" style="text-align:center;">${formatDia(avui)}</th>
+            <th colspan="4" style="text-align:center;">${formatDia(dema)}</th>
+          </tr><tr>
+            ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+            ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+          </tr></thead><tbody>`;
+        REGIONS_BOMBERS[regio].forEach(codi => {
+          const nom = matriu[codi]?.nom || nomComarcaLocal(codi);
+          html += `<tr><td class="zona-nom">${nom}</td>`;
+          [avui, dema].forEach(dia => {
+            PERIODES_SMP.forEach(p => { html += cel(riscComarca(matriu, codi, dia, p)); });
+          });
+          html += '</tr>';
+        });
+        html += `</tbody></table></div></div>`;
+      });
+      html += `</div></details>`;
+
+      // Mapa
+      html += `
+        <div class="card" style="margin-bottom:1.5rem;">
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:0.75rem;">
+            <strong style="font-size:0.9rem;">🗺️ Mapa</strong>
+            <select id="smpb-dia" onchange="canviarMapaSMPBombers()" style="padding:0.25rem 0.4rem;font-size:0.85rem;">
+              <option value="${avui}" ${smpBombersEstat.dia === avui ? 'selected' : ''}>${formatDia(avui)} (Avui)</option>
+              <option value="${dema}" ${smpBombersEstat.dia === dema ? 'selected' : ''}>${formatDia(dema)} (Demà)</option>
+            </select>
+            <select id="smpb-periode" onchange="canviarMapaSMPBombers()" style="padding:0.25rem 0.4rem;font-size:0.85rem;">
+              ${PERIODES_SMP.map(p => `<option value="${p}" ${smpBombersEstat.periode === p ? 'selected' : ''}>${p}</option>`).join('')}
+            </select>
+            <select id="smpb-vista" onchange="canviarMapaSMPBombers()" style="padding:0.25rem 0.4rem;font-size:0.85rem;">
+              <option value="regions" ${smpBombersEstat.vista === 'regions' ? 'selected' : ''}>Per regions</option>
+              <option value="comarques" ${smpBombersEstat.vista === 'comarques' ? 'selected' : ''}>Per comarques</option>
+            </select>
+          </div>
+          <div id="smpb-mapa">${svgComarques(matriu, smpBombersEstat.dia, smpBombersEstat.periode, smpBombersEstat.vista)}</div>
+          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem;font-size:0.8rem;">
+            ${COLORS_RISC.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
+          </div>
+        </div>
+      `;
+
+      cont.innerHTML = html;
+    }
+
+    // Nom de comarca quan no hi ha cap avís i, per tant, no ve del JSON.
+    const NOMS_COMARQUES = {
+      1: 'Alt Camp', 2: 'Alt Empordà', 3: 'Alt Penedès', 4: 'Alt Urgell', 5: 'Alta Ribagorça',
+      6: 'Anoia', 7: 'Bages', 8: 'Baix Camp', 9: 'Baix Ebre', 10: 'Baix Empordà',
+      11: 'Baix Llobregat', 12: 'Baix Penedès', 13: 'Barcelonès', 14: 'Berguedà', 15: 'Cerdanya',
+      16: 'Conca de Barberà', 17: 'Garraf', 18: 'Garrigues', 19: 'Garrotxa', 20: 'Gironès',
+      21: 'Maresme', 22: 'Montsià', 23: 'Noguera', 24: 'Osona', 25: 'Pallars Jussà',
+      26: 'Pallars Sobirà', 27: "Pla d'Urgell", 28: "Pla de l'Estany", 29: 'Priorat',
+      30: "Ribera d'Ebre", 31: 'Ripollès', 32: 'Segarra', 33: 'Segrià', 34: 'Selva',
+      35: 'Solsonès', 36: 'Tarragonès', 37: 'Terra Alta', 38: 'Urgell', 39: 'Aran',
+      40: 'Vallès Occidental', 41: 'Vallès Oriental', 42: 'Moianès', 43: 'Lluçanès'
+    };
+    const nomComarcaLocal = (codi) => NOMS_COMARQUES[codi] || `Comarca ${codi}`;
+
+    function canviarMapaSMPBombers() {
+      const dia = document.getElementById('smpb-dia')?.value;
+      const periode = document.getElementById('smpb-periode')?.value;
+      const vista = document.getElementById('smpb-vista')?.value;
+      if (dia) smpBombersEstat.dia = dia;
+      if (periode) smpBombersEstat.periode = periode;
+      if (vista) smpBombersEstat.vista = vista;
+      const cont = document.getElementById('smpb-mapa');
+      if (cont) {
+        cont.innerHTML = svgComarques(
+          matriuRiscComarques(dadesCarregades.smp),
+          smpBombersEstat.dia, smpBombersEstat.periode, smpBombersEstat.vista
+        );
+      }
+    }
+
+    async function carregarSMPBombers() {
+      try {
+        await carregarGeoComarques();
+      } catch (e) {
+        logError('SMP Bombers', e.message);
+      }
+      renderSMPBombers();
+    }
+
     // ==================== AFLUÈNCIA ====================
     const AFLUENCIA_DATA = {
       nivells: {
@@ -5789,6 +6187,47 @@
                   </tbody>
                 </table>
                 <p style="margin:0.5rem 0 0;font-size:0.78rem;color:#888;">Nota: el càlcul SMP filtra per <code>riscParams.zones</code> (zones configurades com a "de muntanya") — Litoral Central, Costa Brava, etc. poden estar desactivades i no comptaran per al risc, tot i que la taula SMP les mostra sempre.</p>
+              </div>
+            </details>
+
+            <details style="margin-bottom:1.5rem;">
+              <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🚒 2.10 — SMP Bombers: risc per regions d'emergència</summary>
+              <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
+                <p style="margin:0 0 0.5rem;color:#555;">Pestanya <strong>SMP Bombers</strong>. És un càlcul <strong>independent</strong> del risc del GRAE: no entra a la fórmula de <code>Risc GRAE</code> ni es desa a <code>risc_historic</code>. Serveix perquè cada cap de regió vegi el risc SMP del seu territori.</p>
+
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Risc d'una comarca (0-6)</p>
+                <p style="margin:0 0 0.5rem;color:#555;">No se'l calcula el projecte: <strong>Meteocat ja publica un grau de perill de 0 a 6</strong> per comarca i franja de 6 h, que surt de creuar el llindar del fenomen amb la probabilitat que passi. El color de l'avís només n'és l'agrupació (verd, groc, taronja, vermell). Ve al camp <code>perill</code> de cada afectació i <code>fetch-smp.js</code> el desa cru com a <code>grauPerill</code>.</p>
+                <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-bottom:0.5rem;font-size:0.8rem;">
+                  <strong>⚠️ Escala de reserva:</strong> per a dades anteriors al canvi de <code>fetch-smp.js</code>, que no porten <code>grauPerill</code>, es dedueix del color: Groc 1, Taronja 3, Vermell 5, i +1 punt si la probabilitat és <em>Molt probable</em> o <em>Segur</em>. És una aproximació i desapareixerà sola quan tot l'històric porti el grau real.
+                </div>
+                <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Nota: el camp <code>perill</code> es mostrava fins ara com una probabilitat (<em>Poc probable</em>…<em>Segur</em>) a la pestanya Alertes. Segons la documentació de Meteocat és el grau de perill 1-6, no la probabilitat, o sigui que aquelles etiquetes s'han de revisar.</p>
+
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Risc d'una regió i de Catalunya (<code>agregarRisc</code>)</p>
+                <p style="margin:0 0 0.5rem;color:#555;">El valor més alt que assoleix <strong>la meitat + 1</strong> de les unitats. Els valors s'engloben: una comarca amb un 4 també compta per al 3 i per al 2. El risc de Catalunya és el mateix càlcul aplicat sobre les 8 regions.</p>
+                <div style="background:#e3f2fd;border-radius:6px;padding:0.7rem;font-size:0.8rem;">
+                  <strong>Exemple:</strong> 8 regions amb valors 3, 3, 3, 2, 2, 2, 4, 4. El llindar és 5. N'hi ha 5 amb ≥3 i només 2 amb ≥4 → <strong>el risc de Catalunya és 3</strong>.
+                </div>
+
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Regions i comarques (<code>REGIONS_BOMBERS</code>)</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+                  <thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Regió</th><th style="text-align:left;padding:0.4rem 0.5rem;border:1px solid #e0e0e0;">Comarques</th></tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Metropolitana Nord</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Maresme · Vallès Occidental · Vallès Oriental</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Metropolitana Sud</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Barcelonès · Baix Llobregat · Alt Penedès · Garraf · Anoia</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Girona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Alt Empordà · Baix Empordà · Gironès · Pla de l'Estany · Selva · Garrotxa · Ripollès</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Centre</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Bages · Osona · Berguedà · Solsonès · Moianès · Lluçanès · Cerdanya</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Lleida</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Segrià · Noguera · Urgell · Pla d'Urgell · Garrigues · Segarra</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Pirineus</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Aran · Alta Ribagorça · Pallars Sobirà · Pallars Jussà · Alt Urgell</td></tr>
+                    <tr><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Tarragona</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Tarragonès · Baix Camp · Alt Camp · Baix Penedès · Conca de Barberà · Priorat</td></tr>
+                    <tr style="background:#fafafa;"><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;font-weight:600;">Terres de l'Ebre</td><td style="padding:0.3rem 0.5rem;border:1px solid #e0e0e0;">Baix Ebre · Montsià · Ribera d'Ebre · Terra Alta</td></tr>
+                  </tbody>
+                </table>
+                <p style="margin:0.5rem 0 0;font-size:0.78rem;color:#888;">El <strong>Barcelonès</strong> i l'<strong>Anoia</strong> estan partits de veritat entre dues regions, però per municipis; com que l'SMP arriba per comarca, s'assignen sencers a la Sud. La <strong>Cerdanya</strong> va al Centre: el decret la posa a Pirineus però operativament depèn de la sala de Manresa.</p>
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Zones marítimes</p>
+                <p style="margin:0 0 0.5rem;color:#555;">L'SMP també avisa per zones marítimes, que no són comarques. Cada zona s'adjunta a la comarca costanera que té al davant (<code>MARITIMES_A_COMARCA</code>) i la comarca es queda el valor més alt dels dos. <strong>Els codis 88-99 no estan verificats:</strong> són els que ja hi havia al projecte i no hem vist mai una alerta marítima passar-hi. <code>fetch-smp.js</code> registra al log del workflow qualsevol codi desconegut amb tots els seus camps, així que la primera alerta d'onatge ho aclarirà.</p>
+                <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-top:0.75rem;font-size:0.8rem;">
+                  <strong>⚠️ Depèn de <code>fetch-smp.js</code>:</strong> el càlcul necessita que cada afectació de <code>smp_latest.json</code> porti el camp <code>comarca</code>. El <em>fallback</em> a <code>smp_historic</code> de Supabase no el té (la taula desa la zona, no la comarca), i llavors la taula surt buida amb un avís.
+                </div>
               </div>
             </details>
 
