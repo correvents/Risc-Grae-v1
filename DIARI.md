@@ -8,11 +8,13 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
-## 2026-08-02 — Web de proves separat de l'operatiu
+## 2026-08-08 — Web de proves separat de l'operatiu
+
+Començat el 02-08 (`2d54f79`, `69774db`, `1fa4b81`) i acabat el 08-08 (`a7778b3` fins a `202e303`).
 
 Fins ara l'única manera de veure un canvi era fusionar-lo a `main`, és a dir, publicar-lo directament al web operatiu.
 
-**Fet:** workflow `pages.yml` que publica `main` a l'arrel i la branca `proves` a `/proves/`.
+**Resultat:** el banc de proves és la carpeta `proves/` de `main`, que `sincronitzar-proves.yml` copia des de la branca `proves` a cada push. Les dues webs funcionen: l'operativa a l'arrel i la de proves a `/proves/`.
 
 La còpia de proves es distingeix sola (`marcarWebDeProves()`): **fons verd**, franja verda a dalt i `🧪 PROVES` al títol de la pestanya.
 
