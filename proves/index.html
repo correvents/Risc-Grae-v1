@@ -4030,16 +4030,23 @@
     }
     
     // ==================== FÓRMULA DE RISC (configurable) ====================
-    // Fórmula "factor dominant + increments":
-    //   base  = el més greu dels factors de perill (SMP i allaus), en escala 0-6
-    //   risc  = min(SOSTRE, base + increments dels factors secundaris)
-    // Així un perill extrem no queda diluït per la resta, i els factors
-    // secundaris matisen sense poder dominar el resultat.
+    // El risc mesura la probabilitat de quedar desbordats: no és "quant perill hi ha
+    // a la muntanya" sinó "podrem atendre tot el que surti".
+    //
+    //   perill = min(PERILL_MAX, el més gran d'SMP i allaus + suplement pel segon)
+    //   risc   = min(SOSTRE, perill + increments)
+    //
+    // Es pren el més gran i no la suma per no comptar dues vegades el mateix, però
+    // dos perills alhora carreguen més: el segon hi afegeix un suplement.
+    // El perill es limita a 5 perquè sempre quedi marge: el darrer graó fins a 6 el
+    // mouen la gent que hi ha a la muntanya, els helicòpters i el canvi de temps.
     const RISC_SOSTRE = 6;
+    const RISC_PERILL_MAX = 5;
     const RISC_FORMULA_DEFAULT = {
-      // --- Base (es pren el màxim) ---
-      smp:          { actiu: true, base: true },                            // ja ve en escala 0-6
-      allaus:       { actiu: true, base: true, punts: { 1: 0, 2: 1, 3: 3, 4: 4, 5: 6 } },
+      // --- Perill (es pren el més gran; el segon hi suma un suplement) ---
+      smp:          { actiu: true, perill: true },                          // ja ve en escala 0-6
+      allaus:       { actiu: true, perill: true, punts: { 1: 0, 2: 0, 3: 2, 4: 4, 5: 5 } },
+      segonPerill:  { actiu: true, punts: { 1: 1, 3: 2 } },                 // suplement: segon perill 1-2 → +1; 3 o més → +2
       // --- Increments ---
       operativitat: { actiu: true, punts: { 0: 1, 1: 0.5, 2: 0 } },         // nº helis operatius; 2+ → 0
       afluencia:    { actiu: true, punts: { 0: 0, 1: 0.25, 2: 0.5, 3: 1 } },
@@ -4171,12 +4178,22 @@
     // Ho fa servir tant calcularRisc() com el desglossament de la targeta.
     function detallarRisc(dia) {
       const F = riscFormula || RISC_FORMULA_DEFAULT;
-      const candidats = [];
-      if (F.smp.actiu)    candidats.push({ nom: 'smp',    valor: parseFloat(dia.smp || 0) });
-      if (F.allaus.actiu) candidats.push({ nom: 'allaus', valor: +(F.allaus.punts[parseInt(dia.allaus || 0)] ?? 0) });
+      const perills = [];
+      if (F.smp.actiu)    perills.push({ nom: 'smp',    valor: parseFloat(dia.smp || 0) });
+      if (F.allaus.actiu) perills.push({ nom: 'allaus', valor: +(F.allaus.punts[parseInt(dia.allaus || 0)] ?? 0) });
+      perills.sort((a, b) => b.valor - a.valor);
 
-      let dominant = null, base = 0;
-      for (const c of candidats) if (c.valor > base) { base = c.valor; dominant = c.nom; }
+      const major = perills[0] || { nom: null, valor: 0 };
+      const segon = perills[1] || { nom: null, valor: 0 };
+      const dominant = major.valor > 0 ? major.nom : null;
+
+      // Dos perills alhora carreguen més que un de sol, però no se sumen sencers
+      let suplement = 0;
+      if (F.segonPerill.actiu && major.valor > 0 && segon.valor > 0) {
+        suplement = segon.valor >= 3 ? +(F.segonPerill.punts[3] ?? 0) : +(F.segonPerill.punts[1] ?? 0);
+      }
+      const base = Math.min(RISC_PERILL_MAX, major.valor + suplement);
+      const segonNom = suplement > 0 ? segon.nom : null;
 
       const increments = {};
       if (F.operativitat.actiu) {
@@ -4190,7 +4207,7 @@
       const extra = Object.values(increments).reduce((a, b) => a + b, 0);
       const brut = base + extra;
       return {
-        base, dominant, increments, extra,
+        base, dominant, suplement, segonNom, increments, extra,
         topat: brut > RISC_SOSTRE,
         risc: Math.max(0, Math.min(RISC_SOSTRE, brut))
       };
@@ -4288,7 +4305,8 @@
         const opPts = (opActiu && opTeDades) ? (calc.increments.operativitat || 0) : 0;
         // Marca el factor que fixa la base, i formata els increments dels altres
         const esBase = nom => calc.dominant === nom
-          ? ' <span style="font-size:0.6rem;color:#c62828;font-weight:700;">BASE</span>' : '';
+          ? ' <span style="font-size:0.6rem;color:#c62828;font-weight:700;">PERILL</span>'
+          : (calc.segonNom === nom ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;">2n · +' + formatarRisc(calc.suplement) + '</span>' : '');
         const mesPts = n => n ? ` \u00b7 +${formatarRisc(n)}` : '';
         const opBaixes = opTeDades ? opDetall.filter(d => !d.operatiu) : [];
         const opMotiuTxt = !opActiu ? '—'
@@ -4995,12 +5013,15 @@
             </tr>
           </thead>
           <tbody>
-            ${capcalera('BASE — es pren el factor de perill més greu')}
+            ${capcalera('PERILL — es pren el més gran, amb sostre ' + RISC_PERILL_MAX)}
             ${fila('smp', '⚠️ <strong>SMP</strong>',
                    'Ja ve en escala 0–6: groc 1 zona → 1, groc ≥3 zones → 2, taronja → 3, taronja ≥3 → 4, vermell → 5, vermell ≥3 → 6.')}
             ${fila('allaus', '❄️ <strong>Risc allaus</strong>',
                    'Segons el perill del BPA:' + grup('allaus', {1:'Feble', 2:'Moderat', 3:'Marcat', 4:'Fort', 5:'Molt fort'}))}
-            ${capcalera('INCREMENTS — sumen sobre la base, amb sostre ' + RISC_SOSTRE)}
+            ${fila('segonPerill', '➕ <strong>Segon perill</strong>',
+                   'Suplement quan els dos perills coincideixen, segons el que val el segon:' +
+                   grup('segonPerill', {1:'val 1 o 2', 3:'val 3 o més'}))}
+            ${capcalera('INCREMENTS — sumen sobre el perill, amb sostre ' + RISC_SOSTRE)}
             ${fila('operativitat', '🚁 <strong>Operativitat</strong>',
                    'Segons HC que poden volar:' + grup('operativitat', {0:'0 HC', 1:'1 HC', 2:'2 o més'}) +
                    '<br><span style="font-size:0.75rem;color:#999;">Veure la pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>')}
@@ -5085,11 +5106,12 @@
           <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
             <h3 style="margin:0 0 0.5rem;font-size:1rem;color:#e53935;">🧮 Fórmula del Risc Principal</h3>
             <p style="font-size:0.82rem;color:#555;margin:0 0 1rem;">
-              El risc de la pàgina principal es calcula amb <strong>factor dominant + increments</strong>:
-              es pren com a <strong>base</strong> el més greu dels factors de perill (SMP i allaus, tots dos en escala 0–6)
-              i els altres factors hi <strong>sumen</strong> per damunt, amb <strong>sostre 6</strong>.
-              Així un perill extrem no queda diluït i els factors secundaris matisen sense poder dominar.
-              <br>Al desglossament, el factor que marca la base surt etiquetat com a <strong>BASE</strong> i la resta mostren els punts que hi afegeixen.
+              El risc mesura la <strong>probabilitat de quedar desbordats</strong>: no és quant perill hi ha a la muntanya,
+              sinó si podreu atendre tot el que surti.
+              <br>Es pren com a <strong>perill</strong> el més gran entre SMP i allaus — no la suma, per no comptar dues vegades el mateix —
+              i, si tots dos hi són alhora, el segon hi afegeix un <strong>suplement</strong>. El perill es limita a ${RISC_PERILL_MAX}
+              perquè sempre quedi marge: el darrer graó fins a ${RISC_SOSTRE} el mouen la gent que hi ha a la muntanya, els helicòpters i el canvi de temps.
+              <br>Al desglossament, el factor que marca el nivell surt etiquetat com a <strong>PERILL</strong> i el segon com a <strong>2n</strong>.
               <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
               Un factor desactivat surt atenuat al desglossament.
               <br><strong>Plans PC</strong> és només informatiu (no suma).
