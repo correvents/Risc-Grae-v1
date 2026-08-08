@@ -94,7 +94,9 @@ Publica dues versions del mateix web a GitHub Pages:
 
 S'executa a cada push a `main` o a `proves`. La còpia de proves mostra un avís taronja a dalt i porta `🧪 PROVES` al títol de la pestanya, per no confondre-la amb l'operativa. Llegeix les mateixes dades que l'operativa (`data/*.json` i Supabase són compartits).
 
-Perquè funcioni cal tenir **Settings → Pages → Source = "GitHub Actions"**. Si la branca `proves` no existeix, el workflow publica només la versió operativa.
+El desplegament el fa sempre `main`: l'entorn `github-pages` només accepta la branca per defecte, així que un push a `proves` no publica directament sinó que crida el workflow a `main` (`gh workflow run pages.yml --ref main`), i és main qui recull la branca `proves` i la posa a `/proves/`.
+
+Requereix **Settings → Pages → Source = "GitHub Actions"**. Si la branca `proves` no existeix, es publica només la versió operativa.
 
 Per provar un canvi: puja'l a la branca `proves`, mira'l a `/proves/` i, quan et convenci, porta'l a `main`.
 

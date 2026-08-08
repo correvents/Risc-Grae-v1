@@ -20,7 +20,9 @@ La còpia de proves es distingeix sola (`marcarWebDeProves()`): **fons verd**, f
 
 **Compte:** els dos webs comparteixen dades. `data/*.json` i Supabase són els mateixos, així que provar-hi coses que escriguin a Supabase toca les taules de veritat.
 
-**Cal fer un cop a mà:** Settings → Pages → Source = "GitHub Actions". Fins que no es faci, el web es continua publicant com abans i el workflow falla al pas de desplegar.
+**Ensopegada:** el primer intent des de `proves` fallava en 2 segons sense arrencar cap pas. L'entorn `github-pages` només accepta desplegaments de la branca per defecte. Resolt fent que el workflow, quan corre en una branca que no és `main`, només cridi `gh workflow run pages.yml --ref main`; la publicació la fa sempre main, que ja recull `proves` i la posa a `/proves/`.
+
+Comprovat: push a `proves` → run verd que llança el de main → main publica les dues versions amb el pas "Web de proves" inclòs.
 
 ## 2026-08-02 — Les caselles de la fórmula de risc no feien res
 
