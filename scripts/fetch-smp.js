@@ -1,4 +1,4 @@
-const { supabaseInsert, readJSON, writeJSON } = require('./utils');
+const { supabaseInsert, readJSON, writeJSON, nomComarca } = require('./utils');
 
 const API_KEY = process.env.METEOCAT_API_KEY;
 const FORCE = process.env.FORCE === 'true';
@@ -28,25 +28,58 @@ for (const [zona, comarques] of Object.entries(ZONES))
 const NIVELLS = { 1: "Groc", 2: "Taronja", 3: "Vermell" };
 const PROBABILITATS = { 1: "Poc probable", 2: "Probable", 3: "Molt probable", 4: "Segur" };
 
+// Ordre numèric d'una probabilitat ja formatada, per poder-ne agafar la més alta.
+function ordreProbabilitat(text) {
+  const clau = Object.keys(PROBABILITATS).find(k => PROBABILITATS[k] === text);
+  return clau ? parseInt(clau) : 0;
+}
+
+// Cada afectació es guarda **per comarca**, no per zona Meteocat. La zona hi
+// continua sent perquè la pestanya Alertes hi agrupa, però si es col·lapsés
+// aquí la comarca es perdria i el risc per regions d'emergència no es podria
+// calcular: dues comarques d'una mateixa zona poden tenir franges diferents.
 function afegirAfectacio(diesMap, diaISO, afectacio, nomPeriode) {
-  const zona = COMARCA_A_ZONA[afectacio.idComarca] || `Comarca ${afectacio.idComarca}`;
+  const idComarca = afectacio.idComarca;
+  const zona = COMARCA_A_ZONA[idComarca] || `Comarca ${idComarca}`;
   const existent = diesMap[diaISO].find(a =>
-    a.zona === zona && a.nivell === NIVELLS[afectacio.nivell] && a.llindar === afectacio.llindar
+    a.comarca === idComarca && a.nivell === NIVELLS[afectacio.nivell] && a.llindar === afectacio.llindar
   );
   const periodes = nomPeriode ? [nomPeriode] : ['00-06', '06-12', '12-18', '18-00'];
   if (existent) {
     periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
-    const probActual = parseInt(Object.keys(PROBABILITATS).find(k => PROBABILITATS[k] === existent.probabilitat) || 0);
-    if (afectacio.perill > probActual) existent.probabilitat = PROBABILITATS[afectacio.perill];
+    if (afectacio.perill > ordreProbabilitat(existent.probabilitat)) {
+      existent.probabilitat = PROBABILITATS[afectacio.perill];
+    }
   } else {
     diesMap[diaISO].push({
       zona,
+      comarca:      idComarca,
+      comarcaNom:   nomComarca(idComarca),
       nivell:       NIVELLS[afectacio.nivell]       || `Nivell ${afectacio.nivell}`,
       probabilitat: PROBABILITATS[afectacio.perill] || `Prob ${afectacio.perill}`,
       llindar:      afectacio.llindar,
       periodes
     });
   }
+}
+
+// `smp_historic` no té columna de comarca, així que abans de desar a Supabase es
+// torna a agrupar per zona i les files queden exactament com sempre.
+function agruparPerZona(afectacions) {
+  const perClau = new Map();
+  for (const af of afectacions) {
+    const clau = `${af.zona}|${af.nivell}|${af.llindar}`;
+    const existent = perClau.get(clau);
+    if (!existent) {
+      perClau.set(clau, { ...af, periodes: [...af.periodes] });
+      continue;
+    }
+    af.periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
+    if (ordreProbabilitat(af.probabilitat) > ordreProbabilitat(existent.probabilitat)) {
+      existent.probabilitat = af.probabilitat;
+    }
+  }
+  return [...perClau.values()];
 }
 
 function processarSMP(dades) {
@@ -83,7 +116,9 @@ function processarSMP(dades) {
       for (const dia of Object.keys(diesMap).sort()) {
         const afs = diesMap[dia];
         if (afs.length > 0) {
-          afs.sort((a, b) => a.zona.localeCompare(b.zona));
+          afs.sort((a, b) =>
+            a.zona.localeCompare(b.zona) || (a.comarcaNom || '').localeCompare(b.comarcaNom || '')
+          );
           avisS.dies.push({ dia, afectacions: afs });
         }
       }
@@ -103,7 +138,7 @@ function toRows(dades) {
   const rows = [];
   for (const avis of dades.avisos)
     for (const diaObj of avis.dies)
-      for (const af of diaObj.afectacions)
+      for (const af of agruparPerZona(diaObj.afectacions))
         rows.push({
           data_consulta: dades.dataConsulta,
           data_inici: avis.dataInici || null, data_fi: avis.dataFi || null,
@@ -134,4 +169,8 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e.message); process.exit(1); });
+if (require.main === module) {
+  main().catch(e => { console.error(e.message); process.exit(1); });
+}
+
+module.exports = { processarSMP, agruparPerZona, toRows, ZONES };

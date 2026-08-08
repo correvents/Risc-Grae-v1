@@ -66,4 +66,29 @@ function avuiMadrid() {
   return new Date().toLocaleString('sv', { timeZone: 'Europe/Madrid' }).split(' ')[0];
 }
 
-module.exports = { supabaseInsert, supabaseUpsert, supabaseSelect, readJSON, writeJSON, avuiMadrid };
+// Comarques de Catalunya per codi oficial. Els `idComarca` que retorna l'API SMP
+// de Meteocat són aquests mateixos codis, per això el mapatge és directe.
+// L'SMP també fa servir els codis 88-99 per a zones marítimes, que no hi són.
+const COMARQUES = {
+  1: 'Alt Camp',        2: 'Alt Empordà',    3: 'Alt Penedès',    4: 'Alt Urgell',
+  5: 'Alta Ribagorça',  6: 'Anoia',          7: 'Bages',          8: 'Baix Camp',
+  9: 'Baix Ebre',      10: 'Baix Empordà',  11: 'Baix Llobregat',12: 'Baix Penedès',
+ 13: 'Barcelonès',     14: 'Berguedà',      15: 'Cerdanya',      16: 'Conca de Barberà',
+ 17: 'Garraf',         18: 'Garrigues',     19: 'Garrotxa',      20: 'Gironès',
+ 21: 'Maresme',        22: 'Montsià',       23: 'Noguera',       24: 'Osona',
+ 25: 'Pallars Jussà',  26: 'Pallars Sobirà',27: "Pla d'Urgell",  28: "Pla de l'Estany",
+ 29: 'Priorat',        30: "Ribera d'Ebre", 31: 'Ripollès',      32: 'Segarra',
+ 33: 'Segrià',         34: 'Selva',         35: 'Solsonès',      36: 'Tarragonès',
+ 37: 'Terra Alta',     38: 'Urgell',        39: 'Aran',          40: 'Vallès Occidental',
+ 41: 'Vallès Oriental',42: 'Moianès',       43: 'Lluçanès'
+};
+
+function nomComarca(id) {
+  return COMARQUES[id] || `Comarca ${id}`;
+}
+
+module.exports = {
+  supabaseInsert, supabaseUpsert, supabaseSelect,
+  readJSON, writeJSON, avuiMadrid,
+  COMARQUES, nomComarca
+};

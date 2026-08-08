@@ -8,6 +8,24 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — Pestanya SMP Bombers: risc per regions d'emergència
+
+El cap del GRAE vol un risc SMP **de Bombers**, separat del risc del GRAE, perquè cada cap de regió pugui veure el risc del seu territori. Nova pestanya **SMP Bombers**, amb taula per franges horàries (avui i demà) i mapa pintat.
+
+**Decisions preses:** la Cerdanya va al **Centre** (el decret la posa a Pirineus, però operativament depèn de la sala de Manresa). El Barcelonès i l'Anoia, que estan partits entre regions per municipis, s'assignen sencers a la Metropolitana Sud, perquè l'SMP arriba per comarca i no s'hi pot baixar més.
+
+**La regla d'agregació.** El risc d'una regió és el valor més alt que assoleix la meitat + 1 de les seves comarques, amb els valors englobats: una comarca amb un 4 també compta per al 3. El risc de Catalunya és el mateix càlcul sobre les 8 regions. Amb l'exemple del cap (3,3,3,2,2,2,4,4 → 3) surt el que ell esperava.
+
+**Canvi obligatori al backend.** `fetch-smp.js` col·lapsava `idComarca` en una zona Meteocat abans de desar i la comarca es perdia. Ara les afectacions de `smp_latest.json` van per comarca; les files cap a `smp_historic` es tornen a agrupar per zona (`agruparPerZona`), o sigui que **la taula de Supabase no canvia**.
+
+**El que el cap no va especificar** és com es converteix un avís en un 0-6 per comarca. S'ha fet: nivell (Groc 1 / Taronja 3 / Vermell 5) + 1 punt si la probabilitat és *Molt probable* o *Segur*. Està aïllat a `RISC_BASE_NIVELL` i `PROB_ALTA` per si es vol canviar.
+
+**Mapa:** SVG pla generat des del GeoJSON de comarques, sense Leaflet (index.html no té dependències), amb vista per regions i per comarques. El GeoJSON només es baixa en obrir la pestanya.
+
+Comprovat amb Playwright sobre l'app servida en local: la regla d'agregació dona els valors esperats en sis casos (inclòs el del cap), les 43 comarques hi són sense duplicats, el mapa es dibuixa i no hi ha errors de JS.
+
+**Pendent:** la pestanya no té dades fins que el workflow no torni a generar `smp_latest.json` amb el format nou; mentrestant surt un avís explicant-ho. Els objectius següents (subregions del GRAE, gra de municipi, zones marítimes, històric) són a `REGIONS-EMERGENCIA.md`.
+
 ## 2026-08-08 — SMP per regions d'emergència: recerca prèvia
 
 El cap del GRAE vol que la pestanya SMP deixi d'agrupar per zones geogràfiques de muntanya i passi a agrupar per **regions d'emergència** de Bombers, partint-ne algunes en dues.

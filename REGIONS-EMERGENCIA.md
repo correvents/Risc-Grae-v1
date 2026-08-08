@@ -4,7 +4,8 @@ Document de treball per reformular la pestanya **SMP**: passar d'agrupar per zon
 geogràfiques de muntanya (zones internes de Meteocat) a agrupar per **regions
 d'emergència** de Bombers de la Generalitat.
 
-Estat: **proposta, pendent de validar amb el cap del GRAE.** Encara no s'ha tocat codi.
+Estat: **decidit i implementat** a la pestanya *SMP Bombers*. Les subregions del
+GRAE i el pas a municipis queden per a més endavant (vegeu l'apartat 6).
 
 ---
 
@@ -30,12 +31,12 @@ retorna l'API SMP de Meteocat** (comprovat contra `scripts/fetch-smp.js` i
 
 | Regió d'emergències | Comarques (codi) |
 | --- | --- |
-| **Metropolitana Nord** | Barcelonès¹ (13) · Maresme (21) · Vallès Occidental (40) · Vallès Oriental (41) |
+| **Metropolitana Nord** | Maresme (21) · Vallès Occidental (40) · Vallès Oriental (41) ¹ |
 | **Metropolitana Sud** | Barcelonès¹ (13) · Baix Llobregat (11) · Alt Penedès (03) · Garraf (17) · Anoia² (06) |
 | **Girona** | Alt Empordà (02) · Baix Empordà (10) · Gironès (20) · Pla de l'Estany (28) · Selva (34) · Garrotxa (19) · Ripollès (31) |
-| **Centre** | Bages (07) · Osona (24) · Berguedà (14) · Solsonès (35) · Moianès (42) · Lluçanès (43) · Cerdanya³ (15) · Anoia² (06) |
+| **Centre** | Bages (07) · Osona (24) · Berguedà (14) · Solsonès (35) · Moianès (42) · Lluçanès (43) · Cerdanya³ (15) |
 | **Lleida** | Segrià (33) · Noguera (23) · Urgell (38) · Pla d'Urgell (27) · Garrigues (18) · Segarra (32) |
-| **Pirineus** (nova) | Aran (39) · Alta Ribagorça (05) · Pallars Sobirà (26) · Pallars Jussà (25) · Alt Urgell (04) · Cerdanya³ (15) |
+| **Pirineus** (nova) | Aran (39) · Alta Ribagorça (05) · Pallars Sobirà (26) · Pallars Jussà (25) · Alt Urgell (04) |
 | **Tarragona** | Tarragonès (36) · Baix Camp (08) · Alt Camp (01) · Baix Penedès (12) · Conca de Barberà (16) · Priorat (29) |
 | **Terres de l'Ebre** | Baix Ebre (09) · Montsià (22) · Ribera d'Ebre (30) · Terra Alta (37) |
 
@@ -52,9 +53,9 @@ Calonge de Segarra, Castellfollit de Riubregós, els Prats de Rei, Pujalt, Sant
 Martí Sesgueioles, Sant Pere Sallavinera i Veciana — 8 municipis) és del Centre;
 els altres 25 (Igualada, Piera, Capellades…) són de la Metropolitana Sud.
 
-**³ La Cerdanya és el punt discutit.** El decret la posa a Pirineus, però
-operativament continua depenent de la sala de Manresa (Centre), i això ha generat
-polèmica al territori. **Cal decidir a quina la posem.**
+**³ La Cerdanya va al Centre.** El decret la posa a Pirineus, però operativament
+continua depenent de la sala de Manresa, i això és el que s'ha decidit reflectir.
+Canviar-ho és tocar una línia de `REGIONS_BOMBERS` a `index.html`.
 
 **Zones marítimes.** L'SMP també emet avisos per zones marítimes (`idComarca` 88-99,
 que el codi actual anomena `Comarca 88`…`Comarca 99`). No tenen regió d'emergència.
@@ -70,7 +71,11 @@ cada comarca sencera:
 
 - **Anoia** → Metropolitana Sud (25 municipis de 33). L'Alta Anoia hi queda mal
   assignada, però és territori de poc interès per al GRAE.
-- **Barcelonès** → indiferent per al GRAE (no hi ha muntanya). Proposta: Metropolitana Sud.
+- **Barcelonès** → Metropolitana Sud (hi són Barcelona i l'Hospitalet; a la Nord,
+  Badalona, Sant Adrià i Santa Coloma).
+
+Si algun dia l'SMP arriba **per municipis**, aquestes dues assignacions deixen de
+ser una aproximació: el mateix càlcul es podrà fer amb el gra real.
 
 ---
 
@@ -91,20 +96,65 @@ Terres de l'Ebre (Ports) tenen massís però són d'una peça; **proposta: no pa
 
 ---
 
-## 5. Què implica al codi (encara no fet)
+## 5. Com està implementat
 
-1. **`scripts/fetch-smp.js`** col·lapsa `idComarca` → zona Meteocat abans de desar.
-   Per anar per regions cal que desi la **comarca** (o directament la regió) i no la
-   zona. Mentre desi la zona, la informació de comarca es perd i no es pot recuperar.
-2. **`index.html`** fa un segon salt, `riscParams.zonesGrup` (zona Meteocat → grup
-   GRAE). Aquest mapatge desapareix i el substitueix comarca → regió.
-3. **`smp_historic`** de Supabase té una columna `zona` amb els noms antics. En
-   canviar la nomenclatura, l'històric deixa de ser comparable: cal decidir si es
-   migra, si es conviu amb les dues o si es parteix de zero.
-4. **`riscParams.zones`** (quines zones compten per al risc) i la taula
-   `taula_config_Alertes_SMP` passen a tenir una fila per regió.
-5. **El manual integrat** d'`index.html` (apartat 2.9, "Agrupació de zones SMP")
-   s'ha d'actualitzar amb la taula nova.
+Pestanya **SMP Bombers** d'`index.html`. És un càlcul independent del risc del
+GRAE: no entra a la fórmula de `Risc GRAE` ni es desa a `risc_historic`.
+
+**Risc d'una comarca (0-6).** El nivell de l'avís marca el tram i la probabilitat
+hi suma un punt quan és *Molt probable* o *Segur*:
+
+| Nivell | Prob. baixa | Molt probable / Segur |
+| --- | --- | --- |
+| Cap avís | 0 | 0 |
+| Groc | 1 | 2 |
+| Taronja | 3 | 4 |
+| Vermell | 5 | 6 |
+
+Aquesta escala és la peça que el cap del GRAE no va especificar. Està aïllada a
+les constants `RISC_BASE_NIVELL` i `PROB_ALTA`, o sigui que canviar-la és tocar
+dues línies.
+
+**Risc d'una regió i de Catalunya (`agregarRisc`).** El valor més alt que
+assoleix **la meitat + 1** de les unitats. Els valors s'engloben: una comarca amb
+un 4 també compta per al 3 i per al 2. El risc de Catalunya és el mateix càlcul
+aplicat sobre les 8 regions.
+
+> Exemple del cap del GRAE: 8 regions amb 3, 3, 3, 2, 2, 2, 4, 4. El llindar és 5.
+> N'hi ha 5 amb ≥3 i només 2 amb ≥4 → el risc de Catalunya és **3**.
+
+**Canvi obligatori al backend.** `scripts/fetch-smp.js` col·lapsava `idComarca` en
+una zona Meteocat *abans* de desar, i la comarca es perdia. Ara cada afectació de
+`smp_latest.json` porta `comarca` i `comarcaNom`. Les files que van a
+`smp_historic` es tornen a agrupar per zona (`agruparPerZona`), o sigui que la
+taula de Supabase **no canvia**.
+
+**Conseqüència.** El *fallback* a Supabase no porta comarca, perquè la taula desa
+la zona. Quan el frontend hi cau, la pestanya surt buida amb un avís explicant-ho.
+La pestanya tampoc no té dades fins que el workflow no torni a generar
+`data/smp_latest.json` amb el format nou.
+
+**Mapa.** SVG pla generat des de `comarques_simplificat_500m.geojson`, sense
+Leaflet ni cap altra dependència, amb dues vistes: *per regions* (totes les
+comarques d'una regió pintades amb el valor de la regió) i *per comarques*. El
+GeoJSON només es baixa quan s'obre la pestanya.
+
+---
+
+## 6. Objectius futurs
+
+1. **Subregions per al GRAE.** Un mapa equivalent però partint les regions en
+   muntanya i plana (apartat 4). El càlcul ja hi serveix tal com és: només canvia
+   la taula de grups.
+2. **Risc SMP per municipis.** Si algun dia l'SMP arriba amb gra de municipi, el
+   mateix `agregarRisc` funciona un nivell més avall, i les assignacions
+   aproximades de l'Anoia i el Barcelonès deixen de ser aproximades.
+3. **Zones marítimes.** Decidir si es descarten o si es pengen de les regions
+   costaneres. Ara mateix es descarten.
+4. **Històric.** `smp_historic` desa la zona, no la comarca. Si es vol poder
+   reconstruir el risc per regions cap enrere, cal afegir-hi la comarca i decidir
+   què es fa amb les files antigues.
+5. **Unificar les dues fórmules de risc** (pendent de fa temps, vegeu `DIARI.md`).
 
 ---
 
