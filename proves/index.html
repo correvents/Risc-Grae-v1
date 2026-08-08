@@ -4030,30 +4030,42 @@
     }
     
     // ==================== FÓRMULA DE RISC (configurable) ====================
-    // Risc = SMP + Afluència + Operativitat + Allaus + Canvi (sense límit superior).
-    // Plans PC i Boletaires són només informatius (no sumen).
+    // Fórmula "factor dominant + increments":
+    //   base  = el més greu dels factors de perill (SMP i allaus), en escala 0-6
+    //   risc  = min(SOSTRE, base + increments dels factors secundaris)
+    // Així un perill extrem no queda diluït per la resta, i els factors
+    // secundaris matisen sense poder dominar el resultat.
+    const RISC_SOSTRE = 6;
     const RISC_FORMULA_DEFAULT = {
-      smp:          { actiu: true },
-      afluencia:    { actiu: true },
-      operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0 } }, // nº helis operatius; 3-4 → 0
-      allaus:       { actiu: true, punts: { 3: 1, 4: 2, 5: 3 } },  // nivells 1-2 → 0
-      canvi:        { actiu: true },
+      // --- Base (es pren el màxim) ---
+      smp:          { actiu: true, base: true },                            // ja ve en escala 0-6
+      allaus:       { actiu: true, base: true, punts: { 1: 0, 2: 1, 3: 3, 4: 4, 5: 6 } },
+      // --- Increments ---
+      operativitat: { actiu: true, punts: { 0: 1, 1: 0.5, 2: 0 } },         // nº helis operatius; 2+ → 0
+      afluencia:    { actiu: true, punts: { 0: 0, 1: 0.25, 2: 0.5, 3: 1 } },
+      canvi:        { actiu: true, punts: { 0: 0, 1: 0.5, 2: 1 } },
+      boletaires:   { actiu: true, punts: { 0: 0, 1: 1 } },                 // 0 o 1
+      // Plans PC: només informatiu, no entra al càlcul
     };
     let riscFormula = JSON.parse(JSON.stringify(RISC_FORMULA_DEFAULT));
 
+    // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
+    // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
+    // de suma directa) no deixa forats ni valors sense sentit.
     function carregarRiscFormula() {
       try {
         const saved = JSON.parse(localStorage.getItem('riscGRAE_formula') || 'null');
-        if (saved) {
-          riscFormula = {
-            smp:       { actiu: saved.smp?.actiu !== false },
-            afluencia: { actiu: saved.afluencia?.actiu !== false },
-            operativitat: { actiu: saved.operativitat?.actiu !== false,
-              punts: { 0: +(saved.operativitat?.punts?.[0] ?? 2), 1: +(saved.operativitat?.punts?.[1] ?? 1), 2: +(saved.operativitat?.punts?.[2] ?? 0) } },
-            allaus: { actiu: saved.allaus?.actiu !== false,
-              punts: { 3: +(saved.allaus?.punts?.[3] ?? 1), 4: +(saved.allaus?.punts?.[4] ?? 2), 5: +(saved.allaus?.punts?.[5] ?? 3) } },
-            canvi:     { actiu: saved.canvi?.actiu !== false },
-          };
+        if (!saved) return;
+        for (const [nom, def] of Object.entries(riscFormula)) {
+          const s = saved[nom];
+          if (!s) continue;
+          def.actiu = s.actiu !== false;
+          if (def.punts && s.punts) {
+            for (const nivell of Object.keys(def.punts)) {
+              const v = parseFloat(s.punts[nivell]);
+              if (!isNaN(v)) def.punts[nivell] = v;
+            }
+          }
         }
       } catch(e) { logError('RiscFormula', e.message); }
     }
@@ -4154,33 +4166,43 @@
       return { count: detall.filter(d => d.operatiu).length, total: detall.length, detall };
     }
 
-    // Punts que aporta l'operativitat segons nº d'helis operatius (per mostrar al desglossament)
-    function puntsOperativitat(nHelis) {
-      const n = (nHelis == null) ? 4 : parseInt(nHelis);
-      return +(riscFormula.operativitat.punts[n] ?? 0);
+
+    // Detall del càlcul: quin factor marca la base i què hi suma cadascun.
+    // Ho fa servir tant calcularRisc() com el desglossament de la targeta.
+    function detallarRisc(dia) {
+      const F = riscFormula || RISC_FORMULA_DEFAULT;
+      const candidats = [];
+      if (F.smp.actiu)    candidats.push({ nom: 'smp',    valor: parseFloat(dia.smp || 0) });
+      if (F.allaus.actiu) candidats.push({ nom: 'allaus', valor: +(F.allaus.punts[parseInt(dia.allaus || 0)] ?? 0) });
+
+      let dominant = null, base = 0;
+      for (const c of candidats) if (c.valor > base) { base = c.valor; dominant = c.nom; }
+
+      const increments = {};
+      if (F.operativitat.actiu) {
+        const n = (dia.operativitatHelis == null) ? 4 : parseInt(dia.operativitatHelis);
+        increments.operativitat = +(F.operativitat.punts[n] ?? 0);
+      }
+      if (F.afluencia.actiu)  increments.afluencia  = +(F.afluencia.punts[parseInt(dia.afluencia || 0)] ?? 0);
+      if (F.canvi.actiu)      increments.canvi      = +(F.canvi.punts[parseInt(dia.canvi || 0)] ?? 0);
+      if (F.boletaires.actiu) increments.boletaires = parseInt(dia.boletaires || 0) > 0 ? +(F.boletaires.punts[1] ?? 0) : 0;
+
+      const extra = Object.values(increments).reduce((a, b) => a + b, 0);
+      const brut = base + extra;
+      return {
+        base, dominant, increments, extra,
+        topat: brut > RISC_SOSTRE,
+        risc: Math.max(0, Math.min(RISC_SOSTRE, brut))
+      };
     }
 
     function calcularRisc(dia) {
-      const F = riscFormula || RISC_FORMULA_DEFAULT;
-      let total = 0;
-      // SMP (0-6) — suma el seu valor
-      if (F.smp.actiu) total += parseFloat(dia.smp || 0);
-      // Afluència (0-3) — suma el seu valor
-      if (F.afluencia.actiu) total += parseFloat(dia.afluencia || 0);
-      // Operativitat — nº d'helis operatius, invertit (menys helis = més risc); 3-4 → 0
-      if (F.operativitat.actiu) {
-        const n = (dia.operativitatHelis == null) ? 4 : parseInt(dia.operativitatHelis);
-        total += +(F.operativitat.punts[n] ?? 0);
-      }
-      // Risc allaus — nivells 1-2 → 0; 3/4/5 segons punts
-      if (F.allaus.actiu) {
-        const a = parseInt(dia.allaus || 0);
-        total += +(F.allaus.punts[a] ?? 0);
-      }
-      // Canvi de temps (0-2) — suma el seu valor
-      if (F.canvi.actiu) total += parseFloat(dia.canvi || 0);
-      // Plans PC i Boletaires: només informatius (no sumen)
-      return Math.max(0, Math.round(total)); // sense límit superior
+      return detallarRisc(dia).risc;
+    }
+
+    // 4 → "4"; 4.5 → "4,5" (evita ensenyar 4.5 com si fos 5)
+    function formatarRisc(risc) {
+      return (risc % 1 === 0) ? String(risc) : risc.toFixed(1).replace('.', ',');
     }
     
     function getRiscLabel(risc) {
@@ -4252,7 +4274,8 @@
         const dia = riscState[dayKey];
         if (!dia) return;
         
-        const risc = calcularRisc(dia);
+        const calc = detallarRisc(dia);
+        const risc = calc.risc;
         const colorClass = getRiscColorClass(risc);
         const bgClass = getRiscBgClass(risc);
         const label = getRiscLabel(risc);
@@ -4262,7 +4285,11 @@
         const totHelis = dia.operativitatTotal;
         const nHelis = dia.operativitatHelis;
         const opTeDades = !!opDetall && totHelis != null && nHelis != null;
-        const opPts = (opActiu && opTeDades) ? puntsOperativitat(nHelis) : 0;
+        const opPts = (opActiu && opTeDades) ? (calc.increments.operativitat || 0) : 0;
+        // Marca el factor que fixa la base, i formata els increments dels altres
+        const esBase = nom => calc.dominant === nom
+          ? ' <span style="font-size:0.6rem;color:#c62828;font-weight:700;">BASE</span>' : '';
+        const mesPts = n => n ? ` \u00b7 +${formatarRisc(n)}` : '';
         const opBaixes = opTeDades ? opDetall.filter(d => !d.operatiu) : [];
         const opMotiuTxt = !opActiu ? '—'
           : !opTeDades ? 'sense dades'
@@ -4283,8 +4310,8 @@
               ${canEdit ? `<button class="risc-btn" onclick="obrirRiscConfig('${dayKey}')">✏️</button>` : ''}
             </div>
             <div class="risc-value">
-              <div class="risc-number ${colorClass}">${Math.round(risc)}</div>
-              <div class="risc-level ${colorClass}">${label}</div>
+              <div class="risc-number ${colorClass}">${formatarRisc(risc)}</div>
+              <div class="risc-level ${colorClass}">${label}${calc.topat ? ' <span style="font-size:0.6rem;opacity:0.7;">(topat a 6)</span>' : ''}</div>
             </div>
             <div class="risc-bar">
               <div class="risc-bar-fill ${bgClass}" style="width: ${Math.min(100, (risc / 6) * 100)}%"></div>
@@ -4292,19 +4319,19 @@
             <div class="risc-breakdown">
               <div class="risc-breakdown-title">Desglossament</div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
-                <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}</span>
+                <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}${esBase('smp')}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.smp||0)}/6</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu)}">
-                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}</span>
+                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${esBase('allaus')}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.allaus||0)>=4?'background:#ffebee;color:#c62828':((dia.allaus||0)>=3?'background:#fff3e0;color:#e65100':((dia.allaus||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(dia.allaus||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
                 <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.afluencia||0)}/3</span>
+                <span class="risc-breakdown-value">${Math.round(dia.afluencia||0)}/3${mesPts(calc.increments.afluencia)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(opActiu)}">
                 <span class="risc-breakdown-label">🚁 Operativitat${fMarca(opActiu)}</span>
@@ -4314,17 +4341,17 @@
               <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
                 <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2</span>
+                <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2${mesPts(calc.increments.canvi)}</span>
               </div>
               <div class="risc-breakdown-item" style="opacity:0.6;">
                 <span class="risc-breakdown-label">🚨 Plans PC</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;color:#aaa;">${getPlanspcLabel(dia.planspc||0)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.planspc||0)}/3 <span style="font-size:0.6rem;color:#aaa;">info</span></span>
               </div>
-              <div class="risc-breakdown-item" style="opacity:0.6;">
-                <span class="risc-breakdown-label">🍄 Boletaires</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;color:#aaa;"></span>
-                <span class="risc-breakdown-value">${Math.round(dia.boletaires||0)}/2 <span style="font-size:0.6rem;color:#aaa;">info</span></span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.boletaires.actiu)}">
+                <span class="risc-breakdown-label">🍄 Boletaires${fMarca(riscFormula.boletaires.actiu)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${(dia.boletaires||0) > 0 ? 'Temporada' : '—'}</span>
+                <span class="risc-breakdown-value">${Math.round(dia.boletaires||0)}/2${mesPts(calc.increments.boletaires)}</span>
               </div>
             </div>
           </div>
@@ -4936,10 +4963,27 @@
       const cont = document.getElementById('formula-taula');
       if (!cont) return;
       const F = riscFormula;
-      // Els canvis s'apliquen a l'instant (onchange), sense haver de prémer Guardar
-      const chk = (on, id) => `<input type="checkbox" id="${id}" ${on ? 'checked' : ''} onchange="aplicarFormulaConfig()">`;
-      const num = (id, val) => `<input type="number" step="0.5" value="${val}" id="${id}" onchange="aplicarFormulaConfig()" style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;">`;
       const tdL = 'padding:0.5rem;border-bottom:1px solid #f0f0f0;';
+      // Els canvis s'apliquen a l'instant (onchange), sense haver de prémer Guardar
+      const chk = nom => `<input type="checkbox" id="f-${nom}-actiu" ${F[nom].actiu ? 'checked' : ''} onchange="aplicarFormulaConfig()">`;
+      const num = (nom, nivell, etiqueta) =>
+        `<label style="white-space:nowrap;">${etiqueta}
+           <input type="number" step="0.25" value="${F[nom].punts[nivell]}" id="f-${nom}-${nivell}"
+                  onchange="aplicarFormulaConfig()"
+                  style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;"></label>`;
+      const grup = (nom, etiquetes) =>
+        `<span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
+           ${Object.entries(etiquetes).map(([n, e]) => num(nom, n, e)).join('')}</span>`;
+      const fila = (nom, titol, descripcio) => `
+        <tr>
+          <td style="${tdL}">${titol}</td>
+          <td style="${tdL}text-align:center;">${chk(nom)}</td>
+          <td style="${tdL}color:#666;">${descripcio}</td>
+        </tr>`;
+      const capcalera = txt => `
+        <tr><td colspan="3" style="padding:0.5rem;background:#fafafa;border-bottom:2px solid #e0e0e0;
+            font-size:0.8rem;font-weight:700;color:#555;">${txt}</td></tr>`;
+
       cont.innerHTML = `
         <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:520px;">
@@ -4947,59 +4991,29 @@
             <tr style="background:#fafafa;text-align:left;">
               <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;">Factor</th>
               <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;text-align:center;width:70px;">Actiu</th>
-              <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;">Valors de suma</th>
+              <th style="padding:0.5rem;border-bottom:2px solid #e0e0e0;">Punts</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style="${tdL}">⚠️ <strong>SMP</strong></td>
-              <td style="${tdL}text-align:center;">${chk(F.smp.actiu, 'f-smp-actiu')}</td>
-              <td style="${tdL}color:#666;">Suma el seu valor (0–6)</td>
-            </tr>
-            <tr>
-              <td style="${tdL}">📅 <strong>Afluència</strong></td>
-              <td style="${tdL}text-align:center;">${chk(F.afluencia.actiu, 'f-afluencia-actiu')}</td>
-              <td style="${tdL}color:#666;">Suma el seu valor (0–3)</td>
-            </tr>
-            <tr>
-              <td style="${tdL}">🚁 <strong>Operativitat</strong></td>
-              <td style="${tdL}text-align:center;">${chk(F.operativitat.actiu, 'f-operativitat-actiu')}</td>
-              <td style="${tdL}color:#666;">
-                Segons HC operatius que poden volar (2+ → 0):
-                <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
-                  <label>0 HC ${num('f-op-0', F.operativitat.punts[0])}</label>
-                  <label>1 HC ${num('f-op-1', F.operativitat.punts[1])}</label>
-                  <label>2 HC ${num('f-op-2', F.operativitat.punts[2])}</label>
-                </span>
-                <br><span style="font-size:0.75rem;color:#999;">Veure pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>
-              </td>
-            </tr>
-            <tr>
-              <td style="${tdL}">❄️ <strong>Risc allaus</strong></td>
-              <td style="${tdL}text-align:center;">${chk(F.allaus.actiu, 'f-allaus-actiu')}</td>
-              <td style="${tdL}color:#666;">
-                Segons nivell BPA (nivells 1–2 → 0):
-                <span style="display:inline-flex;gap:0.75rem;margin-top:0.35rem;flex-wrap:wrap;">
-                  <label>Nivell 3 ${num('f-al-3', F.allaus.punts[3])}</label>
-                  <label>Nivell 4 ${num('f-al-4', F.allaus.punts[4])}</label>
-                  <label>Nivell 5 ${num('f-al-5', F.allaus.punts[5])}</label>
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td style="${tdL}">🌦️ <strong>Canvi de temps</strong></td>
-              <td style="${tdL}text-align:center;">${chk(F.canvi.actiu, 'f-canvi-actiu')}</td>
-              <td style="${tdL}color:#666;">Suma el seu valor (0–2)</td>
-            </tr>
+            ${capcalera('BASE — es pren el factor de perill més greu')}
+            ${fila('smp', '⚠️ <strong>SMP</strong>',
+                   'Ja ve en escala 0–6: groc 1 zona → 1, groc ≥3 zones → 2, taronja → 3, taronja ≥3 → 4, vermell → 5, vermell ≥3 → 6.')}
+            ${fila('allaus', '❄️ <strong>Risc allaus</strong>',
+                   'Segons el perill del BPA:' + grup('allaus', {1:'Feble', 2:'Moderat', 3:'Marcat', 4:'Fort', 5:'Molt fort'}))}
+            ${capcalera('INCREMENTS — sumen sobre la base, amb sostre ' + RISC_SOSTRE)}
+            ${fila('operativitat', '🚁 <strong>Operativitat</strong>',
+                   'Segons HC que poden volar:' + grup('operativitat', {0:'0 HC', 1:'1 HC', 2:'2 o més'}) +
+                   '<br><span style="font-size:0.75rem;color:#999;">Veure la pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>')}
+            ${fila('afluencia', '📅 <strong>Afluència</strong>',
+                   grup('afluencia', {0:'Normal', 1:'Moderat', 2:'Alt', 3:'Molt alt'}))}
+            ${fila('canvi', '🌦️ <strong>Canvi de temps</strong>',
+                   grup('canvi', {0:'Estable', 1:'Moderat', 2:'Fort'}))}
+            ${fila('boletaires', '🍄 <strong>Boletaires</strong>',
+                   'Suma quan hi ha temporada:' + grup('boletaires', {1:'Temporada'}))}
             <tr style="opacity:0.55;">
-              <td style="${tdL}">🚨 Plans PC</td>
-              <td style="${tdL}text-align:center;color:#aaa;">—</td>
-              <td style="${tdL}color:#aaa;">Només informatiu (no suma)</td>
-            </tr>
-            <tr style="opacity:0.55;">
-              <td style="padding:0.5rem;">🍄 Boletaires</td>
+              <td style="padding:0.5rem;">🚨 Plans PC</td>
               <td style="padding:0.5rem;text-align:center;color:#aaa;">—</td>
-              <td style="padding:0.5rem;color:#aaa;">Només informatiu (no suma)</td>
+              <td style="padding:0.5rem;color:#aaa;">Només informatiu (no suma): una fase activada ja es reflecteix als avisos SMP.</td>
             </tr>
           </tbody>
         </table>
@@ -5009,15 +5023,17 @@
     // Llegeix la taula i aplica els canvis a l'instant. No refà la taula: si ho fes,
     // l'usuari perdria el focus mentre escriu als camps de punts.
     function aplicarFormulaConfig() {
-      const gv = id => { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; };
-      const gc = id => { const el = document.getElementById(id); return el ? el.checked : true; };
-      riscFormula = {
-        smp:          { actiu: gc('f-smp-actiu') },
-        afluencia:    { actiu: gc('f-afluencia-actiu') },
-        operativitat: { actiu: gc('f-operativitat-actiu'), punts: { 0: gv('f-op-0'), 1: gv('f-op-1'), 2: gv('f-op-2') } },
-        allaus:       { actiu: gc('f-allaus-actiu'), punts: { 3: gv('f-al-3'), 4: gv('f-al-4'), 5: gv('f-al-5') } },
-        canvi:        { actiu: gc('f-canvi-actiu') },
-      };
+      for (const [nom, def] of Object.entries(riscFormula)) {
+        const casella = document.getElementById(`f-${nom}-actiu`);
+        if (casella) def.actiu = casella.checked;
+        if (!def.punts) continue;
+        for (const nivell of Object.keys(def.punts)) {
+          const el = document.getElementById(`f-${nom}-${nivell}`);
+          if (!el) continue;
+          const v = parseFloat(el.value);
+          if (!isNaN(v)) def.punts[nivell] = v;
+        }
+      }
       guardarRiscFormula();
     }
 
@@ -5069,11 +5085,14 @@
           <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
             <h3 style="margin:0 0 0.5rem;font-size:1rem;color:#e53935;">🧮 Fórmula del Risc Principal</h3>
             <p style="font-size:0.82rem;color:#555;margin:0 0 1rem;">
-              El valor de risc que surt a la pàgina principal = <strong>suma dels factors actius</strong>.
-              Activa o para cada factor i ajusta els punts que suma. No hi ha límit superior.
+              El risc de la pàgina principal es calcula amb <strong>factor dominant + increments</strong>:
+              es pren com a <strong>base</strong> el més greu dels factors de perill (SMP i allaus, tots dos en escala 0–6)
+              i els altres factors hi <strong>sumen</strong> per damunt, amb <strong>sostre 6</strong>.
+              Així un perill extrem no queda diluït i els factors secundaris matisen sense poder dominar.
+              <br>Al desglossament, el factor que marca la base surt etiquetat com a <strong>BASE</strong> i la resta mostren els punts que hi afegeixen.
               <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
-              Un factor desactivat surt atenuat al desglossament del risc.
-              <br><strong>Plans PC</strong> i <strong>Boletaires</strong> són només informatius (no sumen).
+              Un factor desactivat surt atenuat al desglossament.
+              <br><strong>Plans PC</strong> és només informatiu (no suma).
             </p>
             <div id="formula-taula"></div>
             <div style="display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end;">
@@ -7190,7 +7209,7 @@
                 </div>
               </div>
               <div class="risc-value">
-                <div class="risc-number ${colorClass}">${Math.round(risc)}</div>
+                <div class="risc-number ${colorClass}">${formatarRisc(risc)}</div>
                 <div class="risc-level ${colorClass}">${label}</div>
               </div>
               <div class="risc-bar"><div class="risc-bar-fill risc-bg-${Math.min(6,Math.floor(risc))}" style="width:${(risc/6)*100}%"></div></div>
