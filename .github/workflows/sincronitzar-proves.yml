@@ -1,0 +1,52 @@
+name: Sincronitzar el web de proves
+
+# GitHub Pages publica la branca `main` tal com està, així que el banc de proves
+# és la carpeta `proves/` dins de `main`. Aquest workflow la manté igual que la
+# branca `proves`: cada push a `proves` hi copia l'app.
+#
+# Només es copien index.html i mapa.html. Els GeoJSON i les dades (data/) no es
+# dupliquen: index.html llegeix els JSON per URL absoluta i mapa.html busca els
+# GeoJSON a l'arrel quan detecta que corre sota /proves/.
+
+on:
+  push:
+    branches: [proves]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sincronitzar-proves
+  cancel-in-progress: false
+
+jobs:
+  sincronitzar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Branca main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Branca proves
+        uses: actions/checkout@v4
+        with:
+          ref: proves
+          path: .proves-src
+
+      - name: Copiar l'app a proves/
+        run: |
+          mkdir -p proves
+          cp .proves-src/index.html proves/index.html
+          cp .proves-src/mapa.html  proves/mapa.html
+          rm -rf .proves-src
+
+      - name: Commit a main si hi ha canvis
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add proves/
+          git diff --staged --quiet && echo "El web de proves ja estava al dia" || \
+            (git commit -m "chore: sincronitzar el web de proves ($(date -u '+%Y-%m-%d %H:%M UTC'))" && git push)

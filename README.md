@@ -83,22 +83,22 @@ Si per al dia en curs ja hi ha una entrada a `risc_historic` amb una `font` dife
 
 - Horari (UTC): `0 21`. També es pot llançar manualment.
 
-**`pages.yml` — Publicar web**
+**`sincronitzar-proves.yml` — Sincronitzar el web de proves**
 
-Publica dues versions del mateix web a GitHub Pages:
+Hi ha dues versions del web publicades:
 
-| URL | Branca | Ús |
+| URL | Origen | Ús |
 | --- | --- | --- |
 | `/Risc-Grae-v1/` | `main` | Versió operativa |
-| `/Risc-Grae-v1/proves/` | `proves` | Banc de proves |
+| `/Risc-Grae-v1/proves/` | carpeta `proves/` de `main`, sincronitzada des de la branca `proves` | Banc de proves |
 
-S'executa a cada push a `main` o a `proves`. La còpia de proves mostra un avís taronja a dalt i porta `🧪 PROVES` al títol de la pestanya, per no confondre-la amb l'operativa. Llegeix les mateixes dades que l'operativa (`data/*.json` i Supabase són compartits).
+GitHub Pages publica `main` tal com està, així que el banc de proves és una carpeta dins de `main`. A cada push a la branca `proves`, aquest workflow hi copia `index.html` i `mapa.html` i commiteja el canvi a `main`.
 
-El desplegament el fa sempre `main`: l'entorn `github-pages` només accepta la branca per defecte, així que un push a `proves` no publica directament sinó que crida el workflow a `main` (`gh workflow run pages.yml --ref main`), i és main qui recull la branca `proves` i la posa a `/proves/`.
+No es dupliquen ni els GeoJSON ni `data/`: `index.html` llegeix els JSON per URL absoluta, i `mapa.html` busca els GeoJSON a l'arrel quan detecta que corre sota `/proves/`.
 
-Requereix **Settings → Pages → Source = "GitHub Actions"**. Si la branca `proves` no existeix, es publica només la versió operativa.
+La còpia de proves es reconeix sola: fons verd, franja verda a dalt i `🧪 PROVES` al títol de la pestanya.
 
-Per provar un canvi: puja'l a la branca `proves`, mira'l a `/proves/` i, quan et convenci, porta'l a `main`.
+Per provar un canvi: puja'l a la branca `proves`, mira'l a `/proves/` i, quan et convenci, fusiona `proves` dins de `main`.
 
 ### Secrets necessaris
 

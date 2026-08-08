@@ -58,7 +58,14 @@ Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet vo
 
 **Norma de treball: tot canvi va primer a la branca `proves`.** Es mira funcionant a `/proves/` i, quan estigui validat, es porta a `main`. No es toca `main` directament.
 
-`pages.yml` publica `main` a l'arrel i la branca `proves` a `/proves/`. La còpia de proves es distingeix sola: fons verd, franja verda a dalt i `🧪 PROVES` al títol de la pestanya (`marcarWebDeProves()`, que detecta `/proves/` a la ruta). Si algun dia es canvia la ruta de publicació, cal tocar aquesta funció.
+GitHub Pages publica `main` tal com està (mode "deploy from a branch"), **no** hi ha desplegament per Actions. Per això el banc de proves és la carpeta `proves/` dins de `main`, que `sincronitzar-proves.yml` copia des de la branca `proves` a cada push.
+
+- Només se sincronitzen `index.html` i `mapa.html`. Els GeoJSON i `data/` no es dupliquen: `index.html` llegeix els JSON per URL absoluta i `mapa.html` fa servir `BASE = '../'` quan detecta `/proves/`.
+- **`proves/` de `main` es genera sola: no l'editis a mà.** El que es toca és la branca `proves`.
+- Com que el workflow commiteja a `main`, les dues branques divergeixen: per pujar a l'operatiu cal **fusionar** `proves` dins de `main`, no un fast-forward.
+- La còpia de proves es distingeix sola: fons verd, franja verda i `🧪 PROVES` al títol (`marcarWebDeProves()`, que detecta `/proves/` a la ruta).
+
+Es va provar primer de publicar per Actions (`pages.yml`, esborrat): el desplegament sortia verd però el Pages continuava servint la branca, així que `/proves/` donava 404. Si algun dia es posa Settings → Pages → Source = "GitHub Actions", aquell workflow és a l'historial i és una solució més neta, sense còpia duplicada.
 
 **Els dos webs comparteixen dades.** `data/*.json` i Supabase són els mateixos: la còpia de proves **no** és un entorn aïllat, i si hi guardes coses les escrius a les taules de veritat. Tingues-ho present abans de provar-hi res que escrigui.
 
