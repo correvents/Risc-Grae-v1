@@ -68,6 +68,14 @@ jobs:
       - name: Treure el que no s'ha de publicar
         run: rm -rf site/.git site/.github site/proves/.git site/proves/.github site/proves/proves
 
+      # Marca de diagnòstic: aquest fitxer NOMÉS existeix al web publicat pel
+      # workflow, mai a cap branca. Si /publicat.txt dona 404, és que el Pages
+      # encara serveix una branca i no el que publica aquest workflow.
+      - name: Deixar marca de publicació
+        run: |
+          echo "run=${{ github.run_id }} sha=${{ github.sha }} data=$(date -u +%FT%TZ)" > site/publicat.txt
+          if [ -d site/proves ]; then cp site/publicat.txt site/proves/publicat.txt; fi
+
       - name: Preparar Pages
         uses: actions/configure-pages@v5
 
