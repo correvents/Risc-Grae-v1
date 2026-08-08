@@ -8,6 +8,23 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — SMP per regions d'emergència: recerca prèvia
+
+El cap del GRAE vol que la pestanya SMP deixi d'agrupar per zones geogràfiques de muntanya i passi a agrupar per **regions d'emergència** de Bombers, partint-ne algunes en dues.
+
+Aquesta sessió és **només recerca**: no s'ha tocat cap càlcul ni cap fitxer de codi. El resultat és `REGIONS-EMERGENCIA.md`, amb la taula regió → comarques de les 8 regions, els casos partits i les decisions pendents.
+
+**El que s'ha trobat:**
+
+- Les regions eren **7**; el febrer de 2026 el Govern va crear la **Regió d'Emergències Pirineus** (seu a Sort), segregada de la de Lleida. Ja no cal inventar-se la partició de Lleida: existeix, i amb nom oficial.
+- Els `idComarca` de l'API SMP de Meteocat **són els `CODICOMAR` oficials** (comprovat contra `fetch-smp.js` i el GeoJSON de comarques). El mapatge comarca → regió és directe.
+- Dues comarques estan partides entre regions per municipis: **Anoia** (Alta Anoia al Centre, la resta a Metropolitana Sud) i **Barcelonès** (Badalona, Sant Adrià i Santa Coloma a la Nord). Com que l'SMP arriba per comarca, s'hauran d'assignar senceres.
+- La **Cerdanya** és el punt discutit: el decret la posa a Pirineus, però operativament depèn de la sala de Manresa (Centre).
+
+**Trampa detectada:** `fetch-smp.js` col·lapsa `idComarca` → zona Meteocat *abans* de desar, i llavors la comarca es perd. Per anar per regions, aquest script s'ha de tocar primer; si no, la dada de comarca no existeix enlloc.
+
+**Pendent:** decidir la Cerdanya, quines regions es tornen a partir per al GRAE, i què es fa amb l'històric de `smp_historic` (columna `zona` amb la nomenclatura antiga).
+
 ## 2026-08-08 — Web de proves separat de l'operatiu
 
 Començat el 02-08 (`2d54f79`, `69774db`, `1fa4b81`) i acabat el 08-08 (`a7778b3` fins a `202e303`).
