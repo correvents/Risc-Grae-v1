@@ -1,4 +1,4 @@
-const { supabaseInsert, readJSON, writeJSON } = require('./utils');
+const { supabaseInsert, readJSON, writeJSON, nomComarca, COMARQUES } = require('./utils');
 
 const API_KEY = process.env.METEOCAT_API_KEY;
 const FORCE = process.env.FORCE === 'true';
@@ -28,25 +28,79 @@ for (const [zona, comarques] of Object.entries(ZONES))
 const NIVELLS = { 1: "Groc", 2: "Taronja", 3: "Vermell" };
 const PROBABILITATS = { 1: "Poc probable", 2: "Probable", 3: "Molt probable", 4: "Segur" };
 
+// Ordre numèric d'una probabilitat ja formatada, per poder-ne agafar la més alta.
+function ordreProbabilitat(text) {
+  const clau = Object.keys(PROBABILITATS).find(k => PROBABILITATS[k] === text);
+  return clau ? parseInt(clau) : 0;
+}
+
+// Cada afectació es guarda **per comarca**, no per zona Meteocat. La zona hi
+// continua sent perquè la pestanya Alertes hi agrupa, però si es col·lapsés
+// aquí la comarca es perdria i el risc per regions d'emergència no es podria
+// calcular: dues comarques d'una mateixa zona poden tenir franges diferents.
 function afegirAfectacio(diesMap, diaISO, afectacio, nomPeriode) {
-  const zona = COMARCA_A_ZONA[afectacio.idComarca] || `Comarca ${afectacio.idComarca}`;
+  const idComarca = afectacio.idComarca;
+  const zona = COMARCA_A_ZONA[idComarca] || `Comarca ${idComarca}`;
   const existent = diesMap[diaISO].find(a =>
-    a.zona === zona && a.nivell === NIVELLS[afectacio.nivell] && a.llindar === afectacio.llindar
+    a.comarca === idComarca && a.nivell === NIVELLS[afectacio.nivell] && a.llindar === afectacio.llindar
   );
   const periodes = nomPeriode ? [nomPeriode] : ['00-06', '06-12', '12-18', '18-00'];
   if (existent) {
     periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
-    const probActual = parseInt(Object.keys(PROBABILITATS).find(k => PROBABILITATS[k] === existent.probabilitat) || 0);
-    if (afectacio.perill > probActual) existent.probabilitat = PROBABILITATS[afectacio.perill];
+    if (afectacio.perill > (existent.grauPerill || 0)) {
+      existent.grauPerill   = afectacio.perill;
+      existent.probabilitat = PROBABILITATS[afectacio.perill] || `Prob ${afectacio.perill}`;
+    }
   } else {
     diesMap[diaISO].push({
       zona,
+      comarca:      idComarca,
+      comarcaNom:   nomComarca(idComarca),
       nivell:       NIVELLS[afectacio.nivell]       || `Nivell ${afectacio.nivell}`,
+      // `perill` és el grau de perill de l'SMP (1-6) que Meteocat dona per
+      // comarca i franja de 6 h. Es desa cru perquè el risc de Bombers el faci
+      // servir tal com ve, en comptes de deduir-lo del color.
+      grauPerill:   afectacio.perill,
       probabilitat: PROBABILITATS[afectacio.perill] || `Prob ${afectacio.perill}`,
       llindar:      afectacio.llindar,
       periodes
     });
   }
+}
+
+// `smp_historic` no té columna de comarca, així que abans de desar a Supabase es
+// torna a agrupar per zona i les files queden exactament com sempre.
+function agruparPerZona(afectacions) {
+  const perClau = new Map();
+  for (const af of afectacions) {
+    const clau = `${af.zona}|${af.nivell}|${af.llindar}`;
+    const existent = perClau.get(clau);
+    if (!existent) {
+      perClau.set(clau, { ...af, periodes: [...af.periodes] });
+      continue;
+    }
+    af.periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
+    if (ordreProbabilitat(af.probabilitat) > ordreProbabilitat(existent.probabilitat)) {
+      existent.probabilitat = af.probabilitat;
+    }
+    if ((af.grauPerill || 0) > (existent.grauPerill || 0)) existent.grauPerill = af.grauPerill;
+  }
+  return [...perClau.values()];
+}
+
+// Els codis de comarca que no són cap de les 43 (l'SMP també avisa per zones
+// marítimes) es registren crus al log del workflow. Encara no sabem quins codis
+// fa servir ni si porten camps que aquí s'ignoren: la primera alerta d'onatge
+// que passi per aquí ens ho dirà.
+function registrarCodisDesconeguts(dades) {
+  const vistos = new Map();
+  for (const avis of dades.avisos)
+    for (const dia of avis.dies)
+      for (const af of dia.afectacions)
+        if (!COMARQUES[af.comarca] && !vistos.has(af.comarca)) vistos.set(af.comarca, af);
+  if (vistos.size === 0) return;
+  console.log('⚠️ Codis de comarca desconeguts (probablement zones marítimes):');
+  for (const [codi, af] of vistos) console.log(`   ${codi} → ${JSON.stringify(af)}`);
 }
 
 function processarSMP(dades) {
@@ -83,7 +137,9 @@ function processarSMP(dades) {
       for (const dia of Object.keys(diesMap).sort()) {
         const afs = diesMap[dia];
         if (afs.length > 0) {
-          afs.sort((a, b) => a.zona.localeCompare(b.zona));
+          afs.sort((a, b) =>
+            a.zona.localeCompare(b.zona) || (a.comarcaNom || '').localeCompare(b.comarcaNom || '')
+          );
           avisS.dies.push({ dia, afectacions: afs });
         }
       }
@@ -103,7 +159,7 @@ function toRows(dades) {
   const rows = [];
   for (const avis of dades.avisos)
     for (const diaObj of avis.dies)
-      for (const af of diaObj.afectacions)
+      for (const af of agruparPerZona(diaObj.afectacions))
         rows.push({
           data_consulta: dades.dataConsulta,
           data_inici: avis.dataInici || null, data_fi: avis.dataFi || null,
@@ -121,6 +177,7 @@ async function main() {
   });
   if (!resp.ok) throw new Error(`Meteocat SMP ${resp.status}: ${await resp.text()}`);
   const dades = processarSMP(await resp.json());
+  registrarCodisDesconeguts(dades);
   const anterior = readJSON('smp_latest.json');
   const changed = hasChanged(dades, anterior);
   writeJSON('smp_latest.json', dades);
@@ -134,4 +191,8 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e.message); process.exit(1); });
+if (require.main === module) {
+  main().catch(e => { console.error(e.message); process.exit(1); });
+}
+
+module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts, ZONES };

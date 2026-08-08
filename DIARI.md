@@ -8,6 +8,52 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — El 0-6 el dona Meteocat, i les zones marítimes van a la seva comarca
+
+Dues correccions sobre la pestanya SMP Bombers acabada de fer.
+
+**El grau de perill no cal calcular-lo.** Meteocat ja publica un **grau de perill de 0 a 6** per comarca i franja de 6 h, que surt de creuar el llindar del fenomen amb la probabilitat. El color de l'avís només n'és l'agrupació. Ve al camp `perill` de cada afectació, que `fetch-smp.js` ara desa cru com a `grauPerill`, i el risc de Bombers el fa servir tal com ve. L'escala inventada ahir (color + probabilitat) queda només com a reserva per a dades antigues i desapareixerà sola.
+
+**El camp `perill` estava mal etiquetat.** El projecte el mostrava com una probabilitat (*Poc probable*…*Segur*) a la pestanya Alertes. Dues coses diuen que no ho és: Meteocat documenta **tres** bandes de probabilitat (10-30 %, 30-70 %, >70 %) i el codi en té quatre; i a les dades reals el llindar alt sempre surt com a "Segur" i el baix mai, que és just l'inrevés del que hauria de passar amb una probabilitat. Les etiquetes de la pestanya Alertes queden pendents de revisar — aquesta sessió no les toca.
+
+**Zones marítimes.** Cada zona s'adjunta ara a la comarca costanera que té al davant, i la comarca es queda el valor més alt dels dos. Els codis 88-99 són els que ja hi havia al projecte i **no estan verificats**: no hem vist mai una alerta marítima passar-hi. Per això `fetch-smp.js` registra al log del workflow qualsevol codi de comarca desconegut amb tots els seus camps; la primera alerta d'onatge ens dirà si la llista és correcta.
+
+Comprovat amb Playwright: el `grauPerill` cru mana per sobre de l'escala de reserva, i una alerta a la zona marítima 91 acaba comptant com a Maresme amb el valor correcte.
+
+## 2026-08-08 — Pestanya SMP Bombers: risc per regions d'emergència
+
+El cap del GRAE vol un risc SMP **de Bombers**, separat del risc del GRAE, perquè cada cap de regió pugui veure el risc del seu territori. Nova pestanya **SMP Bombers**, amb taula per franges horàries (avui i demà) i mapa pintat.
+
+**Decisions preses:** la Cerdanya va al **Centre** (el decret la posa a Pirineus, però operativament depèn de la sala de Manresa). El Barcelonès i l'Anoia, que estan partits entre regions per municipis, s'assignen sencers a la Metropolitana Sud, perquè l'SMP arriba per comarca i no s'hi pot baixar més.
+
+**La regla d'agregació.** El risc d'una regió és el valor més alt que assoleix la meitat + 1 de les seves comarques, amb els valors englobats: una comarca amb un 4 també compta per al 3. El risc de Catalunya és el mateix càlcul sobre les 8 regions. Amb l'exemple del cap (3,3,3,2,2,2,4,4 → 3) surt el que ell esperava.
+
+**Canvi obligatori al backend.** `fetch-smp.js` col·lapsava `idComarca` en una zona Meteocat abans de desar i la comarca es perdia. Ara les afectacions de `smp_latest.json` van per comarca; les files cap a `smp_historic` es tornen a agrupar per zona (`agruparPerZona`), o sigui que **la taula de Supabase no canvia**.
+
+**El que el cap no va especificar** és com es converteix un avís en un 0-6 per comarca. S'ha fet: nivell (Groc 1 / Taronja 3 / Vermell 5) + 1 punt si la probabilitat és *Molt probable* o *Segur*. Està aïllat a `RISC_BASE_NIVELL` i `PROB_ALTA` per si es vol canviar.
+
+**Mapa:** SVG pla generat des del GeoJSON de comarques, sense Leaflet (index.html no té dependències), amb vista per regions i per comarques. El GeoJSON només es baixa en obrir la pestanya.
+
+Comprovat amb Playwright sobre l'app servida en local: la regla d'agregació dona els valors esperats en sis casos (inclòs el del cap), les 43 comarques hi són sense duplicats, el mapa es dibuixa i no hi ha errors de JS.
+
+**Pendent:** la pestanya no té dades fins que el workflow no torni a generar `smp_latest.json` amb el format nou; mentrestant surt un avís explicant-ho. Els objectius següents (subregions del GRAE, gra de municipi, zones marítimes, històric) són a `REGIONS-EMERGENCIA.md`.
+
+## 2026-08-08 — SMP per regions d'emergència: recerca prèvia
+
+El cap del GRAE vol que la pestanya SMP deixi d'agrupar per zones geogràfiques de muntanya i passi a agrupar per **regions d'emergència** de Bombers, partint-ne algunes en dues.
+
+Aquesta sessió és **només recerca**: no s'ha tocat cap càlcul ni cap fitxer de codi. El resultat és `REGIONS-EMERGENCIA.md`, amb la taula regió → comarques de les 8 regions, els casos partits i les decisions pendents.
+
+**El que s'ha trobat:**
+
+- Les regions eren **7**; el febrer de 2026 el Govern va crear la **Regió d'Emergències Pirineus** (seu a Sort), segregada de la de Lleida. Ja no cal inventar-se la partició de Lleida: existeix, i amb nom oficial.
+- Els `idComarca` de l'API SMP de Meteocat **són els `CODICOMAR` oficials** (comprovat contra `fetch-smp.js` i el GeoJSON de comarques). El mapatge comarca → regió és directe.
+- Dues comarques estan partides entre regions per municipis: **Anoia** (Alta Anoia al Centre, la resta a Metropolitana Sud) i **Barcelonès** (Badalona, Sant Adrià i Santa Coloma a la Nord). Com que l'SMP arriba per comarca, s'hauran d'assignar senceres.
+- La **Cerdanya** és el punt discutit: el decret la posa a Pirineus, però operativament depèn de la sala de Manresa (Centre).
+
+**Trampa detectada:** `fetch-smp.js` col·lapsa `idComarca` → zona Meteocat *abans* de desar, i llavors la comarca es perd. Per anar per regions, aquest script s'ha de tocar primer; si no, la dada de comarca no existeix enlloc.
+
+**Pendent:** decidir la Cerdanya, quines regions es tornen a partir per al GRAE, i què es fa amb l'històric de `smp_historic` (columna `zona` amb la nomenclatura antiga).
 ## 2026-08-08 — La fórmula, replantejada: és un índex de saturació
 
 Repassant els pesos va sortir el que de debò s'ha de mesurar: **no és quant perill hi ha a la muntanya, sinó la probabilitat que els GRAE quedin desbordats** — si podran atendre tots els serveis que vagin sortint. Serveix per preveure el dia i per consultar què va passar.
