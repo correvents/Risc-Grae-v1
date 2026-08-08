@@ -8,6 +8,23 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — La fórmula, replantejada: és un índex de saturació
+
+Repassant els pesos va sortir el que de debò s'ha de mesurar: **no és quant perill hi ha a la muntanya, sinó la probabilitat que els GRAE quedin desbordats** — si podran atendre tots els serveis que vagin sortint. Serveix per preveure el dia i per consultar què va passar.
+
+Això va tombar el plantejament anterior. Un intent de model "demanda × dificultat × capacitat" també es va descartar: tractava les allaus com a dificultat per servei, i **un perill d'allaus 5 satura per si sol** encara que només hi hagi una allau, perquè pot afectar molta gent alhora.
+
+**Regla acordada per al bloc de perill:**
+
+- Allaus segons el BPA: 1→0, 2→0, 3→2, 4→4, 5→5.
+- Es pren **el més gran** entre SMP i allaus, no la suma, per no comptar dues vegades el mateix.
+- Si tots dos hi són, el segon hi afegeix un **suplement**: val 1–2 → +1; val 3 o més → +2.
+- El perill es limita a **5** (`RISC_PERILL_MAX`) perquè sempre quedi un punt de marge: el darrer graó fins a 6 el mouen l'afluència, els helicòpters, el canvi de temps i els boletaires.
+
+**Pendent immediat:** els valors de l'SMP (ara 0–6) no s'han tocat encara — es revisaran junt amb la pestanya SMP i el seu càlcul, en una sessió a part. Mentrestant, com que el perill es topa a 5, un SMP de 5 i un de 6 donen el mateix.
+
+**Pendent de calibrar:** els increments poden sumar fins a +3,5, i hi ha casos (bolets + taronja + dos helis de baixa + canvi fort) que se'n van a 5,5 sense cap perill greu.
+
 ## 2026-08-08 — Fórmula de risc repensada: factor dominant + increments
 
 Atacant el pendent d'unificar les dues fórmules, es va decidir no adoptar cap de les dues sinó repensar-la. **Aquest canvi és només al frontend; el script nocturn encara calcula amb l'antiga.**

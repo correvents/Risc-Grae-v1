@@ -21,13 +21,15 @@ Frontend estàtic (GitHub Pages) + scripts Node que s'executen per GitHub Action
 
 | | Frontend (`index.html`, `detallarRisc`) | Backend (`scripts/risc-diari.js`) |
 | --- | --- | --- |
-| Model | **factor dominant + increments** | suma ponderada |
-| Base | màxim entre SMP (0–6) i allaus (1→0, 2→1, 3→3, 4→4, 5→6) | — |
+| Model | **perill dominant + increments** | suma ponderada |
+| Perill | el més gran entre SMP (0–6) i allaus (1→0, 2→0, 3→2, 4→4, 5→5), **+ suplement** si el segon perill també hi és (val 1–2 → +1; ≥3 → +2), topat a `RISC_PERILL_MAX` = 5 | — |
 | Increments | operativitat HC, afluència, canvi, boletaires | — |
 | Factors | SMP, allaus, operativitat, afluència, canvi, boletaires | planspc, smp, allaus, afluència, hc, canvi |
 | Plans PC | informatiu, no suma | suma 0–3 |
 | Escala | `min(6, base + increments)`, amb decimals | `min(6, round((suma / 21) × 6))` |
 | Configurable | sí, per l'usuari (localStorage) | no |
+
+**Què mesura:** no és el perill de la muntanya sinó la **probabilitat que els GRAE quedin desbordats** — si podran atendre tot el que surti. Per això el perill d'allaus pesa tant (una allau gran satura per si sola) i per això hi compten la gent que hi ha a la muntanya i els helicòpters disponibles. El perill es limita a 5 perquè quedi sempre un punt de marge per als increments.
 
 La del frontend és la nova (08-08-2026); la del backend és l'antiga i és **la que es desa cada nit a `risc_historic`**. Migrar-la és la feina pendent, i arrossega els altres dos pendents: el backend no calcula ni `canvi` ni l'operativitat dels helis. Si toques una de les dues, comprova si l'altra també ho necessita.
 
