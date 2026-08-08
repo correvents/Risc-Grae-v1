@@ -27,7 +27,11 @@ La còpia de proves es distingeix sola (`marcarWebDeProves()`): **fons verd**, f
 
 **Solució adoptada:** enterrar `pages.yml` i fer que el banc de proves sigui la carpeta `proves/` dins de `main`, sincronitzada des de la branca `proves` per `sincronitzar-proves.yml`. Funciona amb el Pages tal com està configurat. Cost: una còpia duplicada d'`index.html` i `mapa.html` al repositori (els GeoJSON i `data/` no es dupliquen).
 
-Si algun dia es canvia Settings → Pages → Source a "GitHub Actions", `pages.yml` és a l'historial i és la solució neta.
+**Com es va confirmar:** el repositori té el workflow intern `pages-build-deployment` amb 316 execucions, totes des de `main`. Això demostra que el Pages està en mode branca i que publicar per Actions no hauria funcionat mai sense canviar la configuració. Els builds #315 (la fusió amb `proves/`) i #316 (`.nojekyll`) van sortir correctes, i a partir d'aquí les dues webs funcionen; els 404 que quedaven eren de memòria cau.
+
+També s'hi va afegir `.nojekyll`: el web es publica tal com està i no cal que Jekyll el processi.
+
+Si algun dia es canvia Settings → Pages → Source a "GitHub Actions", `pages.yml` és a l'historial (commit `48b22a8`) i és la solució neta, sense còpia duplicada.
 
 ## 2026-08-02 — Les caselles de la fórmula de risc no feien res
 
