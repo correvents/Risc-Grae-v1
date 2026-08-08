@@ -137,10 +137,12 @@ function resetView() { map.setView([41.72, 1.74], 8); }
 
 async function carregar() {
   try {
+    // Al web de proves (/proves/) els GeoJSON no es dupliquen: es llegeixen de l'arrel
+    var BASE = location.pathname.includes('/proves/') ? '../' : '';
     var [resC, resM, resCat] = await Promise.all([
-      fetch('comarques_simplificat_500m.geojson'),
-      fetch('municipis_simplificat_500m.geojson'),
-      fetch('catalunya_simplificat_100m.geojson')
+      fetch(BASE + 'comarques_simplificat_500m.geojson'),
+      fetch(BASE + 'municipis_simplificat_500m.geojson'),
+      fetch(BASE + 'catalunya_simplificat_100m.geojson')
     ]);
     var [dataC, dataM, dataCat] = await Promise.all([
       resC.json(), resM.json(), resCat.json()

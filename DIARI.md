@@ -20,9 +20,14 @@ La còpia de proves es distingeix sola (`marcarWebDeProves()`): **fons verd**, f
 
 **Compte:** els dos webs comparteixen dades. `data/*.json` i Supabase són els mateixos, així que provar-hi coses que escriguin a Supabase toca les taules de veritat.
 
-**Ensopegada:** el primer intent des de `proves` fallava en 2 segons sense arrencar cap pas. L'entorn `github-pages` només accepta desplegaments de la branca per defecte. Resolt fent que el workflow, quan corre en una branca que no és `main`, només cridi `gh workflow run pages.yml --ref main`; la publicació la fa sempre main, que ja recull `proves` i la posa a `/proves/`.
+**Dues ensopegades pel camí:**
 
-Comprovat: push a `proves` → run verd que llança el de main → main publica les dues versions amb el pas "Web de proves" inclòs.
+1. El desplegament des de `proves` fallava en 2 segons: l'entorn `github-pages` només accepta la branca per defecte. Es va resoldre fent que `proves` demanés la publicació a `main`.
+2. Amb tot verd, `/proves/` continuava donant 404. Es va publicar un fitxer marca (`publicat.txt`) que només existia al desplegament del workflow: també donava 404 a l'arrel. Conclusió: **el Pages serveix la branca `main` directament**, i el desplegament del workflow no arribava enlloc.
+
+**Solució adoptada:** enterrar `pages.yml` i fer que el banc de proves sigui la carpeta `proves/` dins de `main`, sincronitzada des de la branca `proves` per `sincronitzar-proves.yml`. Funciona amb el Pages tal com està configurat. Cost: una còpia duplicada d'`index.html` i `mapa.html` al repositori (els GeoJSON i `data/` no es dupliquen).
+
+Si algun dia es canvia Settings → Pages → Source a "GitHub Actions", `pages.yml` és a l'historial i és la solució neta.
 
 ## 2026-08-02 — Les caselles de la fórmula de risc no feien res
 
