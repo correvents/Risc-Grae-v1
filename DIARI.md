@@ -8,6 +8,30 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — L'afluència es rebaixa quan hi ha avisos SMP
+
+Venia del pendent de calibrar els increments, que amb el pas a enters podien sumar fins a +8. La solució no és posar-hi un sostre: el problema de fons és que **el mal temps comptava dues vegades**.
+
+L'afluència és una **predicció** de quanta gent hi haurà a la muntanya, feta amb estadístiques de calendari (caps de setmana, agost, ponts). Aquestes estadístiques no veuen quin temps farà, que és justament el que fa que la gent es quedi a casa. Amb un avís taronja o vermell no estàvem sumant un factor de més: sumàvem una previsió que ja sabíem falsa.
+
+**Regla nova** (`afluenciaSMP`): l'SMP rebaixa l'afluència **abans** que sumi, `afluència efectiva = màx(0, afluència − reducció)`. Els trams segueixen el **color de l'avís**, no el número — a l'escala d'SMP 1-2 és groc, 3-4 taronja i 5-6 vermell:
+
+- Cap avís o groc (0-2): reducció 0. Un groc no atura ningú.
+- Taronja (3-4): reducció 1.
+- Vermell (5-6): reducció 3, o sigui que l'anul·la.
+
+**No s'aplica a les allaus**, tot i que també fan quedar gent a casa. Amb perill 4-5 hi va menys gent, però la que hi és és exactament la que està en perill i cada servei és molt més gros. Amb un vermell de pluja, en canvi, no hi ha ningú a qui rescatar.
+
+**Error propi que va sortir provant:** la primera proposta posava el primer tram a SMP 2, i amb això el cas que havia reportat l'usuari aquest matí (SMP 2 amb afluència 2, que ha de donar 4) passava a donar 3. SMP 2 és **groc a tres zones o més**, encara groc, i havia dit que el groc no atura ningú. Corregit a taronja.
+
+El sostre es queda a **6** sempre, per decisió expressa.
+
+Comprovat amb Playwright sobre setze escenaris: el cas reportat continua donant 4, el groc no rebaixa res, el taronja rebaixa un graó, el vermell anul·la l'afluència i les allaus no la toquen.
+
+`RISC_FORMULA_VERSIO` puja a 3, perquè hi ha un factor nou i les configs desades no el porten.
+
+**Encara pendent:** un cap de setmana d'agost sense cap avís, amb dos helis de baixa i canvi de temps fort, continua arribant a 6. Ara és defensable (és un dia realment tens per al GRAE), però convindria contrastar-ho amb dades reals de serveis.
+
 ## 2026-08-08 — El risc passa a nombres enters
 
 Reportat: amb SMP 2 i afluència 2 el risc sortia **2,5** i n'havien de sortir **4**. La causa era la taula de punts de l'afluència (`{1: 0,25, 2: 0,5, 3: 1}`), que amb afluència 2 sumava mig punt.
