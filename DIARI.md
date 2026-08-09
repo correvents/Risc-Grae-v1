@@ -8,6 +8,19 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Configuració: què suma cada factor, taula per taula
+
+Petició amb un motiu concret: **s'ha de poder explicar i justificar als caps**. L'explicació que hi havia deia com funcionava el model, però no deixava veure el més important, que és que **cap factor suma el seu valor tal qual**.
+
+S'hi afegeixen dos desplegables a Configuració → Fórmula de risc, amb el valor de cada ítem al costat del que suma de veritat:
+
+- **Què suma cada perill.** SMP (directe, ja ve 0-6), allaus (on més es nota: un 3 aporta 2 i un 5 aporta 5, perquè el BPA mesura la probabilitat que hi hagi allaus i nosaltres mesurem si ens desbordarà), i el suplement del segon perill.
+- **Què suma cada increment.** Operativitat (un punt per heli de baixa), afluència amb **dues columnes** — el que aporta amb bon temps i el que aporta amb taronja o vermell, que és el mateix dia amb temps diferent —, canvi de temps, boletaires i el sostre.
+
+Cada fila que no és una suma directa porta el **per què** al costat. On sí que ho és (SMP, canvi de temps), el motiu va un cop sobre la taula en comptes de repetir-se a cada fila.
+
+**Les taules es generen des de `riscFormula`, no escrites a mà.** Si algú canvia un punt, es refan soles: no es poden desincronitzar. Això treu una feina de la norma dels tres llocs — ara els punts només s'han de tocar a les constants i al `CLAUDE.md`.
+
 ## 2026-08-09 — Operativitat proporcional, i què cal desar per saber si l'encertem
 
 **Operativitat proporcional**, com la resta de factors: suma tants punts com **helis de baixa** hi ha, de les 4 bases. 4 volen +0, 3 volen +1, 2 volen +2, 1 vola +3, cap vola +4 (topat pel sostre a 3). Això arregla que 0 i 1 heli quedessin igualats. `RISC_FORMULA_VERSIO` puja a 5.

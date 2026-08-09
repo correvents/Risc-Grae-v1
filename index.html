@@ -5425,6 +5425,7 @@
     function obrirPaginaParametres() {
       document.getElementById('app-risc').innerHTML = renderPaginaParametres();
       renderFormulaTaula();
+      renderExplicacioFactors();
       renderSimulador();
       const incmax = document.getElementById('expl-incmax');
       if (incmax) incmax.textContent = riscFormula.incrementsMax.actiu ? (riscFormula.incrementsMax.punts[0] ?? 0) : '∞';
@@ -5502,6 +5503,117 @@
           </tbody>
         </table>
         </div>`;
+    }
+
+    // ---- EXPLICACIÓ: què suma realment cada factor ----
+    // Les taules es generen des de `riscFormula`, no escrites a mà, perquè no es
+    // puguin desincronitzar dels punts que hi ha configurats. Cada fila ensenya
+    // el valor de l'ítem al costat del que suma de veritat, que no coincideixen:
+    // és justament això el que s'ha de poder explicar i justificar a un cap.
+    function renderExplicacioFactors() {
+      const cont = document.getElementById('formula-explicacio-factors');
+      if (!cont) return;
+      const F = riscFormula;
+
+      const cap = (txt) => `<th style="text-align:left;padding:0.35rem 0.5rem;border-bottom:2px solid #e0e0e0;background:#fafafa;font-size:0.75rem;">${txt}</th>`;
+      const cel = (txt, extra = '') => `<td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;font-size:0.78rem;${extra}">${txt}</td>`;
+      const suma = (v) => `<td style="padding:0.3rem 0.5rem;border-bottom:1px solid #f0f0f0;font-size:0.78rem;text-align:center;font-weight:700;color:${v > 0 ? '#c62828' : '#2e7d32'};">${v > 0 ? '+' + v : '0'}</td>`;
+      const taula = (caps, files) =>
+        `<table style="width:100%;border-collapse:collapse;margin:0.4rem 0 0.2rem;"><thead><tr>${caps.map(cap).join('')}</tr></thead><tbody>${files.join('')}</tbody></table>`;
+
+      // ---- PERILL ----
+      const smpTxt = ['Cap avís', 'Groc a 1 zona', 'Groc a ≥3 zones', 'Taronja', 'Taronja a ≥3 zones', 'Vermell', 'Vermell a ≥3 zones'];
+      const filesSMP = smpTxt.map((t, v) => `<tr>${cel(`<strong>${v}</strong> · ${t}`)}${suma(v)}</tr>`);
+
+      const allausTxt = ['Cap', 'Feble (1)', 'Moderat (2)', 'Marcat (3)', 'Fort (4)', 'Molt fort (5)'];
+      const allausPer = ['—',
+        'Perill baix: no carrega els GRAE.',
+        'Encara no genera serveis per si sol.',
+        'A partir d\'aquí la muntanya comença a donar feina.',
+        'Salt gros: una allau pot afectar molta gent alhora.',
+        'Satura per si sol, encara que només n\'hi hagi una.'];
+      const filesAllaus = allausTxt.map((t, v) =>
+        `<tr>${cel(`<strong>${v}</strong> · ${t}`)}${suma(v === 0 ? 0 : +(F.allaus.punts[v] ?? 0))}${cel(allausPer[v], 'color:#777;')}</tr>`);
+
+      // ---- INCREMENTS ----
+      const filesOper = [4, 3, 2, 1, 0].map(n => {
+        const pts = +(F.operativitat.punts[n] ?? 0);
+        const baixa = 4 - n;
+        return `<tr>${cel(`<strong>${n}</strong> de 4 poden volar`)}${suma(pts)}${cel(
+          baixa === 0 ? 'Cobertura completa.' : `${baixa} ${baixa === 1 ? 'heli' : 'helis'} de baixa: suma un punt per cadascun.`, 'color:#777;')}</tr>`;
+      });
+
+      const aflTxt = ['Normal', 'Moderat', 'Alt', 'Molt alt'];
+      const reduccio = Object.keys(F.afluenciaSMP.punts).map(Number).sort((a,b)=>a-b).slice(-1).map(k => +(F.afluenciaSMP.punts[k] ?? 0))[0] || 0;
+      const filesAfl = aflTxt.map((t, v) => {
+        const normal = +(F.afluencia.punts[v] ?? 0);
+        const ambMalTemps = +(F.afluencia.punts[Math.max(0, v - reduccio)] ?? 0);
+        return `<tr>${cel(`<strong>${v}</strong> · ${t}`)}${suma(normal)}${suma(ambMalTemps)}</tr>`;
+      });
+
+      const canviTxt = ['Estable', 'Moderat', 'Fort'];
+      const filesCanvi = canviTxt.map((t, v) =>
+        `<tr>${cel(`<strong>${v}</strong> · ${t}`)}${suma(+(F.canvi.punts[v] ?? 0))}</tr>`);
+
+      const filesBol = [0, 1].map(v =>
+        `<tr>${cel(`<strong>${v}</strong> · ${v ? 'Temporada' : 'Fora de temporada'}`)}${suma(v ? +(F.boletaires.punts[1] ?? 0) : 0)}</tr>`);
+
+      const sostre = F.incrementsMax.actiu ? +(F.incrementsMax.punts[0] ?? 0) : null;
+      const sumaMaxima = Math.max(...[0,1,2,3,4].map(n => +(F.operativitat.punts[n] ?? 0)))
+        + Math.max(...[0,1,2,3].map(v => +(F.afluencia.punts[v] ?? 0)))
+        + Math.max(...[0,1,2].map(v => +(F.canvi.punts[v] ?? 0)))
+        + (+(F.boletaires.punts[1] ?? 0));
+
+      cont.innerHTML = `
+        <details style="margin-bottom:0.6rem;border:1px solid #ffcdd2;background:#fff5f5;border-radius:6px;">
+          <summary style="cursor:pointer;padding:0.6rem 0.9rem;font-weight:700;font-size:0.85rem;color:#c62828;">🔺 Què suma cada perill (i per què no és el seu valor)</summary>
+          <div style="padding:0 0.9rem 0.9rem;">
+            <p style="font-size:0.8rem;color:#555;margin:0.4rem 0;">
+              Dels dos perills <strong>només compta el més gran</strong>. El segon no se suma sencer: hi afegeix un suplement.
+            </p>
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.6rem;">⚠️ Alertes SMP</div>
+            <p style="font-size:0.76rem;color:#777;margin:0.2rem 0 0;">Aquí sí que és directe: l'SMP ja ve en escala 0–6 i es fa servir tal com el publica Meteocat.</p>
+            ${taula(['Valor', 'Aporta'], filesSMP)}
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">❄️ Risc d'allaus (BPA)</div>
+            ${taula(['Valor del BPA', 'Aporta', 'Per què'], filesAllaus)}
+            <p style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
+              <strong>Aquí és on més es nota.</strong> Un perill d'allaus 3 no aporta 3, sinó ${+(F.allaus.punts[3] ?? 0)}, i un 5 aporta ${+(F.allaus.punts[5] ?? 0)}.
+              L'escala del BPA mesura la <em>probabilitat que hi hagi allaus</em>; nosaltres mesurem <em>si ens desbordarà</em>, i això no creix igual.
+            </p>
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">➕ Quan els dos hi són alhora</div>
+            ${taula(['El segon perill val', 'Afegeix', 'Per què'], [
+              `<tr>${cel('<strong>1 o 2</strong>')}${suma(+(F.segonPerill.punts[1] ?? 0))}${cel('Carrega, però poc.', 'color:#777;')}</tr>`,
+              `<tr>${cel('<strong>3 o més</strong>')}${suma(+(F.segonPerill.punts[3] ?? 0))}${cel('Dos perills seriosos alhora reparteixen els equips.', 'color:#777;')}</tr>`
+            ])}
+            <p style="font-size:0.78rem;color:#777;margin:0.5rem 0 0;">El perill resultant es limita a <strong>${RISC_PERILL_MAX}</strong>, perquè sempre quedi un graó per als increments.</p>
+          </div>
+        </details>
+
+        <details style="margin-bottom:1rem;border:1px solid #bbdefb;background:#f5faff;border-radius:6px;">
+          <summary style="cursor:pointer;padding:0.6rem 0.9rem;font-weight:700;font-size:0.85rem;color:#1565c0;">➕ Què suma cada increment (i com el modifica el mal temps)</summary>
+          <div style="padding:0 0.9rem 0.9rem;">
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.6rem;">🚁 Operativitat dels helicòpters</div>
+            ${taula(['Estat', 'Aporta', 'Per què'], filesOper)}
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">📅 Afluència</div>
+            ${taula(['Valor previst', 'Aporta', 'Amb taronja/vermell'], filesAfl)}
+            <p style="font-size:0.78rem;color:#555;margin:0.5rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
+              <strong>La columna del mig i la de la dreta són el mateix dia amb temps diferent.</strong>
+              L'afluència es preveu amb estadístiques de calendari, i el calendari no veu quin temps farà.
+              Amb avisos de taronja o vermell la previsió baixa ${reduccio} ${reduccio === 1 ? 'graó' : 'graons'} abans de sumar-se.
+            </p>
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">🌦️ Canvi de temps</div>
+            <p style="font-size:0.76rem;color:#777;margin:0.2rem 0 0;">Directe: suma el seu valor. Un canvi brusc agafa la gent a mitja activitat, lluny del cotxe.</p>
+            ${taula(['Valor', 'Aporta'], filesCanvi)}
+            <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">🍄 Boletaires</div>
+            <p style="font-size:0.76rem;color:#777;margin:0.2rem 0 0;">Gent gran, fora de camins i sovint sola: costa més de localitzar.</p>
+            ${taula(['Valor', 'Aporta'], filesBol)}
+            ${sostre === null ? '' : `
+            <p style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
+              <strong>Sostre.</strong> Tot sumat, els increments podrien arribar a <strong>+${sumaMaxima}</strong>, però es topen a <strong>+${sostre}</strong>.
+              Modulen el perill, no el substitueixen: un dia sense cap perill de muntanya no ha de valer el mateix que un vermell d'allaus.
+            </p>`}
+          </div>
+        </details>`;
     }
 
     // ---- SIMULADOR DE LA FÓRMULA ----
@@ -5593,6 +5705,7 @@
       guardarRiscFormula();
       const incmax = document.getElementById('expl-incmax');
       if (incmax) incmax.textContent = riscFormula.incrementsMax.actiu ? (riscFormula.incrementsMax.punts[0] ?? 0) : '∞';
+      renderExplicacioFactors();
       renderSimuladorResultat();
     }
 
@@ -5670,6 +5783,8 @@
                 <li>Junts tenen <strong>sostre</strong>. Els increments modulen el perill, no el substitueixen: un dia sense cap perill de muntanya no ha de valer el mateix que un vermell d'allaus.</li>
               </ul>
             </div>
+
+            <div id="formula-explicacio-factors"></div>
 
             <details style="margin-bottom:1rem;border:1px solid #ffe0b2;background:#fff8e1;border-radius:6px;">
               <summary style="cursor:pointer;padding:0.6rem 0.9rem;font-weight:700;font-size:0.85rem;color:#e65100;">⚖️ Les correccions: per què un factor de vegades suma menys</summary>
