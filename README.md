@@ -53,7 +53,28 @@ Tots els scripts d'ingesta comparen el resultat amb la instantània anterior i n
 
 ## Càlcul del risc
 
-`risc-diari.js` puntua sis factors i els normalitza a una escala de 0 a 6:
+> ⚠️ **N'hi ha dos i no coincideixen.** Aquest apartat descriu el del **backend**, que és el que es desa cada nit a `risc_historic`. El de l'**aplicació** (`index.html`) és més nou i funciona diferent: es descriu tot seguit. Unificar-los és feina pendent.
+
+### A l'aplicació (`detallarRisc`)
+
+```
+risc = mín(6, PERILL + INCREMENTS)
+```
+
+**Perill (0–5).** El més gran entre SMP i allaus, **no la suma** — sumar-los comptaria dues vegades el mateix mal temps. Si tots dos hi són, el segon hi afegeix un suplement. Es limita a 5 perquè quedi marge per als increments.
+
+**Increments (0–3).** Afluència, operativitat dels helicòpters, canvi de temps i boletaires. Cadascun suma el seu propi valor d'escala, en nombres enters, i **junts tenen sostre**: modulen el perill, no el substitueixen.
+
+Hi ha dues correccions que no es veuen mirant els punts:
+
+- **L'afluència es rebaixa amb mal temps.** És una predicció feta amb estadístiques de calendari, i el calendari no veu quin temps farà. A partir del taronja baixa un graó abans de sumar-se.
+- **Les allaus no la rebaixen.** Amb perill d'allaus alt hi va menys gent, però la que hi és és exactament la que està en perill.
+
+Tot és configurable des de **Configuració → Fórmula de risc**, que a més explica el model i té un simulador per calibrar-lo sense tocar cap dia real.
+
+### Al backend (`risc-diari.js`)
+
+Puntua sis factors i els normalitza a una escala de 0 a 6:
 
 | Factor | Origen | Rang |
 | --- | --- | --- |

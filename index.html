@@ -4449,18 +4449,23 @@
       // Tot en nombres enters: el risc no ha de sortir mai amb decimals. Cada
       // factor suma el seu propi valor d'escala, tret de l'operativitat, que és
       // a l'inrevés (com menys helis operatius, més suma).
-      operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0 } },           // nº helis operatius; 2+ → 0
+      operativitat: { actiu: true, punts: { 0: 2, 1: 2, 2: 1 } },           // nº helis operatius; 3+ → 0
       afluencia:    { actiu: true, punts: { 0: 0, 1: 1, 2: 2, 3: 3 } },
       // L'afluència és una previsió feta amb estadístiques de calendari, i el
       // calendari no veu quin temps farà. Amb avisos SMP la gent no hi va, així
       // que la previsió s'ha de corregir a la baixa abans de sumar-la; si no,
       // el mal temps compta dues vegades. Reducció segons el valor d'SMP:
       // Els trams segueixen el color de l'avís, no el número: a l'escala d'SMP
-      // 1-2 és groc, 3-4 taronja i 5-6 vermell. Un groc no atura ningú, amb
-      // taronja en surt menys i amb vermell la muntanya es buida.
+      // 1-2 és groc i 3-6 taronja o vermell. Un groc no atura ningú; a partir
+      // del taronja hi va menys gent i la previsió baixa un graó.
       // No s'aplica a les allaus: amb perill 4-5 baixa la gent, però la que hi
       // ha és justament la que està en perill.
-      afluenciaSMP: { actiu: true, punts: { 0: 0, 3: 1, 5: 3 } },
+      afluenciaSMP: { actiu: true, punts: { 0: 0, 3: 1 } },
+      // Sostre del que poden sumar tots els increments junts. Sense això, un dia
+      // sense cap perill de muntanya però amb tot en contra (pont d'agost, dos
+      // helis de baixa, canvi de temps fort, boletaires) arribava a 6, que és el
+      // mateix que un vermell d'allaus. Els increments modulen, no manen.
+      incrementsMax: { actiu: true, punts: { 0: 3 } },
       canvi:        { actiu: true, punts: { 0: 0, 1: 1, 2: 2 } },
       boletaires:   { actiu: true, punts: { 0: 0, 1: 1 } },                 // 0 o 1
       // Plans PC: només informatiu, no entra al càlcul
@@ -4471,8 +4476,9 @@
     // no només el seu valor: una config desada amb l'escala antiga no es pot
     // reinterpretar amb la nova i s'ha de descartar. La 2 és el pas a nombres
     // enters, on cada increment suma el seu propi valor d'escala; la 3 hi afegeix
-    // la reducció de l'afluència quan hi ha avisos SMP.
-    const RISC_FORMULA_VERSIO = 3;
+    // la reducció de l'afluència quan hi ha avisos SMP i la 4 el sostre dels
+    // increments.
+    const RISC_FORMULA_VERSIO = 4;
 
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
@@ -4639,12 +4645,17 @@
       if (F.canvi.actiu)      increments.canvi      = +(F.canvi.punts[parseInt(dia.canvi || 0)] ?? 0);
       if (F.boletaires.actiu) increments.boletaires = parseInt(dia.boletaires || 0) > 0 ? +(F.boletaires.punts[1] ?? 0) : 0;
 
-      const extra = Object.values(increments).reduce((a, b) => a + b, 0);
+      let extra = Object.values(increments).reduce((a, b) => a + b, 0);
+      // Els increments modulen el perill, no el substitueixen: junts tenen sostre
+      const extraSenseTopar = extra;
+      const extraMax = F.incrementsMax.actiu ? +(F.incrementsMax.punts[0] ?? 0) : Infinity;
+      extra = Math.min(extra, extraMax);
       // El risc sempre és un nombre enter. Els punts per defecte ja ho són, però
       // es poden editar des de Configuració, i d'allà en podria sortir un decimal.
       const brut = Math.round(base + extra);
       return {
         base, dominant, suplement, segonNom, increments, extra,
+        extraSenseTopar, extraTopat: extraSenseTopar > extra,
         afluenciaBruta, afluenciaEfectiva, reduccioAfluencia,
         topat: brut > RISC_SOSTRE,
         risc: Math.max(0, Math.min(RISC_SOSTRE, brut))
@@ -5412,6 +5423,9 @@
     function obrirPaginaParametres() {
       document.getElementById('app-risc').innerHTML = renderPaginaParametres();
       renderFormulaTaula();
+      renderSimulador();
+      const incmax = document.getElementById('expl-incmax');
+      if (incmax) incmax.textContent = riscFormula.incrementsMax.actiu ? (riscFormula.incrementsMax.punts[0] ?? 0) : '∞';
     }
 
     // ---- Taula configurable de la Fórmula de risc ----
@@ -5468,12 +5482,15 @@
             ${fila('afluenciaSMP', '📅➖ <strong>Afluència amb mal temps</strong>',
                    'L\'afluència es preveu amb estadístiques de calendari, que no veuen quin temps farà. ' +
                    'Amb avisos SMP hi va menys gent, així que la previsió es rebaixa abans de sumar-la:' +
-                   grup('afluenciaSMP', {0:'Cap o groc (0-2)', 3:'Taronja (3-4)', 5:'Vermell (5-6)'}) +
+                   grup('afluenciaSMP', {0:'Cap o groc (0-2)', 3:'Taronja o vermell (3-6)'}) +
                    '<br><span style="font-size:0.75rem;color:#999;">Graons que es resten a l\'afluència. No s\'aplica a les allaus: amb perill alt hi va menys gent, però la que hi ha és la que està en perill.</span>')}
             ${fila('canvi', '🌦️ <strong>Canvi de temps</strong>',
                    grup('canvi', {0:'Estable', 1:'Moderat', 2:'Fort'}))}
             ${fila('boletaires', '🍄 <strong>Boletaires</strong>',
                    'Suma quan hi ha temporada:' + grup('boletaires', {1:'Temporada'}))}
+            ${fila('incrementsMax', '🚧 <strong>Sostre dels increments</strong>',
+                   'El màxim que poden sumar tots els increments junts:' + grup('incrementsMax', {0:'Màxim'}) +
+                   '<br><span style="font-size:0.75rem;color:#999;">Els increments modulen el perill, no el substitueixen. Sense sostre, un dia sense cap perill de muntanya però amb tot en contra arribava a ' + RISC_SOSTRE + '.</span>')}
             <tr style="opacity:0.55;">
               <td style="padding:0.5rem;">🚨 Plans PC</td>
               <td style="padding:0.5rem;text-align:center;color:#aaa;">—</td>
@@ -5481,6 +5498,78 @@
             </tr>
           </tbody>
         </table>
+        </div>`;
+    }
+
+    // ---- SIMULADOR DE LA FÓRMULA ----
+    // Serveix per calibrar: es mouen els valors d'entrada i es veu el resultat i
+    // el perquè, sense tocar cap dia real ni desar res.
+    let simuladorDia = { smp: 0, allaus: 0, afluencia: 0, canvi: 0, boletaires: 0, operativitatHelis: 4 };
+
+    const SIMULADOR_CAMPS = [
+      { clau: 'smp',               etiqueta: '⚠️ SMP',           max: 6, textos: ['Cap', 'Groc 1 zona', 'Groc ≥3 zones', 'Taronja', 'Taronja ≥3', 'Vermell', 'Vermell ≥3'] },
+      { clau: 'allaus',            etiqueta: '❄️ Allaus',        max: 5, textos: ['Cap', 'Feble', 'Moderat', 'Marcat', 'Fort', 'Molt fort'] },
+      { clau: 'afluencia',         etiqueta: '📅 Afluència',     max: 3, textos: ['Normal', 'Moderat', 'Alt', 'Molt alt'] },
+      { clau: 'operativitatHelis', etiqueta: '🚁 Helis que volen', max: 4, textos: ['Cap', '1', '2', '3', '4'] },
+      { clau: 'canvi',             etiqueta: '🌦️ Canvi de temps', max: 2, textos: ['Estable', 'Moderat', 'Fort'] },
+      { clau: 'boletaires',        etiqueta: '🍄 Boletaires',    max: 1, textos: ['No', 'Temporada'] }
+    ];
+
+    function renderSimulador() {
+      const cont = document.getElementById('simulador-controls');
+      if (!cont) return;
+      cont.innerHTML = SIMULADOR_CAMPS.map(c => `
+        <label style="font-size:0.78rem;color:#37474f;">
+          <span style="display:block;font-weight:600;margin-bottom:0.15rem;">${c.etiqueta}</span>
+          <select id="sim-${c.clau}" onchange="canviarSimulador()" style="width:100%;padding:0.3rem;border:1px solid #90caf9;border-radius:4px;font-size:0.8rem;">
+            ${Array.from({ length: c.max + 1 }, (_, i) =>
+              `<option value="${i}" ${simuladorDia[c.clau] === i ? 'selected' : ''}>${i} · ${c.textos[i]}</option>`).join('')}
+          </select>
+        </label>`).join('');
+      renderSimuladorResultat();
+    }
+
+    function canviarSimulador() {
+      for (const c of SIMULADOR_CAMPS) {
+        const el = document.getElementById(`sim-${c.clau}`);
+        if (el) simuladorDia[c.clau] = parseInt(el.value);
+      }
+      renderSimuladorResultat();
+    }
+
+    function renderSimuladorResultat() {
+      const cont = document.getElementById('simulador-resultat');
+      if (!cont) return;
+      const calc = detallarRisc(simuladorDia);
+      const nom = { smp: 'SMP', allaus: 'allaus', operativitat: 'operativitat', afluencia: 'afluència', canvi: 'canvi de temps', boletaires: 'boletaires' };
+
+      const passos = [];
+      passos.push(calc.dominant
+        ? `Perill: mana <strong>${nom[calc.dominant]}</strong> amb ${calc.base - calc.suplement}` +
+          (calc.suplement > 0 ? `, i <strong>${nom[calc.segonNom]}</strong> hi suma +${calc.suplement} com a segon perill` : '') +
+          ` → <strong>${calc.base}</strong>`
+        : 'Perill: cap → <strong>0</strong>');
+
+      if (calc.reduccioAfluencia > 0 && calc.afluenciaBruta > 0) {
+        passos.push(`Afluència: amb avisos SMP hi va menys gent, ${calc.afluenciaBruta} → <strong>${calc.afluenciaEfectiva}</strong>`);
+      }
+
+      const detallInc = Object.entries(calc.increments).filter(([, v]) => v > 0)
+        .map(([k, v]) => `${nom[k]} +${v}`).join(', ');
+      passos.push(`Increments: ${detallInc || 'cap'} → <strong>${calc.extraSenseTopar}</strong>` +
+        (calc.extraTopat ? `, topat pel sostre a <strong>${calc.extra}</strong>` : ''));
+
+      if (calc.topat) passos.push(`El total passava de ${RISC_SOSTRE} i es topa a <strong>${RISC_SOSTRE}</strong>`);
+
+      cont.innerHTML = `
+        <div style="display:flex;align-items:center;gap:1rem;background:#fff;border-radius:6px;padding:0.7rem 0.9rem;">
+          <div style="text-align:center;min-width:70px;">
+            <div style="font-size:2.2rem;font-weight:800;line-height:1;color:${COLORS_RISC[Math.min(6, calc.risc)]};">${formatarRisc(calc.risc)}</div>
+            <div style="font-size:0.7rem;font-weight:700;color:#666;">${getRiscLabel(calc.risc)}</div>
+          </div>
+          <ol style="margin:0;padding-left:1.1rem;font-size:0.78rem;color:#455a64;line-height:1.6;flex:1;">
+            ${passos.map(p => `<li>${p}</li>`).join('')}
+          </ol>
         </div>`;
     }
 
@@ -5499,6 +5588,9 @@
         }
       }
       guardarRiscFormula();
+      const incmax = document.getElementById('expl-incmax');
+      if (incmax) incmax.textContent = riscFormula.incrementsMax.actiu ? (riscFormula.incrementsMax.punts[0] ?? 0) : '∞';
+      renderSimuladorResultat();
     }
 
     function guardarFormulaConfig(btn) {
@@ -5548,23 +5640,67 @@
         <div id="param-formula" class="param-tab">
           <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
             <h3 style="margin:0 0 0.5rem;font-size:1rem;color:#e53935;">🧮 Fórmula del Risc Principal</h3>
-            <p style="font-size:0.82rem;color:#555;margin:0 0 1rem;">
-              El risc mesura la <strong>probabilitat de quedar desbordats</strong>: no és quant perill hi ha a la muntanya,
-              sinó si podreu atendre tot el que surti.
-              <br>Es pren com a <strong>perill</strong> el més gran entre SMP i allaus — no la suma, per no comptar dues vegades el mateix —
-              i, si tots dos hi són alhora, el segon hi afegeix un <strong>suplement</strong>. El perill es limita a ${RISC_PERILL_MAX}
-              perquè sempre quedi marge: el darrer graó fins a ${RISC_SOSTRE} el mouen la gent que hi ha a la muntanya, els helicòpters i el canvi de temps.
-              <br>Al desglossament, el factor que marca el nivell surt etiquetat com a <strong>PERILL</strong> i el segon com a <strong>2n</strong>.
-              <br>El risc surt sempre en <strong>nombres enters</strong>: cada increment suma el seu propi valor d'escala
-              (afluència 0-3, canvi de temps 0-2, boletaires 0-1), tret de l'operativitat, que va a l'inrevés
-              (cap heli +2, un heli +1, dos o més +0).
-              <br>L'<strong>afluència es rebaixa quan hi ha avisos SMP</strong>: es preveu amb estadístiques de calendari,
-              que no veuen quin temps farà, i amb mal temps hi va menys gent. Amb taronja baixa un graó i amb vermell
-              s'anul·la; el groc no la toca. Si no es fes, el mal temps comptaria dues vegades.
-              <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
-              Un factor desactivat surt atenuat al desglossament.
-              <br><strong>Plans PC</strong> és només informatiu (no suma).
-            </p>
+
+            <div style="background:#e8f5e9;border-left:4px solid #43a047;border-radius:4px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
+              <strong>Què mesura aquest número.</strong> No és quant perill hi ha a la muntanya, sinó
+              <strong>la probabilitat que els GRAE quedin desbordats</strong>: si podreu atendre tot el que vagi sortint.
+              Per això hi compta la gent que hi ha a la muntanya i els helicòpters disponibles, i no només el temps.
+            </div>
+
+            <div style="font-size:0.85rem;line-height:1.7;color:#444;margin-bottom:1rem;">
+              <p style="margin:0 0 0.6rem;"><strong>El càlcul, en dues parts:</strong></p>
+              <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:0.7rem 0.9rem;font-family:monospace;font-size:0.8rem;margin-bottom:0.8rem;">
+                risc = mín(${RISC_SOSTRE}, PERILL + INCREMENTS)
+              </div>
+
+              <p style="margin:0.8rem 0 0.3rem;font-weight:700;color:#37474f;">1 · El PERILL (0–${RISC_PERILL_MAX})</p>
+              <ul style="margin:0;padding-left:1.2rem;">
+                <li>Es pren <strong>el més gran</strong> entre SMP i allaus, <strong>no la suma</strong>. Sumar-los comptaria dues vegades el mateix mal temps.</li>
+                <li>Si tots dos hi són alhora, el segon hi afegeix un <strong>suplement</strong> (+1 si val 1–2, +2 si val 3 o més): dos perills carreguen més que un de sol.</li>
+                <li>Es limita a <strong>${RISC_PERILL_MAX}</strong>, no a ${RISC_SOSTRE}, perquè sempre quedi un graó de marge per als increments.</li>
+              </ul>
+
+              <p style="margin:0.8rem 0 0.3rem;font-weight:700;color:#37474f;">2 · Els INCREMENTS (0–<span id="expl-incmax">3</span>)</p>
+              <ul style="margin:0;padding-left:1.2rem;">
+                <li>Cada factor suma <strong>el seu propi valor d'escala</strong>, en nombres enters: afluència 0–3, canvi de temps 0–2, boletaires 0–1.</li>
+                <li>L'<strong>operativitat</strong> va a l'inrevés (com menys helis poden volar, més carrega) i <strong>Plans PC</strong> no suma: una fase activada ja surt als avisos SMP.</li>
+                <li>Junts tenen <strong>sostre</strong>. Els increments modulen el perill, no el substitueixen: un dia sense cap perill de muntanya no ha de valer el mateix que un vermell d'allaus.</li>
+              </ul>
+            </div>
+
+            <details style="margin-bottom:1rem;border:1px solid #ffe0b2;background:#fff8e1;border-radius:6px;">
+              <summary style="cursor:pointer;padding:0.6rem 0.9rem;font-weight:700;font-size:0.85rem;color:#e65100;">⚖️ Les correccions: per què un factor de vegades suma menys</summary>
+              <div style="padding:0 0.9rem 0.8rem;font-size:0.82rem;line-height:1.6;color:#555;">
+                <p style="margin:0.5rem 0 0.3rem;"><strong>1. El perill no se suma, es pren el més gran.</strong>
+                Un dia amb SMP 4 i allaus 4 no és el doble de perillós que un amb SMP 4: és el mateix temps, mirat de dues maneres.
+                El suplement recull que dos perills alhora sí que carreguen una mica més.</p>
+
+                <p style="margin:0.7rem 0 0.3rem;"><strong>2. L'afluència es rebaixa amb mal temps.</strong>
+                L'afluència és una <em>predicció</em> de quanta gent hi haurà a la muntanya, feta amb estadístiques de calendari
+                (caps de setmana, agost, ponts). El calendari <strong>no veu quin temps farà</strong>, que és justament el que fa
+                que la gent es quedi a casa. Amb avisos de taronja o vermell, la previsió baixa un graó abans de sumar-se;
+                si no ho féssim, el mal temps comptaria dues vegades.
+                <br><span style="color:#888;">Un groc no la toca: no atura ningú.</span></p>
+
+                <p style="margin:0.7rem 0 0.3rem;"><strong>3. Les allaus NO rebaixen l'afluència.</strong>
+                Amb perill d'allaus alt també hi va menys gent, però la que hi és és <strong>exactament la que està en perill</strong>,
+                i cada servei és molt més gros. Amb un vermell de pluja, en canvi, no hi ha ningú a qui rescatar.</p>
+
+                <p style="margin:0.7rem 0 0.3rem;"><strong>4. Els increments tenen sostre.</strong>
+                Sense ell, un pont d'agost amb dos helis de baixa i canvi de temps fort arribava a ${RISC_SOSTRE}
+                <em>sense cap perill de muntanya</em>, igual que un vermell d'allaus. Són coses diferents.</p>
+              </div>
+            </details>
+
+            <div style="background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;">
+              <div style="font-weight:700;font-size:0.88rem;color:#0d47a1;margin-bottom:0.6rem;">🧪 Simulador — prova la fórmula sense tocar cap dia</div>
+              <div style="font-size:0.78rem;color:#555;margin-bottom:0.7rem;">
+                Mou els valors i mira com respon. No desa res: només serveix per veure si els punts de sota estan ben calibrats.
+              </div>
+              <div id="simulador-controls" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.5rem;margin-bottom:0.8rem;"></div>
+              <div id="simulador-resultat"></div>
+            </div>
+
             <div id="formula-taula"></div>
             <div style="display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end;">
               <button class="risc-btn" onclick="restaurarFormulaDefault()">↺ Valors per defecte</button>

@@ -23,17 +23,31 @@ Frontend estàtic (GitHub Pages) + scripts Node que s'executen per GitHub Action
 | --- | --- | --- |
 | Model | **perill dominant + increments** | suma ponderada |
 | Perill | el més gran entre SMP (0–6) i allaus (1→0, 2→0, 3→2, 4→4, 5→5), **+ suplement** si el segon perill també hi és (val 1–2 → +1; ≥3 → +2), topat a `RISC_PERILL_MAX` = 5 | — |
-| Increments | operativitat HC, afluència, canvi, boletaires | — |
+| Increments | operativitat HC, afluència, canvi, boletaires; **topats a `incrementsMax` = 3** entre tots | — |
 | Factors | SMP, allaus, operativitat, afluència, canvi, boletaires | planspc, smp, allaus, afluència, hc, canvi |
 | Plans PC | informatiu, no suma | suma 0–3 |
-| Escala | `min(6, base + increments)`, amb decimals | `min(6, round((suma / 21) × 6))` |
-| Configurable | sí, per l'usuari (localStorage) | no |
+| Escala | `min(6, perill + increments)`, **només nombres enters** | `min(6, round((suma / 21) × 6))` |
+| Configurable | sí, per l'usuari (localStorage, amb versió) | no |
 
 **Què mesura:** no és el perill de la muntanya sinó la **probabilitat que els GRAE quedin desbordats** — si podran atendre tot el que surti. Per això el perill d'allaus pesa tant (una allau gran satura per si sola) i per això hi compten la gent que hi ha a la muntanya i els helicòpters disponibles. El perill es limita a 5 perquè quedi sempre un punt de marge per als increments.
 
 La del frontend és la nova (08-08-2026); la del backend és l'antiga i és **la que es desa cada nit a `risc_historic`**. Migrar-la és la feina pendent, i arrossega els altres dos pendents: el backend no calcula ni `canvi` ni l'operativitat dels helis. Si toques una de les dues, comprova si l'altra també ho necessita.
 
-Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
+### Les correccions de la fórmula del frontend
+
+Tres regles que no es dedueixen mirant els punts, i que són el moll de l'os. **Si en toques una, actualitza també l'explicació de Configuració → Fórmula de risc**, que les explica a l'usuari.
+
+1. **El perill no se suma, es pren el més gran.** Un dia amb SMP 4 i allaus 4 no és el doble de perillós que un amb SMP 4: és el mateix temps mirat de dues maneres. El suplement recull que dos perills alhora carreguen una mica més.
+2. **L'afluència es rebaixa amb mal temps** (`afluenciaSMP`). L'afluència és una *predicció* feta amb estadístiques de calendari, i el calendari no veu quin temps farà — que és justament el que fa que la gent es quedi a casa. A partir del taronja (SMP ≥ 3) la previsió baixa un graó abans de sumar-se. Els trams segueixen el **color** de l'avís, no el número: a l'escala d'SMP, 1–2 és groc i 3–6 taronja o vermell. **No s'aplica a les allaus**: amb perill alt hi va menys gent, però la que hi és és exactament la que està en perill.
+3. **Els increments tenen sostre** (`incrementsMax` = 3). Modulen el perill, no el substitueixen: un pont d'agost amb dos helis de baixa i canvi de temps fort no ha de valer el mateix que un vermell d'allaus.
+
+**Nombres enters.** El risc no ha de tenir mai decimals. Cada increment suma el seu propi valor d'escala (afluència 0–3, canvi 0–2, boletaires 0–1) i l'operativitat va a l'inrevés (cap o un heli +2, dos +1, tres o més +0). `detallarRisc` arrodoneix el total, perquè els punts són editables.
+
+**`RISC_FORMULA_VERSIO`.** La config de la fórmula es desa a `localStorage` i es rellegeix per sobre dels valors per defecte, o sigui que **un canvi de punts no arriba a qui ja tingui config desada**. Puja la versió sempre que canviï el *significat* dels punts, no només el seu valor: si no coincideix, la config es llença. Va per 4.
+
+**Simulador.** A Configuració → Fórmula de risc hi ha un simulador que calcula amb valors inventats i ensenya el desglossament pas a pas. Serveix per calibrar sense tocar cap dia real; no desa res.
+
+Per unificar-les caldrà, com a mínim:Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
 
 **2. `risc-diari.js` no fa servir `canvi_temps_latest.json`.**
 

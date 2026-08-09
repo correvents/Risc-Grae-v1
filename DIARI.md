@@ -8,6 +8,31 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Sostre als increments, i la fórmula explicada a Configuració
+
+Continuació de l'anterior. Rebaixar l'afluència amb mal temps corregia la duplicitat, però no el que grinyolava de debò: **un pont d'agost sense cap perill de muntanya arribava a 6**, igual que un vermell d'allaus.
+
+**Sostre dels increments** (`incrementsMax` = 3). Els increments modulen el perill, no el substitueixen. Aquell pont d'agost (afluència 3 + operativitat 2 + canvi 2 + boletaires 1 = 8) ara es queda a **3**. Amb perill alt no canvia res: el perill mana i el total continua topant a 6.
+
+**Operativitat repesada.** Dos helis operatius ja carreguen (+1), i amb un o cap suma +2. Abans dos helis no sumaven gens. La contrapartida és que 0 i 1 heli queden igualats: amb una escala d'enters de 0 a 2 no hi caben cinc estats, i el salt important és tenir-ne dos o menys.
+
+**Afluència amb mal temps, simplificada.** Un sol tram a partir del taronja: SMP 0-2 no la toca, SMP 3-6 li treu un graó. Abans el vermell l'anul·lava del tot; ara es tracta igual que el taronja.
+
+**Configuració → Fórmula de risc, refeta.** És on s'ha d'entendre com funciona això, i era un paràgraf apilat. Ara hi ha:
+
+- Què mesura el número (probabilitat de quedar desbordats, no perill de muntanya).
+- El càlcul en dues parts, amb la fórmula escrita.
+- Un desplegable **"Les correccions"** que explica les quatre regles que no es dedueixen mirant els punts: per què el perill no se suma, per què l'afluència es rebaixa amb mal temps, per què les allaus no la rebaixen, i per què els increments tenen sostre.
+- Un **simulador**: es mouen els sis valors d'entrada i surt el risc amb el desglossament pas a pas ("mana allaus amb 5", "increments 8, topat pel sostre a 3"). No desa res; serveix per calibrar.
+
+`RISC_FORMULA_VERSIO` puja a 4.
+
+Comprovat amb Playwright: vint escenaris de càlcul i el simulador funcionant, amb el sostre visible al desglossament.
+
+**Com s'ha d'anar ajustant això.** Cada cop que es canviïn punts o correccions cal tocar tres llocs alhora: les constants de `RISC_FORMULA_DEFAULT`, l'explicació de Configuració → Fórmula de risc, i `CLAUDE.md`. I pujar `RISC_FORMULA_VERSIO` si canvia el significat, o el canvi no arribarà a qui ja tingui config desada al navegador.
+
+**Pendent:** contrastar els números amb serveis reals. Fins ara tot s'ha calibrat raonant, no amb dades.
+
 ## 2026-08-09 — L'afluència es rebaixa quan hi ha avisos SMP
 
 Venia del pendent de calibrar els increments, que amb el pas a enters podien sumar fins a +8. La solució no és posar-hi un sostre: el problema de fons és que **el mal temps comptava dues vegades**.
