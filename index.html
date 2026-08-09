@@ -4446,13 +4446,22 @@
       allaus:       { actiu: true, perill: true, punts: { 1: 0, 2: 0, 3: 2, 4: 4, 5: 5 } },
       segonPerill:  { actiu: true, punts: { 1: 1, 3: 2 } },                 // suplement: segon perill 1-2 → +1; 3 o més → +2
       // --- Increments ---
-      operativitat: { actiu: true, punts: { 0: 1, 1: 0.5, 2: 0 } },         // nº helis operatius; 2+ → 0
-      afluencia:    { actiu: true, punts: { 0: 0, 1: 0.25, 2: 0.5, 3: 1 } },
-      canvi:        { actiu: true, punts: { 0: 0, 1: 0.5, 2: 1 } },
+      // Tot en nombres enters: el risc no ha de sortir mai amb decimals. Cada
+      // factor suma el seu propi valor d'escala, tret de l'operativitat, que és
+      // a l'inrevés (com menys helis operatius, més suma).
+      operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0 } },           // nº helis operatius; 2+ → 0
+      afluencia:    { actiu: true, punts: { 0: 0, 1: 1, 2: 2, 3: 3 } },
+      canvi:        { actiu: true, punts: { 0: 0, 1: 1, 2: 2 } },
       boletaires:   { actiu: true, punts: { 0: 0, 1: 1 } },                 // 0 o 1
       // Plans PC: només informatiu, no entra al càlcul
     };
     let riscFormula = JSON.parse(JSON.stringify(RISC_FORMULA_DEFAULT));
+
+    // Versió de la fórmula. Puja-la sempre que canviï el *significat* dels punts,
+    // no només el seu valor: una config desada amb l'escala antiga no es pot
+    // reinterpretar amb la nova i s'ha de descartar. La 2 és el pas a nombres
+    // enters, on cada increment suma el seu propi valor d'escala.
+    const RISC_FORMULA_VERSIO = 2;
 
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
@@ -4461,6 +4470,11 @@
       try {
         const saved = JSON.parse(localStorage.getItem('riscGRAE_formula') || 'null');
         if (!saved) return;
+        // Config d'una versió anterior: es llença i es parteix dels valors nous
+        if (saved.versio !== RISC_FORMULA_VERSIO) {
+          localStorage.removeItem('riscGRAE_formula');
+          return;
+        }
         for (const [nom, def] of Object.entries(riscFormula)) {
           const s = saved[nom];
           if (!s) continue;
@@ -4476,7 +4490,10 @@
     }
 
     function guardarRiscFormula() {
-      try { localStorage.setItem('riscGRAE_formula', JSON.stringify(riscFormula)); } catch(e) {}
+      try {
+        localStorage.setItem('riscGRAE_formula',
+          JSON.stringify({ ...riscFormula, versio: RISC_FORMULA_VERSIO }));
+      } catch(e) {}
     }
 
     // ---- OPERATIVITAT HC (estat + meteo per base) ----
@@ -4603,7 +4620,9 @@
       if (F.boletaires.actiu) increments.boletaires = parseInt(dia.boletaires || 0) > 0 ? +(F.boletaires.punts[1] ?? 0) : 0;
 
       const extra = Object.values(increments).reduce((a, b) => a + b, 0);
-      const brut = base + extra;
+      // El risc sempre és un nombre enter. Els punts per defecte ja ho són, però
+      // es poden editar des de Configuració, i d'allà en podria sortir un decimal.
+      const brut = Math.round(base + extra);
       return {
         base, dominant, suplement, segonNom, increments, extra,
         topat: brut > RISC_SOSTRE,
@@ -5384,7 +5403,7 @@
       const chk = nom => `<input type="checkbox" id="f-${nom}-actiu" ${F[nom].actiu ? 'checked' : ''} onchange="aplicarFormulaConfig()">`;
       const num = (nom, nivell, etiqueta) =>
         `<label style="white-space:nowrap;">${etiqueta}
-           <input type="number" step="0.25" value="${F[nom].punts[nivell]}" id="f-${nom}-${nivell}"
+           <input type="number" step="1" min="0" value="${F[nom].punts[nivell]}" id="f-${nom}-${nivell}"
                   onchange="aplicarFormulaConfig()"
                   style="width:56px;padding:0.25rem;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;"></label>`;
       const grup = (nom, etiquetes) =>
@@ -5510,6 +5529,9 @@
               i, si tots dos hi són alhora, el segon hi afegeix un <strong>suplement</strong>. El perill es limita a ${RISC_PERILL_MAX}
               perquè sempre quedi marge: el darrer graó fins a ${RISC_SOSTRE} el mouen la gent que hi ha a la muntanya, els helicòpters i el canvi de temps.
               <br>Al desglossament, el factor que marca el nivell surt etiquetat com a <strong>PERILL</strong> i el segon com a <strong>2n</strong>.
+              <br>El risc surt sempre en <strong>nombres enters</strong>: cada increment suma el seu propi valor d'escala
+              (afluència 0-3, canvi de temps 0-2, boletaires 0-1), tret de l'operativitat, que va a l'inrevés
+              (cap heli +2, un heli +1, dos o més +0).
               <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
               Un factor desactivat surt atenuat al desglossament.
               <br><strong>Plans PC</strong> és només informatiu (no suma).

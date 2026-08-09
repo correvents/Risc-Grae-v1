@@ -8,6 +8,25 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-08 — El risc passa a nombres enters
+
+Reportat: amb SMP 2 i afluència 2 el risc sortia **2,5** i n'havien de sortir **4**. La causa era la taula de punts de l'afluència (`{1: 0,25, 2: 0,5, 3: 1}`), que amb afluència 2 sumava mig punt.
+
+**Regla nova:** el risc no ha de tenir mai decimals, i cada increment suma **el seu propi valor d'escala**.
+
+- Afluència: 0-3 → +0, +1, +2, +3.
+- Canvi de temps: 0-2 → +0, +1, +2.
+- Operativitat HC, que va a l'inrevés: cap heli +2, un heli +1, dos o més +0.
+- Boletaires (+1) i el suplement del segon perill (+1 / +2) ja eren enters.
+
+`detallarRisc` arrodoneix el total abans de topar-lo, perquè els punts es poden editar des de Configuració i d'allà en podria sortir un decimal. El camp de punts passa a `step="1"`.
+
+**Trampa que això destapava:** la config de la fórmula es desa a `localStorage` i es tornava a llegir per sobre dels valors per defecte, o sigui que qui ja tingués l'escala antiga desada hauria continuat veient 2,5 després del canvi. S'hi afegeix `RISC_FORMULA_VERSIO`: si la versió desada no coincideix, la config es llença i es parteix dels valors nous. **Cal pujar-la sempre que canviï el significat dels punts, no només el seu valor.**
+
+Comprovat amb Playwright sobre deu escenaris, entre ells el cas reportat (surt 4), que cap resultat té decimals, i que una config antiga a `localStorage` queda descartada.
+
+**Pendent de calibrar, i ara més gros:** els increments poden sumar fins a **+8** (afluència 3 + operativitat 2 + canvi 2 + boletaires 1). Un dia sense cap perill de muntanya però amb tot en contra arriba a 6. Cal decidir si es limita el total d'increments o si es tornen a repesar.
+
 ## 2026-08-08 — El 0-6 el dona Meteocat, i les zones marítimes van a la seva comarca
 
 Dues correccions sobre la pestanya SMP Bombers acabada de fer.
