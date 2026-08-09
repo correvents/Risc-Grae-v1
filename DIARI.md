@@ -8,6 +8,22 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Operativitat proporcional, i què cal desar per saber si l'encertem
+
+**Operativitat proporcional**, com la resta de factors: suma tants punts com **helis de baixa** hi ha, de les 4 bases. 4 volen +0, 3 volen +1, 2 volen +2, 1 vola +3, cap vola +4 (topat pel sostre a 3). Això arregla que 0 i 1 heli quedessin igualats. `RISC_FORMULA_VERSIO` puja a 5.
+
+**El que s'ha trobat mirant si podríem analitzar-ho més endavant:** ara mateix **no**. Els dies que desem no es poden ni reconstruir.
+
+`risc_historic` desa `planspc, smp, allaus, afluencia, hc, canvi, boletaires`, però la fórmula del frontend fa servir l'**operativitat**, que no té columna — i la columna `hc` és de la fórmula antiga, que ja no s'usa. Tampoc no es desa quina versió de fórmula va produir el número, i en dos dies ja anem per la 5. Un risc 4 del dia 8 i un del dia 9 poden voler dir coses diferents.
+
+I encara falta el més important: el risc es calcula amb **previsions**, i per saber si l'encertem cal saber **què va passar de veritat** (dades observades de les estacions XEMA) i, sobretot, **quants serveis va tenir el GRAE aquell dia**. Aquesta última no surt de cap API: l'ha de portar Bombers, i és la que decideix si tot això serveix.
+
+Tot analitzat a **`ANALISI-DADES.md`**, amb el SQL concret dels canvis. **No s'ha tocat res de Supabase.**
+
+**Principi que en surt, i que ja ens ha mossegat dues vegades:** desar en cru i no col·lapsar. `fetch-smp.js` col·lapsava la comarca abans de desar i vam perdre la dada; el grau 0-6 de Meteocat es llençava i el deduíem del color. Si l'API ho dona, es desa tal com ve — agregar és barat, recuperar el que no s'ha desat és impossible.
+
+**Avís de seguretat detectat de passada:** nou taules de Supabase tenen la RLS desactivada i la clau `anon` és pública (va incrustada a `index.html`). Qualsevol que la tregui del codi pot llegir i modificar aquelles taules. No s'ha tocat: activar la RLS sense polítiques bloquejaria l'app. Detall a `ANALISI-DADES.md`.
+
 ## 2026-08-09 — Sostre als increments, i la fórmula explicada a Configuració
 
 Continuació de l'anterior. Rebaixar l'afluència amb mal temps corregia la duplicitat, però no el que grinyolava de debò: **un pont d'agost sense cap perill de muntanya arribava a 6**, igual que un vermell d'allaus.

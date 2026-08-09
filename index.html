@@ -4449,7 +4449,9 @@
       // Tot en nombres enters: el risc no ha de sortir mai amb decimals. Cada
       // factor suma el seu propi valor d'escala, tret de l'operativitat, que és
       // a l'inrevés (com menys helis operatius, més suma).
-      operativitat: { actiu: true, punts: { 0: 2, 1: 2, 2: 1 } },           // nº helis operatius; 3+ → 0
+      // Proporcional, com la resta: suma tants punts com helis de baixa hi ha.
+      // La clau és el nombre d'helis que poden volar (0-4), de 4 bases.
+      operativitat: { actiu: true, punts: { 0: 4, 1: 3, 2: 2, 3: 1, 4: 0 } },
       afluencia:    { actiu: true, punts: { 0: 0, 1: 1, 2: 2, 3: 3 } },
       // L'afluència és una previsió feta amb estadístiques de calendari, i el
       // calendari no veu quin temps farà. Amb avisos SMP la gent no hi va, així
@@ -4476,9 +4478,9 @@
     // no només el seu valor: una config desada amb l'escala antiga no es pot
     // reinterpretar amb la nova i s'ha de descartar. La 2 és el pas a nombres
     // enters, on cada increment suma el seu propi valor d'escala; la 3 hi afegeix
-    // la reducció de l'afluència quan hi ha avisos SMP i la 4 el sostre dels
-    // increments.
-    const RISC_FORMULA_VERSIO = 4;
+    // la reducció de l'afluència quan hi ha avisos SMP, la 4 el sostre dels
+    // increments i la 5 l'operativitat proporcional.
+    const RISC_FORMULA_VERSIO = 5;
 
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
@@ -5475,7 +5477,8 @@
                    grup('segonPerill', {1:'val 1 o 2', 3:'val 3 o més'}))}
             ${capcalera('INCREMENTS — sumen sobre el perill, amb sostre ' + RISC_SOSTRE)}
             ${fila('operativitat', '🚁 <strong>Operativitat</strong>',
-                   'Segons HC que poden volar:' + grup('operativitat', {0:'0 HC', 1:'1 HC', 2:'2 o més'}) +
+                   'Segons HC que poden volar (de 4 bases). Suma tants punts com helis de baixa:' +
+                   grup('operativitat', {0:'0 HC', 1:'1 HC', 2:'2 HC', 3:'3 HC', 4:'4 HC'}) +
                    '<br><span style="font-size:0.75rem;color:#999;">Veure la pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>')}
             ${fila('afluencia', '📅 <strong>Afluència</strong>',
                    grup('afluencia', {0:'Normal', 1:'Moderat', 2:'Alt', 3:'Molt alt'}))}
@@ -5663,7 +5666,7 @@
               <p style="margin:0.8rem 0 0.3rem;font-weight:700;color:#37474f;">2 · Els INCREMENTS (0–<span id="expl-incmax">3</span>)</p>
               <ul style="margin:0;padding-left:1.2rem;">
                 <li>Cada factor suma <strong>el seu propi valor d'escala</strong>, en nombres enters: afluència 0–3, canvi de temps 0–2, boletaires 0–1.</li>
-                <li>L'<strong>operativitat</strong> va a l'inrevés (com menys helis poden volar, més carrega) i <strong>Plans PC</strong> no suma: una fase activada ja surt als avisos SMP.</li>
+                <li>L'<strong>operativitat</strong> va a l'inrevés però igual de proporcional: suma tants punts com <strong>helis de baixa</strong> hi ha (de 4 bases). <strong>Plans PC</strong> no suma: una fase activada ja surt als avisos SMP.</li>
                 <li>Junts tenen <strong>sostre</strong>. Els increments modulen el perill, no el substitueixen: un dia sense cap perill de muntanya no ha de valer el mateix que un vermell d'allaus.</li>
               </ul>
             </div>

@@ -41,9 +41,11 @@ Tres regles que no es dedueixen mirant els punts, i que són el moll de l'os. **
 2. **L'afluència es rebaixa amb mal temps** (`afluenciaSMP`). L'afluència és una *predicció* feta amb estadístiques de calendari, i el calendari no veu quin temps farà — que és justament el que fa que la gent es quedi a casa. A partir del taronja (SMP ≥ 3) la previsió baixa un graó abans de sumar-se. Els trams segueixen el **color** de l'avís, no el número: a l'escala d'SMP, 1–2 és groc i 3–6 taronja o vermell. **No s'aplica a les allaus**: amb perill alt hi va menys gent, però la que hi és és exactament la que està en perill.
 3. **Els increments tenen sostre** (`incrementsMax` = 3). Modulen el perill, no el substitueixen: un pont d'agost amb dos helis de baixa i canvi de temps fort no ha de valer el mateix que un vermell d'allaus.
 
-**Nombres enters.** El risc no ha de tenir mai decimals. Cada increment suma el seu propi valor d'escala (afluència 0–3, canvi 0–2, boletaires 0–1) i l'operativitat va a l'inrevés (cap o un heli +2, dos +1, tres o més +0). `detallarRisc` arrodoneix el total, perquè els punts són editables.
+**Nombres enters.** El risc no ha de tenir mai decimals. Cada increment suma el seu propi valor d'escala (afluència 0–3, canvi 0–2, boletaires 0–1) i l'operativitat és igual de proporcional però a l'inrevés: suma tants punts com **helis de baixa** hi ha, de 4 bases. `detallarRisc` arrodoneix el total, perquè els punts són editables.
 
-**`RISC_FORMULA_VERSIO`.** La config de la fórmula es desa a `localStorage` i es rellegeix per sobre dels valors per defecte, o sigui que **un canvi de punts no arriba a qui ja tingui config desada**. Puja la versió sempre que canviï el *significat* dels punts, no només el seu valor: si no coincideix, la config es llença. Va per 4.
+**`RISC_FORMULA_VERSIO`.** La config de la fórmula es desa a `localStorage` i es rellegeix per sobre dels valors per defecte, o sigui que **un canvi de punts no arriba a qui ja tingui config desada**. Puja la versió sempre que canviï el *significat* dels punts, no només el seu valor: si no coincideix, la config es llença. Va per 5.
+
+**Els dies desats no es poden reconstruir.** `risc_historic` no té columna d'operativitat (que és un factor del càlcul) ni de versió de fórmula, i la columna `hc` és de la fórmula antiga. Cada dia que passa és un dia perdut per a l'anàlisi. Vegeu **`ANALISI-DADES.md`**, que porta el SQL concret i el principi que en surt: **si l'API ho dona, es desa tal com ve** — agregar és barat, recuperar el que no s'ha desat és impossible.
 
 **Simulador.** A Configuració → Fórmula de risc hi ha un simulador que calcula amb valors inventats i ensenya el desglossament pas a pas. Serveix per calibrar sense tocar cap dia real; no desa res.
 
