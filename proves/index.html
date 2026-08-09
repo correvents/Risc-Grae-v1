@@ -4451,6 +4451,16 @@
       // a l'inrevés (com menys helis operatius, més suma).
       operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0 } },           // nº helis operatius; 2+ → 0
       afluencia:    { actiu: true, punts: { 0: 0, 1: 1, 2: 2, 3: 3 } },
+      // L'afluència és una previsió feta amb estadístiques de calendari, i el
+      // calendari no veu quin temps farà. Amb avisos SMP la gent no hi va, així
+      // que la previsió s'ha de corregir a la baixa abans de sumar-la; si no,
+      // el mal temps compta dues vegades. Reducció segons el valor d'SMP:
+      // Els trams segueixen el color de l'avís, no el número: a l'escala d'SMP
+      // 1-2 és groc, 3-4 taronja i 5-6 vermell. Un groc no atura ningú, amb
+      // taronja en surt menys i amb vermell la muntanya es buida.
+      // No s'aplica a les allaus: amb perill 4-5 baixa la gent, però la que hi
+      // ha és justament la que està en perill.
+      afluenciaSMP: { actiu: true, punts: { 0: 0, 3: 1, 5: 3 } },
       canvi:        { actiu: true, punts: { 0: 0, 1: 1, 2: 2 } },
       boletaires:   { actiu: true, punts: { 0: 0, 1: 1 } },                 // 0 o 1
       // Plans PC: només informatiu, no entra al càlcul
@@ -4460,8 +4470,9 @@
     // Versió de la fórmula. Puja-la sempre que canviï el *significat* dels punts,
     // no només el seu valor: una config desada amb l'escala antiga no es pot
     // reinterpretar amb la nova i s'ha de descartar. La 2 és el pas a nombres
-    // enters, on cada increment suma el seu propi valor d'escala.
-    const RISC_FORMULA_VERSIO = 2;
+    // enters, on cada increment suma el seu propi valor d'escala; la 3 hi afegeix
+    // la reducció de l'afluència quan hi ha avisos SMP.
+    const RISC_FORMULA_VERSIO = 3;
 
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
@@ -4615,7 +4626,16 @@
         const n = (dia.operativitatHelis == null) ? 4 : parseInt(dia.operativitatHelis);
         increments.operativitat = +(F.operativitat.punts[n] ?? 0);
       }
-      if (F.afluencia.actiu)  increments.afluencia  = +(F.afluencia.punts[parseInt(dia.afluencia || 0)] ?? 0);
+      // L'SMP rebaixa l'afluència prevista abans que sumi (vegeu afluenciaSMP)
+      const smpValor = parseFloat(dia.smp || 0);
+      let reduccioAfluencia = 0;
+      if (F.afluenciaSMP.actiu) {
+        const trams = Object.keys(F.afluenciaSMP.punts).map(Number).sort((a, b) => a - b);
+        for (const t of trams) if (smpValor >= t) reduccioAfluencia = +(F.afluenciaSMP.punts[t] ?? 0);
+      }
+      const afluenciaBruta = parseInt(dia.afluencia || 0);
+      const afluenciaEfectiva = Math.max(0, afluenciaBruta - reduccioAfluencia);
+      if (F.afluencia.actiu)  increments.afluencia  = +(F.afluencia.punts[afluenciaEfectiva] ?? 0);
       if (F.canvi.actiu)      increments.canvi      = +(F.canvi.punts[parseInt(dia.canvi || 0)] ?? 0);
       if (F.boletaires.actiu) increments.boletaires = parseInt(dia.boletaires || 0) > 0 ? +(F.boletaires.punts[1] ?? 0) : 0;
 
@@ -4625,6 +4645,7 @@
       const brut = Math.round(base + extra);
       return {
         base, dominant, suplement, segonNom, increments, extra,
+        afluenciaBruta, afluenciaEfectiva, reduccioAfluencia,
         topat: brut > RISC_SOSTRE,
         risc: Math.max(0, Math.min(RISC_SOSTRE, brut))
       };
@@ -4764,9 +4785,9 @@
                 <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
-                <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}</span>
+                <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.afluencia||0)}/3${mesPts(calc.increments.afluencia)}</span>
+                <span class="risc-breakdown-value">${calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${calc.afluenciaBruta}</span> ${calc.afluenciaEfectiva}` : Math.round(dia.afluencia||0)}/3${mesPts(calc.increments.afluencia)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(opActiu)}">
                 <span class="risc-breakdown-label">🚁 Operativitat${fMarca(opActiu)}</span>
@@ -5444,6 +5465,11 @@
                    '<br><span style="font-size:0.75rem;color:#999;">Veure la pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>')}
             ${fila('afluencia', '📅 <strong>Afluència</strong>',
                    grup('afluencia', {0:'Normal', 1:'Moderat', 2:'Alt', 3:'Molt alt'}))}
+            ${fila('afluenciaSMP', '📅➖ <strong>Afluència amb mal temps</strong>',
+                   'L\'afluència es preveu amb estadístiques de calendari, que no veuen quin temps farà. ' +
+                   'Amb avisos SMP hi va menys gent, així que la previsió es rebaixa abans de sumar-la:' +
+                   grup('afluenciaSMP', {0:'Cap o groc (0-2)', 3:'Taronja (3-4)', 5:'Vermell (5-6)'}) +
+                   '<br><span style="font-size:0.75rem;color:#999;">Graons que es resten a l\'afluència. No s\'aplica a les allaus: amb perill alt hi va menys gent, però la que hi ha és la que està en perill.</span>')}
             ${fila('canvi', '🌦️ <strong>Canvi de temps</strong>',
                    grup('canvi', {0:'Estable', 1:'Moderat', 2:'Fort'}))}
             ${fila('boletaires', '🍄 <strong>Boletaires</strong>',
@@ -5532,6 +5558,9 @@
               <br>El risc surt sempre en <strong>nombres enters</strong>: cada increment suma el seu propi valor d'escala
               (afluència 0-3, canvi de temps 0-2, boletaires 0-1), tret de l'operativitat, que va a l'inrevés
               (cap heli +2, un heli +1, dos o més +0).
+              <br>L'<strong>afluència es rebaixa quan hi ha avisos SMP</strong>: es preveu amb estadístiques de calendari,
+              que no veuen quin temps farà, i amb mal temps hi va menys gent. Amb taronja baixa un graó i amb vermell
+              s'anul·la; el groc no la toca. Si no es fes, el mal temps comptaria dues vegades.
               <br>Els canvis <strong>s'apliquen i es guarden a l'instant</strong>; el botó Guardar només els confirma.
               Un factor desactivat surt atenuat al desglossament.
               <br><strong>Plans PC</strong> és només informatiu (no suma).
