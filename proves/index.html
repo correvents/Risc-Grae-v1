@@ -4449,9 +4449,10 @@
       // Tot en nombres enters: el risc no ha de sortir mai amb decimals. Cada
       // factor suma el seu propi valor d'escala, tret de l'operativitat, que és
       // a l'inrevés (com menys helis operatius, més suma).
-      // Proporcional, com la resta: suma tants punts com helis de baixa hi ha.
-      // La clau és el nombre d'helis que poden volar (0-4), de 4 bases.
-      operativitat: { actiu: true, punts: { 0: 4, 1: 3, 2: 2, 3: 1, 4: 0 } },
+      // La clau és el nombre d'HC **operatius** (0-4): estat de plena operativitat
+      // i meteo que permet volar. Amb dos o més ja es pot cobrir el territori, i
+      // per això no sumen; l'escala només es mou quan en queden un o cap.
+      operativitat: { actiu: true, punts: { 0: 2, 1: 1, 2: 0, 3: 0, 4: 0 } },
       afluencia:    { actiu: true, punts: { 0: 0, 1: 1, 2: 2, 3: 3 } },
       // L'afluència és una previsió feta amb estadístiques de calendari, i el
       // calendari no veu quin temps farà. Amb avisos SMP la gent no hi va, així
@@ -4479,8 +4480,9 @@
     // reinterpretar amb la nova i s'ha de descartar. La 2 és el pas a nombres
     // enters, on cada increment suma el seu propi valor d'escala; la 3 hi afegeix
     // la reducció de l'afluència quan hi ha avisos SMP, la 4 el sostre dels
-    // increments i la 5 l'operativitat proporcional.
-    const RISC_FORMULA_VERSIO = 5;
+    // increments i la 6 l'escala d'operativitat per HC operatius (0→+2, 1→+1,
+    // 2 o més→0). La 5 va ser un intent d'escala proporcional, descartat.
+    const RISC_FORMULA_VERSIO = 6;
 
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
@@ -5478,8 +5480,8 @@
                    grup('segonPerill', {1:'val 1 o 2', 3:'val 3 o més'}))}
             ${capcalera('INCREMENTS — sumen sobre el perill, amb sostre ' + RISC_SOSTRE)}
             ${fila('operativitat', '🚁 <strong>Operativitat</strong>',
-                   'Segons HC que poden volar (de 4 bases). Suma tants punts com helis de baixa:' +
-                   grup('operativitat', {0:'0 HC', 1:'1 HC', 2:'2 HC', 3:'3 HC', 4:'4 HC'}) +
+                   'Segons els HC <strong>operatius</strong> (de 4). Amb dos o més ja es cobreix el territori:' +
+                   grup('operativitat', {0:'cap operatiu', 1:'1 operatiu', 2:'2 operatius', 3:'3 operatius', 4:'4 operatius'}) +
                    '<br><span style="font-size:0.75rem;color:#999;">Veure la pestanya <strong>🚁 Operativitat HC</strong> per com es determina.</span>')}
             ${fila('afluencia', '📅 <strong>Afluència</strong>',
                    grup('afluencia', {0:'Normal', 1:'Moderat', 2:'Alt', 3:'Molt alt'}))}
@@ -5536,12 +5538,15 @@
         `<tr>${cel(`<strong>${v}</strong> · ${t}`)}${suma(v === 0 ? 0 : +(F.allaus.punts[v] ?? 0))}${cel(allausPer[v], 'color:#777;')}</tr>`);
 
       // ---- INCREMENTS ----
-      const filesOper = [4, 3, 2, 1, 0].map(n => {
-        const pts = +(F.operativitat.punts[n] ?? 0);
-        const baixa = 4 - n;
-        return `<tr>${cel(`<strong>${n}</strong> de 4 poden volar`)}${suma(pts)}${cel(
-          baixa === 0 ? 'Cobertura completa.' : `${baixa} ${baixa === 1 ? 'heli' : 'helis'} de baixa: suma un punt per cadascun.`, 'color:#777;')}</tr>`;
-      });
+      const operPer = {
+        4: 'Cobertura completa.',
+        3: 'Amb tres encara es cobreix el territori.',
+        2: 'Dos ja permeten atendre el que surti: és el mínim que no penalitza.',
+        1: 'Un de sol no pot atendre dos serveis alhora.',
+        0: 'Sense HC, tot depèn dels equips terrestres.'
+      };
+      const filesOper = [4, 3, 2, 1, 0].map(n =>
+        `<tr>${cel(`<strong>${n}</strong> de 4 operatius`)}${suma(+(F.operativitat.punts[n] ?? 0))}${cel(operPer[n], 'color:#777;')}</tr>`);
 
       const aflTxt = ['Normal', 'Moderat', 'Alt', 'Molt alt'];
       const reduccio = Object.keys(F.afluenciaSMP.punts).map(Number).sort((a,b)=>a-b).slice(-1).map(k => +(F.afluenciaSMP.punts[k] ?? 0))[0] || 0;
@@ -5593,7 +5598,16 @@
           <summary style="cursor:pointer;padding:0.6rem 0.9rem;font-weight:700;font-size:0.85rem;color:#1565c0;">➕ Què suma cada increment (i com el modifica el mal temps)</summary>
           <div style="padding:0 0.9rem 0.9rem;">
             <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.6rem;">🚁 Operativitat dels helicòpters</div>
-            ${taula(['Estat', 'Aporta', 'Per què'], filesOper)}
+            <p style="font-size:0.76rem;color:#777;margin:0.2rem 0 0;">
+              A la pantalla principal es veu com a <strong>X/4 operatius</strong>. Un HC compta com a operatiu si està en
+              plena operativitat <em>i</em> la meteo li permet volar des d'on és (vegeu <strong>Configuració → Operativitat HC</strong>).
+            </p>
+            ${taula(['HC operatius', 'Aporta', 'Per què'], filesOper)}
+            <p style="font-size:0.78rem;color:#555;margin:0.5rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
+              <strong>El número que es veu i el que suma no són el mateix.</strong> La pantalla ensenya el recompte real
+              (3/4, 2/4…), però a la fórmula només es mou quan la cobertura queda compromesa: de 4 a 2 operatius no suma res,
+              perquè amb dos encara es pot atendre el que surti. Amb <strong>1</strong> suma +1 i amb <strong>cap</strong>, +2.
+            </p>
             <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">📅 Afluència</div>
             ${taula(['Valor previst', 'Aporta', 'Amb taronja/vermell'], filesAfl)}
             <p style="font-size:0.78rem;color:#555;margin:0.5rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
@@ -5779,7 +5793,7 @@
               <p style="margin:0.8rem 0 0.3rem;font-weight:700;color:#37474f;">2 · Els INCREMENTS (0–<span id="expl-incmax">3</span>)</p>
               <ul style="margin:0;padding-left:1.2rem;">
                 <li>Cada factor suma <strong>el seu propi valor d'escala</strong>, en nombres enters: afluència 0–3, canvi de temps 0–2, boletaires 0–1.</li>
-                <li>L'<strong>operativitat</strong> va a l'inrevés però igual de proporcional: suma tants punts com <strong>helis de baixa</strong> hi ha (de 4 bases). <strong>Plans PC</strong> no suma: una fase activada ja surt als avisos SMP.</li>
+                <li>L'<strong>operativitat</strong> va a l'inrevés i <strong>no és proporcional</strong>: amb dos o més HC operatius no suma res, perquè ja es pot cobrir el territori; només carrega quan en queda un (+1) o cap (+2). <strong>Plans PC</strong> no suma: una fase activada ja surt als avisos SMP.</li>
                 <li>Junts tenen <strong>sostre</strong>. Els increments modulen el perill, no el substitueixen: un dia sense cap perill de muntanya no ha de valer el mateix que un vermell d'allaus.</li>
               </ul>
             </div>
@@ -5939,7 +5953,7 @@
             <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #0082d9;">🚁 Com es calcula l'Operativitat HC</h3>
 
             <div style="background:#f0f7ff;border:1px solid #0082d9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.5;">
-              <strong>Què és:</strong> el nombre d'<strong>HC operatius que poden volar</strong>, sobre el total (p. ex. <strong>3/4</strong>). Aquests són els HC realment distribuïts i disponibles. Aquest valor entra a la fórmula del risc de manera <strong>invertida</strong> (com menys HC disponibles, més risc).
+              <strong>Què és:</strong> el nombre d'<strong>HC operatius</strong>, sobre el total (p. ex. <strong>3/4</strong>). És el número que es veu a la pantalla principal. Entra a la fórmula del risc de manera <strong>invertida</strong> (com menys HC operatius, més risc), però <strong>no punt per punt</strong>: vegeu més avall.
             </div>
 
             <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
@@ -5960,9 +5974,9 @@
               <strong>Detalls:</strong>
               <ul style="margin:0.4rem 0 0;padding-left:1.2rem;">
                 <li><strong>Franja d'alerta</strong> (ratxa 30–50 km/h o visibilitat 2–5 km): <strong>segueix comptant com operatiu</strong> — és només un avís. Els límits durs que el treuen del recompte són <strong>ratxa &gt; 50 km/h</strong> o <strong>visibilitat &lt; 2 km</strong>.</li>
-                <li><strong>Distribució:</strong> es compten els HC operatius sobre el total (p. ex. 3/4). Cada HC que no pot volar (per estat o meteo) resta del recompte, encara que estigui a la mateixa base que un altre. Al desglossament s'indica quin HC no vola i per què.</li>
+                <li><strong>Distribució territorial: ⚠️ encara NO es comprova.</strong> Es compten els HC operatius sobre el total (3/4), un per un, <strong>sense mirar on són</strong>. Això vol dir que dos HC operatius a la mateixa regió compten igual que dos de repartits, encara que la cobertura real sigui molt pitjor. <strong>És una limitació coneguda i pendent d'arreglar.</strong> Al desglossament sí que s'indica quin HC no vola i per què.</li>
                 <li><strong>Dades meteo:</strong> Open-Meteo per cada base (avui i demà). Si la consulta falla, l'heli <strong>no es penalitza</strong> per meteo (només el treu l'estat).</li>
-                <li><strong>Punts al risc:</strong> es configuren a la pestanya <strong>🧮 Fórmula de risc</strong> (per defecte: 0 zones → +2, 1 zona → +1, 2 o més → 0).</li>
+                <li><strong>Punts al risc:</strong> <strong>cap operatiu → +2</strong>, <strong>1 operatiu → +1</strong>, <strong>2 o més → +0</strong>. No és proporcional: amb dos ja es pot atendre el que surti, i per això l'escala només es mou quan la cobertura queda compromesa. Es configuren a la pestanya <strong>🧮 Fórmula de risc</strong>, on també s'explica.</li>
               </ul>
             </div>
 
