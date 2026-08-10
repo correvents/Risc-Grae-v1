@@ -8,6 +8,23 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Operativitat: escala corregida i què vol dir "operatiu"
+
+Dues correccions sobre el que havia fet malament.
+
+**Els punts eren erronis.** Havia posat una escala proporcional (un punt per heli de baixa), i no és el que toca: **cap operatiu → +2, un → +1, dos o més → +0**. Amb dos HC ja es cobreix el territori, i l'escala només s'ha de moure quan la cobertura queda compromesa. Es torna, doncs, a l'escala que ja hi havia abans que jo la toqués.
+
+**La terminologia era errònia.** No són "helis de baixa" sinó **HC operatius**: en plena operativitat, amb condicions de vol des d'on són, i distribuïts pel territori. El número que es veu a la pantalla principal és aquest (X/4), i el que s'ha d'explicar és que **el número que es veu i el que suma no són el mateix**.
+
+**Limitació que ha sortit comprovant-ho: la distribució territorial NO es comprova.** El codi compta els HC un per un i no mira on són, o sigui que **dos HC operatius a la mateixa regió compten igual que dos de repartits**, encara que la cobertura real sigui molt pitjor. Ho he marcat com a pendent, ben visible, a Configuració → Operativitat HC.
+
+**On s'explica cada cosa**, tal com es va demanar:
+
+- *Configuració → Operativitat HC*: què vol dir operatiu (les condicions), i l'avís de la distribució.
+- *Configuració → Fórmula de risc*: que el X/4 que es veu no suma punt per punt, sinó +0, +1 o +2.
+
+`RISC_FORMULA_VERSIO` puja a 6. La 5 va ser l'intent d'escala proporcional, descartat.
+
 ## 2026-08-09 — Configuració: què suma cada factor, taula per taula
 
 Petició amb un motiu concret: **s'ha de poder explicar i justificar als caps**. L'explicació que hi havia deia com funcionava el model, però no deixava veure el més important, que és que **cap factor suma el seu valor tal qual**.
