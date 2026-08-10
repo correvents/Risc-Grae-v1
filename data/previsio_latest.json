@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-08-09T14:03:22.433Z",
+  "dataConsulta": "2026-08-10T06:57:23.122Z",
   "avui": {
-    "data": "2026-08-09",
-    "variables": {
-      "estatDelCel": "Predominarà l'ambient assolelat, amb algun interval de núvol baix a punts del litoral i prelitoral a partir del vespre. A banda, també, hi haurà algun núvol mitjà transitori fins a migdia.\nA partir del migdia, però, creixeran nuvolades al Pirineu i Prepirineu, preferentment a l'occidental, així com n'arribarà alguna a l'oest del país.",
-      "precipitacions": "És probable algun ruixat aïllat acompanyat de tempesta a punts del Pirineu, preferentment l'occidental, i n'és possible al Prepirineu. Serà d'intensitat entre feble i moderada, i acumularà quantitats de precipitació entre minses i poc abundants. A banda, no es descarta que algun ruixat aïllat afecti altres punts de l'extrem oest i, fins al migdia, algun d'aïllat i de curta durada a punts de l'interior, sobretot a la Catalunya Central. ",
-      "temperatures": "La temperatura màxima pujarà lleugerament o localment moderadament, sobretot al quadrant nord-est on podrà pujar acusadament i arribar localment als 39 ºC.",
-      "visibilitat": "Visibilitat entre bona i excel·lent en general, excepte en moments de xàfec que quedarà regular o dolenta. A banda, a punts elevats del litoral i prelitoral sud quedarà localment regular al vespre.",
-      "vent": "S'imposarà el component sud entre fluix i moderat amb alguns cops forts, sobretot a l'extrem nord-est i al prelitoral sud a mitja tarda. A la nit el vent quedarà fluix i de direcció variable."
-    }
-  },
-  "dema": {
     "data": "2026-08-10",
     "variables": {
       "estatDelCel": "Predominarà el cel poc o mig ennuvolat amb el pas d'algunes bandes de núvols alts i mitjans fins a migdia que avançaran d'oest a est. A més, a partir del final del matí creixeran nuvolades a punts del nord del país que deixaran el cel molt ennuvolat, així com al llarg de la tarda en poden arribar algunes pel sud i a Ponent. \nIndependentment, hi haurà intervals de núvols baixos als dos extrems del litoral, més probables al principi i al final del dia.",
-      "precipitacions": "Fins al migdia és possible algun ruixat dispers de curta durada a qualsevol punt, preferentment de l'interior, que localment anirà acompanyat d'alguna tempesta. A partir de llavors, s'esperen xàfecs acompanyats de tempesta i localment de calamarsa al Pirineu, al Prepirineu i al massís dels Ports. Seran d'intensitat entre feble i moderada. S'acumularan quantitats de precipitació entre minses i poc abundants.\nA banda, a partir del vespre no es descarta algun ruixat localment moderat al Camp de Tarragona.",
-      "temperatures": "La temperatura mínima sense canvis importants, mentre que la màxima serà semblant o lleugerament més alta a Ponent, i serà lleugerament o moderadament més baixa a la meitat est.",
-      "visibilitat": "Visibilitat entre bona i excel·lent en general, excepte en moments de xàfec quan quedarà regular o dolenta. \nIndependentment, fins a mig matí i de nou a partir del vespre, pot quedar regular a punts dels dos extrems del litoral i prelitoral, preferentment al sud.",
+      "precipitacions": "Al llarg de la jornada és possible algun ruixat dispers de curta durada a qualsevol punt, preferentment de l'interior i del prelitoral, que localment anirà acompanyat de tempesta. Es desplaçaran de sud-oest a nord-est. Al matí són probables alguns xàfecs a punts del sud de les Terres de l'Ebre. A la tarda, s'esperen xàfecs acompanyats de tempesta i localment de calamarsa al Pirineu, al Prepirineu i al massís dels Ports. Seran d'intensitat entre feble i moderada. S'acumularan quantitats de precipitació entre minses i poc abundants. A banda, a partir del vespre no es descarta algun ruixat localment moderat al Camp de Tarragona.",
+      "temperatures": "La temperatura, tant la mínima com la màxima, sense canvis importants. Amb tot, la màxima baixarà de forma puntual a sectors del quadrant nord-est. Valors per sobre de 35 °C excepte a punts del litoral i prelitoral i comarques pirenaiques.",
+      "visibilitat": "Visibilitat entre bona i excel·lent en general, excepte en moments de xàfec quan quedarà regular o dolenta. Independentment, fins a mig matí i de nou a partir del vespre, pot quedar regular a punts dels dos extrems del litoral i prelitoral, preferentment al sud. A banda, anirà empitjorant durant les darreres hores del dia, especialment a cotes altes, per l'arribada de pols en suspensió.",
       "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent del sud-est entre fluix i moderat amb alguns cops forts, sobretot a cotes elevades el Pirineu, al prelitoral sud i sud de Ponent, sobretot a mitja tarda. "
+    }
+  },
+  "dema": {
+    "data": "2026-08-11",
+    "variables": {
+      "estatDelCel": "Predominarà el cel poc o localment mig ennuvolat amb el pas d'algunes bandes de núvols alts i mitjans fins a mig matí que avançaran d'oest a est. A més, a partir del final del matí creixeran nuvolades a punts del Pirineu i Prepirineu que deixaran el cel entre mig i molt ennuvolat al nord del país, com també algunes de locals a punts del prelitoral sud i d'altres que podran arribar per Ponent. Independentment, hi haurà intervals de núvols baixos als dos extrems del litoral, més probables al principi i al final del dia, si bé a punts del sud podrien persistir tota la jornada.",
+      "precipitacions": "A primeres hores del matí no es descarta algun plugim a punts de l'extrem sud. A partir del migdia s'esperen xàfecs acompanyats de tempesta i localment de calamarsa o pedra al Pirineu i al Prepirineu. També en seran probables a punts del prelitoral sud i no se'n descarta algun local que arribi a Ponent. Seran d'intensitat entre feble i moderada. S'acumularan quantitats de precipitació entre minses i poc abundants.",
+      "temperatures": "La temperatura mínima serà semblant, puntualment més alta a punts de la meitat occidental. La temperatura màxima també serà similar, lleugerament més baixa a zones de Ponent i prelitoral. ",
+      "visibilitat": "Visibilitat entre bona i excel·lent en general, excepte en moments de xàfec quan quedarà regular o dolenta. Independentment, fins a mig matí i de nou a partir del vespre, pot quedar regular a punts dels dos extrems del litoral i prelitoral, preferentment al sud. A banda, en zones altes de muntanya hi haurà pols en suspensió que enteranyinarà el cel.",
+      "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent de component sud i est entre fluix i moderat."
     }
   }
 }
