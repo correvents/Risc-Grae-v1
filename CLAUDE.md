@@ -77,7 +77,7 @@ Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet vo
 - El recompte és **per heli** (X/4), no per zones cobertes: agrupar per zones amagava helis de baixa.
 - Si no hi ha coordenades o falla la xarxa, **no es penalitza** (`ok: true`).
 - **El recompte és de províncies cobertes, no d'aparells.** `calcularOperativitat` creua els tres paràmetres alhora — estat `Total`, finestra de vol des de la base i **distribució** — i retorna `count` = províncies cobertes per HC que poden volar. Dos HC operatius a la mateixa província en compten un. `aparells` porta el recompte antic, per si cal.
-- **Els llindars de vol no estan validats.** `OP_RATXA_MAX` = 50 km/h i `OP_VIS_MIN` = 2000 m són els que ja hi havia i no consta d'on van sortir: no són un límit d'aeronau ni una mínima VFR publicada. Són conservadors i poden descartar dies volables. **Pendent de preguntar-ho al GRAE.**
+- **Els llindars de vol, contrastats.** `OP_RATXA_MAX` = 50 km/h (27 kt) **quadra** amb la pràctica de vol de muntanya (no sortir per sobre d'uns 25 kt). `OP_VIS_MIN` = 2000 m **no**: les mínimes HEMS d'EASA (SPA.HEMS.120) són 1.500 m de dia i 3.000 m de nit sense NVIS. Com que la finestra s'avalua les 24 h, un sol valor és massa estricte de dia i massa lax de nit. **Cal separar-lo en dia/nit** i preguntar al GRAE si volen amb NVIS. La flota són H135 P2.
 - La província és una aproximació de la regió d'emergència; quan calgui precisió, caldrà passar a `REGIONS_BOMBERS`.
 - Hi ha cau (`operativitatCache`, `meteoVolCache`); si canvies dades d'helis, crida `invalidarOperativitat()`.
 

@@ -8,6 +8,20 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Llindars de vol: contrastats amb la normativa
+
+Buscats els llindars reals d'enlairament per a HC de rescat, per validar els dos números que teníem sense font.
+
+**El vent (50 km/h ≈ 27 kt) quadra.** El límit d'aeronau de l'H135 és força més alt, però per a **vol de muntanya** la recomanació operativa és no sortir per sobre d'uns 25 kt, i amb ratxes o en llocs confinats encara menys. El nostre valor és raonable.
+
+**La visibilitat (2.000 m) no quadra, i el problema és més subtil del que semblava.** Les mínimes HEMS d'EASA (SPA.HEMS.120) són **1.500 m de dia** (amb sostre de 600 ft) i **3.000 m de nit sense NVIS** (1.200 ft). Com que la nostra finestra s'avalua les **24 h** —els GRAE volen de nit—, un sol llindar és **massa estricte de dia i massa lax de nit**: de dia descartem hores volables i de nit en donem per bones que no ho serien.
+
+**Cal separar `OP_VIS_MIN` en un valor de dia i un de nit**, i per fer-ho bé s'ha de saber si volen amb NVIS. Preguntes concretes per al GRAE, escrites a Configuració → Operativitat HC.
+
+**No tenim el sostre de núvols**, que és l'altra meitat de les mínimes HEMS: Open-Meteo no el dona directament i caldria derivar-lo.
+
+De passada: la flota són **Airbus H135 P2**, amb bases a Sabadell, Olot, la Seu d'Urgell i Tírvia.
+
 ## 2026-08-09 — "HC GRAE operatius": els tres paràmetres en un sol valor
 
 La pestanya Helicòpters tenia dos indicadors separats (Distribució territorial i Operativitat) i la fórmula del risc feia servir un tercer càlcul, que comptava aparells i **no mirava la distribució**. Tres números per a la mateixa cosa, i el que manava era el pitjor dels tres.
