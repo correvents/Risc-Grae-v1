@@ -8,6 +8,18 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — Condicions de vol: configurables, i només de dia
+
+Decidit: **de moment el GRAE no vola de nit.** Això canvia una cosa que semblava resolta. La finestra de vol s'avaluava les **24 h** des del 22 de juliol, amb el raonament que els GRAE operen de nit; ara es busca **només entre hores amb llum** (`is_day` d'Open-Meteo) i una finestra no pot travessar la nit.
+
+I això alhora **valida el llindar de visibilitat**: els 2.000 m només s'han de comparar amb la mínima HEMS de **dia** (1.500 m d'EASA), i hi som per sobre. El conflicte dia/nit que vaig detectar desapareix perquè la nit ja no compta.
+
+**Els valors es queden com estaven** (50 km/h, 2.000 m, 3 h) però **deixen de ser constants**: ara són `opConfig`, editables des de Configuració → Operativitat HC i desades a `localStorage` (`riscGRAE_opHC`). Es recalcula a l'instant i el resum de sota diu sempre què hi ha aplicat. La casella "només amb llum de dia" també és configurable, per si algun dia canvia.
+
+**Precisió important del cap del GRAE, escrita a la pestanya:** aquests llindars diuen si l'helicòpter **pot sortir de l'heliport**, no si podrà treballar al lloc del servei. Això últim depèn d'on sigui el servei i de com ho vegi la tripulació al moment, i no es pot preveure des d'aquí. Un HC pot comptar com a operatiu i haver de renunciar a un rescat concret per turbulència, boira de vall o falta d'espai per a la grua.
+
+**Encara no tenim el sostre de núvols**, que és l'altra meitat de les mínimes HEMS: Open-Meteo no el dona directament.
+
 ## 2026-08-09 — Llindars de vol: contrastats amb la normativa
 
 Buscats els llindars reals d'enlairament per a HC de rescat, per validar els dos números que teníem sense font.

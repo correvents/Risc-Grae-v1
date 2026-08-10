@@ -4521,34 +4521,56 @@
     // Un HC és operatiu si: (1) estat = "Total" i (2) la meteo permet enlairar-se
     // (finestra de ≥3 h seguides de llum de dia amb ratxa ≤ 50 km/h i visibilitat ≥ 2 km).
     // "Distribuït" = cobertura per zones: cada base = 1 zona; operativitat = zones amb ≥1 heli operatiu.
-    const OP_RATXA_MAX = 50;   // km/h — per sobre, no vola
-    const OP_VIS_MIN = 2000;   // m — per sota, no vola
-    const OP_HORES_MIN = 3;    // hores seguides de llum amb condicions dins límits
+    // Condicions de vol dels HC. Editables des de Configuració → Operativitat HC
+    // i desades a localStorage; els valors per defecte són els contrastats amb
+    // la pràctica de vol de muntanya i les mínimes HEMS (vegeu la pestanya).
+    const OP_DEFAULT = {
+      ratxaMax: 50,      // km/h — per sobre, no vola
+      visMin: 2000,      // m — per sota, no vola
+      horesMin: 3,       // hores seguides dins de límits
+      nomesDia: true     // de moment el GRAE no vola de nit
+    };
+    let opConfig = { ...OP_DEFAULT };
 
-    // Carrega els helis d'una data amb el mateix fallback que la pestanya Helicòpters
-    // (data exacta → últim registre desat → base per defecte). No toca el DOM.
-    async function carregarHelisPerRisc(dataStr) {
-      const exacte = await carregarHelicoptersDiaSupabase(dataStr);
-      if (exacte && exacte.length) return exacte;
+    function carregarOpConfig() {
       try {
-        const { data } = await sbClient
-          .from('helicopters_historic')
-          .select('*')
-          .order('data', { ascending: false })
-          .order('heli_id')
-          .limit(20);
-        if (data && data.length) {
-          const ultimaData = data[0].data;
-          return data.filter(r => r.data === ultimaData).map(row => ({
-            id: row.heli_id, recurs: row.recurs, base: row.base,
-            lat: row.lat, lon: row.lon, operativitat: row.operativitat, observacions: row.observacions
-          }));
+        const s = JSON.parse(localStorage.getItem('riscGRAE_opHC') || 'null');
+        if (!s) return;
+        for (const k of Object.keys(OP_DEFAULT)) {
+          if (k === 'nomesDia') { if (typeof s[k] === 'boolean') opConfig[k] = s[k]; continue; }
+          const v = parseFloat(s[k]);
+          if (!isNaN(v) && v > 0) opConfig[k] = v;
         }
-      } catch(e) { logError('HelisRisc', e.message); }
-      return JSON.parse(JSON.stringify(HELICOPTERS_BASE));
+      } catch(e) {}
+    }
+    carregarOpConfig();
+
+    function guardarOpConfig() {
+      try { localStorage.setItem('riscGRAE_opHC', JSON.stringify(opConfig)); } catch(e) {}
     }
 
-    // La meteo permet volar des d'una base aquell dia? (≥3 h seguides de llum dins límits)
+    // Llegeix els camps de Configuració → Operativitat HC i recalcula
+    function aplicarOpConfig() {
+      for (const k of ['ratxaMax', 'visMin', 'horesMin']) {
+        const el = document.getElementById('op-' + k);
+        if (!el) continue;
+        const v = parseFloat(el.value);
+        if (!isNaN(v) && v > 0) opConfig[k] = v;
+      }
+      const dia = document.getElementById('op-nomesDia');
+      if (dia) opConfig.nomesDia = dia.checked;
+      guardarOpConfig();
+      invalidarOperativitat();
+      const resum = document.getElementById('op-resum');
+      if (resum) resum.textContent = resumOpConfig();
+      renderHCGraeOperatius();
+      actualitzarRiscAuto();
+    }
+
+    const resumOpConfig = () =>
+      `Ara mateix: ratxa ≤ ${opConfig.ratxaMax} km/h · visibilitat ≥ ${opConfig.visMin} m · ` +
+      `≥ ${opConfig.horesMin} h seguides, ${opConfig.nomesDia ? 'només amb llum de dia' : 'a qualsevol hora (24 h)'}.`;
+
     const meteoVolCache = {};
     async function meteoPermetVol(lat, lon, dataStr) {
       if (lat == null || lon == null) return { ok: true, motiu: '' }; // sense coords → no penalitza
@@ -4556,22 +4578,25 @@
       if (meteoVolCache[key]) return meteoVolCache[key];
       try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
-          '&hourly=visibility,wind_gusts_10m&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
+          '&hourly=visibility,wind_gusts_10m,is_day&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
         const resp = await fetch(url);
         const data = await resp.json();
         const H = data.hourly;
-        // Tot el dia (24 h) — GRAE també opera de nit
+        // Es busca la finestra més llarga d'hores seguides dins de límits. Si el
+        // GRAE no vola de nit, les hores sense llum no compten i, a més, trenquen
+        // la ratxa: una finestra no pot travessar la nit.
         let seguides = 0, maxSeguides = 0;
         for (let hh = 0; hh <= 23; hh++) {
           const idx = H.time.indexOf(dataStr + 'T' + String(hh).padStart(2, '0') + ':00');
           if (idx < 0) continue;
+          if (opConfig.nomesDia && H.is_day && H.is_day[idx] === 0) { seguides = 0; continue; }
           const ratxa = H.wind_gusts_10m[idx];
           const vis = H.visibility[idx];
-          const bo = (ratxa != null && ratxa <= OP_RATXA_MAX) && (vis != null && vis >= OP_VIS_MIN);
+          const bo = (ratxa != null && ratxa <= opConfig.ratxaMax) && (vis != null && vis >= opConfig.visMin);
           if (bo) { seguides++; maxSeguides = Math.max(maxSeguides, seguides); }
           else seguides = 0;
         }
-        const ok = maxSeguides >= OP_HORES_MIN;
+        const ok = maxSeguides >= opConfig.horesMin;
         const res = { ok, motiu: ok ? '' : 'no vola (meteo)' };
         meteoVolCache[key] = res;
         return res;
@@ -5975,6 +6000,13 @@
             </div>
 
             <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
+              <div style="background:#fff;border-radius:4px;padding:0.6rem 0.8rem;margin-bottom:0.6rem;font-size:0.82rem;line-height:1.6;">
+                <strong>⚠️ Què mesurem aquí, i què no.</strong> Aquests llindars diuen si l'helicòpter
+                <strong>pot sortir de l'heliport</strong>. <strong>No</strong> diuen si podrà treballar al lloc del servei:
+                això depèn d'on sigui el servei i de com ho vegi la tripulació al moment, i no es pot preveure des d'aquí.
+                Un HC pot comptar com a operatiu i, tot i així, haver de renunciar a un rescat concret per turbulència,
+                per la boira d'una vall o per no tenir espai per a la grua.
+              </div>
               <strong>Un HC compta com a GRAE OPERATIU si es compleixen les 3 condicions:</strong>
               <ol style="margin:0.5rem 0 0;padding-left:1.2rem;">
                 <li><strong>Estat = "Total"</strong> a la pestanya Helicòpters.<br>
@@ -5988,7 +6020,7 @@
                 <li><strong>Distribució territorial:</strong> es compten <strong>províncies cobertes</strong>, no aparells. Dos HC operatius a la mateixa província cobreixen el mateix territori que un, i per tant en compta un.</li>
               </ol>
               <div style="background:#fff;border-radius:4px;padding:0.6rem 0.8rem;margin-top:0.6rem;font-size:0.82rem;line-height:1.6;">
-                <strong>D'on surten aquests dos números.</strong> Eren els que ja hi havia al projecte, sense font.
+                <strong>D'on surten aquests números.</strong> Eren els que ja hi havia al projecte, sense font.
                 Contrastats amb la normativa i amb la pràctica de rescat en muntanya:
                 <table style="width:100%;border-collapse:collapse;font-size:0.78rem;margin:0.5rem 0;">
                   <thead><tr style="background:#f5f5f5;">
@@ -5998,35 +6030,48 @@
                   </tr></thead>
                   <tbody>
                     <tr><td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Vent</td>
-                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">El límit d'aeronau de l'H135 és molt més alt, però per a <strong>vol de muntanya</strong> la recomanació és no sortir per sobre d'uns <strong>25 nusos</strong> (46 km/h), i amb ratxes la tolerància baixa força més. En grua i en llocs confinats, encara menys.</td>
-                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#e8f5e9;"><strong>50 km/h</strong> (27 kt)<br><span style="color:#2e7d32;">Quadra bé.</span></td></tr>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">El límit d'aeronau de l'H135 és molt més alt, però per a <strong>vol de muntanya</strong> la recomanació és no sortir per sobre d'uns <strong>25 nusos</strong> (46 km/h).</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#e8f5e9;"><strong>50 km/h</strong> (27 kt)<br><span style="color:#2e7d32;">Quadra.</span></td></tr>
                     <tr><td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Visibilitat</td>
-                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Mínimes HEMS d'EASA (SPA.HEMS.120): de <strong>dia 1.500 m</strong> amb sostre de núvols de 600 ft; de <strong>nit sense NVIS 3.000 m</strong> i 1.200 ft. En ruta es pot baixar a 800 m per trams curts.</td>
-                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#fff8e1;"><strong>2.000 m</strong><br><span style="color:#e65100;">Un sol valor per a dia i nit.</span></td></tr>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Mínimes HEMS d'EASA (SPA.HEMS.120): <strong>1.500 m de dia</strong> (sostre 600 ft); de nit sense NVIS, 3.000 m.</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#e8f5e9;"><strong>2.000 m</strong><br><span style="color:#2e7d32;">Conservador respecte de la mínima de dia.</span></td></tr>
                   </tbody>
                 </table>
-                <strong>⚠️ El problema que això destapa:</strong> la finestra de vol s'avalua les <strong>24 h</strong>, perquè els GRAE
-                també operen de nit, però el llindar de visibilitat és un de sol. Amb 2.000 m som <em>més estrictes</em> que la
-                mínima de dia (1.500 m) i <em>més laxos</em> que la de nit sense NVIS (3.000 m): de dia descartem hores volables
-                i de nit en donem per bones que no ho serien.
-                <br><strong>Preguntes per al GRAE:</strong> volen amb NVIS (ulleres de visió nocturna)? Quina visibilitat mínima
-                apliquen de dia i de nit? I quin vent màxim admeten per enlairar-se i per treballar amb grua?
-                <br><span style="color:#888;">Amb la resposta, cal separar <code>OP_VIS_MIN</code> en un valor de dia i un de nit.
-                El sostre de núvols no el tenim: Open-Meteo no el dona directament i caldria derivar-lo.</span>
+                <strong>🌙 De moment el GRAE no vola de nit</strong>, i per això la finestra es busca <strong>només entre les hores amb llum</strong>.
+                Això fa que els 2.000 m siguin coherents: només s'han de comparar amb la mínima de dia (1.500 m), i hi som per sobre.
+                Si algun dia s'operés de nit, caldria un llindar més alt (3.000 m sense NVIS) i desmarcar la casella de sota.
+                <br><span style="color:#888;">El <strong>sostre de núvols</strong>, que és l'altra meitat de les mínimes HEMS, no el tenim: Open-Meteo no el dona directament.</span>
               </div>
             </div>
 
-            <div style="background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
-              <strong>Detalls:</strong>
-              <ul style="margin:0.4rem 0 0;padding-left:1.2rem;">
-                <li><strong>Franja d'alerta</strong> (ratxa 30–50 km/h o visibilitat 2–5 km): <strong>segueix comptant com operatiu</strong> — és només un avís. Els límits durs que el treuen del recompte són <strong>ratxa &gt; 50 km/h</strong> o <strong>visibilitat &lt; 2 km</strong>.</li>
-                <li><strong>Distribució territorial:</strong> el recompte és de <strong>províncies cobertes</strong> per HC que poden volar, no d'aparells. Si dos HC operatius són a la mateixa província, en compta un: el segon no cobreix territori nou. A la pestanya Helicòpters es veu quins aparells no sumen per aquest motiu.<br><span style="color:#888;">La província és una aproximació de la regió d'emergència; quan calgui més precisió caldrà passar a regions.</span></li>
-                <li><strong>Dades meteo:</strong> Open-Meteo per cada base (avui i demà). Si la consulta falla, l'heli <strong>no es penalitza</strong> per meteo (només el treu l'estat).</li>
-                <li><strong>Punts al risc:</strong> <strong>cap operatiu → +2</strong>, <strong>1 operatiu → +1</strong>, <strong>2 o més → +0</strong>. No és proporcional: amb dos ja es pot atendre el que surti, i per això l'escala només es mou quan la cobertura queda compromesa. Es configuren a la pestanya <strong>🧮 Fórmula de risc</strong>, on també s'explica.</li>
-              </ul>
+            <div style="background:#fff;border:2px solid #0082d9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;">
+              <div style="font-weight:700;font-size:0.9rem;color:#0d47a1;margin-bottom:0.6rem;">⚙️ Ajustar les condicions de vol</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.7rem;">
+                <label style="font-size:0.8rem;color:#37474f;">
+                  <span style="display:block;font-weight:600;margin-bottom:0.15rem;">Ratxa màxima (km/h)</span>
+                  <input type="number" id="op-ratxaMax" min="1" step="1" value="${opConfig.ratxaMax}" onchange="aplicarOpConfig()"
+                         style="width:100%;padding:0.35rem;border:1px solid #90caf9;border-radius:4px;">
+                </label>
+                <label style="font-size:0.8rem;color:#37474f;">
+                  <span style="display:block;font-weight:600;margin-bottom:0.15rem;">Visibilitat mínima (m)</span>
+                  <input type="number" id="op-visMin" min="1" step="100" value="${opConfig.visMin}" onchange="aplicarOpConfig()"
+                         style="width:100%;padding:0.35rem;border:1px solid #90caf9;border-radius:4px;">
+                </label>
+                <label style="font-size:0.8rem;color:#37474f;">
+                  <span style="display:block;font-weight:600;margin-bottom:0.15rem;">Hores seguides mínimes</span>
+                  <input type="number" id="op-horesMin" min="1" max="24" step="1" value="${opConfig.horesMin}" onchange="aplicarOpConfig()"
+                         style="width:100%;padding:0.35rem;border:1px solid #90caf9;border-radius:4px;">
+                </label>
+                <label style="font-size:0.8rem;color:#37474f;display:flex;align-items:center;gap:0.4rem;padding-top:1.1rem;">
+                  <input type="checkbox" id="op-nomesDia" ${opConfig.nomesDia ? 'checked' : ''} onchange="aplicarOpConfig()">
+                  <span><strong>Només amb llum de dia</strong></span>
+                </label>
+              </div>
+              <p id="op-resum" style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;">${resumOpConfig()}</p>
+              <p style="font-size:0.75rem;color:#888;margin:0.3rem 0 0;">
+                Es desa al navegador i es recalcula a l'instant. Si desmarques "només amb llum de dia", la finestra es busca les 24 h i llavors caldria pujar la visibilitat mínima.
+              </p>
             </div>
-
-            <p style="color:#888;font-size:0.78rem;margin:0;">Llindars actuals: ratxa ≤ 50 km/h · visibilitat ≥ 2 km · ≥ 3 h seguides (24 h). (Definits al codi: <code>OP_RATXA_MAX</code>, <code>OP_VIS_MIN</code>, <code>OP_HORES_MIN</code>.)</p>
           </div>
         </div>
         

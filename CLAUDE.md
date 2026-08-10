@@ -73,11 +73,13 @@ Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts →
 
 Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet volar: cal una finestra de **≥3 hores seguides** amb ratxa ≤50 km/h i visibilitat ≥2000 m (constants `OP_RATXA_MAX`, `OP_VIS_MIN`, `OP_HORES_MIN`, via Open-Meteo per coordenades de base).
 
-- La finestra s'avalua **les 24 hores**, no només amb llum: els GRAE també operen de nit.
+- **De moment el GRAE no vola de nit**, així que la finestra es busca només entre hores amb llum (`is_day` d'Open-Meteo) i no pot travessar la nit. És configurable: si algun dia s'opera de nit, cal desmarcar-ho i pujar la visibilitat mínima.
+- **Mesura si poden sortir de l'heliport, no si podran treballar al lloc.** Això últim depèn d'on sigui el servei i del criteri de la tripulació, i no es pot preveure.
 - El recompte és **per heli** (X/4), no per zones cobertes: agrupar per zones amagava helis de baixa.
 - Si no hi ha coordenades o falla la xarxa, **no es penalitza** (`ok: true`).
 - **El recompte és de províncies cobertes, no d'aparells.** `calcularOperativitat` creua els tres paràmetres alhora — estat `Total`, finestra de vol des de la base i **distribució** — i retorna `count` = províncies cobertes per HC que poden volar. Dos HC operatius a la mateixa província en compten un. `aparells` porta el recompte antic, per si cal.
-- **Els llindars de vol, contrastats.** `OP_RATXA_MAX` = 50 km/h (27 kt) **quadra** amb la pràctica de vol de muntanya (no sortir per sobre d'uns 25 kt). `OP_VIS_MIN` = 2000 m **no**: les mínimes HEMS d'EASA (SPA.HEMS.120) són 1.500 m de dia i 3.000 m de nit sense NVIS. Com que la finestra s'avalua les 24 h, un sol valor és massa estricte de dia i massa lax de nit. **Cal separar-lo en dia/nit** i preguntar al GRAE si volen amb NVIS. La flota són H135 P2.
+- **Els llindars són configurables** (`opConfig`, desat a `localStorage` amb la clau `riscGRAE_opHC`; per defecte 50 km/h, 2000 m, 3 h, només de dia) i s'editen a Configuració → Operativitat HC. Ja no són constants.
+- **Contrastats:** 50 km/h (27 kt) quadra amb la pràctica de vol de muntanya (~25 kt). Els 2000 m són conservadors respecte de la mínima HEMS de dia d'EASA (1.500 m), que és la que aplica perquè no es vola de nit. El sostre de núvols no el tenim: Open-Meteo no el dona. La flota són H135 P2.
 - La província és una aproximació de la regió d'emergència; quan calgui precisió, caldrà passar a `REGIONS_BOMBERS`.
 - Hi ha cau (`operativitatCache`, `meteoVolCache`); si canvies dades d'helis, crida `invalidarOperativitat()`.
 
