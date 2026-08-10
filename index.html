@@ -4604,9 +4604,27 @@
           const m = await meteoPermetVol(h.lat, h.lon, dataStr);
           if (!m.ok) { operatiu = false; motiu = m.motiu; }
         }
-        detall.push({ nom: h.recurs || h.base || '?', base: h.base || '', operatiu, motiu });
+        detall.push({ nom: h.recurs || h.base || '?', base: h.base || '',
+                      prov: provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon)),
+                      operatiu, motiu });
       }
-      return { count: detall.filter(d => d.operatiu).length, total: detall.length, detall };
+
+      // "HC GRAE operatius" creua els tres paràmetres alhora: estat de plena
+      // operativitat, condicions de vol des de la seva base i distribució pel
+      // territori. Es compten **províncies cobertes** per helis que poden volar,
+      // no aparells: dos helis a la mateixa província no cobreixen el doble de
+      // territori, i abans comptaven com dos.
+      const provCobertes = new Set(detall.filter(d => d.operatiu && d.prov).map(d => d.prov));
+      const senseProv = detall.filter(d => d.operatiu && !d.prov).length;
+      const count = provCobertes.size + senseProv;
+
+      return {
+        count,
+        aparells: detall.filter(d => d.operatiu).length,
+        provincies: [...provCobertes],
+        total: detall.length,
+        detall
+      };
     }
 
 
@@ -5957,24 +5975,34 @@
             </div>
 
             <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
-              <strong>Un HC compta com a OPERATIU si es compleixen les 2 condicions:</strong>
+              <strong>Un HC compta com a GRAE OPERATIU si es compleixen les 3 condicions:</strong>
               <ol style="margin:0.5rem 0 0;padding-left:1.2rem;">
                 <li><strong>Estat = "Total"</strong> a la pestanya Helicòpters.<br>
                   <span style="color:#666;">Parcial, Sense grua o Baixa → NO operatiu.</span></li>
-                <li><strong>La meteo permet enlairar-se</strong> de la seva base: hi ha una finestra de <strong>≥ 3 h seguides</strong> a qualsevol hora del dia (<strong>24 h, també de nit</strong>), amb:
+                <li><strong>Condicions de vol</strong> des de la seva base: hi ha una finestra de <strong>≥ 3 h seguides</strong> a qualsevol hora del dia (<strong>24 h, també de nit</strong>), amb:
                   <ul style="margin:0.3rem 0 0;padding-left:1.1rem;">
-                    <li>ratxa de vent <strong>≤ 50 km/h</strong>, i</li>
-                    <li>visibilitat <strong>≥ 2 km</strong>.</li>
+                    <li>ratxa de vent <strong>≤ 50 km/h</strong> (uns 27 nusos), i</li>
+                    <li>visibilitat <strong>≥ 2.000 m</strong>.</li>
                   </ul>
                 </li>
+                <li><strong>Distribució territorial:</strong> es compten <strong>províncies cobertes</strong>, no aparells. Dos HC operatius a la mateixa província cobreixen el mateix territori que un, i per tant en compta un.</li>
               </ol>
+              <div style="background:#fff;border-radius:4px;padding:0.6rem 0.8rem;margin-top:0.6rem;font-size:0.82rem;">
+                <strong>⚠️ Els dos llindars de vol s'han de validar amb els pilots.</strong> Els 50 km/h i els 2.000 m
+                són els que ja hi havia al projecte i <strong>no consta d'on van sortir</strong>: no són un límit oficial
+                de l'aeronau ni una mínima VFR publicada. Com a referència, els límits d'aeronau solen ser bastant més
+                alts i les mínimes de visibilitat per a HEMS bastant més baixes, o sigui que la xifra actual és
+                <em>conservadora</em>: pot deixar fora dies en què de fet s'hauria pogut volar. Cal preguntar al GRAE
+                quin vent màxim admeten per enlairar-se i quina visibilitat mínima apliquen de veritat, i ajustar
+                <code>OP_RATXA_MAX</code> i <code>OP_VIS_MIN</code>.
+              </div>
             </div>
 
             <div style="background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:0.9rem;margin-bottom:1rem;font-size:0.85rem;line-height:1.6;">
               <strong>Detalls:</strong>
               <ul style="margin:0.4rem 0 0;padding-left:1.2rem;">
                 <li><strong>Franja d'alerta</strong> (ratxa 30–50 km/h o visibilitat 2–5 km): <strong>segueix comptant com operatiu</strong> — és només un avís. Els límits durs que el treuen del recompte són <strong>ratxa &gt; 50 km/h</strong> o <strong>visibilitat &lt; 2 km</strong>.</li>
-                <li><strong>Distribució territorial: ⚠️ encara NO es comprova.</strong> Es compten els HC operatius sobre el total (3/4), un per un, <strong>sense mirar on són</strong>. Això vol dir que dos HC operatius a la mateixa regió compten igual que dos de repartits, encara que la cobertura real sigui molt pitjor. <strong>És una limitació coneguda i pendent d'arreglar.</strong> Al desglossament sí que s'indica quin HC no vola i per què.</li>
+                <li><strong>Distribució territorial:</strong> el recompte és de <strong>províncies cobertes</strong> per HC que poden volar, no d'aparells. Si dos HC operatius són a la mateixa província, en compta un: el segon no cobreix territori nou. A la pestanya Helicòpters es veu quins aparells no sumen per aquest motiu.<br><span style="color:#888;">La província és una aproximació de la regió d'emergència; quan calgui més precisió caldrà passar a regions.</span></li>
                 <li><strong>Dades meteo:</strong> Open-Meteo per cada base (avui i demà). Si la consulta falla, l'heli <strong>no es penalitza</strong> per meteo (només el treu l'estat).</li>
                 <li><strong>Punts al risc:</strong> <strong>cap operatiu → +2</strong>, <strong>1 operatiu → +1</strong>, <strong>2 o més → +0</strong>. No és proporcional: amb dos ja es pot atendre el que surti, i per això l'escala només es mou quan la cobertura queda compromesa. Es configuren a la pestanya <strong>🧮 Fórmula de risc</strong>, on també s'explica.</li>
               </ul>
@@ -6891,7 +6919,10 @@
       const p = heliPfx;
       return `
         <div style="background:#fff;padding:0.75rem 1.25rem;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters Bombers</div>
+          <div>
+            <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters GRAE Operatius</div>
+            <div id="heli-titol-valor" style="font-size:0.78rem;color:#666;margin-top:0.15rem;">Calculant…</div>
+          </div>
           <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto;">
             <label style="font-size:0.82rem;color:#666;">📅</label>
             <input type="date" id="${p}-data-input" value="${dataStr}"
@@ -7259,6 +7290,36 @@
       return { distribucio, operativitat, provinciesAmbHeli: [...provinciesAmbHeli], debugHelis };
     }
 
+    // El valor que mana: creua estat, condicions de vol i distribució territorial.
+    // És el que entra a la fórmula del risc i el que es veu al títol de la pestanya.
+    async function renderHCGraeOperatius() {
+      const cont = document.getElementById('heli-grae-valor');
+      const titol = document.getElementById('heli-titol-valor');
+      try {
+        const dataStr = (document.getElementById(heliPfx + '-data-input') || {}).value || getRiscDateString(0);
+        const op = await calcularOperativitat(dataStr);
+        const color = op.count >= 3 ? '#2e7d32' : op.count >= 2 ? '#f57f17' : op.count >= 1 ? '#e65100' : '#c62828';
+        const noVolen = op.detall.filter(d => !d.operatiu);
+        const mateixaProv = op.aparells - op.count;
+        if (titol) titol.textContent = `${op.count} de 4 · ${op.aparells} ${op.aparells === 1 ? 'aparell pot volar' : 'aparells poden volar'}`;
+        if (!cont) return;
+        cont.innerHTML = `
+          <div style="display:flex;align-items:baseline;gap:0.4rem;">
+            <span style="font-size:2rem;font-weight:800;color:${color};line-height:1;">${op.count}</span>
+            <span style="font-size:0.8rem;color:#aaa;">/4</span>
+          </div>
+          <div style="font-size:0.72rem;color:#888;margin-top:0.35rem;line-height:1.5;">
+            Estat + condicions de vol + distribució.
+            ${op.provincies.length ? `Cobreix: <strong>${op.provincies.join(', ')}</strong>.` : ''}
+            ${mateixaProv > 0 ? `<br><span style="color:#e65100;">${mateixaProv} ${mateixaProv === 1 ? 'aparell no suma' : 'aparells no sumen'}: comparteixen província amb un altre.</span>` : ''}
+            ${noVolen.length ? `<br><span style="color:#c62828;">No volen: ${noVolen.map(d => `${d.nom} (${d.motiu})`).join(', ')}</span>` : ''}
+          </div>`;
+      } catch (e) {
+        if (cont) cont.innerHTML = '<span style="font-size:0.78rem;color:#c62828;">No s\'ha pogut calcular</span>';
+        if (titol) titol.textContent = '';
+      }
+    }
+
     function renderIndexos() {
       const cont = heliEl('indexos');
       if (!cont) return;
@@ -7293,11 +7354,17 @@
             </div>
             <div style="font-size:0.72rem;color:#888;margin-top:0.3rem;">Total=1pt · Parcial/Sense grua=0.5pt · Baixa=0pt</div>
           </div>
+          <div id="heli-card-grae" style="flex:1;min-width:180px;background:#fff;border:2px solid #1a1a2e;border-radius:8px;padding:0.6rem 0.9rem;">
+            <div style="font-size:0.7rem;font-weight:700;color:#1a1a2e;text-transform:uppercase;margin-bottom:0.3rem;">🚁 HC GRAE operatius</div>
+            <div id="heli-grae-valor" style="font-size:0.85rem;color:#888;">Calculant…</div>
+          </div>
         </div>
         <details style="margin-top:0.4rem;font-size:0.72rem;color:#aaa;padding:0 1rem 0.5rem;">
           <summary style="cursor:pointer;">🔍 Debug distribució</summary>
           <div id="heli-debug-idx"></div>
         </details>`;
+
+      renderHCGraeOperatius();
     }
 
     // ==================== OPEN-METEO PER HELICÒPTERS ====================

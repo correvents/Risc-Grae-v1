@@ -8,6 +8,22 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — "HC GRAE operatius": els tres paràmetres en un sol valor
+
+La pestanya Helicòpters tenia dos indicadors separats (Distribució territorial i Operativitat) i la fórmula del risc feia servir un tercer càlcul, que comptava aparells i **no mirava la distribució**. Tres números per a la mateixa cosa, i el que manava era el pitjor dels tres.
+
+**Ara n'hi ha un que mana: `HC GRAE operatius`.** `calcularOperativitat` creua els tres paràmetres alhora i retorna **províncies cobertes** per helis que poden volar, no aparells:
+
+1. Estat `Total` a la pestanya Helicòpters.
+2. Condicions de vol des de la seva base (finestra de ≥3 h dins llindars, 24 h).
+3. Distribució: dos HC operatius a la mateixa província en compten **un**, perquè el segon no cobreix territori nou.
+
+Això arregla la limitació que vaig detectar ahir. La pestanya es diu ara **🚁 Helicòpters GRAE Operatius**, amb el valor al títol i una targeta nova que diu quines províncies es cobreixen, quins aparells no sumen per compartir província i quins no volen i per què.
+
+**Els llindars de vol no estan validats i s'ha de preguntar al GRAE.** `OP_RATXA_MAX` = 50 km/h i `OP_VIS_MIN` = 2000 m són els que ja hi havia al projecte i **no consta d'on van sortir**: no són un límit d'aeronau ni una mínima VFR publicada. Són conservadors — poden deixar fora dies en què s'hauria pogut volar. Queda escrit ben visible a Configuració → Operativitat HC: cal saber quin vent màxim admeten per enlairar-se i quina visibilitat mínima apliquen.
+
+**Limitació que queda:** la província és una aproximació de la regió d'emergència. Amb 4 províncies i 8 regions, la cobertura real és més fina del que el número diu. Quan calgui precisió, cal passar a `REGIONS_BOMBERS`, que ja hi és.
+
 ## 2026-08-09 — Operativitat: escala corregida i què vol dir "operatiu"
 
 Dues correccions sobre el que havia fet malament.
