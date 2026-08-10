@@ -5987,14 +5987,32 @@
                 </li>
                 <li><strong>Distribució territorial:</strong> es compten <strong>províncies cobertes</strong>, no aparells. Dos HC operatius a la mateixa província cobreixen el mateix territori que un, i per tant en compta un.</li>
               </ol>
-              <div style="background:#fff;border-radius:4px;padding:0.6rem 0.8rem;margin-top:0.6rem;font-size:0.82rem;">
-                <strong>⚠️ Els dos llindars de vol s'han de validar amb els pilots.</strong> Els 50 km/h i els 2.000 m
-                són els que ja hi havia al projecte i <strong>no consta d'on van sortir</strong>: no són un límit oficial
-                de l'aeronau ni una mínima VFR publicada. Com a referència, els límits d'aeronau solen ser bastant més
-                alts i les mínimes de visibilitat per a HEMS bastant més baixes, o sigui que la xifra actual és
-                <em>conservadora</em>: pot deixar fora dies en què de fet s'hauria pogut volar. Cal preguntar al GRAE
-                quin vent màxim admeten per enlairar-se i quina visibilitat mínima apliquen de veritat, i ajustar
-                <code>OP_RATXA_MAX</code> i <code>OP_VIS_MIN</code>.
+              <div style="background:#fff;border-radius:4px;padding:0.6rem 0.8rem;margin-top:0.6rem;font-size:0.82rem;line-height:1.6;">
+                <strong>D'on surten aquests dos números.</strong> Eren els que ja hi havia al projecte, sense font.
+                Contrastats amb la normativa i amb la pràctica de rescat en muntanya:
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;margin:0.5rem 0;">
+                  <thead><tr style="background:#f5f5f5;">
+                    <th style="text-align:left;padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Paràmetre</th>
+                    <th style="text-align:left;padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Referència</th>
+                    <th style="text-align:left;padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Nosaltres</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr><td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Vent</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">El límit d'aeronau de l'H135 és molt més alt, però per a <strong>vol de muntanya</strong> la recomanació és no sortir per sobre d'uns <strong>25 nusos</strong> (46 km/h), i amb ratxes la tolerància baixa força més. En grua i en llocs confinats, encara menys.</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#e8f5e9;"><strong>50 km/h</strong> (27 kt)<br><span style="color:#2e7d32;">Quadra bé.</span></td></tr>
+                    <tr><td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Visibilitat</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;">Mínimes HEMS d'EASA (SPA.HEMS.120): de <strong>dia 1.500 m</strong> amb sostre de núvols de 600 ft; de <strong>nit sense NVIS 3.000 m</strong> i 1.200 ft. En ruta es pot baixar a 800 m per trams curts.</td>
+                        <td style="padding:0.3rem 0.4rem;border:1px solid #e0e0e0;background:#fff8e1;"><strong>2.000 m</strong><br><span style="color:#e65100;">Un sol valor per a dia i nit.</span></td></tr>
+                  </tbody>
+                </table>
+                <strong>⚠️ El problema que això destapa:</strong> la finestra de vol s'avalua les <strong>24 h</strong>, perquè els GRAE
+                també operen de nit, però el llindar de visibilitat és un de sol. Amb 2.000 m som <em>més estrictes</em> que la
+                mínima de dia (1.500 m) i <em>més laxos</em> que la de nit sense NVIS (3.000 m): de dia descartem hores volables
+                i de nit en donem per bones que no ho serien.
+                <br><strong>Preguntes per al GRAE:</strong> volen amb NVIS (ulleres de visió nocturna)? Quina visibilitat mínima
+                apliquen de dia i de nit? I quin vent màxim admeten per enlairar-se i per treballar amb grua?
+                <br><span style="color:#888;">Amb la resposta, cal separar <code>OP_VIS_MIN</code> en un valor de dia i un de nit.
+                El sostre de núvols no el tenim: Open-Meteo no el dona directament i caldria derivar-lo.</span>
               </div>
             </div>
 
