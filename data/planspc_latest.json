@@ -1,4 +1,33 @@
 {
-  "actualitzat": "2026-08-11T09:04:25.612Z",
-  "plans": []
+  "actualitzat": "2026-08-11T14:33:37.647Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "11/08/2026 10:47",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126213_INICI--NOACTIVAT_INUNCAT_202608111120.pdf"
+      },
+      "descripcio": "SMP intensitat pluja 11/08 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "11/08/2026 11:07",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-125760_INICI--NOACTIVAT_PROCICAT_202608111130.pdf"
+      },
+      "descripcio": "Eclipsi solar 12/08 - "
+    }
+  ]
 }
