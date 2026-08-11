@@ -1,6 +1,252 @@
 {
-  "dataConsulta": "2026-08-11T06:37:14.809Z",
+  "dataConsulta": "2026-08-11T09:04:21.897Z",
   "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-11T12:00Z",
+      "dataFi": "2026-08-11T17:59Z",
+      "comentari": "Els ruixats aniran acompanyats localment de tempesta i calamarsa.",
+      "dies": [
+        {
+          "dia": "2026-08-11",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "comarca": 43,
+              "comarcaNom": "Lluçanès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 14,
+              "comarcaNom": "Berguedà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-08-11T12:00Z",
+      "dataFi": "2026-08-11T23:59Z",
+      "comentari": "Els ruixats aniran acompanyats de tempesta i localment de fenòmens de temps violent.",
+      "dies": [
+        {
+          "dia": "2026-08-11",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 43,
+              "comarcaNom": "Lluçanès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 2,
+              "comarcaNom": "Alt Empordà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 23,
+              "comarcaNom": "Noguera",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 25,
+              "comarcaNom": "Pallars Jussà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 35,
+              "comarcaNom": "Solsonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 4,
+              "comarcaNom": "Alt Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 14,
+              "comarcaNom": "Berguedà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 42,
+              "comarcaNom": "Moianès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
@@ -109,56 +355,6 @@
             }
           ]
         },
-        {
-          "dia": "2026-08-11",
-          "afectacions": [
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 14,
-              "comarcaNom": "Berguedà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
-      "dataInici": "2026-08-11T12:00Z",
-      "dataFi": "2026-08-11T17:59Z",
-      "comentari": "Els ruixats aniran acompanyats localment de tempesta i calamarsa.",
-      "dies": [
         {
           "dia": "2026-08-11",
           "afectacions": [
@@ -535,7 +731,7 @@
     },
     {
       "meteor": "Calor nocturna",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-08-11T00:00Z",
       "dataFi": "2026-08-12T05:59Z",
       "comentari": "",
