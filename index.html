@@ -1363,9 +1363,15 @@
       errorLog.unshift(entrada);
       if (errorLog.length > 200) errorLog.pop();
       try { localStorage.setItem(LS_ERRORS_KEY, JSON.stringify(errorLog)); } catch {}
-      if (typeof sbClient !== 'undefined' && sbClient) {
-        sbClient.from('error_log').insert({ ts: entrada.ts, font: entrada.font, missatge: entrada.missatge, detall: entrada.detall || null }).then(() => {});
-      }
+      // logError es crida des de tots els catch: si peta ell, converteix un error
+      // ja controlat en un de no controlat i s'endú la funció que el cridava.
+      try {
+        if (typeof sbClient !== 'undefined' && sbClient) {
+          sbClient.from('error_log')
+            .insert({ ts: entrada.ts, font: entrada.font, missatge: entrada.missatge, detall: entrada.detall || null })
+            .then(() => {}, () => {});
+        }
+      } catch {}
       const badge = document.getElementById('badge-errors');
       if (badge) {
         badge.textContent = errorLog.filter(e => {
@@ -4422,9 +4428,11 @@
         riscState.tomorrow.operativitatDetall = opDema.detall;
       }
 
-      // Guardar i renderitzar
+      // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
+      // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
+      // l'usuari hi és a dins, l'expulsa enmig del que estigui ajustant.
       localStorage.setItem('riscGRAE', JSON.stringify(riscState));
-      renderRisc();
+      if (!document.getElementById('pagina-parametres')) renderRisc();
     }
     
     // ==================== FÓRMULA DE RISC (configurable) ====================
@@ -4596,6 +4604,19 @@
     }
 
     const meteoVolCache = {};
+    // Llista d'hores → trams llegibles: [10,11,12,15] → "de 10 a 13 h i de 15 a 16 h"
+    function tramsHores(hores) {
+      if (!hores.length) return '';
+      const trams = [];
+      let ini = hores[0], prev = hores[0];
+      for (let i = 1; i < hores.length; i++) {
+        if (hores[i] === prev + 1) { prev = hores[i]; continue; }
+        trams.push([ini, prev]); ini = prev = hores[i];
+      }
+      trams.push([ini, prev]);
+      return trams.map(([a, b]) => `de ${a} a ${b + 1} h`).join(' i ');
+    }
+
     async function meteoPermetVol(lat, lon, dataStr) {
       if (lat == null || lon == null) return { ok: true, motiu: '' }; // sense coords → no penalitza
       const key = `${(+lat).toFixed(2)},${(+lon).toFixed(2)},${dataStr}`;
@@ -4610,18 +4631,29 @@
         // GRAE no vola de nit, les hores sense llum no compten i, a més, trenquen
         // la ratxa: una finestra no pot travessar la nit.
         let seguides = 0, maxSeguides = 0;
+        // Es guarda també *què* falla i *quan*, per poder dir-ho a la pestanya:
+        // "no vola (meteo)" no serveix per decidir res.
+        const horesVis = [], horesVent = [];
+        let pitjorVis = Infinity, pitjorRatxa = 0;
         for (let hh = 0; hh <= 23; hh++) {
           const idx = H.time.indexOf(dataStr + 'T' + String(hh).padStart(2, '0') + ':00');
           if (idx < 0) continue;
           if (opConfig.nomesDia && H.is_day && H.is_day[idx] === 0) { seguides = 0; continue; }
           const ratxa = H.wind_gusts_10m[idx];
           const vis = H.visibility[idx];
+          if (vis != null && vis < opConfig.visMin) { horesVis.push(hh); pitjorVis = Math.min(pitjorVis, vis); }
+          if (ratxa != null && ratxa > opConfig.ratxaMax) { horesVent.push(hh); pitjorRatxa = Math.max(pitjorRatxa, ratxa); }
           const bo = (ratxa != null && ratxa <= opConfig.ratxaMax) && (vis != null && vis >= opConfig.visMin);
           if (bo) { seguides++; maxSeguides = Math.max(maxSeguides, seguides); }
           else seguides = 0;
         }
         const ok = maxSeguides >= opConfig.horesMin;
-        const res = { ok, motiu: ok ? '' : 'no vola (meteo)' };
+        const parts = [];
+        if (horesVis.length) parts.push(`visibilitat de fins a ${Math.round(pitjorVis)} m ${tramsHores(horesVis)}`);
+        if (horesVent.length) parts.push(`ratxes de fins a ${Math.round(pitjorRatxa)} km/h ${tramsHores(horesVent)}`);
+        // Cap hora dolenta i tot i així no vola: la finestra la trenca la nit
+        if (!parts.length && !ok) parts.push(`cap tram de ${opConfig.horesMin} h seguides${opConfig.nomesDia ? ' amb llum de dia' : ''} (el més llarg, ${maxSeguides} h)`);
+        const res = { ok, motiu: ok ? '' : parts.join(' · '), maxSeguides };
         meteoVolCache[key] = res;
         return res;
       } catch(e) {
@@ -4647,14 +4679,16 @@
       const detall = [];
       for (const h of helis) {
         let operatiu = true, motiu = '', estatOk = true;
-        if ((h.operativitat || 'Total') !== 'Total') {
-          operatiu = false; estatOk = false; motiu = 'estat ' + (h.operativitat || '?').toLowerCase();
+        const estat = (h.operativitat || 'Total').trim() || 'Total';
+        if (estat !== 'Total') {
+          operatiu = false; estatOk = false; motiu = estat.toLowerCase();
         } else {
           const m = await meteoPermetVol(h.lat, h.lon, dataStr);
           if (!m.ok) { operatiu = false; motiu = m.motiu; }
         }
         detall.push({ nom: h.recurs || h.base || '?', base: h.base || '',
                       prov: provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon)),
+                      estat, obs: (h.observacions || '').trim(),
                       operatiu, estatOk, motiu });
       }
 
@@ -5812,6 +5846,7 @@
     
     function renderPaginaParametres() {
       return `
+        <div id="pagina-parametres"></div>
         <div class="risc-header">
           <div class="risc-title">⚙️ Configuració de Paràmetres</div>
           <div class="risc-actions">
@@ -7018,9 +7053,9 @@
           <div style="display:flex;align-items:center;gap:0.9rem;">
             <div>
               <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters GRAE Operatius</div>
-              <div id="heli-titol-sub" style="font-size:0.75rem;color:#888;margin-top:0.1rem;">Calculant…</div>
+              <div id="${p}-titol-sub" style="font-size:0.75rem;color:#888;margin-top:0.1rem;">Calculant…</div>
             </div>
-            <div id="heli-titol-valor" style="font-size:2.6rem;font-weight:800;line-height:1;color:#bbb;">–</div>
+            <div id="${p}-titol-valor" style="font-size:2.6rem;font-weight:800;line-height:1;color:#bbb;">–</div>
           </div>
           <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto;">
             <label style="font-size:0.82rem;color:#666;">📅</label>
@@ -7032,8 +7067,7 @@
           </div>
         </div>
 
-        <div id="heli-grae-valor" style="padding:0.75rem 1rem 0;"></div>
-        <div id="${p}-indexos" style="padding:0.75rem 1rem 0.5rem;"></div>
+        <div id="${p}-grae-valor" style="padding:0.75rem 1rem 0.5rem;"></div>
         <div id="${p}-mapa" style="width:100%;aspect-ratio:1/1;max-height:600px;"></div>
 
         <div style="padding:0.75rem 1rem;overflow-x:auto;">
@@ -7073,7 +7107,7 @@
           <button class="risc-btn risc-btn-primary" onclick="guardarHelicopters()" id="heli-cfg-btn-guardar">💾 Guardar</button>
           <span id="heli-cfg-status" style="font-size:0.78rem;color:#888;min-width:80px;"></span>
         </div>
-        <div id="heli-cfg-indexos" style="margin-bottom:0.5rem;"></div>
+        <div id="heli-cfg-grae-valor" style="margin-bottom:0.5rem;"></div>
         <div id="heli-cfg-mapa" style="width:100%;height:320px;border-radius:6px;margin-bottom:1rem;"></div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:0.84rem;min-width:560px;">
@@ -7231,7 +7265,7 @@
       }).join('');
 
       actualitzarMarcadors();
-      renderIndexos();
+      renderHCGraeOperatius();
       // Carregar meteo quan hi ha coordenades
       setTimeout(carregarMeteoHelicopters, 300);
     }
@@ -7364,40 +7398,24 @@
       return 'Barcelona';
     }
 
-    function calcularIndexos() {
-      const helis = helicopterDadesActuals.filter(h => h.lat && h.lon);
-
-      // Distribució: quantes províncies diferents tenen almenys 1 HC operatiu (no Baixa)
-      const provinciesAmbHeli = new Set();
-      const debugHelis = [];
-      helis.forEach(h => {
-        const op = (h.operativitat || '').trim();
-        const prov = provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon));
-        debugHelis.push({ recurs: h.recurs, base: h.base, lat: h.lat, lon: h.lon, op, prov });
-        if (op !== 'Baixa') {
-          provinciesAmbHeli.add(prov);
-        }
-      });
-      const distribucio = provinciesAmbHeli.size;
-
-      // Operativitat: Total=1, Parcial/Sense grua=0.5, Baixa=0
-      let opTotal = 0;
-      helis.forEach(h => {
-        const op = (h.operativitat || '').trim();
-        if (op === 'Total') opTotal += 1;
-        else if (op !== 'Baixa') opTotal += 0.5;
-      });
-      const operativitat = Math.min(4, opTotal);
-
-      return { distribucio, operativitat, provinciesAmbHeli: [...provinciesAmbHeli], debugHelis };
+    // Quines províncies queden cobertes i quines no: la coberta és la que té un HC
+    // que pot volar de veritat, no només un HC assignat.
+    function provinciesHTML(cobertes) {
+      return '<div style="display:flex;gap:0.25rem;flex-wrap:wrap;margin-top:0.35rem;">' +
+        ['Barcelona', 'Girona', 'Lleida', 'Tarragona'].map(p => {
+          const ok = cobertes.includes(p);
+          return `<span style="font-size:0.68rem;padding:0.1rem 0.35rem;border-radius:3px;` +
+                 `background:${ok ? '#e8f5e9' : '#f5f5f5'};color:${ok ? '#2e7d32' : '#bbb'};` +
+                 `font-weight:${ok ? '700' : '400'};">${p}</span>`;
+        }).join('') + '</div>';
     }
 
     // El valor que mana: creua estat, condicions de vol i distribució territorial.
     // És el que entra a la fórmula del risc i el que es veu al títol de la pestanya.
     async function renderHCGraeOperatius() {
-      const cont = document.getElementById('heli-grae-valor');
-      const valor = document.getElementById('heli-titol-valor');
-      const sub = document.getElementById('heli-titol-sub');
+      const cont = heliEl('grae-valor');
+      const valor = heliEl('titol-valor');   // a Configuració no hi ha capçalera gran
+      const sub = heliEl('titol-sub');
       try {
         const dataStr = (document.getElementById(heliPfx + '-data-input') || {}).value || getRiscDateString(0);
         const op = await avaluarOperativitat(dataStr);
@@ -7406,8 +7424,8 @@
         const totals = op.detall.filter(d => d.estatOk !== false).length;
         const volen = op.aparells;
         const noVolen = op.detall.filter(d => !d.operatiu);
-        const perEstat = noVolen.filter(d => /estat/.test(d.motiu || ''));
-        const perMeteo = noVolen.filter(d => !/estat/.test(d.motiu || ''));
+        const perEstat = noVolen.filter(d => d.estatOk === false);
+        const perMeteo = noVolen.filter(d => d.estatOk !== false);
         const mateixaProv = volen - op.count;
 
         if (valor) { valor.textContent = op.count + '/4'; valor.style.color = color; }
@@ -7422,22 +7440,35 @@
             <div style="font-size:0.7rem;color:#888;line-height:1.4;">${detallTxt}</div>
           </div>`;
 
-        cont.innerHTML = `
+        // Sense capçalera gran (Configuració) el número ha de sortir aquí mateix
+        const capcalera = valor ? '' : `
+          <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.4rem;">
+            <span style="font-size:1.6rem;font-weight:800;line-height:1;color:${color};">${op.count}/4</span>
+            <span style="font-size:0.8rem;font-weight:700;color:#666;">🚁 HC GRAE operatius</span>
+            <span style="font-size:0.75rem;color:#888;">${op.provincies.length ? 'Cobreix ' + op.provincies.join(', ') : 'Cap província coberta'}</span>
+          </div>`;
+
+        cont.innerHTML = capcalera + `
           <div style="font-size:0.75rem;color:#666;margin-bottom:0.5rem;">
-            D'aquests tres paràmetres surt el <strong>${op.count}/4</strong> de dalt:
+            D'aquests tres paràmetres surt el <strong>${op.count}/4</strong>:
           </div>
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-            ${bloc('1 · Estat', `${op.total - perEstat.length}/${op.total}`,
-                   perEstat.length ? 'Fora: ' + perEstat.map(d => d.nom).join(', ') : 'Tots en plena operativitat.',
+            ${bloc('1 · Estat dels helicòpters', `${op.total - perEstat.length}/${op.total}`,
+                   perEstat.length
+                     ? perEstat.map(d => `<div><strong>${escapeHtml(d.nom)}</strong>: ${escapeHtml(d.estat)}` +
+                         `${d.obs ? ' — ' + escapeHtml(d.obs) : ''}</div>`).join('')
+                     : 'Tots en plena operativitat.',
                    perEstat.length > 0)}
             ${bloc('2 · Condicions de vol', `${volen}/${op.total - perEstat.length}`,
-                   perMeteo.length ? 'No poden sortir: ' + perMeteo.map(d => d.nom).join(', ')
-                                   : `Finestra de ≥${opConfig.horesMin} h dins de límits${opConfig.nomesDia ? ', amb llum de dia' : ''}.`,
+                   perMeteo.length
+                     ? perMeteo.map(d => `<div><strong>${escapeHtml(d.nom)}</strong>: ${escapeHtml(d.motiu || 'no pot sortir')}</div>`).join('')
+                     : `Finestra de ≥${opConfig.horesMin} h dins de límits${opConfig.nomesDia ? ', amb llum de dia' : ''}.`,
                    perMeteo.length > 0)}
-            ${bloc('3 · Distribució', `${op.count}/${volen || 0}`,
-                   mateixaProv > 0 ? `${mateixaProv} ${mateixaProv === 1 ? 'no suma' : 'no sumen'}: comparteixen província.`
-                                   : 'Cadascun cobreix una província diferent.',
-                   mateixaProv > 0)}
+            ${bloc('3 · Distribució territorial', `${op.count}/${volen || 0}`,
+                   (!volen ? 'Cap helicòpter pot volar.'
+                     : mateixaProv > 0 ? `${mateixaProv} ${mateixaProv === 1 ? 'no suma' : 'no sumen'}: comparteixen província.`
+                                       : 'Cadascun cobreix una província diferent.') + provinciesHTML(op.provincies),
+                   mateixaProv > 0 || !volen)}
           </div>
           <div style="font-size:0.7rem;color:#aaa;margin-top:0.5rem;">
             Mesura si poden <strong>sortir de l'heliport</strong>, no si podran treballar al lloc del servei.
@@ -7449,49 +7480,6 @@
         if (sub) sub.textContent = '';
         if (cont) cont.innerHTML = `<span style="font-size:0.78rem;color:#c62828;">No s'ha pogut calcular: ${escapeHtml(e.message)}</span>`;
       }
-    }
-
-    function renderIndexos() {
-      const cont = heliEl('indexos');
-      if (!cont) return;
-      const idx = calcularIndexos();
-      const { distribucio, operativitat, provinciesAmbHeli } = idx;
-
-      const colorIdx = (val) => val >= 3.5 ? '#2e7d32' : val >= 2.5 ? '#f57f17' : val >= 1 ? '#e65100' : '#c62828';
-      const colorDist = colorIdx(distribucio);
-      const colorOp = colorIdx(operativitat);
-
-      const totesProv = ['Barcelona','Girona','Lleida','Tarragona'];
-      const provHTML = totesProv.map(p => {
-        const activa = provinciesAmbHeli.includes(p);
-        return `<span style="font-size:0.72rem;padding:0.15rem 0.4rem;border-radius:3px;background:${activa?'#e8f5e9':'#f5f5f5'};color:${activa?'#2e7d32':'#bbb'};font-weight:${activa?'700':'400'};">${p}</span>`;
-      }).join('');
-
-      cont.innerHTML = `
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:stretch;">
-          <div style="flex:1;min-width:160px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.9rem;border-left:4px solid ${colorDist};">
-            <div style="font-size:0.7rem;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:0.3rem;">Distribució territorial</div>
-            <div style="display:flex;align-items:baseline;gap:0.4rem;">
-              <span style="font-size:2rem;font-weight:800;color:${colorDist};line-height:1;">${distribucio}</span>
-              <span style="font-size:0.8rem;color:#aaa;">/4</span>
-            </div>
-            <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-top:0.4rem;">${provHTML}</div>
-          </div>
-          <div style="flex:1;min-width:160px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.9rem;border-left:4px solid ${colorOp};">
-            <div style="font-size:0.7rem;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:0.3rem;">Operativitat</div>
-            <div style="display:flex;align-items:baseline;gap:0.4rem;">
-              <span style="font-size:2rem;font-weight:800;color:${colorOp};line-height:1;">${operativitat % 1 === 0 ? operativitat : operativitat.toFixed(1)}</span>
-              <span style="font-size:0.8rem;color:#aaa;">/4</span>
-            </div>
-            <div style="font-size:0.72rem;color:#888;margin-top:0.3rem;">Total=1pt · Parcial/Sense grua=0.5pt · Baixa=0pt</div>
-          </div>
-        </div>
-        <details style="margin-top:0.4rem;font-size:0.72rem;color:#aaa;padding:0 1rem 0.5rem;">
-          <summary style="cursor:pointer;">🔍 Debug distribució</summary>
-          <div id="heli-debug-idx"></div>
-        </details>`;
-
-      renderHCGraeOperatius();
     }
 
     // ==================== OPEN-METEO PER HELICÒPTERS ====================

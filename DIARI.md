@@ -8,6 +8,30 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-12 — Un sol recompte d'helis, i que digui quin és el problema
+
+Reportat: el recompte sortia **dues vegades**. La targeta nova (Estat · Condicions de vol · Distribució) i les dues targetes velles (`renderIndexos`: "Distribució territorial" i "Operativitat") deien el mateix, i a més **no deien el mateix número**: les velles comptaven províncies sense mirar si l'heli podia volar, i puntuaven amb mitjos punts (Total=1, Parcial=0,5), que és la fórmula antiga.
+
+Retirades `renderIndexos` i `calcularIndexos`. Ara només hi ha el bloc unificat, que surt tant a la pestanya com a **Configuració → Helicòpters** (allà, sense capçalera gran, el número va dins del mateix bloc).
+
+**Els tres blocs ara diuen el problema, no que n'hi ha un:**
+
+| Abans | Ara |
+| --- | --- |
+| Estat · "Fora: HC4" | **Estat dels helicòpters** · "HC4: Baixa — revisió 50.05" (estat real + observacions) |
+| Condicions de vol · "No poden sortir: HC1" | **Condicions de vol** · "HC1: visibilitat de fins a 800 m de 10 a 14 h · ratxes de fins a 72 km/h de 15 a 19 h" |
+| Distribució · "1 no suma" | **Distribució territorial** · el mateix + les quatre províncies, marcades les cobertes |
+
+Per poder-ho dir, `meteoPermetVol` ara desa **quines hores** fallen i **per què** (`tramsHores` les agrupa en trams llegibles) en lloc de tornar "no vola (meteo)". Quan no falla cap hora concreta però tampoc no hi ha finestra, ho diu clar: la trenca la nit.
+
+### Dos errors de fons que van sortir pel camí
+
+**1. `logError` podia petar i endur-se qui el cridava.** Se'l crida des de *tots* els `catch` de l'aplicació; si la crida a Supabase falla, convertia un error ja controlat en un de no controlat i avortava la funció que l'havia cridat. És exactament com la caiguda de Leaflet s'enduia tota la pestanya d'helicòpters. Ara la inserció va dins d'un `try` i la promesa té els dos mànecs.
+
+**2. Canviar un llindar t'expulsava de Configuració.** La pàgina de paràmetres es dibuixa dins de `app-risc`, el mateix contenidor que reescriu `renderRisc()`. Com que `aplicarOpConfig()` crida `actualitzarRiscAuto()` → `renderRisc()`, tocar el vent o la visibilitat et tornava a la pantalla de risc enmig de l'ajust. Ara `actualitzarRiscAuto` no dibuixa si la pàgina de paràmetres és oberta (marcador `#pagina-parametres`); el botó "← Tornar" continua funcionant igual.
+
+El segon només es veia perquè el primer ja no amaga res: l'excepció de `logError` avortava abans d'arribar-hi. Un error que se n'empassa un altre.
+
 ## 2026-08-12 — `carregarHelisPerRisc`: una funció que vaig esborrar
 
 Reportat des de `/proves/`: **"No s'ha pogut calcular: carregarHelisPerRisc is not defined"**.

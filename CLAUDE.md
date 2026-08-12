@@ -65,7 +65,15 @@ El factor `canvi` sempre es desa a 0 des del càlcul automàtic (i `boletaires` 
 
 Tot (HTML, CSS, JS) hi va dins, sense build ni mòduls. És deliberat: es publica directament a GitHub Pages. Fes servir edicions puntuals; no el reescriguis sencer. Conté un **manual d'ús integrat** a la pestanya Configuració: si canvies un càlcul, actualitza també la documentació que hi ha allà dins.
 
-**5. Dues claus de Supabase.**
+**5. La pàgina de Configuració viu dins d'`app-risc`.**
+
+És el mateix contenidor que reescriu `renderRisc()`, o sigui que **qualsevol crida a `renderRisc` mentre l'usuari és a Configuració l'expulsa** enmig del que estigui ajustant. Per això `actualitzarRiscAuto` només dibuixa si no hi ha `#pagina-parametres` al DOM. Si afegeixes un camí que acabi cridant `renderRisc`, comprova-ho.
+
+**6. `logError` no ha de petar mai.**
+
+Se'l crida des de tots els `catch`. Si peta ell, converteix un error controlat en un de no controlat i avorta la funció que l'havia cridat — silenciosament, perquè sembla que el `catch` ja ho tenia resolt. La crida a Supabase va dins d'un `try` i la promesa té els dos mànecs. No hi posis res que pugui llançar.
+
+**7. Dues claus de Supabase.**
 
 Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts → `service_role`, sempre via GitHub Secrets. **Mai** posis la `service_role` a `index.html`.
 
@@ -77,7 +85,10 @@ Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet vo
 - **Mesura si poden sortir de l'heliport, no si podran treballar al lloc.** Això últim depèn d'on sigui el servei i del criteri de la tripulació, i no es pot preveure.
 - El recompte és **per heli** (X/4), no per zones cobertes: agrupar per zones amagava helis de baixa.
 - Si no hi ha coordenades o falla la xarxa, **no es penalitza** (`ok: true`).
-- **El recompte és de províncies cobertes, no d'aparells.** `calcularOperativitat` creua els tres paràmetres alhora — estat `Total`, finestra de vol des de la base i **distribució** — i retorna `count` = províncies cobertes per HC que poden volar. Dos HC operatius a la mateixa província en compten un. `aparells` porta el recompte antic, per si cal.
+- **El recompte és de províncies cobertes, no d'aparells.** `avaluarOperativitat` creua els tres paràmetres alhora — estat `Total`, finestra de vol des de la base i **distribució** — i retorna `count` = províncies cobertes per HC que poden volar. Dos HC operatius a la mateixa província en compten un. `aparells` porta el recompte d'aparells, per si cal.
+- **N'hi ha un de sol.** Hi havia un segon recompte (`calcularIndexos` / `renderIndexos`) que dibuixava les seves pròpies targetes de "Distribució territorial" i "Operativitat" amb mitjos punts i sense mirar les condicions de vol: donava un número diferent per a la mateixa cosa. Retirat. Si tornes a necessitar un desglossament, surt de `detall`, no d'un càlcul paral·lel.
+- **`meteoPermetVol` diu què falla i quan** (`visibilitat de fins a 800 m de 10 a 14 h`), no només que no vola: és el que permet decidir. `tramsHores` agrupa les hores dolentes en trams.
+- **`renderHCGraeOperatius` va per prefix** (`heliEl`), o sigui que el mateix bloc surt a la pestanya i a Configuració → Helicòpters. Si no hi ha capçalera gran, el número el dibuixa ell mateix.
 - **Els llindars són configurables** (`opConfig`, desat a `localStorage` amb la clau `riscGRAE_opHC`; per defecte 50 km/h, 2000 m, 3 h, només de dia) i s'editen a Configuració → Operativitat HC. Ja no són constants.
 - **Contrastats:** 50 km/h (27 kt) quadra amb la pràctica de vol de muntanya (~25 kt). Els 2000 m són conservadors respecte de la mínima HEMS de dia d'EASA (1.500 m), que és la que aplica perquè no es vola de nit. El sostre de núvols no el tenim: Open-Meteo no el dona. La flota són H135 P2.
 - La província és una aproximació de la regió d'emergència; quan calgui precisió, caldrà passar a `REGIONS_BOMBERS`.
