@@ -4622,16 +4622,16 @@
       const helis = await carregarHelisPerRisc(dataStr);
       const detall = [];
       for (const h of helis) {
-        let operatiu = true, motiu = '';
+        let operatiu = true, motiu = '', estatOk = true;
         if ((h.operativitat || 'Total') !== 'Total') {
-          operatiu = false; motiu = 'estat ' + (h.operativitat || '?').toLowerCase();
+          operatiu = false; estatOk = false; motiu = 'estat ' + (h.operativitat || '?').toLowerCase();
         } else {
           const m = await meteoPermetVol(h.lat, h.lon, dataStr);
           if (!m.ok) { operatiu = false; motiu = m.motiu; }
         }
         detall.push({ nom: h.recurs || h.base || '?', base: h.base || '',
                       prov: provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon)),
-                      operatiu, motiu });
+                      operatiu, estatOk, motiu });
       }
 
       // "HC GRAE operatius" creua els tres paràmetres alhora: estat de plena
@@ -6969,11 +6969,20 @@
 
       cont.innerHTML = renderHelicoptersHTML(avui);
 
-      helicopterMap = L.map(heliPfx + '-mapa', { zoomControl: true });
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap', maxZoom: 18
-      }).addTo(helicopterMap);
-      helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
+      // El mapa és secundari: si Leaflet no carrega, la pestanya ha de continuar
+      // ensenyant el recompte d'HC operatius, que és el que de debò importa.
+      try {
+        helicopterMap = L.map(heliPfx + '-mapa', { zoomControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap', maxZoom: 18
+        }).addTo(helicopterMap);
+        helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
+      } catch (e) {
+        helicopterMap = null;
+        logError('Helicòpters', 'mapa no disponible: ' + e.message);
+        const m = heliEl('mapa');
+        if (m) m.innerHTML = '<div style="padding:1rem;color:#888;font-size:0.85rem;">El mapa no s\'ha pogut carregar. La resta de la pestanya funciona igual.</div>';
+      }
 
       await carregarDadesHelicoptersDia(avui);
     }
@@ -6982,9 +6991,12 @@
       const p = heliPfx;
       return `
         <div style="background:#fff;padding:0.75rem 1.25rem;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters GRAE Operatius</div>
-            <div id="heli-titol-valor" style="font-size:0.78rem;color:#666;margin-top:0.15rem;">Calculant…</div>
+          <div style="display:flex;align-items:center;gap:0.9rem;">
+            <div>
+              <div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;">🚁 Helicòpters GRAE Operatius</div>
+              <div id="heli-titol-sub" style="font-size:0.75rem;color:#888;margin-top:0.1rem;">Calculant…</div>
+            </div>
+            <div id="heli-titol-valor" style="font-size:2.6rem;font-weight:800;line-height:1;color:#bbb;">–</div>
           </div>
           <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto;">
             <label style="font-size:0.82rem;color:#666;">📅</label>
@@ -6996,6 +7008,7 @@
           </div>
         </div>
 
+        <div id="heli-grae-valor" style="padding:0.75rem 1rem 0;"></div>
         <div id="${p}-indexos" style="padding:0.75rem 1rem 0.5rem;"></div>
         <div id="${p}-mapa" style="width:100%;aspect-ratio:1/1;max-height:600px;"></div>
 
@@ -7066,11 +7079,13 @@
       const avui = getAvuiStr();
       helicopterDataActual = avui;
       cont.innerHTML = renderHelicoptersCfgHTML(avui);
-      helicopterMap = L.map('heli-cfg-mapa', { zoomControl: true });
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap', maxZoom: 18
-      }).addTo(helicopterMap);
-      helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
+      try {
+        helicopterMap = L.map('heli-cfg-mapa', { zoomControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap', maxZoom: 18
+        }).addTo(helicopterMap);
+        helicopterMap.fitBounds([[40.5, 0.15], [42.9, 3.35]]);
+      } catch (e) { helicopterMap = null; logError('Helicòpters', 'mapa no disponible: ' + e.message); }
       await carregarDadesHelicoptersDia(avui);
     }
 
@@ -7357,29 +7372,58 @@
     // És el que entra a la fórmula del risc i el que es veu al títol de la pestanya.
     async function renderHCGraeOperatius() {
       const cont = document.getElementById('heli-grae-valor');
-      const titol = document.getElementById('heli-titol-valor');
+      const valor = document.getElementById('heli-titol-valor');
+      const sub = document.getElementById('heli-titol-sub');
       try {
         const dataStr = (document.getElementById(heliPfx + '-data-input') || {}).value || getRiscDateString(0);
-        const op = await calcularOperativitat(dataStr);
+        const op = await avaluarOperativitat(dataStr);
         const color = op.count >= 3 ? '#2e7d32' : op.count >= 2 ? '#f57f17' : op.count >= 1 ? '#e65100' : '#c62828';
+
+        const totals = op.detall.filter(d => d.estatOk !== false).length;
+        const volen = op.aparells;
         const noVolen = op.detall.filter(d => !d.operatiu);
-        const mateixaProv = op.aparells - op.count;
-        if (titol) titol.textContent = `${op.count} de 4 · ${op.aparells} ${op.aparells === 1 ? 'aparell pot volar' : 'aparells poden volar'}`;
+        const perEstat = noVolen.filter(d => /estat/.test(d.motiu || ''));
+        const perMeteo = noVolen.filter(d => !/estat/.test(d.motiu || ''));
+        const mateixaProv = volen - op.count;
+
+        if (valor) { valor.textContent = op.count + '/4'; valor.style.color = color; }
+        if (sub) sub.textContent = op.provincies.length ? 'Cobreix ' + op.provincies.join(', ') : 'Cap província coberta';
         if (!cont) return;
+
+        // Els tres paràmetres que produeixen el número de dalt
+        const bloc = (etiqueta, valorTxt, detallTxt, ko) => `
+          <div style="flex:1;min-width:150px;background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:0.5rem 0.7rem;">
+            <div style="font-size:0.68rem;font-weight:700;color:#888;text-transform:uppercase;">${etiqueta}</div>
+            <div style="font-size:1.1rem;font-weight:700;color:${ko ? '#c62828' : '#2e7d32'};margin:0.1rem 0;">${valorTxt}</div>
+            <div style="font-size:0.7rem;color:#888;line-height:1.4;">${detallTxt}</div>
+          </div>`;
+
         cont.innerHTML = `
-          <div style="display:flex;align-items:baseline;gap:0.4rem;">
-            <span style="font-size:2rem;font-weight:800;color:${color};line-height:1;">${op.count}</span>
-            <span style="font-size:0.8rem;color:#aaa;">/4</span>
+          <div style="font-size:0.75rem;color:#666;margin-bottom:0.5rem;">
+            D'aquests tres paràmetres surt el <strong>${op.count}/4</strong> de dalt:
           </div>
-          <div style="font-size:0.72rem;color:#888;margin-top:0.35rem;line-height:1.5;">
-            Estat + condicions de vol + distribució.
-            ${op.provincies.length ? `Cobreix: <strong>${op.provincies.join(', ')}</strong>.` : ''}
-            ${mateixaProv > 0 ? `<br><span style="color:#e65100;">${mateixaProv} ${mateixaProv === 1 ? 'aparell no suma' : 'aparells no sumen'}: comparteixen província amb un altre.</span>` : ''}
-            ${noVolen.length ? `<br><span style="color:#c62828;">No volen: ${noVolen.map(d => `${d.nom} (${d.motiu})`).join(', ')}</span>` : ''}
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            ${bloc('1 · Estat', `${op.total - perEstat.length}/${op.total}`,
+                   perEstat.length ? 'Fora: ' + perEstat.map(d => d.nom).join(', ') : 'Tots en plena operativitat.',
+                   perEstat.length > 0)}
+            ${bloc('2 · Condicions de vol', `${volen}/${op.total - perEstat.length}`,
+                   perMeteo.length ? 'No poden sortir: ' + perMeteo.map(d => d.nom).join(', ')
+                                   : `Finestra de ≥${opConfig.horesMin} h dins de límits${opConfig.nomesDia ? ', amb llum de dia' : ''}.`,
+                   perMeteo.length > 0)}
+            ${bloc('3 · Distribució', `${op.count}/${volen || 0}`,
+                   mateixaProv > 0 ? `${mateixaProv} ${mateixaProv === 1 ? 'no suma' : 'no sumen'}: comparteixen província.`
+                                   : 'Cadascun cobreix una província diferent.',
+                   mateixaProv > 0)}
+          </div>
+          <div style="font-size:0.7rem;color:#aaa;margin-top:0.5rem;">
+            Mesura si poden <strong>sortir de l'heliport</strong>, no si podran treballar al lloc del servei.
+            Llindars a Configuració → Operativitat HC.
           </div>`;
       } catch (e) {
-        if (cont) cont.innerHTML = '<span style="font-size:0.78rem;color:#c62828;">No s\'ha pogut calcular</span>';
-        if (titol) titol.textContent = '';
+        logError('HC operatius', e.message);
+        if (valor) { valor.textContent = '–'; valor.style.color = '#c62828'; }
+        if (sub) sub.textContent = '';
+        if (cont) cont.innerHTML = `<span style="font-size:0.78rem;color:#c62828;">No s'ha pogut calcular: ${escapeHtml(e.message)}</span>`;
       }
     }
 
@@ -7416,10 +7460,6 @@
               <span style="font-size:0.8rem;color:#aaa;">/4</span>
             </div>
             <div style="font-size:0.72rem;color:#888;margin-top:0.3rem;">Total=1pt · Parcial/Sense grua=0.5pt · Baixa=0pt</div>
-          </div>
-          <div id="heli-card-grae" style="flex:1;min-width:180px;background:#fff;border:2px solid #1a1a2e;border-radius:8px;padding:0.6rem 0.9rem;">
-            <div style="font-size:0.7rem;font-weight:700;color:#1a1a2e;text-transform:uppercase;margin-bottom:0.3rem;">🚁 HC GRAE operatius</div>
-            <div id="heli-grae-valor" style="font-size:0.85rem;color:#888;">Calculant…</div>
           </div>
         </div>
         <details style="margin-top:0.4rem;font-size:0.72rem;color:#aaa;padding:0 1rem 0.5rem;">
