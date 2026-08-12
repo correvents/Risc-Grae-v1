@@ -8,6 +8,18 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-12 — `carregarHelisPerRisc`: una funció que vaig esborrar
+
+Reportat des de `/proves/`: **"No s'ha pogut calcular: carregarHelisPerRisc is not defined"**.
+
+Aquesta és la **segona part** del mateix error d'ahir, i té una causa diferent i pitjor. Ahir el problema era el nom equivocat (`calcularOperativitat` en lloc d'`avaluarOperativitat`). Avui el problema és que **la funció ja no hi era**: la vaig esborrar sense adonar-me'n en refactoritzar `opConfig`, quan vaig substituir de cop tot el bloc que anava de `const OP_RATXA_MAX = 50;` fins a `const meteoVolCache = {};`. `carregarHelisPerRisc` vivia allà dins.
+
+Recuperada literalment de `git show 9d59173:index.html` i tornada a posar just abans de `meteoVolCache`. Carrega els helis del dia exacte; si no n'hi ha, l'últim registre desat; i si tampoc, la flota per defecte.
+
+**Per què no ho va agafar el test.** El test de la pestanya HC *creava* la funció per poder aïllar el càlcul (`carregarHelisPerRisc = async () => hs`), o sigui que passava en verd precisament perquè la funció no existia. Un stub que crea el que hauria de comprovar no comprova res. Ara `test-hc.js` **afirma primer que existeixen** `avaluarOperativitat`, `carregarHelisPerRisc`, `meteoPermetVol`, `provinciaDeBase`, `renderHCGraeOperatius` i `invalidarOperativitat`, i només després les substitueix.
+
+**Regla que se'n treu:** en un fitxer de 380 KB sense mòduls, substituir un bloc gran de cop és perillós; abans de fer-ho, comprovar quines funcions hi ha a dins.
+
 ## 2026-08-09 — El número d'HC operatius, arreglat i posat al davant
 
 Reportat: la targeta d'HC GRAE operatius deia **"No s'ha pogut calcular"**.
