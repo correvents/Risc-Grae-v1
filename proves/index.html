@@ -4571,6 +4571,30 @@
       `Ara mateix: ratxa ≤ ${opConfig.ratxaMax} km/h · visibilitat ≥ ${opConfig.visMin} m · ` +
       `≥ ${opConfig.horesMin} h seguides, ${opConfig.nomesDia ? 'només amb llum de dia' : 'a qualsevol hora (24 h)'}.`;
 
+    // Helis del dia per al càlcul de risc: el dia exacte, si no l'últim desat,
+    // i si no la flota per defecte. Es va perdre en una refactorització i
+    // deixava el recompte d'HC operatius sense dades.
+    async function carregarHelisPerRisc(dataStr) {
+      const exacte = await carregarHelicoptersDiaSupabase(dataStr);
+      if (exacte && exacte.length) return exacte;
+      try {
+        const { data } = await sbClient
+          .from('helicopters_historic')
+          .select('*')
+          .order('data', { ascending: false })
+          .order('heli_id')
+          .limit(20);
+        if (data && data.length) {
+          const ultimaData = data[0].data;
+          return data.filter(r => r.data === ultimaData).map(row => ({
+            id: row.heli_id, recurs: row.recurs, base: row.base,
+            lat: row.lat, lon: row.lon, operativitat: row.operativitat, observacions: row.observacions
+          }));
+        }
+      } catch(e) { logError('HelisRisc', e.message); }
+      return JSON.parse(JSON.stringify(HELICOPTERS_BASE));
+    }
+
     const meteoVolCache = {};
     async function meteoPermetVol(lat, lon, dataStr) {
       if (lat == null || lon == null) return { ok: true, motiu: '' }; // sense coords → no penalitza
