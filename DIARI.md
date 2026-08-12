@@ -8,6 +8,22 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-09 — El número d'HC operatius, arreglat i posat al davant
+
+Reportat: la targeta d'HC GRAE operatius deia **"No s'ha pogut calcular"**.
+
+**Causa:** cridava `calcularOperativitat`, que no existeix. La funció es diu `avaluarOperativitat`. El `try/catch` s'empassava l'error i només deixava el missatge genèric, així que no es podia saber què passava; ara el `catch` registra a l'`error_log` i ensenya el motiu.
+
+**Segona causa, més de fons:** el bloc penjava de `renderIndexos`, que al seu torn depèn de la càrrega de dades del dia. I la inicialització del mapa era **fatal**: si Leaflet no carregava, s'enduia tota la pestanya, inclòs el número. Ara la creació del mapa va dins d'un `try` i el bloc del recompte es dibuixa des de la capçalera, independentment.
+
+**Disseny nou**, com es va demanar: el valor mana i va **al costat del títol, gros** (`2/4`), amb les províncies cobertes a sota. I sota la capçalera, **els tres paràmetres d'on surt**, cadascun amb el seu subtotal i el motiu:
+
+1. **Estat** 3/4 — Fora: HC4
+2. **Condicions de vol** 3/3 — finestra de ≥3 h dins de límits, amb llum de dia
+3. **Distribució** 2/3 — 1 no suma: comparteixen província
+
+Comprovat amb Playwright sobre quatre helis inventats (un de baixa, dos a la mateixa província): el càlcul dona 2/4 i els tres blocs expliquen d'on surt cada resta.
+
 ## 2026-08-09 — Condicions de vol: configurables, i només de dia
 
 Decidit: **de moment el GRAE no vola de nit.** Això canvia una cosa que semblava resolta. La finestra de vol s'avaluava les **24 h** des del 22 de juliol, amb el raonament que els GRAE operen de nit; ara es busca **només entre hores amb llum** (`is_day` d'Open-Meteo) i una finestra no pot travessar la nit.
