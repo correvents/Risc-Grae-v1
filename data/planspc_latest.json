@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-14T09:12:16.401Z",
+  "actualitzat": "2026-08-14T14:28:35.007Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126348_INICI--NOACTIVAT_INFOCAT_202608140952.pdf"
       },
       "descripcio": "Previsió risc d'incendi 14/08 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "14/08/2026 11:00",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126316_INICI--NOACTIVAT_INUNCAT_202608141129.pdf"
+      },
+      "descripcio": "SMP Intensitat Pluja 15/08 - "
     }
   ]
 }
