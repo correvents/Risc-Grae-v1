@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-16T08:35:01.285Z",
+  "actualitzat": "2026-08-16T13:49:03.162Z",
   "plans": [
     {
       "plaicona": {
@@ -7,13 +7,13 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "16/08/2026 02:03",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "16/08/2026 10:43",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126316_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608160227.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126316_ACTUALITZACIO--ACTIVAT_INUNCAT_202608161103.pdf"
       },
-      "descripcio": "SMP Intensitat Pluja 15/08 - "
+      "descripcio": "SMP Intensitat Pluja 16/08"
     }
   ]
 }

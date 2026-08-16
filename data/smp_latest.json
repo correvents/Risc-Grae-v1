@@ -1,6 +1,110 @@
 {
-  "dataConsulta": "2026-08-16T08:34:57.650Z",
+  "dataConsulta": "2026-08-16T13:48:58.734Z",
   "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-08-16T13:35Z",
+      "dataFi": "2026-08-16T15:35Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-08-16",
+          "afectacions": [
+            {
+              "zona": "Empordà",
+              "comarca": 2,
+              "comarcaNom": "Alt Empordà",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 10,
+              "comarcaNom": "Baix Empordà",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Calor nocturna",
       "estat": "Ampliat",
