@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-08-17T06:20:09.377Z",
+  "dataConsulta": "2026-08-17T08:49:37.401Z",
   "avisos": [
     {
       "meteor": "Calor nocturna",
@@ -154,7 +154,7 @@
     },
     {
       "meteor": "Calor nocturna",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-08-17T00:00Z",
       "dataFi": "2026-08-18T05:59Z",
       "comentari": "",
@@ -825,9 +825,33 @@
               ]
             },
             {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
               "zona": "Litoral Nord",
               "comarca": 34,
               "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
@@ -841,6 +865,18 @@
               "comarca": 24,
               "comarcaNom": "Osona",
               "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
@@ -853,8 +889,8 @@
               "comarca": 41,
               "comarcaNom": "Vallès Oriental",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
@@ -867,6 +903,104 @@
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Vigent",
+      "dataInici": "2026-08-17T12:00Z",
+      "dataFi": "2026-08-17T17:59Z",
+      "comentari": "Els ruixats aniran acompanyats de tempesta i de calamarsa o pedra. ",
+      "dies": [
+        {
+          "dia": "2026-08-17",
+          "afectacions": [
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Ampliat",
       "dataInici": "2026-08-16T12:00Z",
       "dataFi": "2026-08-17T17:59Z",
       "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de fenòmens de temps violent.",
@@ -1108,33 +1242,9 @@
               ]
             },
             {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 28,
-              "comarcaNom": "Pla de l'Estany",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
               "zona": "Litoral Nord",
               "comarca": 34,
               "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
@@ -1148,18 +1258,6 @@
               "comarca": 24,
               "comarcaNom": "Osona",
               "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
@@ -1172,8 +1270,8 @@
               "comarca": 41,
               "comarcaNom": "Vallès Oriental",
               "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "12-18"
