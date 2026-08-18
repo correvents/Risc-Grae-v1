@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-08-17T13:57:15.389Z",
+  "dataConsulta": "2026-08-18T06:03:05.347Z",
   "avui": {
-    "data": "2026-08-17",
-    "variables": {
-      "estatDelCel": "Fins a mig matí dominarà l'ambient assolellat, si bé hi haurà algunes bandes de núvols alts que creuaran de nord a sud, més probables al sud del país. A partir de llavors creixeran nuvolades al Pirineu, Prepirineu, prelitoral, i altres punts del quadrant nord-est; en aquests sectors el cel quedarà localment cobert durant la tarda.",
-      "precipitacions": "A partir del final del matí s'iniciarà precipitació en forma de ruixats dispersos al Pirineu i Prepirineu, sobretot sector oriental, i al prelitoral nord, si bé no se'n descarten al sector central i sud. Durant la tarda la precipitació es podrà estendre de forma més dispersa a altres punts del terç nord. Seran d'intensitat entre feble i moderada, si bé és probable que a l'interior del nord-est siguin d'intensitat forta; aniran acompanyats de tempesta i localment de calamarsa o pedra. S'acumularan quantitats de precipitació entre minses i poc abundants, localment abundants.",
-      "temperatures": "La màxima pujarà lleugerament a la meitat oest i a l'Empordà, i semblant a la resta.",
-      "visibilitat": "Visibilitat bona en general, excepte en moments de xàfec quan quedarà regular o dolenta. ",
-      "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent de component sud i est al litoral i prelitoral, i el component oest, entre fluix i moderat, amb alguns cops forts a la tarda, a punts de l'interior. Malgrat això, hi haurà intervals de vent fluix i variable a l'interior del quadrant nord-est durant la tarda. A banda, hi haurà tramuntana a l'extrem nord de la Costa Brava, amb alguns cops forts, menys probables al centre del dia, però més reforçada al final de la jornada quan també s'estendrà a l'extrem nord de l'Alt Empordà."
-    }
-  },
-  "dema": {
     "data": "2026-08-18",
     "variables": {
       "estatDelCel": "Fins a migdia dominarà l'ambient assolellat, si bé hi haurà intervals de núvols baixos al sector central del litoral i prelitoral, Catalunya Central i altres punts del quadrant nord-est.\nA partir de migdia creixeran alguns núvols d'evolució i nuvolades a punts de l'interior del quadrant nord-est i més aïlladament a altres punts del Pirineu i Prepirineu, més probables al sector oriental.",
-      "precipitacions": "Durant el matí no es descarta alguna precipitació aïllada al sud de la Costa Brava i nord del litoral central. A partir de migdia s'esperen alguns ruixats aïllats a l'interior del quadrant nord-est. Seran d'intensitat feble, localment moderada. S'acumularan quantitats de precipitació entre minses i poc abundants.",
-      "temperatures": "La temperatura mínima i màxima serà semblant o lleugerament més baixa. Malgrat tot, a punts del litoral la temperatura mínima serà lleugerament més alta. A banda, al litoral sud i a Ponent la temperatura màxima serà lleugerament més alta. A l'interior de les Terres de l'Ebre i a Ponent els valors més alts s'aproximaran als 40 ºC. ",
-      "visibilitat": "Visibilitat bona en general, excepte en moments de xàfec quan quedarà regular o dolenta. ",
+      "precipitacions": "Durant el matí no es descarta alguna precipitació aïllada al sud de la Costa Brava i nord del litoral central, mentre que a partir de migdia són probables alguns ruixats aïllats a l'interior del quadrant nord-est. Seran d'intensitat feble, localment moderada. S'acumularan quantitats de precipitació entre minses i poc abundants.",
+      "temperatures": "La temperatura mínima i màxima serà semblant o lleugerament més baixa. Malgrat tot, a punts del litoral la temperatura mínima serà lleugerament més alta, sobretot a l'Empordà. A banda, al litoral sud i a Ponent la temperatura màxima serà lleugerament més alta. A l'interior de les Terres de l'Ebre i a Ponent els valors més alts s'aproximaran als 40 ºC. ",
+      "visibilitat": "Visibilitat bona en general, excepte fins a mig matí a punts de la Catalunya central on hi haurà algun banc de boirina. ",
       "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent de component sud al litoral i prelitoral, i el component sud i oest a la resta, entre fluix i moderat, amb alguns cops forts a la tarda a punts de Ponent. Malgrat això, hi haurà intervals de vent fluix i variable a l'interior del quadrant nord-est i del terç nord durant la tarda. A banda, fins a migdia hi haurà tramuntana moderada al litoral de l'Empordà, amb cops forts a l'extrem nord de la Costa Brava."
+    }
+  },
+  "dema": {
+    "data": "2026-08-19",
+    "variables": {
+      "estatDelCel": "Fins a migdia dominarà l'ambient assolellat, si bé durant la matinada hi haurà alguns intervals de núvols baixos preferentment a punts litoral i prelitoral sud i de la Catalunya central. A partir de migdia creixeran nuvolades al prelitoral, així com a punts de la meitat nord del país. A més, al llarg de la tarda augmentarà la nuvolositat pel terç oest del país. En tots aquests sectors on quedarà entre mig i molt ennuvolat, localment cobert.",
+      "precipitacions": "A partir de migdia són probables ruixats febles i minsos al Pirineu i Prepirineu, més freqüents al sector occidental de la zona a partir del final de la tarda, i possibles a punts del prelitoral. No es descarta que també arribin a altres punts del terç oest del país.",
+      "temperatures": "La temperatura mínima pujarà lleugerament, si bé serà similar o lleugerament més baixa a la Catalunya central i al nord-est. \nLa temperatura màxima serà lleugerament més alta, amb valors que podrien superar els 40 ºC al Pla de Lleida i a l'interior de les Terres de l'Ebre. ",
+      "visibilitat": "Visibilitat bona en general, excepte en moments de xàfec quan quedarà regular o dolenta. A banda, també serà regular a punts del litoral i prelitoral sud i Catalunya central durant la matinada.",
+      "vent": "Vent fluix i de direcció variable de matinada i a la nit. La resta del dia s'imposarà el vent de component sud al litoral i prelitoral, i el component sud i oest a la resta, entre fluix i moderat, amb alguns cops forts a la tarda a punts de Ponent i de les cotes altes del Pirineu, sobretot vessant nord. Malgrat això, hi haurà intervals de vent fluix i variable a l'interior del quadrant nord-est durant la tarda."
     }
   }
 }
