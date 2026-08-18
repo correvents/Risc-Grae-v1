@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-08-18T06:03:04.015Z",
+  "dataConsulta": "2026-08-18T08:42:29.580Z",
   "avisos": [
     {
       "meteor": "Calor",
@@ -136,6 +136,276 @@
     {
       "meteor": "Calor",
       "estat": "Vigent",
+      "dataInici": "2026-08-18T06:00Z",
+      "dataFi": "2026-08-19T17:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-08-18",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 37,
+              "comarcaNom": "Terra Alta",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-19",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 23,
+              "comarcaNom": "Noguera",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 18,
+              "comarcaNom": "Garrigues",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 27,
+              "comarcaNom": "Pla d'Urgell",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 33,
+              "comarcaNom": "Segrià",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 37,
+              "comarcaNom": "Terra Alta",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Calor intensa",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Calor",
+      "estat": "Ampliat",
       "dataInici": "2026-08-18T06:00Z",
       "dataFi": "2026-08-19T17:59Z",
       "comentari": "",
@@ -514,7 +784,7 @@
     },
     {
       "meteor": "Calor nocturna",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-08-18T00:00Z",
       "dataFi": "2026-08-19T05:59Z",
       "comentari": "",

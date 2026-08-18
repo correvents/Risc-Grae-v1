@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-08-18T06:03:07.814Z",
-  "plans": []
+  "actualitzat": "2026-08-18T08:42:33.990Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "18/08/2026 09:23",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126484_INICI--NOACTIVAT_INFOCAT_202608180940.pdf"
+      },
+      "descripcio": "Previsió risc incendi 18/08 - "
+    }
+  ]
 }
