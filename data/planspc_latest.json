@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-19T08:43:12.032Z",
+  "actualitzat": "2026-08-19T14:02:36.478Z",
   "plans": [
     {
       "plaicona": {
@@ -17,6 +17,20 @@
     },
     {
       "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "19/08/2026 10:30",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_INICI--NOACTIVAT_INUNCAT_202608191104.pdf"
+      },
+      "descripcio": "SMP Intensitat de pluja perill 2/6 - "
+    },
+    {
+      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
       },
       "plaacronim": "PROCICAT",
@@ -25,7 +39,7 @@
       "plaactivat": "SI",
       "fasedatahora": "19/08/2026 09:52",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191015.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191113.pdf"
       },
       "descripcio": "SMP Calor nocturna i diürna dies 11 al 20/08 "
     }
