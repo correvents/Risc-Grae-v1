@@ -1,4 +1,33 @@
 {
-  "actualitzat": "2026-08-19T06:03:42.400Z",
-  "plans": []
+  "actualitzat": "2026-08-19T08:43:12.032Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "19/08/2026 08:59",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126512_INICI--NOACTIVAT_INFOCAT_202608190919.pdf"
+      },
+      "descripcio": "Previsió risc d'incendis 19/08 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "19/08/2026 09:52",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191015.pdf"
+      },
+      "descripcio": "SMP Calor nocturna i diürna dies 11 al 20/08 "
+    }
+  ]
 }
