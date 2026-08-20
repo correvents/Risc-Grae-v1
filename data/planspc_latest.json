@@ -1,19 +1,19 @@
 {
-  "actualitzat": "2026-08-20T08:45:01.031Z",
+  "actualitzat": "2026-08-20T14:04:54.131Z",
   "plans": [
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
       },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "19/08/2026 10:30",
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "19/08/2026 09:52",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608191951.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191113.pdf"
       },
-      "descripcio": "SMP Intensitat de pluja perill 2/6 - "
+      "descripcio": "SMP Calor nocturna i diürna dies 11 al 20/08 "
     },
     {
       "plaicona": {
@@ -31,17 +31,31 @@
     },
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
       },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "19/08/2026 09:52",
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "19/08/2026 10:30",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191113.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608201055.pdf"
       },
-      "descripcio": "SMP Calor nocturna i diürna dies 11 al 20/08 "
+      "descripcio": "Prealerta INUNCAT"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PLASEQCAT.png"
+      },
+      "plaacronim": "PLASEQTA",
+      "planom": "Pla risc químic comarques Tarragona",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "20/08/2026 14:02",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126562_INICI--NOACTIVAT_PLASEQTA_202608201417.pdf"
+      },
+      "descripcio": "Inici i fi Prealerta PLASEQTA"
     }
   ]
 }
