@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-20T06:03:28.818Z",
+  "actualitzat": "2026-08-20T08:45:01.031Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608191951.pdf"
       },
       "descripcio": "SMP Intensitat de pluja perill 2/6 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "20/08/2026 10:07",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126555_INICI--NOACTIVAT_INFOCAT_202608201019.pdf"
+      },
+      "descripcio": "Previsió de risc incendis 20/08 "
     },
     {
       "plaicona": {
