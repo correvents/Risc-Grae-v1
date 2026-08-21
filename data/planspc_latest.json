@@ -1,61 +1,19 @@
 {
-  "actualitzat": "2026-08-20T14:04:54.131Z",
+  "actualitzat": "2026-08-21T06:05:09.775Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "19/08/2026 09:52",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126179_ACTUALITZACIO--ACTIVAT_PROCICAT_202608191113.pdf"
-      },
-      "descripcio": "SMP Calor nocturna i diürna dies 11 al 20/08 "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "20/08/2026 10:07",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126555_INICI--NOACTIVAT_INFOCAT_202608201019.pdf"
-      },
-      "descripcio": "Previsió de risc incendis 20/08 "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "19/08/2026 10:30",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "20/08/2026 19:25",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608201055.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--ACTIVAT_INUNCAT_202608201948.pdf"
       },
-      "descripcio": "Prealerta INUNCAT"
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PLASEQCAT.png"
-      },
-      "plaacronim": "PLASEQTA",
-      "planom": "Pla risc químic comarques Tarragona",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "20/08/2026 14:02",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126562_INICI--NOACTIVAT_PLASEQTA_202608201417.pdf"
-      },
-      "descripcio": "Inici i fi Prealerta PLASEQTA"
+      "descripcio": "Alerta INUNCAT"
     }
   ]
 }
