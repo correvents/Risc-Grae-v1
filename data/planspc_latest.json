@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-21T14:03:10.717Z",
+  "actualitzat": "2026-08-22T06:01:33.030Z",
   "plans": [
     {
       "plaicona": {
@@ -11,9 +11,23 @@
       "plaactivat": "SI",
       "fasedatahora": "20/08/2026 19:25",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--ACTIVAT_INUNCAT_202608211218.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--ACTIVAT_INUNCAT_202608211858.pdf"
       },
       "descripcio": "Actualització Alerta INUNCAT"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "22/08/2026 06:35",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126631_INICI--ACTIVAT_INUNCAT_202608220639.pdf"
+      },
+      "descripcio": "Avís SMP (Acumulació de pluja) - "
     }
   ]
 }
