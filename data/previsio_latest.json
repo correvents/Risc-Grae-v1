@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-08-22T13:48:25.558Z",
+  "dataConsulta": "2026-08-23T06:02:47.801Z",
   "avui": {
-    "data": "2026-08-22",
-    "variables": {
-      "estatDelCel": "Cel molt ennuvolat en conjunt. A partir de migdia tendirà a minvar de la meitat nord del litoral i prelitoral, alhora que creixeran nuvolades al Pirineu, al Prepirineu i n'arribaran pel terç oest. La nuvolositat minvarà de cara a final del dia.",
-      "precipitacions": "Fins a migdia s'espera precipitació feble i dispersa a punts de la meitat oest i a la Catalunya Central. A l'extrem sud aquesta precipitació serà en forma de xàfecs, localment no es descarta que vagin acompanyats de tempestes, i seran d'intensitat moderada, forta o localment torrencial. Durant la tarda s'esperen xàfecs al Pirineu i Prepirineu, i és possible que n'arribi algun pel terç oest. Seran d'intensitat feble o moderada, i localment aniran acompanyats de tempesta. S'acumularan quantitats de precipitació entre minses i poc abundants, tot i que localment seran abundants o molt abundants (més de 50 mm) a punts del litoral sud. ",
-      "temperatures": "La temperatura màxima serà lleugerament més baixa, tot i que el descens serà localment moderat. Els valors màxims més alts voltaran els 30 ºC a Ponent, a la Catalunya Central i al prelitoral. ",
-      "visibilitat": "La visibilitat serà entre bona i regular, si bé localment podrà quedar dolenta, sobretot a cotes mitjanes i altes de la meitat oest del país. A banda, durant la matinada i fins primera hora del matí hi haurà bancs de boira a molts punts de l'interior del país.",
-      "vent": "Durant la matinada el vent serà fluix i de direcció variable, tret dels dos extrems del litoral on bufarà de component nord, amb cops forts especialment a l'Empordà. A partir d'aleshores s'imposarà el vent moderat de component est al litoral i de component sud a l'interior. "
-    }
-  },
-  "dema": {
     "data": "2026-08-23",
     "variables": {
       "estatDelCel": "Durant el matí estarà molt ennuvolat o cobert al terç sud i mig ennuvolat a la resta de la meitat oest. A partir d'aleshores, la nuvolositat minvarà arreu, tret del terç sud del litoral i prelitoral, on el cel es mantindrà entre mig i molt ennuvolat. A banda, creixeran nuvolades durant la tarda al Pirineu, al Prepirineu i al prelitoral, que deixaran el cel molt cobert a gran part d'aquests sectors. A la resta es mantindrà el cel poc ennuvolat.",
-      "precipitacions": "Durant el matí hi haurà alguns xàfecs al terç sud, sobretot al voltant del Delta de l'Ebre i sud del Camp de Tarragona. Seran d'intensitat feble o moderada, si bé localment seran forts. S'acumularan quantitats de precipitació entre minses i poc abundants, tot i que localment podran ser abundants. A la tarda s'esperen xàfecs locals al Pirineu i Prepirineu, sobretot al sector oriental, com també a punts del nord de la depressió Central i al prelitoral sud. Seran d'intensitat feble o moderada i s'acumularan quantitats minses o poc abundants de precipitació.",
-      "temperatures": "La temperatura mínima serà similar a gran part del País, tot i que serà lleugerament, o fins i tot notablement, més alta al terç sud i Ponent. La màxima serà entre lleugerament i moderadament més alta. Els valors més alts es mouran entre 32 i 34 ºC a Ponent i a la Catalunya Central.",
+      "precipitacions": "Al llarg de la matinada i durant el matí hi haurà alguns xàfecs al terç sud del país, sobretot al voltant del Delta de l'Ebre i sud del Camp de Tarragona. Seran d'intensitat feble o moderada, si bé localment seran forts. S'acumularan quantitats de precipitació entre minses i poc abundants, tot i que localment seran abundants. A la tarda s'esperen xàfecs locals al Pirineu i Prepirineu, sobretot al sector oriental, com també a punts del nord de la depressió Central i al prelitoral sud. Seran d'intensitat feble o moderada i s'acumularan quantitats minses o poc abundants de precipitació.",
+      "temperatures": "La temperatura màxima serà entre lleugerament i moderadament més alta. Els valors més alts es mouran entre 32 i 34 ºC a Ponent i a la Catalunya Central.",
       "visibilitat": "La visibilitat serà bona, excepte al terç sud on podrà quedar regular. A la tarda també quedarà regular en zones de muntanya. ",
-      "vent": "Durant el matí el vent es mantindrà en calma a gran part del País, tret del terç sud, on bufarà fluix de component est. Durant la tarda es reforçarà, predominant el component est fluix, amb cops moderats en general, tret del terç sud, on bufarà moderadament amb cops forts."
+      "vent": "Durant el matí el vent es mantindrà en calma a gran part del País, tret del terç sud, on bufarà fluix de component est. Durant la tarda es reforçarà, predominant el component sud fluix, amb cops moderats en general, tret del terç sud, on bufarà moderadament amb cops forts."
+    }
+  },
+  "dema": {
+    "data": "2026-08-24",
+    "variables": {
+      "estatDelCel": "Fins a mig matí, el cel estarà entre poc i mig ennuvolat a la meitat oest del país, si bé al terç sud i al sector occidental del Pirineu estarà entre molt ennuvolat i cobert. A partir de llavors, la nuvolositat tendirà a augmentar d'oest a est i el cel quedarà entre mig i molt ennuvolat arreu, especialment a la meitat oest.",
+      "precipitacions": "Durant la matinada, és possible algun plugim al litoral sud i al sector occidental del Pirineu i Prepirineu. A partir de migdia, s'esperen xàfecs que s'iniciaran al terç oest i avançaran progressivament fins a afectar qualsevol punt. En general seran d'intensitat entre feble i moderada, si bé localment seran forts al quadrant nord-oest, on també podran anar acompanyats de fenòmens de temps violent. Les quantitats de precipitació seran minses o poc abundants, tot i que localment seran abundants al quadrant nord-oest. \n",
+      "temperatures": "Temperatura mínima similar, tret del terç sud on serà lleugerament més alta. La temperatura màxima es mantindrà sense grans canvis, si bé pujarà entre lleugerament i moderadament a l'extrem nord-est. ",
+      "visibilitat": "Visibilitat bona, si bé quedarà regular al terç sud del país durant la matinada, i al Pirineu i Prepirineu de cara la tarda, on, fins i tot, localment serà dolenta.",
+      "vent": "De matinada, el vent serà fluix i de direcció variable amb estones de component sud i est a la meitat sud del país. Al llarg del matí, el component sud s'imposarà arreu, amb domini del sud-est la meitat sud del territori, i del sud a la resta. A la tarda, el sud dominarà arreu amb cops moderats en general, tret del terç sud i Ponent, on seran forts. Al final del dia, de nou, el vent quedarà fluix i de direcció variable."
     }
   }
 }
