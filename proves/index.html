@@ -4271,7 +4271,40 @@
     }
     
     // Funció per calcular SMP: compta zones de muntanya afectades per nivell màxim
+    // A partir de {zonaGrup → {nivell màxim, meteors}}, aplica els llindars de zones
+    // (0-6) i retorna el mateix format que fa servir calcularSMPPonderat.
+    function avaluarZonesSMPPerNivell(infoPerZona) {
+      const zonesPerNivell = { 'Groc': [], 'Taronja': [], 'Vermell': [] };
+      const detall = [];
+      for (const [zona, info] of Object.entries(infoPerZona)) {
+        zonesPerNivell[info.nivell].push(zona);
+        detall.push({ zona, nivell: info.nivell, meteors: [...info.meteors] });
+      }
+
+      const numGroc    = zonesPerNivell['Groc'].length;
+      const numTaronja = zonesPerNivell['Taronja'].length;
+      const numVermell = zonesPerNivell['Vermell'].length;
+
+      let valor = 0, explicacio = 'Cap alerta';
+      if      (numVermell >= 3) { valor = 6; explicacio = `${numVermell} zones vermell (≥3)`; }
+      else if (numVermell >  0) { valor = 5; explicacio = `${numVermell} zona vermell (<3)`;  }
+      else if (numTaronja >= 3) { valor = 4; explicacio = `${numTaronja} zones taronja (≥3)`; }
+      else if (numTaronja >  0) { valor = 3; explicacio = `${numTaronja} zona taronja (<3)`;  }
+      else if (numGroc    >= 3) { valor = 2; explicacio = `${numGroc} zones groc (≥3)`;       }
+      else if (numGroc    >  0) { valor = 1; explicacio = `${numGroc} zona groc (<3)`;        }
+
+      return { valor, explicacio, zones: { groc: numGroc, taronja: numTaronja, vermell: numVermell }, detall };
+    }
+
+    // "Ahir" mai té dades a dadesCarregades.smp: és un avís de meteo.cat en viu,
+    // només avui/demà. Es guarda aquí el que hagi arribat de smp_historic
+    // (Supabase), calculat amb la mateixa ponderació, via sincronitzarSMPAhir().
+    let smpAhirHistoric = null;
+
     function calcularSMPPonderat(data_str) {
+      if (data_str === localDateStr(-1) && smpAhirHistoric && smpAhirHistoric.data === data_str) {
+        return smpAhirHistoric;
+      }
       if (!dadesCarregades.smp || !dadesCarregades.smp.avisos) {
         return { valor: 0, explicacio: 'Sense dades', zones: { groc: 0, taronja: 0, vermell: 0 }, detall: [] };
       }
@@ -4302,26 +4335,35 @@
         }
       }
 
-      const zonesPerNivell = { 'Groc': [], 'Taronja': [], 'Vermell': [] };
-      const detall = [];
-      for (const [zona, info] of Object.entries(infoPerZona)) {
-        zonesPerNivell[info.nivell].push(zona);
-        detall.push({ zona, nivell: info.nivell, meteors: [...info.meteors] });
-      }
+      return avaluarZonesSMPPerNivell(infoPerZona);
+    }
 
-      const numGroc    = zonesPerNivell['Groc'].length;
-      const numTaronja = zonesPerNivell['Taronja'].length;
-      const numVermell = zonesPerNivell['Vermell'].length;
+    // Descarrega d'smp_historic (Supabase) les alertes reals d'ahir i les avalua
+    // amb la mateixa ponderació per zones que calcularSMPPonderat, perquè la
+    // targeta "Ahir" de la pestanya Alertes deixi de mostrar sempre 0.
+    async function sincronitzarSMPAhir() {
+      const ahir = localDateStr(-1);
+      try {
+        const { data, error } = await sbClient.from('smp_historic').select('zona, nivell, meteor').eq('dia', ahir);
+        if (error || !data || data.length === 0) return;
 
-      let valor = 0, explicacio = 'Cap alerta';
-      if      (numVermell >= 3) { valor = 6; explicacio = `${numVermell} zones vermell (≥3)`; }
-      else if (numVermell >  0) { valor = 5; explicacio = `${numVermell} zona vermell (<3)`;  }
-      else if (numTaronja >= 3) { valor = 4; explicacio = `${numTaronja} zones taronja (≥3)`; }
-      else if (numTaronja >  0) { valor = 3; explicacio = `${numTaronja} zona taronja (<3)`;  }
-      else if (numGroc    >= 3) { valor = 2; explicacio = `${numGroc} zones groc (≥3)`;       }
-      else if (numGroc    >  0) { valor = 1; explicacio = `${numGroc} zona groc (<3)`;        }
+        const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
+        const infoPerZona = {};
+        for (const r of data) {
+          const zonaGrup = riscParams.zonesGrup[r.zona] || r.zona;
+          if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) continue;
+          if (!nivellOrdre[r.nivell]) continue;
+          if (!infoPerZona[zonaGrup]) {
+            infoPerZona[zonaGrup] = { nivell: r.nivell, meteors: new Set([r.meteor]) };
+          } else {
+            if (nivellOrdre[r.nivell] > nivellOrdre[infoPerZona[zonaGrup].nivell]) infoPerZona[zonaGrup].nivell = r.nivell;
+            infoPerZona[zonaGrup].meteors.add(r.meteor);
+          }
+        }
 
-      return { valor, explicacio, zones: { groc: numGroc, taronja: numTaronja, vermell: numVermell }, detall };
+        smpAhirHistoric = { data: ahir, ...avaluarZonesSMPPerNivell(infoPerZona) };
+        if (dadesCarregades.smp) renderSMP(dadesCarregades.smp);
+      } catch (e) { logError('SMPAhir', e.message); }
     }
     
     // Funció per calcular valors automàtics des de les dades carregades
@@ -6635,11 +6677,12 @@
               <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🔄 2.7 — Flux de dades en el frontend</summary>
               <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
                 <ol style="margin:0;padding-left:1.3rem;color:#555;">
-                  <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
+                  <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>sincronitzarSMPAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
                   <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>.</li>
                   <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
                   <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
-                  <li><strong>"Ahir" (no editable):</strong> <code>sincronitzarRiscAhir()</code> el descarrega sempre de <code>risc_historic</code> a Supabase i sobreescriu qualsevol valor local (<code>riscAhirRemot</code>) — així surt igual des de qualsevol mòbil/ordinador, no depèn del <code>localStorage</code> de cada dispositiu.</li>
+                  <li><strong>"Ahir" al Risc GRAE (no editable):</strong> <code>sincronitzarRiscAhir()</code> el descarrega sempre de <code>risc_historic</code> a Supabase i sobreescriu qualsevol valor local (<code>riscAhirRemot</code>) — així surt igual des de qualsevol mòbil/ordinador, no depèn del <code>localStorage</code> de cada dispositiu.</li>
+                  <li><strong>"Ahir" a la pestanya Alertes:</strong> <code>calcularSMPPonderat()</code> llegeix <code>dadesCarregades.smp</code> (l'avís de meteo.cat en viu, que només porta avui/demà: mai hi ha "ahir"). <code>sincronitzarSMPAhir()</code> recupera les alertes reals d'ahir d'<code>smp_historic</code> i les avalua amb la mateixa ponderació per zones (<code>avaluarZonesSMPPerNivell()</code>), guardant el resultat a <code>smpAhirHistoric</code> perquè <code>calcularSMPPonderat()</code> el faci servir en lloc de tornar 0.</li>
                 </ol>
                 <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-top:0.75rem;font-size:0.8rem;">
                   <strong>⚠️ localStorage (<code>riscGRAE</code>):</strong> guarda l'estat avui/demà entre sessions. Supabase preval sobre localStorage si hi ha connexió. Sense connexió, l'app funciona en mode completament local (i "ahir" es queda amb el que hi hagués desat anteriorment, o buit si és la primera vegada).
@@ -6911,8 +6954,8 @@
 
     // Carregar tot al iniciar
     carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
-    carregarRiscConfig().then(() => renderRisc());  // Config de Supabase primer, després renderitza risc
-    sincronitzarRiscAhir();  // "Ahir" ve sempre de Supabase, no del localStorage del dispositiu
+    carregarRiscConfig().then(() => { renderRisc(); sincronitzarSMPAhir(); });  // Config de Supabase primer (riscParams), després renderitza risc i sincronitza "Ahir" de la pestanya Alertes
+    sincronitzarRiscAhir();  // "Ahir" del Risc GRAE ve sempre de Supabase, no del localStorage del dispositiu
     carregarBPA();
     carregarPrevisio();
     carregarSMP();
