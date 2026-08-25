@@ -1383,9 +1383,14 @@
       console.error('[' + font + ']', missatge, detall || '');
     }
 
+    // proves/ (dins de main) no té la seva pròpia carpeta data/ — per disseny,
+    // no es duplica (vegeu sincronitzar-proves.yml) — així que amb un _base
+    // relatiu al mateix directori els fetch resolien a proves/data/... i
+    // donaven 404. Mateix patró que carregarGeoComarques(): puja un nivell
+    // quan corre sota /proves/, perquè data/ és a l'arrel del repo.
     const _base = location.protocol === 'file:'
       ? 'https://correvents.github.io/Risc-Grae-v1'
-      : '.';
+      : (location.pathname.includes('/proves/') ? '..' : '.');
     const URLS = {
       bpa:     _base + "/data/bpa_latest.json",
       previsio: _base + "/data/previsio_latest.json",
