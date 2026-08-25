@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-25T08:49:25.946Z",
+  "actualitzat": "2026-08-25T14:10:22.559Z",
   "plans": [
     {
       "plaicona": {
@@ -7,11 +7,11 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "20/08/2026 19:25",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "25/08/2026 11:53",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--ACTIVAT_INUNCAT_202608242132.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126518_ACTUALITZACIO--NOACTIVAT_INUNCAT_202608251214.pdf"
       },
       "descripcio": "Actualització Alerta INUNCAT"
     }
