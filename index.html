@@ -4033,17 +4033,22 @@
       tomorrow: null,
       history: []
     };
-    
+
+    // "Ahir" no es pot editar, així que no té sentit fiar-se del localStorage
+    // (és per dispositiu i no el comparteixen mòbil/ordinador): es guarda aquí
+    // el que hagi arribat de Supabase (font de veritat) via sincronitzarRiscAhir().
+    let riscAhirRemot = null;
+
     function carregarRiscEstat() {
       const saved = localStorage.getItem('riscGRAE');
       if (saved) {
         riscState = JSON.parse(saved);
       }
-      
+
       const avui = getRiscDateString(0);
       const ahir = getRiscDateString(-1);
       const dema = getRiscDateString(1);
-      
+
       if (!riscState.today || riscState.today.data !== avui) {
         if (riscState.today && riscState.today.data === ahir) {
           riscState.yesterday = riscState.today;
@@ -4056,19 +4061,41 @@
         }
         riscState.tomorrow = crearRiscDiaDefault(dema);
       }
-      
+
       if (!riscState.yesterday || riscState.yesterday.data !== ahir) {
         riscState.yesterday = crearRiscDiaDefault(ahir);
       }
-      
+
       if (!riscState.tomorrow || riscState.tomorrow.data !== dema) {
         riscState.tomorrow = crearRiscDiaDefault(dema);
       }
-      
+
       if (!riscState.history) {
         riscState.history = [];
       }
-      
+
+      if (riscAhirRemot && riscAhirRemot.data === ahir) {
+        riscState.yesterday = riscAhirRemot;
+      }
+    }
+
+    // Substitueix "ahir" pel que hi hagi realment desat a Supabase (risc_historic),
+    // igual per a tothom que obri la web des de qualsevol dispositiu.
+    async function sincronitzarRiscAhir() {
+      const ahir = getRiscDateString(-1);
+      const data = await carregarDiaSupabase(ahir);
+      if (!data) return;
+      riscAhirRemot = {
+        data: ahir,
+        planspc: data.planspc || 0,
+        smp: data.smp || 0,
+        allaus: data.allaus || 0,
+        afluencia: data.afluencia || 0,
+        hc: data.hc || 0,
+        canvi: data.canvi || 0,
+        notes: data.notes || ''
+      };
+      if (!document.getElementById('pagina-parametres')) renderRisc();
     }
     
     // Configuració de paràmetres per càlcul automàtic
@@ -6608,13 +6635,14 @@
               <summary style="font-weight:700;font-size:0.95rem;cursor:pointer;padding:0.4rem 0;color:#37474f;">🔄 2.7 — Flux de dades en el frontend</summary>
               <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
                 <ol style="margin:0;padding-left:1.3rem;color:#555;">
-                  <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
+                  <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
                   <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>.</li>
                   <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
                   <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
+                  <li><strong>"Ahir" (no editable):</strong> <code>sincronitzarRiscAhir()</code> el descarrega sempre de <code>risc_historic</code> a Supabase i sobreescriu qualsevol valor local (<code>riscAhirRemot</code>) — així surt igual des de qualsevol mòbil/ordinador, no depèn del <code>localStorage</code> de cada dispositiu.</li>
                 </ol>
                 <div style="background:#fff8e1;border:1px solid #f59e0b;border-radius:6px;padding:0.7rem;margin-top:0.75rem;font-size:0.8rem;">
-                  <strong>⚠️ localStorage (<code>riscGRAE</code>):</strong> guarda l'estat avui/demà entre sessions. Supabase preval sobre localStorage si hi ha connexió. Sense connexió, l'app funciona en mode completament local.
+                  <strong>⚠️ localStorage (<code>riscGRAE</code>):</strong> guarda l'estat avui/demà entre sessions. Supabase preval sobre localStorage si hi ha connexió. Sense connexió, l'app funciona en mode completament local (i "ahir" es queda amb el que hi hagués desat anteriorment, o buit si és la primera vegada).
                 </div>
               </div>
             </details>
@@ -6884,6 +6912,7 @@
     // Carregar tot al iniciar
     carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
     carregarRiscConfig().then(() => renderRisc());  // Config de Supabase primer, després renderitza risc
+    sincronitzarRiscAhir();  // "Ahir" ve sempre de Supabase, no del localStorage del dispositiu
     carregarBPA();
     carregarPrevisio();
     carregarSMP();
