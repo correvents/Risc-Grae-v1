@@ -4396,6 +4396,11 @@
         resultat.allaus = perillMax;
         if (perillMax >= 3) {
           resultat.notes.push(`BPA: perill ${perillMax}/5`);
+          const zonesMax = (dadesCarregades.bpa.zones || []).filter(z => z.perill_numeric === perillMax);
+          resultat.allausDetall = {
+            zones: [...new Set(zonesMax.map(z => z.nom).filter(Boolean))],
+            situacions: [...new Set(zonesMax.map(z => z.situacio_primaria).filter(Boolean))]
+          };
         }
       }
       
@@ -4431,11 +4436,19 @@
         const avui = dadesCarregades.canvi.data;
         const clauDia = avui === data ? 'avui' : (data > avui ? 'dema' : null);
         if (clauDia) {
-          const maxNivell = Object.values(dadesCarregades.canvi.resultats)
+          const entrades = Object.values(dadesCarregades.canvi.resultats);
+          const maxNivell = entrades
             .map(r => r[clauDia]?.nivell || 0)
             .reduce((a, b) => Math.max(a, b), 0);
           resultat.canvi = maxNivell;
-          if (maxNivell > 0) resultat.notes.push(`Canvi temps: nivell ${maxNivell}/2`);
+          if (maxNivell > 0) {
+            resultat.notes.push(`Canvi temps: nivell ${maxNivell}/2`);
+            const puntsMax = entrades.filter(r => (r[clauDia]?.nivell || 0) === maxNivell);
+            resultat.canviDetall = {
+              punts: [...new Set(puntsMax.map(r => r.punt?.nom).filter(Boolean))],
+              factors: [...new Set(puntsMax.flatMap(r => r[clauDia]?.factors || []))]
+            };
+          }
         }
       }
 
@@ -4469,9 +4482,12 @@
         if (!riscState.today.modificatManualment) {
           const valsAvui = calcularValorsAuto(avui);
           riscState.today.smp = valsAvui.smp;
+          riscState.today.smpDetall = valsAvui.smpDetall;
           riscState.today.allaus = valsAvui.allaus;
+          riscState.today.allausDetall = valsAvui.allausDetall || null;
           riscState.today.hc = valsAvui.hc;
           riscState.today.canvi = valsAvui.canvi;
+          riscState.today.canviDetall = valsAvui.canviDetall || null;
           riscState.today.planspc = valsAvui.planspc || 0;
           if (valsAvui.notes.length > 0 && !riscState.today.notes) {
             riscState.today.notes = valsAvui.notes.join('. ');
@@ -4488,9 +4504,12 @@
         if (!riscState.tomorrow.modificatManualment) {
           const valsDema = calcularValorsAuto(dema);
           riscState.tomorrow.smp = valsDema.smp;
+          riscState.tomorrow.smpDetall = valsDema.smpDetall;
           riscState.tomorrow.allaus = valsDema.allaus;
+          riscState.tomorrow.allausDetall = valsDema.allausDetall || null;
           riscState.tomorrow.hc = valsDema.hc;
           riscState.tomorrow.canvi = valsDema.canvi;
+          riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
           riscState.tomorrow.planspc = valsDema.planspc || 0;
           if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
             riscState.tomorrow.notes = valsDema.notes.join('. ');
@@ -4945,7 +4964,20 @@
         // Un factor desactivat no suma: el desglossament ho ha de deixar veure
         const fOff  = on => on ? '' : 'opacity:0.45;';
         const fMarca = on => on ? '' : ' <span style="font-size:0.6rem;color:#999;font-weight:400;">desactivat</span>';
-        
+        // El "per què": no n'hi ha prou amb el nivell, cal poder-lo justificar sense
+        // anar a mirar cada pestanya. Només hi ha detall per a avui/demà (calculat
+        // en viu); els dies desats (ahir) no el guarden — vegeu CLAUDE.md.
+        const motiuHtml = txt => txt ? ` · ${escapeHtml(txt)}` : '';
+        const smpMotiu = (dia.smpDetall && dia.smpDetall.length)
+          ? [...new Set(dia.smpDetall.flatMap(d => d.meteors || []))].join(', ') : '';
+        const allausPts = +(riscFormula.allaus.punts[parseInt(dia.allaus || 0)] ?? 0);
+        const allausMotiu = (dia.allausDetall && dia.allausDetall.situacions?.length)
+          ? dia.allausDetall.situacions.join(', ') : '';
+        const infoAflu = getInfoDia(dia.data);
+        const afluMotiu = infoAflu.nivell > 0 ? infoAflu.motiu : '';
+        const canviMotiu = (dia.canviDetall && dia.canviDetall.factors?.length)
+          ? dia.canviDetall.factors.slice(0, 2).join(', ') : '';
+
         cardsHtml += `
           <div class="risc-card ${dayKey}">
             <div class="risc-card-header">
@@ -4966,17 +4998,17 @@
               <div class="risc-breakdown-title">Desglossament</div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
                 <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}${esBase('smp')}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}${motiuHtml(smpMotiu)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.smp||0)}/6</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu)}">
                 <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${esBase('allaus')}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.allaus||0)>=4?'background:#ffebee;color:#c62828':((dia.allaus||0)>=3?'background:#fff3e0;color:#e65100':((dia.allaus||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(dia.allaus||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.allaus||0)>=4?'background:#ffebee;color:#c62828':((dia.allaus||0)>=3?'background:#fff3e0;color:#e65100':((dia.allaus||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(dia.allaus||0)}${motiuHtml(allausMotiu)}</span>
+                <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5${mesPts(allausPts)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
                 <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}${motiuHtml(afluMotiu)}</span>
                 <span class="risc-breakdown-value">${calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${calc.afluenciaBruta}</span> ${calc.afluenciaEfectiva}` : Math.round(dia.afluencia||0)}/3${mesPts(calc.increments.afluencia)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(opActiu)}">
@@ -4986,7 +5018,7 @@
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
                 <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}${motiuHtml(canviMotiu)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2${mesPts(calc.increments.canvi)}</span>
               </div>
               <div class="risc-breakdown-item" style="opacity:0.6;">
