@@ -8,6 +8,22 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-26 — L'Apps Script no era un backup, i «Ahir» no es podia creure
+
+Reportat: "ahir teníem risc 4 però a la principal no surt", i l'endemà "ara diu 1 i ahir deia 3". Tres bugs diferents amagats sota el mateix símptoma, i al fons un problema d'arquitectura.
+
+**Els tres bugs (arreglats, PR #5 a #8):**
+
+1. **La targeta «Ahir» del Risc GRAE no llegia mai Supabase.** `riscState.yesterday` només es generava fent rodar el que ahir era `today` dins del `localStorage` del mateix navegador, i `actualitzarRiscAuto()` només recalcula `today`/`tomorrow`. Des d'un altre dispositiu queia al valor per defecte (tot a 0). Ara `sincronitzarRiscAhir()` el descarrega de `risc_historic`.
+2. **La targeta «Ahir» de la pestanya Alertes sempre donava 0.** `calcularSMPPonderat()` només llegeix `dadesCarregades.smp`, l'avís de meteo.cat **en viu**, que és una previsió i mai conté un dia passat: estructuralment no podia donar res més que 0. Ara `sincronitzarSMPAhir()` recupera les alertes d'`smp_historic` i les avalua amb la mateixa ponderació.
+3. **Cap pestanya amb dades carregava a `/proves/`.** `_base` només mirava `location.protocol === 'file:'`; servit per HTTP quedava `'.'`, relatiu al directori del document. A l'arrel funcionava per casualitat; a `/proves/` resolia a `proves/data/*.json`, que no existeix (per disseny). Ara puja un nivell sota `/proves/`, com ja feia `carregarGeoComarques()`.
+
+També: el desglossament del Risc GRAE ara diu **per què** suma cada factor (fenomen SMP, situació de neu, motiu de calendari de l'afluència, factor del canvi de temps), i les allaus ensenyen què aporten de veritat a la fórmula, que no és 1:1 amb el nivell.
+
+**El problema de fons.** Investigant d'on sortia el «1», resulta que `scripts/risc-diari.js` **no escriu res des del 7 d'agost**: peta cada nit amb un 409 (`utils.js` fa upsert sense `on_conflict=data`). Qui desa el risc diari és l'**Apps Script** (`font: auto_gas`), i **el seu codi no és al repositori**, o sigui que no es pot auditar què calcula.
+
+Anàlisi completa i disseny a **`EVOLUCIO-PREDICCIONS.md`**: què falta per apagar l'Apps Script (sis factors comparats un a un, dues fórmules diferents, config a `localStorage` que el backend no pot llegir) i com desar l'evolució de la predicció durant el dia (`risc_snapshots`, amb `horitzo` i `fonts`). Res implementat encara; hi ha quatre decisions pendents al final del document.
+
 ## 2026-08-12 — Un sol recompte d'helis, i que digui quin és el problema
 
 Reportat: el recompte sortia **dues vegades**. La targeta nova (Estat · Condicions de vol · Distribució) i les dues targetes velles (`renderIndexos`: "Distribució territorial" i "Operativitat") deien el mateix, i a més **no deien el mateix número**: les velles comptaven províncies sense mirar si l'heli podia volar, i puntuaven amb mitjos punts (Total=1, Parcial=0,5), que és la fórmula antiga.
