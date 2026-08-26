@@ -5,6 +5,7 @@ validar la fórmula**; aquest diu **què falta per deixar l'Apps Script i com de
 com evoluciona la predicció al llarg del dia**.
 
 Estat: **anàlisi feta, res implementat.** Dades comprovades contra Supabase el 26-08-2026.
+Decisions de producte resoltes (§8); el codi de l'Apps Script ja és al repositori.
 
 ---
 
@@ -20,22 +21,69 @@ hi ha posat res.
 | `auto_github` | `scripts/risc-diari.js` | 63 | 12-05 → **07-08** | Peta cada nit |
 | `web` | Desat manual des de l'app | 1 | 19-08 | Puntual |
 
-**El problema de fons no és que peti: és que el codi de l'Apps Script no és al repositori.**
-No es pot auditar com calcula cap factor, ni per què el 25 d'agost va desar `smp: 0` quan a
-`smp_historic` hi havia quatre avisos grocs desats 19 minuts abans. Xoca amb la regla d'or del
-projecte (el repositori és la memòria), i és la raó principal per migrar.
+### 1.1 Què fa, ara que en tenim el codi
+
+El projecte és **`historic_risc_grae`** (Drive, creat el 06-03-2026 — la data exacta de la
+primera fila `auto_gas`). N'hi ha una còpia a **`apps-script/historic_risc_grae.js`**, perquè
+es pugui auditar sense sortir del repositori. Corre amb un trigger diari cap a les 09:08 UTC.
+
+**La bona notícia: no hi ha lògica secreta.** `calcularRiscTotal()` és exactament la mateixa
+fórmula antiga que `risc-diari.js`:
+
+```js
+const total = planspc + smp + allaus + afluencia + hc + canvi;
+return Math.min(6, Math.round((total / 21) * 6));
+```
+
+I compta les zones SMP **crues** igual que ell, deixa `canvi` i `boletaires` sempre a `0` igual
+que ell, i fa servir la mateixa escala d'allaus `(perill-1) × 1,25`. Migrar no vol dir
+reimplementar res que no sapiguem: vol dir **completar** el que ja hi ha.
+
+### 1.2 El que sí que és diferent: llegeix d'una altra canonada
+
+Aquí és on s'expliquen les discrepàncies. L'Apps Script **no llegeix `data/*.json` del
+repositori**:
+
+| Factor | D'on el treu l'Apps Script |
+| --- | --- |
+| Allaus | Un **Gist de GitHub** (`bf2beb9…`) — que és on `fetch-bpa.js` també escriu, o sigui que aquesta sí que ve del repositori, però via intermediari |
+| SMP | Un **altre Apps Script** (`consulta_smp_meteocat`), amb la seva pròpia cadència |
+| Plans PC | Un **altre Apps Script** (`Plans PC`) |
+| Afluència | Un **altre Apps Script** (`afluencia`) |
+
+Això respon el misteri del 25 d'agost: va desar `smp: 0` no perquè calculi malament, sinó
+perquè **va llegir d'una font diferent** de la que alimenta `smp_historic`, amb una foto
+d'un altre moment. Dues canonades paral·leles que no es miren.
+
+També manté una **segona còpia de l'històric** en un JSON a Drive
+(`risc_grae_historic.json`), i exposa endpoints web (`doGet`/`doPost`). Comprovat: **cap dels
+dos webs crida aquests endpoints**, o sigui que apagar-los no trenca res del que fem servir.
+
+### 1.3 Nota de seguretat
+
+La constant s'anomena `SUPABASE_SERVICE_KEY` però el valor és una clau `sb_publishable_`,
+és a dir **pública**. Vol dir que `risc_historic` accepta escriptures amb clau pública: qui
+tregui la clau del web pot escriure-hi. Convé mirar-ho quan es toquin les polítiques RLS que ja
+queden anotades a `ANALISI-DADES.md`.
 
 ## 2. Com calcula cada paràmetre cadascun dels dos
 
-| Factor | Frontend (en viu) | `risc-diari.js` | Què falta |
+La referència és el **frontend de la branca `proves`**, que és on viu la fórmula actual
+(`RISC_FORMULA_VERSIO = 6`). El de `main` encara porta la fórmula antiga. Els scripts de
+`scripts/` i els workflows són **idèntics a les dues branques**, i s'executen des de `main`.
+
+L'Apps Script i `risc-diari.js` calculen igual (§1.1), així que la columna del mig val per als
+dos:
+
+| Factor | Frontend `proves` (en viu) | Backend (`risc-diari.js` = Apps Script) | Què falta |
 | --- | --- | --- | --- |
 | **SMP** 0-6 | Agrupa zones amb `zonesGrup` i filtra per `taula_config_Alertes_SMP` | Compta zones **crues**, sense agrupar ni filtrar | Divergeix: tres zones d'un mateix grup li compten com a tres |
 | **Allaus** 0-5 | Punts `{3:2, 4:4, 5:5}` | Escala antiga `(perill-1) × 1,25` | Portar la taula de punts |
 | **Afluència** 0-3 | `getInfoDia()`: calendari + edicions | `calcularAfluenciaBase()` + edicions | Dues implementacions del mateix calendari |
 | **Operativitat HC** 0-4 | `avaluarOperativitat()`: estat + finestra de vol (Open-Meteo) + província | — | **No existeix**: ni es calcula ni té columna |
 | **Canvi de temps** 0-2 | Llegeix `canvi_temps_latest.json` | Sempre `0` | Les dades existeixen, no es llegeixen |
-| **Boletaires** 0-1 | Marca manual | Sempre `0` | Cal decidir d'on surt |
-| **Plans PC** 0-3 | Informatiu, no suma | **Suma 0-3** al total | Han de dir el mateix |
+| **Boletaires** 0-1 | Marca manual | Sempre `0` | El backend ha de **respectar** la marca manual, no sobreescriure-la amb 0 |
+| **Plans PC** 0-3 | Informatiu, no suma | **Suma 0-3** al total | Treure'l del càlcul del backend |
 
 I la fórmula tampoc és la mateixa: el frontend fa **perill dominant + increments** (versió 6),
 el backend una **suma ponderada** `min(6, round(suma / 21 × 6))`.
@@ -158,20 +206,31 @@ l'agent auditor previst més endavant.
    frontend no poden coincidir. És el bloqueig real de tot el que ve després.
 3. **Un sol mòdul de càlcul** — extreure `detallarRisc()` a un fitxer que facin servir tant el
    navegador com Node. Deixa d'haver-hi dues fórmules.
-4. **Completar els factors que falten al backend** — canvi de temps, operativitat HC, boletaires.
-5. **Crear `risc_snapshots` i escriure-hi** a cada ingesta. A partir d'aquí no es perd res.
-6. **Apagar l'Apps Script** — quan una setmana de snapshots quadri amb el que ell desa.
+4. **Completar els factors que falten al backend** — canvi de temps i operativitat HC; treure
+   Plans PC del càlcul; conservar la marca manual de boletaires en comptes de posar-hi `0`.
+5. **Crear `risc_snapshots` i escriure-hi** a cada ingesta. A partir d'aquí no es perd res, que
+   és l'objectiu de tot això.
+6. **Apagar l'Apps Script** — quan una setmana de snapshots quadri. Es desactiva el trigger
+   diari; els endpoints web no els crida ningú (§1.2), i el JSON de Drive queda com a arxiu.
 7. **Historial amb corba i taula.**
 
-## 8. Decisions pendents
+## 8. Decisions preses (26-08-2026)
 
-Cap de les set passes no es pot tancar bé sense aquestes respostes:
+- **Codi de l'Apps Script**: recuperat de Drive i arxivat a `apps-script/historic_risc_grae.js`.
+  No hi ha lògica secreta: mateixa fórmula antiga que `risc-diari.js` (§1.1). El que canvia són
+  les fonts (§1.2).
+- **Boletaires**: es queda **manual**. Sense boletaires `+0`, amb boletaires `+1`. El backend
+  **no l'ha de sobreescriure amb `0`**: ha de conservar la marca que hi hagi. És l'únic factor
+  que no es pot derivar de cap API.
+- **Plans PC**: **informatiu**, no suma. Cal treure'l del càlcul del backend, on encara aporta
+  fins a 3 punts sobre 21.
+- **Recalcular el passat**: **no cal.** L'objectiu és que a partir del dia que això funcioni
+  quedi tot ben desat i es pugui analitzar. Els dies anteriors es deixen com estan.
 
-- **Tenim el codi de l'Apps Script?** Si es pot recuperar, es compara amb `risc-diari.js` i se
-  sap exactament què s'ha de portar. Si no, es migra a cegues i es valida comparant una setmana.
-- **Els boletaires, d'on surten?** Ara és marca manual al frontend i `0` fix al backend. O se li
-  posa una regla de calendari, o es queda manual i el backend l'ha de respectar.
-- **Plans PC: suma o és informatiu?** El frontend diu que no suma; el backend li dona fins a 3
-  punts. La resposta canvia tots els números històrics.
-- **Recalculem el passat?** Amb `smp_historic` i les altres taules crues es podrien reconstruir
-  snapshots enrere fins al març. No arreglaria els dies on la dada crua també es va sobreescriure.
+### El que això implica
+
+Que els boletaires siguin manuals i el backend no els pugui endevinar **fa que un càlcul
+automàtic mai sigui l'última paraula**. El disseny d'`risc_snapshots` ja ho aguanta: una edició
+manual és simplement un snapshot més, amb `font: 'web'` i el seu `calculat_at`. No cal cap
+mecanisme d'excepció com el que ara té `risc-diari.js` (que mira la `font` i s'atura) — el
+darrer snapshot mana, i tots queden desats.
