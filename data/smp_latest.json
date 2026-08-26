@@ -1,74 +1,9 @@
 {
-  "dataConsulta": "2026-08-26T06:18:09.004Z",
+  "dataConsulta": "2026-08-26T08:50:27.469Z",
   "avisos": [
     {
       "meteor": "Vent",
       "estat": "Ampliat",
-      "dataInici": "2026-08-26T06:00Z",
-      "dataFi": "2026-08-26T17:59Z",
-      "comentari": "El vent bufarà de component sud. El llindar d'avís s'assolirà a les cotes altes.  A banda, a la resta de Catalunya es podrien registrar ratxes fortes de vent puntuals associades als ruixats, però sense superacions de llindar.",
-      "dies": [
-        {
-          "dia": "2026-08-26",
-          "afectacions": [
-            {
-              "zona": "Pirineu Occidental",
-              "comarca": 5,
-              "comarcaNom": "Alta Ribagorça",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "comarca": 39,
-              "comarcaNom": "Aran",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "comarca": 26,
-              "comarcaNom": "Pallars Sobirà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Vent",
-      "estat": "Vigent",
       "dataInici": "2026-08-26T06:00Z",
       "dataFi": "2026-08-26T17:59Z",
       "comentari": "El vent bufarà de component sud. Al Pirineu el llindar d'avís és possible que s'assoleixi a les cotes altes.",
@@ -222,6 +157,263 @@
               "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
               "periodes": [
                 "06-12"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Vent",
+      "estat": "Vigent",
+      "dataInici": "2026-08-26T06:00Z",
+      "dataFi": "2026-08-27T17:59Z",
+      "comentari": "El vent bufarà de component sud. Al Pirineu el llindar d'avís és possible que s'assoleixi a les cotes altes.",
+      "dies": [
+        {
+          "dia": "2026-08-26",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "comarca": 32,
+              "comarcaNom": "Segarra",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 15,
+              "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 27,
+              "comarcaNom": "Pla d'Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 33,
+              "comarcaNom": "Segrià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 38,
+              "comarcaNom": "Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-08-27",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "comarca": 15,
+              "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Vent",
+      "estat": "Ampliat",
+      "dataInici": "2026-08-26T06:00Z",
+      "dataFi": "2026-08-26T17:59Z",
+      "comentari": "El vent bufarà de component sud. El llindar d'avís s'assolirà a les cotes altes.  A banda, a la resta de Catalunya es podrien registrar ratxes fortes de vent puntuals associades als ruixats, però sense superacions de llindar.",
+      "dies": [
+        {
+          "dia": "2026-08-26",
+          "afectacions": [
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
               ]
             }
           ]
