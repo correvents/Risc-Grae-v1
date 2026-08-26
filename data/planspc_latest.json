@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-08-26T08:50:30.867Z",
+  "actualitzat": "2026-08-26T14:08:48.367Z",
   "plans": [
     {
       "plaicona": {
@@ -7,13 +7,13 @@
       },
       "plaacronim": "INFOCAT",
       "planom": "INFOCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "25/08/2026 16:36",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "26/08/2026 11:09",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126743_INICI--ACTIVAT_INFOCAT_202608251743.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126743_ACTUALITZACIO--NOACTIVAT_INFOCAT_202608261143.pdf"
       },
-      "descripcio": "Comunicat IF Torre Baro ALERTA"
+      "descripcio": "Comunicat IF Torre Baro PREALERTA"
     }
   ]
 }
