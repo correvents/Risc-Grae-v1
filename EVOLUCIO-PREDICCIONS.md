@@ -108,6 +108,75 @@ però a l'estiu són les 23:00 i el retard de GitHub Actions l'empenyia passada 
 Madrid. Fins al 7 d'agost això el salvava: arribava abans que l'Apps Script i inseria el dia
 següent net. Quan el retard va afluixar, va començar a caure sempre sobre la fila del matí.
 
+## 3.bis La fórmula de referència, verificada
+
+La fórmula bona és la de **Configuració → Fórmula de risc** a `proves`. Verificada executant
+el `detallarRisc()` real amb la config per defecte (`RISC_FORMULA_VERSIO = 6`):
+
+```
+risc = mín(6, PERILL + INCREMENTS)
+
+PERILL (0-5)      el més GRAN entre SMP i allaus, no la suma
+                  SMP     valor v → aporta v (directe, 0-6)
+                  Allaus  1→+0  2→+0  3→+2  4→+4  5→+5
+                  2n perill hi afegeix   1-2 → +1    ≥3 → +2
+                  sostre 5, perquè quedi marge per als increments
+
+INCREMENTS (0-3)  Operativitat  0HC→+2  1HC→+1  2/3/4HC→+0
+                  Afluència     0→+0  1→+1  2→+2  3→+3   (amb SMP≥3 baixa 1 graó)
+                  Canvi         0→+0  1→+1  2→+2
+                  Boletaires    0→+0  1→+1
+                  suma màxima teòrica 8 → topada a 3
+```
+
+Escenaris comprovats: pont d'agost amb tot en contra i cap perill de muntanya → **3** (increments
+topats de 8); vermell d'allaus sol → **5**; SMP 4 + allaus 4 → **5** (dominant SMP, suplement +2);
+SMP 4 amb afluència 3 → **6** (l'afluència baixa de 3 a 2 pel mal temps).
+
+**El motiu pel qual Plans PC no compta**, que la pàgina explica i convé no perdre: *una fase
+activada ja surt als avisos SMP*. No és que sigui poc important, és que ja està comptada.
+
+## 3.ter `smp_historic` ja perd dades, i és la base de tot això
+
+Trobat llegint `fetch-smp.js`. L'script desa cada afectació **per comarca** i captura el grau de
+perill cru de Meteocat, amb comentaris que diuen explícitament per què:
+
+> *"si es col·lapsés aquí la comarca es perdria i el risc per regions d'emergència no es podria
+> calcular"* · *"es desa cru perquè el risc de Bombers el faci servir tal com ve, en comptes de
+> deduir-lo del color"*
+
+Però just abans d'escriure a Supabase, `agruparPerZona()` torna a col·lapsar per zona, «perquè
+`smp_historic` no té columna de comarca». I la fila que s'hi insereix no porta ni `comarca` ni
+`grauPerill`:
+
+| | `data/smp_latest.json` | `smp_historic` (Supabase) |
+| --- | --- | --- |
+| `zona` | ✅ | ✅ |
+| `comarca` / `comarcaNom` | ✅ | ❌ **es perd** |
+| `grauPerill` (0-6 de Meteocat) | ✅ | ❌ **es perd** (només queda l'etiqueta derivada) |
+
+**Per què importa ara.** Tot el disseny d'`risc_snapshots` es recolza en `smp_historic` com a
+capa crua reproduïble. Si aquesta capa ja és incompleta, «guardar-ho tot bé per poder analitzar»
+falla pel fonament. I concretament: la pestanya **SMP Bombers** calcula el risc per regions
+d'emergència **a partir de la comarca** — aquesta anàlisi no es podrà fer mai cap enrere.
+
+És **la tercera vegada** que passa el mateix: `ANALISI-DADES.md` en documenta dues de prèvies i
+n'extreu la regla *«si l'API ho dona, es desa tal com ve»*. Aquí es dona, i no es desa.
+
+**Fix proposat** (barat, no trenca res: columnes que poden ser nul·les):
+
+```sql
+alter table public.smp_historic
+  add column if not exists comarca     smallint,
+  add column if not exists comarca_nom text,
+  add column if not exists grau_perill smallint;
+```
+
+I deixar d'aplicar `agruparPerZona()` abans de l'`insert` (que es quedi només per al JSON de
+visualització). Cal validar que el recompte de zones no canvia: tant `calcularSMPPonderat()` com
+`sincronitzarSMPAhir()` i `renderHistSMP()` agrupen per `zona` amb un mapa, així que més files
+per comarca haurien de deduplicar-se soles — però s'ha de comprovar abans de tocar res.
+
 ## 4. On es perd l'evolució
 
 La ingesta corre **tres cops al dia** (05:45, 08:00 i 13:30 UTC) i tres taules crues ja
@@ -200,6 +269,9 @@ l'agent auditor previst més endavant.
 
 ## 7. Ordre de feina
 
+0. **Tapar la fuita de `smp_historic`** (§3.ter) — dues columnes noves i deixar de col·lapsar per
+   zona. Va primer perquè cada dia que passa és un dia de comarques perdudes, i perquè és la
+   capa sobre la qual es recolza tota la resta.
 1. **Arreglar el 409** — `on_conflict=data` a `utils.js` i ancorar el cron lluny de la mitjanit.
    Una línia; torna a deixar el script de la nit escrivint.
 2. **Pujar la config de la fórmula a Supabase** — mentre visqui a `localStorage`, backend i
