@@ -163,7 +163,7 @@ async function main() {
     const rowsAvui = toRows(resultats, avuiStr, 'avui');
     const rowsDema = toRows(resultats, demaStr, 'dema');
     const rows = [...rowsAvui, ...rowsDema];
-    if (rows.length > 0) await supabaseUpsert('canvi_temps_historic', rows);
+    if (rows.length > 0) await supabaseUpsert('canvi_temps_historic', rows, 'data,tipus_dia,punt');
     console.log(changed ? `🔄 Canvi Temps actualitzat` : '💪 Forçat');
   } else {
     console.log('⏭️ Canvi Temps: sense canvis');

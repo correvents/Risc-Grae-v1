@@ -23,10 +23,17 @@ async function supabaseInsert(table, rows) {
   console.log(`✅ Supabase ${table}: ${rows.length} files`);
 }
 
-async function supabaseUpsert(table, rows) {
+// `onConflict` són les columnes de la restricció que ha de resoldre el conflicte.
+// Cal passar-la sempre que la restricció **no sigui la clau primària**: sense ella,
+// PostgREST mira la primària (sovint un `id` autogenerat que no coincideix mai) i
+// l'upsert acaba xocant amb el UNIQUE de veritat amb un 409. Va passar amb
+// `risc_historic` (UNIQUE data) i amb `canvi_temps_historic` (UNIQUE data+tipus_dia+punt):
+// tots dos deixaven de desar en silenci, perquè el workflow porta continue-on-error.
+async function supabaseUpsert(table, rows, onConflict) {
   const data = Array.isArray(rows) ? rows : [rows];
   if (data.length === 0) return;
-  const resp = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+  const qs = onConflict ? `?on_conflict=${encodeURIComponent(onConflict)}` : '';
+  const resp = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs}`, {
     method: 'POST',
     headers: {
       'apikey': SUPABASE_KEY,

@@ -73,8 +73,26 @@ function calcularFactors(avui) {
   return f;
 }
 
+// El cron és a les 21:00 UTC (22 h CET, 23 h CEST) però GitHub Actions l'endarrereix
+// de manera irregular: avui ha sortit a les 00:24 UTC, 3 h 24 min tard. Quan travessa
+// la mitjanit de Madrid, `avuiMadrid()` ja retorna l'endemà i la foto de tancament
+// se salta el dia que havia de tancar i cau sobre el següent. Ancorar l'hora no
+// n'hi ha prou amb retards així de grans, o sigui que el dia es decideix aquí: les
+// hores petites encara pertanyen al dia operatiu anterior.
+const HORA_INICI_DIA = 6;
+
+function diaDeTancament() {
+  const ara = new Date();
+  const hora = parseInt(
+    ara.toLocaleString('sv', { timeZone: 'Europe/Madrid' }).split(' ')[1].slice(0, 2), 10
+  );
+  if (hora >= HORA_INICI_DIA) return avuiMadrid();
+  return new Date(ara.getTime() - 24 * 3600 * 1000)
+    .toLocaleString('sv', { timeZone: 'Europe/Madrid' }).split(' ')[0];
+}
+
 async function main() {
-  const avui = avuiMadrid();
+  const avui = diaDeTancament();
 
   // No sobreescriure si ja hi ha entrada manual per avui
   const existent = await supabaseSelect('risc_historic', { data: avui });
@@ -94,7 +112,7 @@ async function main() {
     planspc: factors.planspc, smp: factors.smp, allaus: factors.allaus,
     afluencia: factors.afluencia, hc: factors.hc, canvi: factors.canvi,
     boletaires: factors.boletaires, notes: '', font: 'auto_github'
-  });
+  }, 'data');
 
   console.log(`✅ Risc GRAE ${avui}: ${risc} | planspc=${factors.planspc} smp=${factors.smp} allaus=${factors.allaus} afluencia=${factors.afluencia} hc=${factors.hc}`);
 }
