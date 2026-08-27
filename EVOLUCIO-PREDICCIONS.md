@@ -163,19 +163,30 @@ d'emergència **a partir de la comarca** — aquesta anàlisi no es podrà fer m
 És **la tercera vegada** que passa el mateix: `ANALISI-DADES.md` en documenta dues de prèvies i
 n'extreu la regla *«si l'API ho dona, es desa tal com ve»*. Aquí es dona, i no es desa.
 
-**Fix proposat** (barat, no trenca res: columnes que poden ser nul·les):
+### ✅ Fet el 26-08-2026
+
+La primera idea era treure `agruparPerZona()` i desar una fila per comarca. **No es pot**: els
+**dos** webs (també el de `main`) reconstrueixen els avisos amb `smpDesDeSupabase()`, que
+dedupeix per `zona`. Amb files per comarca, el *fallback* ensenyaria les dades d'una sola
+comarca com si fossin de tota la zona — una regressió a l'operatiu.
+
+Fet, doncs, **sense tocar la cardinalitat**: una fila per zona+nivell+llindar, com sempre, amb
+el detall a dins.
 
 ```sql
 alter table public.smp_historic
-  add column if not exists comarca     smallint,
-  add column if not exists comarca_nom text,
-  add column if not exists grau_perill smallint;
+  add column if not exists grau_perill smallint,  -- el grau cru de Meteocat, màxim de la zona
+  add column if not exists comarques   jsonb;     -- [{comarca, nom, grauPerill, periodes}]
 ```
 
-I deixar d'aplicar `agruparPerZona()` abans de l'`insert` (que es quedi només per al JSON de
-visualització). Cal validar que el recompte de zones no canvia: tant `calcularSMPPonderat()` com
-`sincronitzarSMPAhir()` i `renderHistSMP()` agrupen per `zona` amb un mapa, així que més files
-per comarca haurien de deduplicar-se soles — però s'ha de comprovar abans de tocar res.
+`agruparPerZona()` ara acumula el detall de cada comarca en comptes de llençar-lo. Comprovat amb
+les dades reals: **mateixes 17 files, tots els camps antics idèntics** (cap regressió), cap
+comarca perduda i `grau_perill` sempre present. Verificada també la forma exacta contra Supabase,
+inclosa la consulta que farà servir el risc per regions (`jsonb_array_elements`).
+
+**Queda pendent**: `smpDesDeSupabase()` encara no llegeix `comarques`, així que el *fallback* de
+la pestanya SMP Bombers continua sortint buit. I les files anteriors al 26-08 tenen la columna a
+`null` — això no es recupera.
 
 ## 4. On es perd l'evolució
 
@@ -269,9 +280,7 @@ l'agent auditor previst més endavant.
 
 ## 7. Ordre de feina
 
-0. **Tapar la fuita de `smp_historic`** (§3.ter) — dues columnes noves i deixar de col·lapsar per
-   zona. Va primer perquè cada dia que passa és un dia de comarques perdudes, i perquè és la
-   capa sobre la qual es recolza tota la resta.
+0. ~~**Tapar la fuita de `smp_historic`**~~ (§3.ter) — ✅ **fet el 26-08-2026.**
 1. **Arreglar el 409** — `on_conflict=data` a `utils.js` i ancorar el cron lluny de la mitjanit.
    Una línia; torna a deixar el script de la nit escrivint.
 2. **Pujar la config de la fórmula a Supabase** — mentre visqui a `localStorage`, backend i

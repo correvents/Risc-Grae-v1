@@ -68,15 +68,28 @@ function afegirAfectacio(diesMap, diaISO, afectacio, nomPeriode) {
   }
 }
 
-// `smp_historic` no té columna de comarca, així que abans de desar a Supabase es
-// torna a agrupar per zona i les files queden exactament com sempre.
+// Les files d'`smp_historic` són una per zona+nivell+llindar, i han de continuar
+// sent-ho: els dos webs dedupeixen per zona a `smpDesDeSupabase()`, i si aquí
+// sortissin files per comarca el fallback ensenyaria les dades d'una comarca com
+// si fossin de tota la zona.
+//
+// El que sí que canvia és que la comarca ja no es llença: cada fila se'n porta el
+// detall a `comarques`, perquè el risc per regions d'emergència es pugui calcular
+// també cap enrere. Abans es perdia aquí, tot i que `afegirAfectacio` s'havia
+// molestat a capturar-la (vegeu el comentari de més amunt).
 function agruparPerZona(afectacions) {
   const perClau = new Map();
+  const detallComarca = af => ({
+    comarca:    af.comarca,
+    nom:        af.comarcaNom,
+    grauPerill: af.grauPerill,
+    periodes:   [...af.periodes]
+  });
   for (const af of afectacions) {
     const clau = `${af.zona}|${af.nivell}|${af.llindar}`;
     const existent = perClau.get(clau);
     if (!existent) {
-      perClau.set(clau, { ...af, periodes: [...af.periodes] });
+      perClau.set(clau, { ...af, periodes: [...af.periodes], comarques: [detallComarca(af)] });
       continue;
     }
     af.periodes.forEach(p => { if (!existent.periodes.includes(p)) existent.periodes.push(p); });
@@ -84,6 +97,13 @@ function agruparPerZona(afectacions) {
       existent.probabilitat = af.probabilitat;
     }
     if ((af.grauPerill || 0) > (existent.grauPerill || 0)) existent.grauPerill = af.grauPerill;
+    const jaHiEs = existent.comarques.find(c => c.comarca === af.comarca);
+    if (jaHiEs) {
+      af.periodes.forEach(p => { if (!jaHiEs.periodes.includes(p)) jaHiEs.periodes.push(p); });
+      if ((af.grauPerill || 0) > (jaHiEs.grauPerill || 0)) jaHiEs.grauPerill = af.grauPerill;
+    } else {
+      existent.comarques.push(detallComarca(af));
+    }
   }
   return [...perClau.values()];
 }
@@ -166,7 +186,10 @@ function toRows(dades) {
           meteor: avis.meteor, estat: avis.estat, comentari: avis.comentari || '',
           dia: diaObj.dia, zona: af.zona, nivell: af.nivell,
           llindar: af.llindar || '', periodes: af.periodes || [],
-          probabilitat: af.probabilitat || '', canvi: 'NOU'
+          probabilitat: af.probabilitat || '', canvi: 'NOU',
+          // El grau el dona Meteocat; la probabilitat n'és només l'etiqueta.
+          grau_perill: af.grauPerill ?? null,
+          comarques: af.comarques || null
         });
   return rows;
 }
