@@ -8,6 +8,18 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-26 — `smp_historic` deixa de perdre la comarca
+
+Trobat llegint la fórmula a Configuració. `fetch-smp.js` desa cada afectació **per comarca** i captura el grau de perill cru de Meteocat, amb comentaris que diuen explícitament per què no s'ha de col·lapsar («si es col·lapsés aquí la comarca es perdria i el risc per regions d'emergència no es podria calcular»). I tot seguit `agruparPerZona()` ho tornava a col·lapsar just abans d'escriure a Supabase, perquè la taula no tenia on posar-ho. El JSON les tenia; Supabase no. **Tercera vegada** que passa el patró que `ANALISI-DADES.md` ja documenta dos cops.
+
+La primera idea era treure `agruparPerZona()` i desar una fila per comarca. **No es pot**: els dos webs —també el de `main`— reconstrueixen els avisos amb `smpDesDeSupabase()`, que dedupeix per `zona`. Amb files per comarca, el *fallback* ensenyaria les dades d'una sola comarca com si fossin de tota la zona. Una regressió a l'operatiu, i Supabase és compartida entre els dos webs.
+
+Fet **sense tocar la cardinalitat**: dues columnes noves (`grau_perill` i `comarques` jsonb) i `agruparPerZona()` que ara acumula el detall en comptes de llençar-lo. Mateixes files, tots els camps antics idèntics.
+
+Comprovat amb les dades reals de `main`: 17 files abans i després, zero camps antics canviats, cap comarca perduda, `grau_perill` sempre present. Verificada la forma exacta contra Supabase amb una fila de prova (esborrada), inclosa la consulta `jsonb_array_elements` que farà servir el risc per regions.
+
+Pendent: `smpDesDeSupabase()` encara no llegeix `comarques`, o sigui que el *fallback* d'SMP Bombers continua sortint buit; i les files anteriors al 26-08 tenen la columna a `null`, cosa que no es recupera.
+
 ## 2026-08-26 — L'Apps Script no era un backup, i «Ahir» no es podia creure
 
 Reportat: "ahir teníem risc 4 però a la principal no surt", i l'endemà "ara diu 1 i ahir deia 3". Tres bugs diferents amagats sota el mateix símptoma, i al fons un problema d'arquitectura.
