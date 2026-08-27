@@ -8,6 +8,324 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-26 — `smp_historic` deixa de perdre la comarca
+
+Trobat llegint la fórmula a Configuració. `fetch-smp.js` desa cada afectació **per comarca** i captura el grau de perill cru de Meteocat, amb comentaris que diuen explícitament per què no s'ha de col·lapsar («si es col·lapsés aquí la comarca es perdria i el risc per regions d'emergència no es podria calcular»). I tot seguit `agruparPerZona()` ho tornava a col·lapsar just abans d'escriure a Supabase, perquè la taula no tenia on posar-ho. El JSON les tenia; Supabase no. **Tercera vegada** que passa el patró que `ANALISI-DADES.md` ja documenta dos cops.
+
+La primera idea era treure `agruparPerZona()` i desar una fila per comarca. **No es pot**: els dos webs —també el de `main`— reconstrueixen els avisos amb `smpDesDeSupabase()`, que dedupeix per `zona`. Amb files per comarca, el *fallback* ensenyaria les dades d'una sola comarca com si fossin de tota la zona. Una regressió a l'operatiu, i Supabase és compartida entre els dos webs.
+
+Fet **sense tocar la cardinalitat**: dues columnes noves (`grau_perill` i `comarques` jsonb) i `agruparPerZona()` que ara acumula el detall en comptes de llençar-lo. Mateixes files, tots els camps antics idèntics.
+
+Comprovat amb les dades reals de `main`: 17 files abans i després, zero camps antics canviats, cap comarca perduda, `grau_perill` sempre present. Verificada la forma exacta contra Supabase amb una fila de prova (esborrada), inclosa la consulta `jsonb_array_elements` que farà servir el risc per regions.
+
+Pendent: `smpDesDeSupabase()` encara no llegeix `comarques`, o sigui que el *fallback* d'SMP Bombers continua sortint buit; i les files anteriors al 26-08 tenen la columna a `null`, cosa que no es recupera.
+
+## 2026-08-26 — L'Apps Script no era un backup, i «Ahir» no es podia creure
+
+Reportat: "ahir teníem risc 4 però a la principal no surt", i l'endemà "ara diu 1 i ahir deia 3". Tres bugs diferents amagats sota el mateix símptoma, i al fons un problema d'arquitectura.
+
+**Els tres bugs (arreglats, PR #5 a #8):**
+
+1. **La targeta «Ahir» del Risc GRAE no llegia mai Supabase.** `riscState.yesterday` només es generava fent rodar el que ahir era `today` dins del `localStorage` del mateix navegador, i `actualitzarRiscAuto()` només recalcula `today`/`tomorrow`. Des d'un altre dispositiu queia al valor per defecte (tot a 0). Ara `sincronitzarRiscAhir()` el descarrega de `risc_historic`.
+2. **La targeta «Ahir» de la pestanya Alertes sempre donava 0.** `calcularSMPPonderat()` només llegeix `dadesCarregades.smp`, l'avís de meteo.cat **en viu**, que és una previsió i mai conté un dia passat: estructuralment no podia donar res més que 0. Ara `sincronitzarSMPAhir()` recupera les alertes d'`smp_historic` i les avalua amb la mateixa ponderació.
+3. **Cap pestanya amb dades carregava a `/proves/`.** `_base` només mirava `location.protocol === 'file:'`; servit per HTTP quedava `'.'`, relatiu al directori del document. A l'arrel funcionava per casualitat; a `/proves/` resolia a `proves/data/*.json`, que no existeix (per disseny). Ara puja un nivell sota `/proves/`, com ja feia `carregarGeoComarques()`.
+
+També: el desglossament del Risc GRAE ara diu **per què** suma cada factor (fenomen SMP, situació de neu, motiu de calendari de l'afluència, factor del canvi de temps), i les allaus ensenyen què aporten de veritat a la fórmula, que no és 1:1 amb el nivell.
+
+**El problema de fons.** Investigant d'on sortia el «1», resulta que `scripts/risc-diari.js` **no escriu res des del 7 d'agost**: peta cada nit amb un 409 (`utils.js` fa upsert sense `on_conflict=data`). Qui desa el risc diari és l'**Apps Script** (`font: auto_gas`), i **el seu codi no és al repositori**, o sigui que no es pot auditar què calcula.
+
+Anàlisi completa i disseny a **`EVOLUCIO-PREDICCIONS.md`**: què falta per apagar l'Apps Script (sis factors comparats un a un, dues fórmules diferents, config a `localStorage` que el backend no pot llegir) i com desar l'evolució de la predicció durant el dia (`risc_snapshots`, amb `horitzo` i `fonts`). Res implementat encara; hi ha quatre decisions pendents al final del document.
+
+## 2026-08-12 — Un sol recompte d'helis, i que digui quin és el problema
+
+Reportat: el recompte sortia **dues vegades**. La targeta nova (Estat · Condicions de vol · Distribució) i les dues targetes velles (`renderIndexos`: "Distribució territorial" i "Operativitat") deien el mateix, i a més **no deien el mateix número**: les velles comptaven províncies sense mirar si l'heli podia volar, i puntuaven amb mitjos punts (Total=1, Parcial=0,5), que és la fórmula antiga.
+
+Retirades `renderIndexos` i `calcularIndexos`. Ara només hi ha el bloc unificat, que surt tant a la pestanya com a **Configuració → Helicòpters** (allà, sense capçalera gran, el número va dins del mateix bloc).
+
+**Els tres blocs ara diuen el problema, no que n'hi ha un:**
+
+| Abans | Ara |
+| --- | --- |
+| Estat · "Fora: HC4" | **Estat dels helicòpters** · "HC4: Baixa — revisió 50.05" (estat real + observacions) |
+| Condicions de vol · "No poden sortir: HC1" | **Condicions de vol** · "HC1: visibilitat de fins a 800 m de 10 a 14 h · ratxes de fins a 72 km/h de 15 a 19 h" |
+| Distribució · "1 no suma" | **Distribució territorial** · el mateix + les quatre províncies, marcades les cobertes |
+
+Per poder-ho dir, `meteoPermetVol` ara desa **quines hores** fallen i **per què** (`tramsHores` les agrupa en trams llegibles) en lloc de tornar "no vola (meteo)". Quan no falla cap hora concreta però tampoc no hi ha finestra, ho diu clar: la trenca la nit.
+
+### Dos errors de fons que van sortir pel camí
+
+**1. `logError` podia petar i endur-se qui el cridava.** Se'l crida des de *tots* els `catch` de l'aplicació; si la crida a Supabase falla, convertia un error ja controlat en un de no controlat i avortava la funció que l'havia cridat. És exactament com la caiguda de Leaflet s'enduia tota la pestanya d'helicòpters. Ara la inserció va dins d'un `try` i la promesa té els dos mànecs.
+
+**2. Canviar un llindar t'expulsava de Configuració.** La pàgina de paràmetres es dibuixa dins de `app-risc`, el mateix contenidor que reescriu `renderRisc()`. Com que `aplicarOpConfig()` crida `actualitzarRiscAuto()` → `renderRisc()`, tocar el vent o la visibilitat et tornava a la pantalla de risc enmig de l'ajust. Ara `actualitzarRiscAuto` no dibuixa si la pàgina de paràmetres és oberta (marcador `#pagina-parametres`); el botó "← Tornar" continua funcionant igual.
+
+El segon només es veia perquè el primer ja no amaga res: l'excepció de `logError` avortava abans d'arribar-hi. Un error que se n'empassa un altre.
+
+## 2026-08-12 — `carregarHelisPerRisc`: una funció que vaig esborrar
+
+Reportat des de `/proves/`: **"No s'ha pogut calcular: carregarHelisPerRisc is not defined"**.
+
+Aquesta és la **segona part** del mateix error d'ahir, i té una causa diferent i pitjor. Ahir el problema era el nom equivocat (`calcularOperativitat` en lloc d'`avaluarOperativitat`). Avui el problema és que **la funció ja no hi era**: la vaig esborrar sense adonar-me'n en refactoritzar `opConfig`, quan vaig substituir de cop tot el bloc que anava de `const OP_RATXA_MAX = 50;` fins a `const meteoVolCache = {};`. `carregarHelisPerRisc` vivia allà dins.
+
+Recuperada literalment de `git show 9d59173:index.html` i tornada a posar just abans de `meteoVolCache`. Carrega els helis del dia exacte; si no n'hi ha, l'últim registre desat; i si tampoc, la flota per defecte.
+
+**Per què no ho va agafar el test.** El test de la pestanya HC *creava* la funció per poder aïllar el càlcul (`carregarHelisPerRisc = async () => hs`), o sigui que passava en verd precisament perquè la funció no existia. Un stub que crea el que hauria de comprovar no comprova res. Ara `test-hc.js` **afirma primer que existeixen** `avaluarOperativitat`, `carregarHelisPerRisc`, `meteoPermetVol`, `provinciaDeBase`, `renderHCGraeOperatius` i `invalidarOperativitat`, i només després les substitueix.
+
+**Regla que se'n treu:** en un fitxer de 380 KB sense mòduls, substituir un bloc gran de cop és perillós; abans de fer-ho, comprovar quines funcions hi ha a dins.
+
+## 2026-08-09 — El número d'HC operatius, arreglat i posat al davant
+
+Reportat: la targeta d'HC GRAE operatius deia **"No s'ha pogut calcular"**.
+
+**Causa:** cridava `calcularOperativitat`, que no existeix. La funció es diu `avaluarOperativitat`. El `try/catch` s'empassava l'error i només deixava el missatge genèric, així que no es podia saber què passava; ara el `catch` registra a l'`error_log` i ensenya el motiu.
+
+**Segona causa, més de fons:** el bloc penjava de `renderIndexos`, que al seu torn depèn de la càrrega de dades del dia. I la inicialització del mapa era **fatal**: si Leaflet no carregava, s'enduia tota la pestanya, inclòs el número. Ara la creació del mapa va dins d'un `try` i el bloc del recompte es dibuixa des de la capçalera, independentment.
+
+**Disseny nou**, com es va demanar: el valor mana i va **al costat del títol, gros** (`2/4`), amb les províncies cobertes a sota. I sota la capçalera, **els tres paràmetres d'on surt**, cadascun amb el seu subtotal i el motiu:
+
+1. **Estat** 3/4 — Fora: HC4
+2. **Condicions de vol** 3/3 — finestra de ≥3 h dins de límits, amb llum de dia
+3. **Distribució** 2/3 — 1 no suma: comparteixen província
+
+Comprovat amb Playwright sobre quatre helis inventats (un de baixa, dos a la mateixa província): el càlcul dona 2/4 i els tres blocs expliquen d'on surt cada resta.
+
+## 2026-08-09 — Condicions de vol: configurables, i només de dia
+
+Decidit: **de moment el GRAE no vola de nit.** Això canvia una cosa que semblava resolta. La finestra de vol s'avaluava les **24 h** des del 22 de juliol, amb el raonament que els GRAE operen de nit; ara es busca **només entre hores amb llum** (`is_day` d'Open-Meteo) i una finestra no pot travessar la nit.
+
+I això alhora **valida el llindar de visibilitat**: els 2.000 m només s'han de comparar amb la mínima HEMS de **dia** (1.500 m d'EASA), i hi som per sobre. El conflicte dia/nit que vaig detectar desapareix perquè la nit ja no compta.
+
+**Els valors es queden com estaven** (50 km/h, 2.000 m, 3 h) però **deixen de ser constants**: ara són `opConfig`, editables des de Configuració → Operativitat HC i desades a `localStorage` (`riscGRAE_opHC`). Es recalcula a l'instant i el resum de sota diu sempre què hi ha aplicat. La casella "només amb llum de dia" també és configurable, per si algun dia canvia.
+
+**Precisió important del cap del GRAE, escrita a la pestanya:** aquests llindars diuen si l'helicòpter **pot sortir de l'heliport**, no si podrà treballar al lloc del servei. Això últim depèn d'on sigui el servei i de com ho vegi la tripulació al moment, i no es pot preveure des d'aquí. Un HC pot comptar com a operatiu i haver de renunciar a un rescat concret per turbulència, boira de vall o falta d'espai per a la grua.
+
+**Encara no tenim el sostre de núvols**, que és l'altra meitat de les mínimes HEMS: Open-Meteo no el dona directament.
+
+## 2026-08-09 — Llindars de vol: contrastats amb la normativa
+
+Buscats els llindars reals d'enlairament per a HC de rescat, per validar els dos números que teníem sense font.
+
+**El vent (50 km/h ≈ 27 kt) quadra.** El límit d'aeronau de l'H135 és força més alt, però per a **vol de muntanya** la recomanació operativa és no sortir per sobre d'uns 25 kt, i amb ratxes o en llocs confinats encara menys. El nostre valor és raonable.
+
+**La visibilitat (2.000 m) no quadra, i el problema és més subtil del que semblava.** Les mínimes HEMS d'EASA (SPA.HEMS.120) són **1.500 m de dia** (amb sostre de 600 ft) i **3.000 m de nit sense NVIS** (1.200 ft). Com que la nostra finestra s'avalua les **24 h** —els GRAE volen de nit—, un sol llindar és **massa estricte de dia i massa lax de nit**: de dia descartem hores volables i de nit en donem per bones que no ho serien.
+
+**Cal separar `OP_VIS_MIN` en un valor de dia i un de nit**, i per fer-ho bé s'ha de saber si volen amb NVIS. Preguntes concretes per al GRAE, escrites a Configuració → Operativitat HC.
+
+**No tenim el sostre de núvols**, que és l'altra meitat de les mínimes HEMS: Open-Meteo no el dona directament i caldria derivar-lo.
+
+De passada: la flota són **Airbus H135 P2**, amb bases a Sabadell, Olot, la Seu d'Urgell i Tírvia.
+
+## 2026-08-09 — "HC GRAE operatius": els tres paràmetres en un sol valor
+
+La pestanya Helicòpters tenia dos indicadors separats (Distribució territorial i Operativitat) i la fórmula del risc feia servir un tercer càlcul, que comptava aparells i **no mirava la distribució**. Tres números per a la mateixa cosa, i el que manava era el pitjor dels tres.
+
+**Ara n'hi ha un que mana: `HC GRAE operatius`.** `calcularOperativitat` creua els tres paràmetres alhora i retorna **províncies cobertes** per helis que poden volar, no aparells:
+
+1. Estat `Total` a la pestanya Helicòpters.
+2. Condicions de vol des de la seva base (finestra de ≥3 h dins llindars, 24 h).
+3. Distribució: dos HC operatius a la mateixa província en compten **un**, perquè el segon no cobreix territori nou.
+
+Això arregla la limitació que vaig detectar ahir. La pestanya es diu ara **🚁 Helicòpters GRAE Operatius**, amb el valor al títol i una targeta nova que diu quines províncies es cobreixen, quins aparells no sumen per compartir província i quins no volen i per què.
+
+**Els llindars de vol no estan validats i s'ha de preguntar al GRAE.** `OP_RATXA_MAX` = 50 km/h i `OP_VIS_MIN` = 2000 m són els que ja hi havia al projecte i **no consta d'on van sortir**: no són un límit d'aeronau ni una mínima VFR publicada. Són conservadors — poden deixar fora dies en què s'hauria pogut volar. Queda escrit ben visible a Configuració → Operativitat HC: cal saber quin vent màxim admeten per enlairar-se i quina visibilitat mínima apliquen.
+
+**Limitació que queda:** la província és una aproximació de la regió d'emergència. Amb 4 províncies i 8 regions, la cobertura real és més fina del que el número diu. Quan calgui precisió, cal passar a `REGIONS_BOMBERS`, que ja hi és.
+
+## 2026-08-09 — Operativitat: escala corregida i què vol dir "operatiu"
+
+Dues correccions sobre el que havia fet malament.
+
+**Els punts eren erronis.** Havia posat una escala proporcional (un punt per heli de baixa), i no és el que toca: **cap operatiu → +2, un → +1, dos o més → +0**. Amb dos HC ja es cobreix el territori, i l'escala només s'ha de moure quan la cobertura queda compromesa. Es torna, doncs, a l'escala que ja hi havia abans que jo la toqués.
+
+**La terminologia era errònia.** No són "helis de baixa" sinó **HC operatius**: en plena operativitat, amb condicions de vol des d'on són, i distribuïts pel territori. El número que es veu a la pantalla principal és aquest (X/4), i el que s'ha d'explicar és que **el número que es veu i el que suma no són el mateix**.
+
+**Limitació que ha sortit comprovant-ho: la distribució territorial NO es comprova.** El codi compta els HC un per un i no mira on són, o sigui que **dos HC operatius a la mateixa regió compten igual que dos de repartits**, encara que la cobertura real sigui molt pitjor. Ho he marcat com a pendent, ben visible, a Configuració → Operativitat HC.
+
+**On s'explica cada cosa**, tal com es va demanar:
+
+- *Configuració → Operativitat HC*: què vol dir operatiu (les condicions), i l'avís de la distribució.
+- *Configuració → Fórmula de risc*: que el X/4 que es veu no suma punt per punt, sinó +0, +1 o +2.
+
+`RISC_FORMULA_VERSIO` puja a 6. La 5 va ser l'intent d'escala proporcional, descartat.
+
+## 2026-08-09 — Configuració: què suma cada factor, taula per taula
+
+Petició amb un motiu concret: **s'ha de poder explicar i justificar als caps**. L'explicació que hi havia deia com funcionava el model, però no deixava veure el més important, que és que **cap factor suma el seu valor tal qual**.
+
+S'hi afegeixen dos desplegables a Configuració → Fórmula de risc, amb el valor de cada ítem al costat del que suma de veritat:
+
+- **Què suma cada perill.** SMP (directe, ja ve 0-6), allaus (on més es nota: un 3 aporta 2 i un 5 aporta 5, perquè el BPA mesura la probabilitat que hi hagi allaus i nosaltres mesurem si ens desbordarà), i el suplement del segon perill.
+- **Què suma cada increment.** Operativitat (un punt per heli de baixa), afluència amb **dues columnes** — el que aporta amb bon temps i el que aporta amb taronja o vermell, que és el mateix dia amb temps diferent —, canvi de temps, boletaires i el sostre.
+
+Cada fila que no és una suma directa porta el **per què** al costat. On sí que ho és (SMP, canvi de temps), el motiu va un cop sobre la taula en comptes de repetir-se a cada fila.
+
+**Les taules es generen des de `riscFormula`, no escrites a mà.** Si algú canvia un punt, es refan soles: no es poden desincronitzar. Això treu una feina de la norma dels tres llocs — ara els punts només s'han de tocar a les constants i al `CLAUDE.md`.
+
+## 2026-08-09 — Operativitat proporcional, i què cal desar per saber si l'encertem
+
+**Operativitat proporcional**, com la resta de factors: suma tants punts com **helis de baixa** hi ha, de les 4 bases. 4 volen +0, 3 volen +1, 2 volen +2, 1 vola +3, cap vola +4 (topat pel sostre a 3). Això arregla que 0 i 1 heli quedessin igualats. `RISC_FORMULA_VERSIO` puja a 5.
+
+**El que s'ha trobat mirant si podríem analitzar-ho més endavant:** ara mateix **no**. Els dies que desem no es poden ni reconstruir.
+
+`risc_historic` desa `planspc, smp, allaus, afluencia, hc, canvi, boletaires`, però la fórmula del frontend fa servir l'**operativitat**, que no té columna — i la columna `hc` és de la fórmula antiga, que ja no s'usa. Tampoc no es desa quina versió de fórmula va produir el número, i en dos dies ja anem per la 5. Un risc 4 del dia 8 i un del dia 9 poden voler dir coses diferents.
+
+I encara falta el més important: el risc es calcula amb **previsions**, i per saber si l'encertem cal saber **què va passar de veritat** (dades observades de les estacions XEMA) i, sobretot, **quants serveis va tenir el GRAE aquell dia**. Aquesta última no surt de cap API: l'ha de portar Bombers, i és la que decideix si tot això serveix.
+
+Tot analitzat a **`ANALISI-DADES.md`**, amb el SQL concret dels canvis. **No s'ha tocat res de Supabase.**
+
+**Principi que en surt, i que ja ens ha mossegat dues vegades:** desar en cru i no col·lapsar. `fetch-smp.js` col·lapsava la comarca abans de desar i vam perdre la dada; el grau 0-6 de Meteocat es llençava i el deduíem del color. Si l'API ho dona, es desa tal com ve — agregar és barat, recuperar el que no s'ha desat és impossible.
+
+**Avís de seguretat detectat de passada:** nou taules de Supabase tenen la RLS desactivada i la clau `anon` és pública (va incrustada a `index.html`). Qualsevol que la tregui del codi pot llegir i modificar aquelles taules. No s'ha tocat: activar la RLS sense polítiques bloquejaria l'app. Detall a `ANALISI-DADES.md`.
+
+## 2026-08-09 — Sostre als increments, i la fórmula explicada a Configuració
+
+Continuació de l'anterior. Rebaixar l'afluència amb mal temps corregia la duplicitat, però no el que grinyolava de debò: **un pont d'agost sense cap perill de muntanya arribava a 6**, igual que un vermell d'allaus.
+
+**Sostre dels increments** (`incrementsMax` = 3). Els increments modulen el perill, no el substitueixen. Aquell pont d'agost (afluència 3 + operativitat 2 + canvi 2 + boletaires 1 = 8) ara es queda a **3**. Amb perill alt no canvia res: el perill mana i el total continua topant a 6.
+
+**Operativitat repesada.** Dos helis operatius ja carreguen (+1), i amb un o cap suma +2. Abans dos helis no sumaven gens. La contrapartida és que 0 i 1 heli queden igualats: amb una escala d'enters de 0 a 2 no hi caben cinc estats, i el salt important és tenir-ne dos o menys.
+
+**Afluència amb mal temps, simplificada.** Un sol tram a partir del taronja: SMP 0-2 no la toca, SMP 3-6 li treu un graó. Abans el vermell l'anul·lava del tot; ara es tracta igual que el taronja.
+
+**Configuració → Fórmula de risc, refeta.** És on s'ha d'entendre com funciona això, i era un paràgraf apilat. Ara hi ha:
+
+- Què mesura el número (probabilitat de quedar desbordats, no perill de muntanya).
+- El càlcul en dues parts, amb la fórmula escrita.
+- Un desplegable **"Les correccions"** que explica les quatre regles que no es dedueixen mirant els punts: per què el perill no se suma, per què l'afluència es rebaixa amb mal temps, per què les allaus no la rebaixen, i per què els increments tenen sostre.
+- Un **simulador**: es mouen els sis valors d'entrada i surt el risc amb el desglossament pas a pas ("mana allaus amb 5", "increments 8, topat pel sostre a 3"). No desa res; serveix per calibrar.
+
+`RISC_FORMULA_VERSIO` puja a 4.
+
+Comprovat amb Playwright: vint escenaris de càlcul i el simulador funcionant, amb el sostre visible al desglossament.
+
+**Com s'ha d'anar ajustant això.** Cada cop que es canviïn punts o correccions cal tocar tres llocs alhora: les constants de `RISC_FORMULA_DEFAULT`, l'explicació de Configuració → Fórmula de risc, i `CLAUDE.md`. I pujar `RISC_FORMULA_VERSIO` si canvia el significat, o el canvi no arribarà a qui ja tingui config desada al navegador.
+
+**Pendent:** contrastar els números amb serveis reals. Fins ara tot s'ha calibrat raonant, no amb dades.
+
+## 2026-08-09 — L'afluència es rebaixa quan hi ha avisos SMP
+
+Venia del pendent de calibrar els increments, que amb el pas a enters podien sumar fins a +8. La solució no és posar-hi un sostre: el problema de fons és que **el mal temps comptava dues vegades**.
+
+L'afluència és una **predicció** de quanta gent hi haurà a la muntanya, feta amb estadístiques de calendari (caps de setmana, agost, ponts). Aquestes estadístiques no veuen quin temps farà, que és justament el que fa que la gent es quedi a casa. Amb un avís taronja o vermell no estàvem sumant un factor de més: sumàvem una previsió que ja sabíem falsa.
+
+**Regla nova** (`afluenciaSMP`): l'SMP rebaixa l'afluència **abans** que sumi, `afluència efectiva = màx(0, afluència − reducció)`. Els trams segueixen el **color de l'avís**, no el número — a l'escala d'SMP 1-2 és groc, 3-4 taronja i 5-6 vermell:
+
+- Cap avís o groc (0-2): reducció 0. Un groc no atura ningú.
+- Taronja (3-4): reducció 1.
+- Vermell (5-6): reducció 3, o sigui que l'anul·la.
+
+**No s'aplica a les allaus**, tot i que també fan quedar gent a casa. Amb perill 4-5 hi va menys gent, però la que hi és és exactament la que està en perill i cada servei és molt més gros. Amb un vermell de pluja, en canvi, no hi ha ningú a qui rescatar.
+
+**Error propi que va sortir provant:** la primera proposta posava el primer tram a SMP 2, i amb això el cas que havia reportat l'usuari aquest matí (SMP 2 amb afluència 2, que ha de donar 4) passava a donar 3. SMP 2 és **groc a tres zones o més**, encara groc, i havia dit que el groc no atura ningú. Corregit a taronja.
+
+El sostre es queda a **6** sempre, per decisió expressa.
+
+Comprovat amb Playwright sobre setze escenaris: el cas reportat continua donant 4, el groc no rebaixa res, el taronja rebaixa un graó, el vermell anul·la l'afluència i les allaus no la toquen.
+
+`RISC_FORMULA_VERSIO` puja a 3, perquè hi ha un factor nou i les configs desades no el porten.
+
+**Encara pendent:** un cap de setmana d'agost sense cap avís, amb dos helis de baixa i canvi de temps fort, continua arribant a 6. Ara és defensable (és un dia realment tens per al GRAE), però convindria contrastar-ho amb dades reals de serveis.
+
+## 2026-08-08 — El risc passa a nombres enters
+
+Reportat: amb SMP 2 i afluència 2 el risc sortia **2,5** i n'havien de sortir **4**. La causa era la taula de punts de l'afluència (`{1: 0,25, 2: 0,5, 3: 1}`), que amb afluència 2 sumava mig punt.
+
+**Regla nova:** el risc no ha de tenir mai decimals, i cada increment suma **el seu propi valor d'escala**.
+
+- Afluència: 0-3 → +0, +1, +2, +3.
+- Canvi de temps: 0-2 → +0, +1, +2.
+- Operativitat HC, que va a l'inrevés: cap heli +2, un heli +1, dos o més +0.
+- Boletaires (+1) i el suplement del segon perill (+1 / +2) ja eren enters.
+
+`detallarRisc` arrodoneix el total abans de topar-lo, perquè els punts es poden editar des de Configuració i d'allà en podria sortir un decimal. El camp de punts passa a `step="1"`.
+
+**Trampa que això destapava:** la config de la fórmula es desa a `localStorage` i es tornava a llegir per sobre dels valors per defecte, o sigui que qui ja tingués l'escala antiga desada hauria continuat veient 2,5 després del canvi. S'hi afegeix `RISC_FORMULA_VERSIO`: si la versió desada no coincideix, la config es llença i es parteix dels valors nous. **Cal pujar-la sempre que canviï el significat dels punts, no només el seu valor.**
+
+Comprovat amb Playwright sobre deu escenaris, entre ells el cas reportat (surt 4), que cap resultat té decimals, i que una config antiga a `localStorage` queda descartada.
+
+**Pendent de calibrar, i ara més gros:** els increments poden sumar fins a **+8** (afluència 3 + operativitat 2 + canvi 2 + boletaires 1). Un dia sense cap perill de muntanya però amb tot en contra arriba a 6. Cal decidir si es limita el total d'increments o si es tornen a repesar.
+
+## 2026-08-08 — El 0-6 el dona Meteocat, i les zones marítimes van a la seva comarca
+
+Dues correccions sobre la pestanya SMP Bombers acabada de fer.
+
+**El grau de perill no cal calcular-lo.** Meteocat ja publica un **grau de perill de 0 a 6** per comarca i franja de 6 h, que surt de creuar el llindar del fenomen amb la probabilitat. El color de l'avís només n'és l'agrupació. Ve al camp `perill` de cada afectació, que `fetch-smp.js` ara desa cru com a `grauPerill`, i el risc de Bombers el fa servir tal com ve. L'escala inventada ahir (color + probabilitat) queda només com a reserva per a dades antigues i desapareixerà sola.
+
+**El camp `perill` estava mal etiquetat.** El projecte el mostrava com una probabilitat (*Poc probable*…*Segur*) a la pestanya Alertes. Dues coses diuen que no ho és: Meteocat documenta **tres** bandes de probabilitat (10-30 %, 30-70 %, >70 %) i el codi en té quatre; i a les dades reals el llindar alt sempre surt com a "Segur" i el baix mai, que és just l'inrevés del que hauria de passar amb una probabilitat. Les etiquetes de la pestanya Alertes queden pendents de revisar — aquesta sessió no les toca.
+
+**Zones marítimes.** Cada zona s'adjunta ara a la comarca costanera que té al davant, i la comarca es queda el valor més alt dels dos. Els codis 88-99 són els que ja hi havia al projecte i **no estan verificats**: no hem vist mai una alerta marítima passar-hi. Per això `fetch-smp.js` registra al log del workflow qualsevol codi de comarca desconegut amb tots els seus camps; la primera alerta d'onatge ens dirà si la llista és correcta.
+
+Comprovat amb Playwright: el `grauPerill` cru mana per sobre de l'escala de reserva, i una alerta a la zona marítima 91 acaba comptant com a Maresme amb el valor correcte.
+
+## 2026-08-08 — Pestanya SMP Bombers: risc per regions d'emergència
+
+El cap del GRAE vol un risc SMP **de Bombers**, separat del risc del GRAE, perquè cada cap de regió pugui veure el risc del seu territori. Nova pestanya **SMP Bombers**, amb taula per franges horàries (avui i demà) i mapa pintat.
+
+**Decisions preses:** la Cerdanya va al **Centre** (el decret la posa a Pirineus, però operativament depèn de la sala de Manresa). El Barcelonès i l'Anoia, que estan partits entre regions per municipis, s'assignen sencers a la Metropolitana Sud, perquè l'SMP arriba per comarca i no s'hi pot baixar més.
+
+**La regla d'agregació.** El risc d'una regió és el valor més alt que assoleix la meitat + 1 de les seves comarques, amb els valors englobats: una comarca amb un 4 també compta per al 3. El risc de Catalunya és el mateix càlcul sobre les 8 regions. Amb l'exemple del cap (3,3,3,2,2,2,4,4 → 3) surt el que ell esperava.
+
+**Canvi obligatori al backend.** `fetch-smp.js` col·lapsava `idComarca` en una zona Meteocat abans de desar i la comarca es perdia. Ara les afectacions de `smp_latest.json` van per comarca; les files cap a `smp_historic` es tornen a agrupar per zona (`agruparPerZona`), o sigui que **la taula de Supabase no canvia**.
+
+**El que el cap no va especificar** és com es converteix un avís en un 0-6 per comarca. S'ha fet: nivell (Groc 1 / Taronja 3 / Vermell 5) + 1 punt si la probabilitat és *Molt probable* o *Segur*. Està aïllat a `RISC_BASE_NIVELL` i `PROB_ALTA` per si es vol canviar.
+
+**Mapa:** SVG pla generat des del GeoJSON de comarques, sense Leaflet (index.html no té dependències), amb vista per regions i per comarques. El GeoJSON només es baixa en obrir la pestanya.
+
+Comprovat amb Playwright sobre l'app servida en local: la regla d'agregació dona els valors esperats en sis casos (inclòs el del cap), les 43 comarques hi són sense duplicats, el mapa es dibuixa i no hi ha errors de JS.
+
+**Pendent:** la pestanya no té dades fins que el workflow no torni a generar `smp_latest.json` amb el format nou; mentrestant surt un avís explicant-ho. Els objectius següents (subregions del GRAE, gra de municipi, zones marítimes, històric) són a `REGIONS-EMERGENCIA.md`.
+
+## 2026-08-08 — SMP per regions d'emergència: recerca prèvia
+
+El cap del GRAE vol que la pestanya SMP deixi d'agrupar per zones geogràfiques de muntanya i passi a agrupar per **regions d'emergència** de Bombers, partint-ne algunes en dues.
+
+Aquesta sessió és **només recerca**: no s'ha tocat cap càlcul ni cap fitxer de codi. El resultat és `REGIONS-EMERGENCIA.md`, amb la taula regió → comarques de les 8 regions, els casos partits i les decisions pendents.
+
+**El que s'ha trobat:**
+
+- Les regions eren **7**; el febrer de 2026 el Govern va crear la **Regió d'Emergències Pirineus** (seu a Sort), segregada de la de Lleida. Ja no cal inventar-se la partició de Lleida: existeix, i amb nom oficial.
+- Els `idComarca` de l'API SMP de Meteocat **són els `CODICOMAR` oficials** (comprovat contra `fetch-smp.js` i el GeoJSON de comarques). El mapatge comarca → regió és directe.
+- Dues comarques estan partides entre regions per municipis: **Anoia** (Alta Anoia al Centre, la resta a Metropolitana Sud) i **Barcelonès** (Badalona, Sant Adrià i Santa Coloma a la Nord). Com que l'SMP arriba per comarca, s'hauran d'assignar senceres.
+- La **Cerdanya** és el punt discutit: el decret la posa a Pirineus, però operativament depèn de la sala de Manresa (Centre).
+
+**Trampa detectada:** `fetch-smp.js` col·lapsa `idComarca` → zona Meteocat *abans* de desar, i llavors la comarca es perd. Per anar per regions, aquest script s'ha de tocar primer; si no, la dada de comarca no existeix enlloc.
+
+**Pendent:** decidir la Cerdanya, quines regions es tornen a partir per al GRAE, i què es fa amb l'històric de `smp_historic` (columna `zona` amb la nomenclatura antiga).
+## 2026-08-08 — La fórmula, replantejada: és un índex de saturació
+
+Repassant els pesos va sortir el que de debò s'ha de mesurar: **no és quant perill hi ha a la muntanya, sinó la probabilitat que els GRAE quedin desbordats** — si podran atendre tots els serveis que vagin sortint. Serveix per preveure el dia i per consultar què va passar.
+
+Això va tombar el plantejament anterior. Un intent de model "demanda × dificultat × capacitat" també es va descartar: tractava les allaus com a dificultat per servei, i **un perill d'allaus 5 satura per si sol** encara que només hi hagi una allau, perquè pot afectar molta gent alhora.
+
+**Regla acordada per al bloc de perill:**
+
+- Allaus segons el BPA: 1→0, 2→0, 3→2, 4→4, 5→5.
+- Es pren **el més gran** entre SMP i allaus, no la suma, per no comptar dues vegades el mateix.
+- Si tots dos hi són, el segon hi afegeix un **suplement**: val 1–2 → +1; val 3 o més → +2.
+- El perill es limita a **5** (`RISC_PERILL_MAX`) perquè sempre quedi un punt de marge: el darrer graó fins a 6 el mouen l'afluència, els helicòpters, el canvi de temps i els boletaires.
+
+**Pendent immediat:** els valors de l'SMP (ara 0–6) no s'han tocat encara — es revisaran junt amb la pestanya SMP i el seu càlcul, en una sessió a part. Mentrestant, com que el perill es topa a 5, un SMP de 5 i un de 6 donen el mateix.
+
+**Pendent de calibrar:** els increments poden sumar fins a +3,5, i hi ha casos (bolets + taronja + dos helis de baixa + canvi fort) que se'n van a 5,5 sense cap perill greu.
+
+## 2026-08-08 — Fórmula de risc repensada: factor dominant + increments
+
+Atacant el pendent d'unificar les dues fórmules, es va decidir no adoptar cap de les dues sinó repensar-la. **Aquest canvi és només al frontend; el script nocturn encara calcula amb l'antiga.**
+
+**Què fallava a la fórmula del 22-07:** sumava rangs incomparables i la suma podia arribar a 16, però colors, barra i etiquetes estan calibrats a 0–6. Resultat: de 5 en amunt tot es veia igual, i casos molt diferents donaven el mateix número. El més greu: **perill d'allaus 5 tot sol donava 3 (MODERAT)**.
+
+**Model nou:** `risc = min(6, base + increments)`
+
+- **Base** = el més greu dels factors de perill: SMP (ja ve 0–6) o allaus (1→0, 2→1, 3→3, 4→4, **5→6**). Es pren el màxim, així un perill extrem no queda diluït.
+- **Increments**: operativitat HC (cap heli +1, un heli +0,5), afluència (+0,25 / +0,5 / +1), canvi de temps (+0,5 / +1) i boletaires (+1).
+- **Plans PC** queda informatiu: una fase activada ja es reflecteix als avisos SMP.
+- El factor antic `hc` desapareix del càlcul; el substitueix l'operativitat.
+
+Tot continua sent editable des de Configuració → Fórmula de risc, i al desglossament el factor que marca la base surt etiquetat com a **BASE**.
+
+**Comprovat** amb Playwright sobre set escenaris: allaus 5 passa de 3 a 6; groc en una zona amb cap de setmana d'agost dona 1,5; vermell a tres zones amb allaus 4 i cap heli topa a 6.
+
+**Pendent de calibrar:** els increments poden sumar fins a +4, així que un dia sense cap perill però amb tot en contra arriba a 4 (ALT) amb base 0. Cal decidir si es limita el total d'increments.
+
 ## 2026-08-08 — Web de proves separat de l'operatiu
 
 Començat el 02-08 (`2d54f79`, `69774db`, `1fa4b81`) i acabat el 08-08 (`a7778b3` fins a `202e303`).
