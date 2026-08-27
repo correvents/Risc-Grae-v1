@@ -73,7 +73,24 @@ Tot (HTML, CSS, JS) hi va dins, sense build ni mòduls. És deliberat: es public
 
 Se'l crida des de tots els `catch`. Si peta ell, converteix un error controlat en un de no controlat i avorta la funció que l'havia cridat — silenciosament, perquè sembla que el `catch` ja ho tenia resolt. La crida a Supabase va dins d'un `try` i la promesa té els dos mànecs. No hi posis res que pugui llançar.
 
-**7. Dues claus de Supabase.**
+**7. `supabaseUpsert` necessita `onConflict` si el UNIQUE no és la clau primària.**
+
+`utils.js` envia `Prefer: resolution=merge-duplicates`. Sense el tercer argument, PostgREST mira
+la **clau primària** — sovint un `id` autogenerat que no coincideix mai — i l'upsert acaba xocant
+amb el UNIQUE de veritat amb un **409**. Com que els workflows porten `continue-on-error`, això
+falla **en silenci**.
+
+Va passar a dues taules i va estar setmanes sense detectar-se: `risc_historic` (UNIQUE `data`) i
+`canvi_temps_historic` (UNIQUE `data,tipus_dia,punt`). Si afegeixes una taula amb un UNIQUE que
+no sigui la primària, passa-li les columnes: `supabaseUpsert('taula', files, 'col1,col2')`.
+
+**8. El cron pot travessar la mitjanit.** GitHub Actions endarrereix els crons de manera
+irregular — s'ha vist un retard de **3 h 24 min**. Si el retard creua la mitjanit de Madrid,
+`avuiMadrid()` ja retorna l'endemà i la feina cau sobre el dia equivocat. Per això
+`risc-diari.js` no fa servir `avuiMadrid()` directament sinó `diaDeTancament()`, que tracta les
+hores petites com a part del dia operatiu anterior. Ancorar l'hora del cron no n'hi ha prou.
+
+**9. Dues claus de Supabase.**
 
 Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts → `service_role`, sempre via GitHub Secrets. **Mai** posis la `service_role` a `index.html`.
 
@@ -94,16 +111,31 @@ Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet vo
 - La província és una aproximació de la regió d'emergència; quan calgui precisió, caldrà passar a `REGIONS_BOMBERS`.
 - Hi ha cau (`operativitatCache`, `meteoVolCache`); si canvies dades d'helis, crida `invalidarOperativitat()`.
 
-## Dos webs: operatiu i proves
+## Una sola branca: `main` (des del 27-08-2026)
 
-**Norma de treball: tot canvi va primer a la branca `proves`.** Es mira funcionant a `/proves/` i, quan estigui validat, es porta a `main`. No es toca `main` directament.
+**Es treballa directament a `main`.** La branca `proves` es va abandonar el 27-08-2026;
+queda al repositori per si algun dia es vol recuperar, però no s'hi commiteja.
 
-GitHub Pages publica `main` tal com està (mode "deploy from a branch"), **no** hi ha desplegament per Actions. Per això el banc de proves és la carpeta `proves/` dins de `main`, que `sincronitzar-proves.yml` copia des de la branca `proves` a cada push.
+**El motiu, que és el que importa:** els workflows programats **només s'executen des de la
+branca per defecte**, que és `main`. Qualsevol canvi a `scripts/` fet a `proves` **no s'executa
+mai**: neix mort. Ja va passar dues vegades (el 08-08 amb `fetch-smp.js` i el 26-08 amb el fix
+d'`smp_historic`, que va estar un dia sencer sense fer res). El model de dues branques estava
+pensat per al frontend i no aguanta un repositori que també conté ingesta.
 
-- Només se sincronitzen `index.html` i `mapa.html`. Els GeoJSON i `data/` no es dupliquen: `index.html` llegeix els JSON per URL absoluta i `mapa.html` fa servir `BASE = '../'` quan detecta `/proves/`.
-- **`proves/` de `main` es genera sola: no l'editis a mà.** El que es toca és la branca `proves`.
-- Com que el workflow commiteja a `main`, les dues branques divergeixen: per pujar a l'operatiu cal **fusionar** `proves` dins de `main`, no un fast-forward.
-- La còpia de proves es distingeix sola: fons verd, franja verda i `🧪 PROVES` al títol (`marcarWebDeProves()`, que detecta `/proves/` a la ruta).
+I la separació donava menys del que semblava: `/proves/` **comparteix `data/*.json` i Supabase**
+amb l'operatiu, o sigui que mai va ser un entorn aïllat. Donava una URL per mirar la interfície,
+no seguretat.
+
+GitHub Pages publica `main` tal com està (mode "deploy from a branch"), **no** hi ha desplegament
+per Actions. La carpeta `proves/` continua servint-se a `/proves/` i es distingeix sola: fons
+verd, franja verda i `🧪 PROVES` al títol (`marcarWebDeProves()`, que detecta `/proves/` a la
+ruta). `sincronitzar-proves.yml` només s'activa amb pushes a `proves`, així que ara no fa res.
+
+Si algun dia es vol tornar a tenir un banc de proves, **que no sigui una branca**: o s'edita
+`proves/index.html` directament, o es posa Settings → Pages → Source = "GitHub Actions" i es
+recupera `pages.yml` de l'historial (commit `48b22a8`), que és la solució neta.
+
+**Compte igualment:** el que provis a `/proves/` escriu a les taules de veritat.
 
 Es va provar primer de publicar per Actions (`pages.yml`, esborrat): el desplegament sortia verd però el Pages continuava servint la branca, així que `/proves/` donava 404. Si algun dia es posa Settings → Pages → Source = "GitHub Actions", aquell workflow és a l'historial i és una solució més neta, sense còpia duplicada.
 

@@ -281,8 +281,10 @@ l'agent auditor previst més endavant.
 ## 7. Ordre de feina
 
 0. ~~**Tapar la fuita de `smp_historic`**~~ (§3.ter) — ✅ **fet el 26-08-2026.**
-1. **Arreglar el 409** — `on_conflict=data` a `utils.js` i ancorar el cron lluny de la mitjanit.
-   Una línia; torna a deixar el script de la nit escrivint.
+1. ~~**Arreglar el 409**~~ — ✅ **fet el 27-08-2026.** `supabaseUpsert()` accepta `onConflict`.
+   Afectava dues taules, no una: també `canvi_temps_historic`, que per això només tenia una
+   escriptura per dia. I la deriva del cron es resol a l'script amb `diaDeTancament()`, perquè
+   ancorar l'hora no aguanta retards de 3 h. Verificat amb una execució real del workflow.
 2. **Pujar la config de la fórmula a Supabase** — mentre visqui a `localStorage`, backend i
    frontend no poden coincidir. És el bloqueig real de tot el que ve després.
 3. **Un sol mòdul de càlcul** — extreure `detallarRisc()` a un fitxer que facin servir tant el

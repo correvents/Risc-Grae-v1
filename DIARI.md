@@ -8,6 +8,25 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-27 — Una sola branca, i l'upsert que petava en silenci
+
+**Es deixa de treballar amb dues branques.** `proves` es fusiona a `main` i es queda quieta. El motiu és estructural: els workflows programats **només s'executen des de la branca per defecte**, o sigui que qualsevol canvi a `scripts/` fet a `proves` neix mort. Havia passat dues vegades, i ahir mateix el fix d'`smp_historic` va estar un dia sencer sense executar-se. A més, `/proves/` mai va ser un entorn aïllat: comparteix `data/` i Supabase amb l'operatiu.
+
+La fusió porta a l'operatiu 30 commits, entre els quals **tres bugs que la gent estava patint** i que ja estaven arreglats (les dues targetes "Ahir" i el recompte d'helis duplicat), i també la **fórmula versió 6**. Els números que veu la gent canvien: és un canvi de criteri, decidit.
+
+Detall pel camí: `main` i `proves` semblaven tenir historials **no relacionats**. Era un artefacte del clon superficial de la sessió; amb `git fetch --unshallow` apareix l'avantpassat comú (`a8f7d84`, 08-08). Val la pena recordar-ho abans de concloure res de l'historial en una sessió nova.
+
+**L'upsert que petava en silenci.** `supabaseUpsert()` enviava `merge-duplicates` sense dir sobre quina restricció resoldre el conflicte, així que PostgREST mirava la clau primària —un `id` autogenerat que no coincideix mai— i acabava xocant amb el UNIQUE de veritat amb un **409**. Afectava **dues** taules:
+
+- `risc_historic` (UNIQUE `data`): petava cada nit des del 7 d'agost. Per això l'Apps Script era l'únic que desava el risc.
+- `canvi_temps_historic` (UNIQUE `data,tipus_dia,punt`): **descobert avui.** Només hi quedava la primera escriptura de cada dia; les de les 08:00 i les 13:30 petaven i el workflow se les empassava (`continue-on-error`). Del canvi de temps no en teníem cap evolució i ningú se n'havia adonat.
+
+**La deriva del cron.** El cron és a les 21:00 UTC però GitHub l'endarrereix de manera irregular: avui ha sortit a les 00:24, **3 h 24 min tard**. Quan travessa la mitjanit de Madrid, `avuiMadrid()` retorna l'endemà i la foto de tancament cau sobre el dia equivocat. Ancorar l'hora no aguanta retards així, o sigui que el dia el decideix l'script: `diaDeTancament()` tracta les hores petites com a part del dia operatiu anterior. Comprovat amb el rellotge falsejat a cinc hores, incloses les dues bandes del canvi horari.
+
+**Verificat en real:** disparat el workflow a mà sobre un dia que ja tenia fila. Abans hauria donat 409; ara acaba en verd i la fila s'actualitza al lloc, sense duplicat.
+
+Pendent: passes 2 a 7 d'`EVOLUCIO-PREDICCIONS.md` (config de la fórmula a Supabase, un sol mòdul de càlcul, factors que falten al backend, `risc_snapshots`, apagar l'Apps Script i l'Historial amb corba).
+
 ## 2026-08-26 — `smp_historic` deixa de perdre la comarca
 
 Trobat llegint la fórmula a Configuració. `fetch-smp.js` desa cada afectació **per comarca** i captura el grau de perill cru de Meteocat, amb comentaris que diuen explícitament per què no s'ha de col·lapsar («si es col·lapsés aquí la comarca es perdria i el risc per regions d'emergència no es podria calcular»). I tot seguit `agruparPerZona()` ho tornava a col·lapsar just abans d'escriure a Supabase, perquè la taula no tenia on posar-ho. El JSON les tenia; Supabase no. **Tercera vegada** que passa el patró que `ANALISI-DADES.md` ja documenta dos cops.
