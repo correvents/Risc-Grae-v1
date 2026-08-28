@@ -2513,7 +2513,7 @@
     // es veu és la de 06-12, i d'aquí la seqüència continua sola.
     const franjaAra = () => PERIODES_SMP[Math.min(3, Math.floor(new Date().getHours() / 6))];
 
-    let smpBombersEstat = { periode: franjaAra(), auto: true };
+    let smpBombersEstat = { periode: franjaAra(), auto: true, obertes: [] };
     let smpbTemporitzador = null;
     let smpbMatriu = {};
     let geoComarques = null;
@@ -2678,6 +2678,117 @@
       pintarMapesSMPBombers(smpbMatriu, periode);
     }
 
+    // Ordre dels avisos, per quedar-nos amb el més gros quan una franja en porta
+    // més d'un del mateix fenomen.
+    const NIVELL_ORDRE = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
+    const PROB_ORDRE = { 'Poc probable': 1, 'Probable': 2, 'Molt probable': 3, 'Segur': 4 };
+    const pesAvis = (r) => (NIVELL_ORDRE[r.nivell] || 0) * 10 + (PROB_ORDRE[r.probabilitat] || 0);
+
+    // El nivell de l'avís es pinta amb el to fosc del seu propi color, el mateix
+    // que la resta de la pestanya: no és una escala nova.
+    const COLORS_NIVELL_AVIS = { 'Groc': COLORS_SMP[2], 'Taronja': COLORS_SMP[4], 'Vermell': COLORS_SMP[6] };
+
+    // Gira la matriu d'una comarca: en comptes de «què hi ha en aquesta franja»,
+    // «aquest fenomen, quan i amb quina probabilitat», que és com es llegeix un
+    // avís i com es decideix si cal fer res.
+    function fenomensComarca(matriu, codi, dies) {
+      const perMeteor = {};
+      dies.forEach(dia => PERIODES_SMP.forEach(periode => {
+        (matriu[codi]?.dies?.[dia]?.[periode]?.riscos || []).forEach(r => {
+          const m = perMeteor[r.meteor] || (perMeteor[r.meteor] = { meteor: r.meteor, llindars: [], cel: {} });
+          if (r.llindar && !m.llindars.includes(r.llindar)) m.llindars.push(r.llindar);
+          const clau = dia + '|' + periode;
+          if (!m.cel[clau] || pesAvis(r) > pesAvis(m.cel[clau])) m.cel[clau] = r;
+        });
+      }));
+      return Object.values(perMeteor);
+    }
+
+    // El desplegable d'una regió: les seves comarques amb avís i, sota cadascuna,
+    // un fenomen per fila amb el nivell i la probabilitat de cada franja. Les
+    // comarques sense cap avís no hi surten: no diuen res i allarguen la taula.
+    function detallRegioSMPBombers(matriu, regio, dies, etiquetes) {
+      const ambRisc = REGIONS_BOMBERS[regio].filter(codi =>
+        dies.some(d => PERIODES_SMP.some(p => riscComarca(matriu, codi, d, p) > 0)));
+
+      if (!ambRisc.length) {
+        return '<p style="margin:0;padding:0.7rem 0.9rem;font-size:0.8rem;color:#78909c;">' +
+               'Cap comarca d\'aquesta regió no té avís avui ni demà.</p>';
+      }
+
+      const celGrau = (v) =>
+        `<td style="background:${colorRisc(v)};color:${textSobreRisc(v)};text-align:center;font-weight:700;padding:0.3rem;border:1px solid #fff;">${v}</td>`;
+
+      const celAvis = (r) => {
+        if (!r) return '<td style="text-align:center;color:#cfd8dc;padding:0.3rem;border:1px solid #eceff1;">·</td>';
+        const fons = COLORS_NIVELL_AVIS[r.nivell] || '#eceff1';
+        const text = r.nivell === 'Groc' ? '#000' : '#fff';
+        const titol = `${r.meteor} · ${r.nivell} · ${r.probabilitat}` +
+          (r.llindar ? ` · ${formatLlindar(r.llindar)}` : '');
+        return `<td title="${escapeHtml(titol)}" style="background:${fons};color:${text};text-align:center;` +
+               `padding:0.25rem 0.3rem;border:1px solid #fff;font-size:0.68rem;line-height:1.25;white-space:nowrap;">` +
+               `<div style="font-weight:700;">${r.nivell}</div>` +
+               `<div style="opacity:0.95;">${formatProb(r.probabilitat)}</div></td>`;
+      };
+
+      let files = '';
+      ambRisc.forEach(codi => {
+        const nom = matriu[codi]?.nom || nomComarcaLocal(codi);
+        files += `<tr><td class="zona-nom" style="font-weight:700;">${nom}</td>`;
+        dies.forEach(d => PERIODES_SMP.forEach(p => { files += celGrau(riscComarca(matriu, codi, d, p)); }));
+        files += '</tr>';
+
+        fenomensComarca(matriu, codi, dies).forEach(f => {
+          // El llindar només al costat del nom quan n'hi ha un de sol: amb dos o
+          // tres el nom es fa il·legible i, a més, cada franja té el seu, que ja
+          // surt al títol de la cel·la.
+          const llindar = f.llindars.length === 1 ? formatLlindar(f.llindars[0]) : '';
+          files += `<tr><td class="zona-nom" style="padding-left:1.4rem;font-weight:500;font-size:0.75rem;color:#546e7a;">` +
+                   `<span style="font-variant-emoji:emoji;">${getSMPEmoji(f.meteor)}</span> ${escapeHtml(f.meteor)}` +
+                   (llindar ? ` <span style="color:#90a4ae;">${escapeHtml(llindar)}</span>` : '') + `</td>`;
+          dies.forEach(d => PERIODES_SMP.forEach(p => { files += celAvis(f.cel[d + '|' + p]); }));
+          files += '</tr>';
+        });
+      });
+
+      return `<div class="taula-container" style="padding:0.5rem;">
+          <table class="smp-taula">
+            <thead>
+              <tr>
+                <th rowspan="2" style="vertical-align:bottom;text-align:left;">Comarca · fenomen</th>
+                <th colspan="4" style="text-align:center;">${etiquetes[0]}</th>
+                <th colspan="4" style="text-align:center;">${etiquetes[1]}</th>
+              </tr>
+              <tr>
+                ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+                ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>${files}</tbody>
+          </table>
+          <p style="margin:0.4rem 0 0;font-size:0.72rem;color:#90a4ae;">
+            La fila de la comarca porta el grau de perill (0-6); les de sota, el nivell de l'avís i la probabilitat de cada fenomen.
+          </p>
+        </div>`;
+    }
+
+    // Desplega o plega una regió de la taula. Quines estan obertes es recorda a
+    // `smpBombersEstat`: l'app es redibuixa sola quan arriben dades noves i, si
+    // no, es tancarien totes just quan les estàs mirant.
+    function alternarRegioSMPBombers(i) {
+      const fila = document.getElementById('smpb-detall-' + i);
+      if (!fila) return;
+      const obert = fila.style.display !== 'none';
+      fila.style.display = obert ? 'none' : 'table-row';
+      const fletxa = document.getElementById('smpb-fletxa-' + i);
+      if (fletxa) fletxa.textContent = obert ? '▸' : '▾';
+
+      const regio = REGIONS_ORDRE[i];
+      const pos = smpBombersEstat.obertes.indexOf(regio);
+      if (obert && pos >= 0) smpBombersEstat.obertes.splice(pos, 1);
+      if (!obert && pos < 0) smpBombersEstat.obertes.push(regio);
+    }
+
     function renderSMPBombers() {
       const cont = document.getElementById('app-smpbombers');
       if (!cont) return;
@@ -2709,6 +2820,8 @@
           <p style="margin:0;font-size:0.85rem;color:#555;">
             Risc de Bombers, independent del risc del GRAE. Cada comarca té un risc de 0 a 6
             i el de la regió és el valor que assoleix la meitat + 1 de les seves comarques.
+            <strong>Clica una regió</strong> per veure quines comarques hi tenen avís, amb el nivell
+            i la probabilitat de cada franja.
           </p>
         </div>
       `;
@@ -2751,14 +2864,20 @@
             <tbody>
       `;
 
-      REGIONS_ORDRE.forEach(regio => {
-        html += `<tr><td class="zona-nom">${regio}</td>`;
+      REGIONS_ORDRE.forEach((regio, i) => {
+        const obert = smpBombersEstat.obertes.includes(regio);
+        html += `<tr onclick="alternarRegioSMPBombers(${i})" style="cursor:pointer;" title="Clica-hi per veure les comarques amb avís">` +
+                `<td class="zona-nom"><span id="smpb-fletxa-${i}" style="display:inline-block;width:1em;color:#78909c;">${obert ? '▾' : '▸'}</span>${regio}</td>`;
         [avui, dema].forEach(dia => {
           PERIODES_SMP.forEach(p => {
             html += cel(agregarRisc(valorsRegio(matriu, regio, dia, p)));
           });
         });
         html += '</tr>';
+        html += `<tr id="smpb-detall-${i}" style="display:${obert ? 'table-row' : 'none'};">` +
+                `<td colspan="9" style="padding:0;background:#fafafa;border:1px solid #ddd;">` +
+                detallRegioSMPBombers(matriu, regio, [avui, dema], [formatDia(avui), formatDia(dema)]) +
+                `</td></tr>`;
       });
 
       html += `<tr><td class="zona-nom" style="font-weight:800;background:#eceff1;">CATALUNYA</td>`;
@@ -2768,31 +2887,6 @@
         });
       });
       html += `</tr></tbody></table></div>`;
-
-      // Detall per comarques
-      html += `<details style="margin-bottom:1.5rem;"><summary style="cursor:pointer;font-weight:700;padding:0.5rem 0;">🔍 Detall per comarques</summary><div style="padding-top:0.5rem;">`;
-      REGIONS_ORDRE.forEach(regio => {
-        html += `<div class="card" style="margin-bottom:0.75rem;">
-          <p style="margin:0 0 0.4rem;font-weight:700;font-size:0.9rem;">${regio}</p>
-          <div class="taula-container"><table class="smp-taula"><thead><tr>
-            <th rowspan="2" style="vertical-align:bottom;">Comarca</th>
-            <th colspan="4" style="text-align:center;">${formatDia(avui)}</th>
-            <th colspan="4" style="text-align:center;">${formatDia(dema)}</th>
-          </tr><tr>
-            ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
-            ${PERIODES_SMP.map(p => `<th class="periode-header">${p}</th>`).join('')}
-          </tr></thead><tbody>`;
-        REGIONS_BOMBERS[regio].forEach(codi => {
-          const nom = matriu[codi]?.nom || nomComarcaLocal(codi);
-          html += `<tr><td class="zona-nom">${nom}</td>`;
-          [avui, dema].forEach(dia => {
-            PERIODES_SMP.forEach(p => { html += cel(riscComarca(matriu, codi, dia, p)); });
-          });
-          html += '</tr>';
-        });
-        html += `</tbody></table></div></div>`;
-      });
-      html += `</div></details>`;
 
       // Els quatre mapes, tots alhora, amb la franja passant sola
       const titolMapa = (m) => `${m.vista === 'regions' ? 'Regions' : 'Comarques'} · ` +
@@ -6965,6 +7059,10 @@
                   <strong>⚠️ Escala de reserva:</strong> per a dades anteriors al canvi de <code>fetch-smp.js</code>, que no porten <code>grauPerill</code>, es dedueix del color: Groc 1, Taronja 3, Vermell 5, i +1 punt si la probabilitat és <em>Molt probable</em> o <em>Segur</em>. És una aproximació i desapareixerà sola quan tot l'històric porti el grau real.
                 </div>
                 <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Nota: el camp <code>perill</code> es mostrava fins ara com una probabilitat (<em>Poc probable</em>…<em>Segur</em>) a la pestanya Alertes. Segons la documentació de Meteocat és el grau de perill 1-6, no la probabilitat, o sigui que aquelles etiquetes s'han de revisar.</p>
+
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Desplegar una regió</p>
+                <p style="margin:0 0 0.5rem;color:#555;">Clicant una fila de la taula s'obre el detall de la regió: <strong>només les comarques que hi tenen avís</strong> (les que estan a 0 les vuit franges no hi surten, no diuen res). De cada comarca hi ha la fila del <strong>grau de perill</strong> (0-6) i, a sota, <strong>una fila per fenomen</strong> amb el <strong>nivell de l'avís i la probabilitat</strong> de cada franja; el llindar surt al costat del nom quan n'hi ha un de sol i, si no, al títol de cada cel·la. El nivell es pinta amb el to fosc del seu propi color, com la resta de la pestanya.</p>
+                <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">És aquí on es veu per què el valor d'una regió pot ser 0 amb comarques a 4 o 6: el llindar de <code>agregarRisc</code> és la meitat + 1 de les comarques, i dues comarques calentes d'una regió de set no hi arriben. La regió mesura si la <em>regió</em> quedarà desbordada, no si hi ha perill en algun lloc.</p>
 
                 <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Els quatre mapes</p>
                 <p style="margin:0 0 0.5rem;color:#555;">Es veuen <strong>tots quatre alhora</strong> —comarques i regions, avui i demà— en comptes d'un de sol amb desplegables: així es compara d'un cop d'ull el detall amb l'agregat, i avui amb demà, sense haver de recordar el mapa que acabes de deixar. La <strong>franja de sis hores va passant sola cada 2 s</strong> (00-06 → 06-12 → 12-18 → 18-00) perquè es vegi com es mou el dia; clicant una franja es fixa i el botó ▶/⏸ atura i reprèn la seqüència. Arrenca per la franja de l'hora que és.</p>
