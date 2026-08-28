@@ -4399,7 +4399,8 @@
       }
       
       // 2. RISC ALLAUS (BPA) - valor màxim del dia directe (1-5)
-      if (dadesCarregades.bpa && dadesCarregades.bpa.resum) {
+      // Fora de temporada es deixa a 0: vegeu l'interruptor d'allaus.
+      if (!allausConfig.desactivat && dadesCarregades.bpa && dadesCarregades.bpa.resum) {
         const perillMax = dadesCarregades.bpa.resum.perill_maxim_numeric || 1;
         resultat.allaus = perillMax;
         if (perillMax >= 3) {
@@ -4626,6 +4627,48 @@
       } catch(e) {}
     }
 
+    // ---- ALLAUS: interruptor de fora de temporada ----
+    // A l'estiu l'ICGC no publica butlletí, però l'últim que es va desar es queda
+    // a bpa_latest.json i el càlcul el continua llegint: al juliol encara hi
+    // hauria el perill de la primavera, congelat. Amb l'interruptor posat, el
+    // nivell d'allaus és 0 encara que arribin dades. Es desa al navegador i
+    // s'engega i s'apaga a Configuració → Allaus BPA.
+    //
+    // No és el mateix que treure la casella "allaus" de Fórmula de risc: allà es
+    // desactiva el factor, aquí es diu que el perill que hi ha és 0. Per això
+    // val tant per al càlcul automàtic com per a un dia editat a mà.
+    const LS_ALLAUS_KEY = 'riscGRAE_allaus';
+    let allausConfig = { desactivat: false };
+
+    function carregarAllausConfig() {
+      try {
+        const s = JSON.parse(localStorage.getItem(LS_ALLAUS_KEY) || 'null');
+        if (s && typeof s.desactivat === 'boolean') allausConfig.desactivat = s.desactivat;
+      } catch(e) {}
+    }
+    carregarAllausConfig();
+
+    // Nivell d'allaus que compta de veritat. Passa-hi sempre pel mig: si es
+    // llegeix `dia.allaus` cru, l'interruptor no fa res. El simulador de
+    // Configuració (`simulacio: true`) se'l salta: hi calibres la fórmula amb
+    // valors inventats i ha de respondre encara que avui les allaus siguin fora
+    // de temporada.
+    const nivellAllaus = (dia) => (allausConfig.desactivat && !dia?.simulacio) ? 0 : parseInt(dia?.allaus || 0);
+
+    const resumAllausConfig = () => allausConfig.desactivat
+      ? 'Ara mateix: allaus desactivades — compten 0 encara que el BPA porti perill.'
+      : 'Ara mateix: allaus actives — es fa servir el perill màxim del BPA.';
+
+    // Llegeix la casella de Configuració → Allaus BPA i recalcula
+    function aplicarAllausConfig() {
+      const el = document.getElementById('allaus-desactivat');
+      if (el) allausConfig.desactivat = el.checked;
+      try { localStorage.setItem(LS_ALLAUS_KEY, JSON.stringify(allausConfig)); } catch(e) {}
+      const resum = document.getElementById('allaus-resum');
+      if (resum) resum.textContent = resumAllausConfig();
+      actualitzarRiscAuto();
+    }
+
     // ---- OPERATIVITAT HC (estat + meteo per base) ----
     // Un HC és operatiu si: (1) estat = "Total" i (2) la meteo permet enlairar-se
     // (finestra de ≥3 h seguides de llum de dia amb ratxa ≤ 50 km/h i visibilitat ≥ 2 km).
@@ -4818,7 +4861,7 @@
       const F = riscFormula || RISC_FORMULA_DEFAULT;
       const perills = [];
       if (F.smp.actiu)    perills.push({ nom: 'smp',    valor: parseFloat(dia.smp || 0) });
-      if (F.allaus.actiu) perills.push({ nom: 'allaus', valor: +(F.allaus.punts[parseInt(dia.allaus || 0)] ?? 0) });
+      if (F.allaus.actiu) perills.push({ nom: 'allaus', valor: +(F.allaus.punts[nivellAllaus(dia)] ?? 0) });
       perills.sort((a, b) => b.valor - a.valor);
 
       const major = perills[0] || { nom: null, valor: 0 };
@@ -4978,7 +5021,8 @@
         const motiuHtml = txt => txt ? ` · ${escapeHtml(txt)}` : '';
         const smpMotiu = (dia.smpDetall && dia.smpDetall.length)
           ? [...new Set(dia.smpDetall.flatMap(d => d.meteors || []))].join(', ') : '';
-        const allausPts = +(riscFormula.allaus.punts[parseInt(dia.allaus || 0)] ?? 0);
+        const allausNiv = nivellAllaus(dia);
+        const allausPts = +(riscFormula.allaus.punts[allausNiv] ?? 0);
         const allausMotiu = (dia.allausDetall && dia.allausDetall.situacions?.length)
           ? dia.allausDetall.situacions.join(', ') : '';
         const infoAflu = getInfoDia(dia.data);
@@ -5009,10 +5053,10 @@
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}${motiuHtml(smpMotiu)}</span>
                 <span class="risc-breakdown-value">${Math.round(dia.smp||0)}/6</span>
               </div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu)}">
-                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${esBase('allaus')}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.allaus||0)>=4?'background:#ffebee;color:#c62828':((dia.allaus||0)>=3?'background:#fff3e0;color:#e65100':((dia.allaus||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(dia.allaus||0)}${motiuHtml(allausMotiu)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.allaus||0)}/5${mesPts(allausPts)}</span>
+              <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu && !allausConfig.desactivat)}">
+                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${allausConfig.desactivat ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;" title="Allaus desactivades a Configuració → Allaus BPA: compten 0">🌞 fora de temporada</span>' : ''}${esBase('allaus')}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(allausNiv)}${motiuHtml(allausConfig.desactivat ? '' : allausMotiu)}</span>
+                <span class="risc-breakdown-value">${allausNiv}/5${mesPts(allausPts)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
                 <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
@@ -5799,6 +5843,9 @@
             <p style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;background:#fff;border-radius:4px;padding:0.5rem 0.7rem;">
               <strong>Aquí és on més es nota.</strong> Un perill d'allaus 3 no aporta 3, sinó ${+(F.allaus.punts[3] ?? 0)}, i un 5 aporta ${+(F.allaus.punts[5] ?? 0)}.
               L'escala del BPA mesura la <em>probabilitat que hi hagi allaus</em>; nosaltres mesurem <em>si ens desbordarà</em>, i això no creix igual.
+              ${allausConfig.desactivat
+                ? '<br><strong style="color:#ef6c00;">🌞 Ara mateix les allaus estan desactivades</strong> (Configuració → Allaus BPA): compten 0 encara que el BPA porti perill.'
+                : '<br><span style="color:#888;">Fora de temporada es poden desactivar a <strong>Configuració → Allaus BPA</strong>: llavors compten 0 encara que arribin dades velles del BPA.</span>'}
             </p>
             <div style="font-weight:700;font-size:0.8rem;color:#37474f;margin-top:0.8rem;">➕ Quan els dos hi són alhora</div>
             ${taula(['El segon perill val', 'Afegeix', 'Per què'], [
@@ -5848,7 +5895,7 @@
     // ---- SIMULADOR DE LA FÓRMULA ----
     // Serveix per calibrar: es mouen els valors d'entrada i es veu el resultat i
     // el perquè, sense tocar cap dia real ni desar res.
-    let simuladorDia = { smp: 0, allaus: 0, afluencia: 0, canvi: 0, boletaires: 0, operativitatHelis: 4 };
+    let simuladorDia = { smp: 0, allaus: 0, afluencia: 0, canvi: 0, boletaires: 0, operativitatHelis: 4, simulacio: true };
 
     const SIMULADOR_CAMPS = [
       { clau: 'smp',               etiqueta: '⚠️ SMP',           max: 6, textos: ['Cap', 'Groc 1 zona', 'Groc ≥3 zones', 'Taronja', 'Taronja ≥3', 'Vermell', 'Vermell ≥3'] },
@@ -6150,15 +6197,27 @@
             <h3 style="margin: 0 0 1rem; font-size: 1rem; color: #0082d9;">❄️ Paràmetres Risc Allaus (BPA)</h3>
             
             <div style="background: #e3f2fd; border: 1px solid #0082d9; border-radius: 6px; padding: 0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
-              <strong>📐 Fórmula actual:</strong><br>
-              Conversió nivell BPA (1-5) a valor (0-6):<br>
-              Nivell 1 → 0, Nivell 2 → 1.5, Nivell 3 → 3, Nivell 4 → 4.5, Nivell 5 → 6<br><br>
-              <strong>Rang:</strong> 0 a 6
+              <strong>📐 Què aporta al risc:</strong><br>
+              El perill del BPA (1-5) no suma el seu valor tal qual:
+              ${[1, 2, 3, 4, 5].map(v => `${v} → <strong>${+(riscFormula.allaus.punts[v] ?? 0)}</strong>`).join(' · ')}.<br>
+              És un dels dos perills de la fórmula: es pren <strong>el més gran</strong> entre l'SMP i les allaus, no la suma.
+              Els punts s'editen a <strong>Configuració → Fórmula de risc</strong>.
             </div>
-            
-            <p style="color: #666; font-style: italic; font-size: 0.9rem;">
-              🚧 Paràmetres d'allaus - Pròximament<br>
-              Aquí es podran configurar pesos per zona d'allaus, orientació, altitud, etc.
+
+            <div style="background:#fff;border:2px solid #0082d9;border-radius:6px;padding:0.9rem;margin-bottom:1rem;">
+              <div style="font-weight:700;font-size:0.9rem;color:#0d47a1;margin-bottom:0.6rem;">🌞 Fora de temporada</div>
+              <label style="font-size:0.85rem;color:#37474f;display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                <input type="checkbox" id="allaus-desactivat" ${allausConfig.desactivat ? 'checked' : ''} onchange="aplicarAllausConfig()">
+                <span><strong>Desactivar les allaus (estiu)</strong> — el risc d'allaus compta <strong>0</strong></span>
+              </label>
+              <p id="allaus-resum" style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;">${resumAllausConfig()}</p>
+              <p style="font-size:0.75rem;color:#888;margin:0.3rem 0 0;">
+                A l'estiu l'ICGC no publica butlletí, però l'últim que es va desar es queda a <code>bpa_latest.json</code> i el càlcul el continuaria llegint: al juliol encara hi hauria el perill de la primavera. Amb la casella marcada, el nivell és 0 encara que arribin dades, tant si el dia és automàtic com si s'ha editat a mà. Es desa al navegador i es recalcula a l'instant: <strong>recorda treure-la quan torni la temporada.</strong>
+              </p>
+            </div>
+
+            <p style="color: #666; font-style: italic; font-size: 0.85rem;">
+              🚧 Pesos per zona d'allaus, orientació i altitud: pròximament.
             </p>
           </div>
         </div>
