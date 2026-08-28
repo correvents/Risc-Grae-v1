@@ -8,6 +8,32 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-28 — Quatre mapes alhora a l'SMP Bombers
+
+Hi havia un sol mapa amb tres desplegables (dia, franja, vista). Per comparar les comarques amb les
+regions, o avui amb demà, calies canviar el desplegable i recordar el que acabaves de veure. Ara n'hi
+ha **quatre de més petits, tots alhora**: comarques i regions d'avui a dalt, els mateixos de demà a
+sota.
+
+I la franja de sis hores **va passant sola cada 2 s** (00-06 → 06-12 → 12-18 → 18-00), que és la
+manera de veure com es mou el dia sense clicar res. Arrenca per la franja de l'hora que és. Clicar una
+franja la fixa —si continuessin passant no la podries mirar— i el botó ⏸/▶ atura i reprèn.
+
+Per dins, el que importa: la geometria es projecta **un sol cop** (`projeccioComarques`) i cada canvi
+de franja només reescriu el `fill` i el `<title>` de cada comarca (`pintarMapesSMPBombers`). Refer
+quatre SVG sencers cada dos segons faria pampallugues, perdria el tooltip obert i cremaria CPU per no
+moure ni un punt de la geometria.
+
+El temporitzador **es mata sol quan la secció deixa de tenir la classe `active`**. Comprovar només si
+l'element existeix no serveix: en canviar de pestanya la secció es queda al DOM, i el temporitzador
+hauria seguit pintant per sempre quatre mapes que ningú mira. En tornar a la pestanya, `renderSMPBombers`
+l'arrenca de nou.
+
+Comprovat amb el navegador i una matriu inventada: la seqüència avança sola, clicar una franja la fixa,
+el botó reprèn, el mapa de regions pinta tota la regió de Girona amb l'agregat mentre el de comarques
+manté el valor de cada comarca, demà es queda a 0, i el temporitzador queda a `null` en sortir de la
+pestanya i torna a arrencar en entrar-hi.
+
 ## 2026-08-28 — Els colors de l'SMP i un interruptor per a l'estiu
 
 Dues peticions petites de la pestanya i de la configuració.

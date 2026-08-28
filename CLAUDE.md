@@ -63,6 +63,15 @@ Només afecta el frontend — el backend (`risc-diari.js`) no pot llegir el `loc
 
 Per unificar-les caldrà, com a mínim:Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
 
+**Els quatre mapes de l'SMP Bombers es dibuixen un cop i es repinten.** `projeccioComarques()`
+projecta les 43 comarques una sola vegada i en guarda els camins; `svgComarques(idMapa)` només en fa
+l'esquelet, sense color, amb el codi de comarca a `data-codi`; i `pintarMapesSMPBombers(matriu,
+franja)` canvia el `fill` i el `<title>` a cada franja. La seqüència de franges avança sola cada 2 s
+i el temporitzador (`smpbTemporitzador`) **es mata sol quan la secció deixa de tenir la classe
+`active`**: la secció es queda al DOM en canviar de pestanya, o sigui que comprovar només si
+l'element existeix no serveix, i sense això s'acumularien temporitzadors pintant mapes que ningú
+mira. Si hi afegeixes un mapa, posa'l a `SMPB_MAPES`; no facis un segon camí de dibuix.
+
 **Els colors de l'SMP Bombers no són els del risc del GRAE.** `COLORS_SMP` (taula, mapa i llegenda
 de la pestanya SMP Bombers) no és un degradat: és el **color de l'avís de Meteocat**, que és el que
 el cap de regió té al cap. 1–2 groc, 3–4 taronja, 5–6 vermell, 0 verd, i dins de cada color el valor
