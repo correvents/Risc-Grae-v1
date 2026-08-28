@@ -47,11 +47,36 @@ Tres regles que no es dedueixen mirant els punts, i que són el moll de l'os. **
 
 **Els dies desats no es poden reconstruir.** `risc_historic` no té columna d'operativitat (que és un factor del càlcul) ni de versió de fórmula, i la columna `hc` és de la fórmula antiga. Cada dia que passa és un dia perdut per a l'anàlisi. Vegeu **`ANALISI-DADES.md`**, que porta el SQL concret i el principi que en surt: **si l'API ho dona, es desa tal com ve** — agregar és barat, recuperar el que no s'ha desat és impossible.
 
+**Interruptor d'allaus fora de temporada.** A l'estiu l'ICGC no publica butlletí, però l'últim
+desat es queda a `bpa_latest.json` i el càlcul el continuaria llegint: al juliol encara hi hauria el
+perill de la primavera. La casella de Configuració → Allaus BPA (`allausConfig.desactivat`, desat a
+`localStorage` amb la clau `riscGRAE_allaus`) posa el nivell a **0**. No és el mateix que treure la
+casella `allaus` de la fórmula: allà es desactiva el factor, aquí es diu que el perill és 0, i per
+això val també per a un dia editat a mà. **Tot el codi ha de llegir el nivell per `nivellAllaus(dia)`**;
+si algú torna a llegir `dia.allaus` cru, l'interruptor deixa de fer efecte en aquell camí. El
+simulador se'l salta a posta (`simulacio: true`): serveix per calibrar amb valors inventats.
+Només afecta el frontend — el backend (`risc-diari.js`) no pot llegir el `localStorage`.
+
 **Simulador.** A Configuració → Fórmula de risc hi ha un simulador que calcula amb valors inventats i ensenya el desglossament pas a pas. Serveix per calibrar sense tocar cap dia real; no desa res.
 
 **Taules de "què suma cada factor"** (`renderExplicacioFactors`). Dos desplegables a la mateixa pestanya que ensenyen, per a cada valor de cada factor, què aporta de veritat — perquè cap factor suma el seu valor tal qual i això s'ha de poder justificar a un cap. **Es generen des de `riscFormula`, no escrites a mà**, o sigui que segueixen sols qualsevol canvi de punts: no els has d'actualitzar.
 
 Per unificar-les caldrà, com a mínim:Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
+
+**Els quatre mapes de l'SMP Bombers es dibuixen un cop i es repinten.** `projeccioComarques()`
+projecta les 43 comarques una sola vegada i en guarda els camins; `svgComarques(idMapa)` només en fa
+l'esquelet, sense color, amb el codi de comarca a `data-codi`; i `pintarMapesSMPBombers(matriu,
+franja)` canvia el `fill` i el `<title>` a cada franja. La seqüència de franges avança sola cada 2 s
+i el temporitzador (`smpbTemporitzador`) **es mata sol quan la secció deixa de tenir la classe
+`active`**: la secció es queda al DOM en canviar de pestanya, o sigui que comprovar només si
+l'element existeix no serveix, i sense això s'acumularien temporitzadors pintant mapes que ningú
+mira. Si hi afegeixes un mapa, posa'l a `SMPB_MAPES`; no facis un segon camí de dibuix.
+
+**Els colors de l'SMP Bombers no són els del risc del GRAE.** `COLORS_SMP` (taula, mapa i llegenda
+de la pestanya SMP Bombers) no és un degradat: és el **color de l'avís de Meteocat**, que és el que
+el cap de regió té al cap. 1–2 groc, 3–4 taronja, 5–6 vermell, 0 verd, i dins de cada color el valor
+baix és el to clar i l'alt el fosc. `COLORS_RISC` és l'altra escala, la del risc del GRAE (l'usa el
+simulador i li fan joc les classes `.risc-color-*`). No les barregis: volen dir coses diferents.
 
 **2. `risc-diari.js` no fa servir `canvi_temps_latest.json`.**
 

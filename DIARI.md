@@ -8,6 +8,72 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-28 — Quatre mapes alhora a l'SMP Bombers
+
+Hi havia un sol mapa amb tres desplegables (dia, franja, vista). Per comparar les comarques amb les
+regions, o avui amb demà, calies canviar el desplegable i recordar el que acabaves de veure. Ara n'hi
+ha **quatre de més petits, tots alhora**: comarques i regions d'avui a dalt, els mateixos de demà a
+sota.
+
+I la franja de sis hores **va passant sola cada 2 s** (00-06 → 06-12 → 12-18 → 18-00), que és la
+manera de veure com es mou el dia sense clicar res. Arrenca per la franja de l'hora que és. Clicar una
+franja la fixa —si continuessin passant no la podries mirar— i el botó ⏸/▶ atura i reprèn.
+
+Per dins, el que importa: la geometria es projecta **un sol cop** (`projeccioComarques`) i cada canvi
+de franja només reescriu el `fill` i el `<title>` de cada comarca (`pintarMapesSMPBombers`). Refer
+quatre SVG sencers cada dos segons faria pampallugues, perdria el tooltip obert i cremaria CPU per no
+moure ni un punt de la geometria.
+
+El temporitzador **es mata sol quan la secció deixa de tenir la classe `active`**. Comprovar només si
+l'element existeix no serveix: en canviar de pestanya la secció es queda al DOM, i el temporitzador
+hauria seguit pintant per sempre quatre mapes que ningú mira. En tornar a la pestanya, `renderSMPBombers`
+l'arrenca de nou.
+
+Comprovat amb el navegador i una matriu inventada: la seqüència avança sola, clicar una franja la fixa,
+el botó reprèn, el mapa de regions pinta tota la regió de Girona amb l'agregat mentre el de comarques
+manté el valor de cada comarca, demà es queda a 0, i el temporitzador queda a `null` en sortir de la
+pestanya i torna a arrencar en entrar-hi.
+
+## 2026-08-28 — Els colors de l'SMP i un interruptor per a l'estiu
+
+Dues peticions petites de la pestanya i de la configuració.
+
+**Els colors de l'SMP Bombers ara són els de l'avís.** La taula, el mapa i la llegenda pintaven un
+degradat de set tons (verd, verd clar, llima, taronja, taronja fosc, vermell, granat) que no volia dir
+res per a qui mira avisos de Meteocat cada dia. Ara segueixen l'avís: **1–2 groc**, **3–4 taronja**,
+**5–6 vermell**, 0 verd, i dins de cada color el valor baix és el to clar i l'alt el fosc, de manera
+que els dos graons d'un mateix avís es distingeixen sense deixar de ser el mateix color.
+
+El canvi és una constant nova, `COLORS_SMP`, i **no** una edició de `COLORS_RISC`: aquella és
+l'escala del risc del GRAE (l'usa el simulador i li fan joc les classes `.risc-color-*`) i no ha de
+canviar perquè canviïn els colors de l'SMP. El text passa a blanc a partir del 4, que és on el fons
+es fa fosc.
+
+**Interruptor d'allaus fora de temporada** (Configuració → Allaus BPA). A l'estiu l'ICGC no publica
+butlletí, però l'últim desat es queda a `bpa_latest.json` i el càlcul el continuava llegint: al juliol
+encara hi hauria el perill de la primavera, congelat i sumant. La casella el posa a **0**.
+
+No és el mateix que treure la casella `allaus` de la fórmula: allà es desactiva el factor, aquí es diu
+que el perill que hi ha és 0. Per això val tant per al càlcul automàtic com per a un dia editat a mà:
+el nivell es llegeix sempre per `nivellAllaus(dia)`, no per `dia.allaus`. El simulador se'l salta a
+posta, perquè hi calibres la fórmula amb valors inventats i ha de respondre encara que avui les
+allaus estiguin desactivades. Al desglossament de la targeta hi surt la marca «🌞 fora de temporada».
+
+De passada, la pestanya Allaus BPA deia una fórmula que ja no existeix (nivell 2 → 1,5, nivell 5 → 6,
+amb decimals). Ara ensenya els punts de veritat, generats des de `riscFormula`, o sigui que segueix
+sola qualsevol canvi.
+
+Es desa al navegador, com els llindars d'operativitat. **Només afecta el frontend:** `risc-diari.js`
+no pot llegir el `localStorage`, així que el risc que es desa cada nit a `risc_historic` continuarà
+comptant les allaus. És el mateix forat que ja tenen els punts de la fórmula, i es tancarà quan la
+config passi a Supabase (passa 2 d'`EVOLUCIO-PREDICCIONS.md`).
+
+Comprovat amb el navegador: la llegenda pinta els set colors nous, la casella desa i recupera
+`riscGRAE_allaus`, `nivellAllaus({allaus: 4})` retorna 0 amb l'interruptor posat i 4 al simulador, i
+la consola no dona cap error.
+
+Pendent: el de sempre, passes 2 a 7 d'`EVOLUCIO-PREDICCIONS.md`.
+
 ## 2026-08-27 — Una sola branca, i l'upsert que petava en silenci
 
 **Es deixa de treballar amb dues branques.** `proves` es fusiona a `main` i es queda quieta. El motiu és estructural: els workflows programats **només s'executen des de la branca per defecte**, o sigui que qualsevol canvi a `scripts/` fet a `proves` neix mort. Havia passat dues vegades, i ahir mateix el fix d'`smp_historic` va estar un dia sencer sense executar-se. A més, `/proves/` mai va ser un entorn aïllat: comparteix `data/` i Supabase amb l'operatiu.
