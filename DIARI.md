@@ -8,6 +8,33 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-08-28 — Les regions es despleguen i ensenyen els avisos de cada comarca
+
+A la taula, clicant una regió s'obre el detall: **les comarques que hi tenen avís** —les que estan a
+0 les vuit franges no hi surten— amb la fila del grau de perill i, a sota, **una fila per fenomen amb
+el nivell de l'avís i la probabilitat de cada franja**. El llindar va al costat del nom quan n'hi ha
+un de sol i, si no, al títol de cada cel·la, que porta sempre el detall sencer.
+
+Substitueix el desplegable «🔍 Detall per comarques» que hi havia sota la taula, que llistava **totes**
+les comarques de **totes** les regions i només en donava el número: la mateixa informació, més fluixa i
+lluny de la fila que t'interessa. Les dades ja hi eren (`matriu[codi].dies[dia][franja].riscos` guarda
+meteor, nivell, probabilitat i llindar de cada afectació); només no es miraven.
+
+Per dins, `fenomensComarca()` gira la matriu: en comptes de «què hi ha en aquesta franja», «aquest
+fenomen, quan i amb quina probabilitat», que és com es llegeix un avís. Si una franja porta dos avisos
+del mateix fenomen, mana el més gros (nivell primer, probabilitat després). Quines regions estan
+obertes es recorda a `smpBombersEstat.obertes`: l'app es redibuixa sola quan arriben dades noves i, si
+no, es tancarien totes just quan les estàs mirant.
+
+De passada queda a la vista una cosa que sorprèn i és correcta: una regió pot marcar 0 amb comarques a
+4 i a 6. El llindar de `agregarRisc` és la meitat + 1 de les comarques, i dues comarques calentes de
+set no hi arriben — la regió mesura si la *regió* quedarà desbordada, no si hi ha perill en algun lloc.
+Ara es pot veure d'on surt el número en comptes d'haver-hi de confiar.
+
+Comprovat al navegador amb avisos inventats (calor i tempesta a Girona, vent al Segrià): les files
+surten en ordre, els nivells i les probabilitats cauen a la franja que toca, una regió sense avisos ho
+diu, i el desplegament sobreviu a un redibuix.
+
 ## 2026-08-28 — Quatre mapes alhora a l'SMP Bombers
 
 Hi havia un sol mapa amb tres desplegables (dia, franja, vista). Per comparar les comarques amb les
