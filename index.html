@@ -2462,9 +2462,17 @@
       return REGIONS_BOMBERS[regio].map(c => riscComarca(matriu, c, dia, periode));
     }
 
+    // Escala del risc del GRAE (l'usa el simulador de Configuració → Fórmula de risc).
     const COLORS_RISC = ['#4caf50', '#8bc34a', '#cddc39', '#ff9800', '#ff5722', '#f44336', '#b71c1c'];
-    const colorRisc = (v) => COLORS_RISC[Math.max(0, Math.min(6, v))];
-    const textSobreRisc = (v) => (v >= 5 ? '#fff' : '#000');
+
+    // Colors de l'SMP: aquí no hi va un degradat sinó el color de l'avís de
+    // Meteocat, que és el que el cap de regió té al cap: 1–2 groc, 3–4 taronja,
+    // 5–6 vermell, i el 0 (cap avís) verd. Dins de cada color el valor baix és el
+    // to clar i l'alt el fosc, o sigui que els dos graons d'un mateix avís es
+    // distingeixen sense deixar de ser el mateix color.
+    const COLORS_SMP = ['#4caf50', '#fff176', '#fdd835', '#ffb74d', '#ef6c00', '#e53935', '#b71c1c'];
+    const colorRisc = (v) => COLORS_SMP[Math.max(0, Math.min(6, v))];
+    const textSobreRisc = (v) => (v >= 4 ? '#fff' : '#000');
 
     let smpBombersEstat = { dia: null, periode: '12-18', vista: 'regions' };
     let geoComarques = null;
@@ -2675,7 +2683,7 @@
           </div>
           <div id="smpb-mapa">${svgComarques(matriu, smpBombersEstat.dia, smpBombersEstat.periode, smpBombersEstat.vista)}</div>
           <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem;font-size:0.8rem;">
-            ${COLORS_RISC.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
+            ${COLORS_SMP.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
           </div>
         </div>
       `;
@@ -6778,6 +6786,9 @@
                   <strong>⚠️ Escala de reserva:</strong> per a dades anteriors al canvi de <code>fetch-smp.js</code>, que no porten <code>grauPerill</code>, es dedueix del color: Groc 1, Taronja 3, Vermell 5, i +1 punt si la probabilitat és <em>Molt probable</em> o <em>Segur</em>. És una aproximació i desapareixerà sola quan tot l'històric porti el grau real.
                 </div>
                 <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Nota: el camp <code>perill</code> es mostrava fins ara com una probabilitat (<em>Poc probable</em>…<em>Segur</em>) a la pestanya Alertes. Segons la documentació de Meteocat és el grau de perill 1-6, no la probabilitat, o sigui que aquelles etiquetes s'han de revisar.</p>
+
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Colors de la taula i del mapa</p>
+                <p style="margin:0 0 0.5rem;color:#555;">No és un degradat de verd a vermell sinó <strong>el color de l'avís de Meteocat</strong>, que és el que el cap de regió té al cap: <strong>1–2 groc</strong>, <strong>3–4 taronja</strong>, <strong>5–6 vermell</strong>, i el <strong>0</strong> (cap avís) verd. Dins de cada color, el valor baix és el to clar i l'alt el fosc, o sigui que els dos graons d'un mateix avís es distingeixen sense deixar de ser el mateix color (<code>COLORS_SMP</code>). L'escala del risc del GRAE és una altra i no s'ha de barrejar amb aquesta.</p>
 
                 <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Risc d'una regió i de Catalunya (<code>agregarRisc</code>)</p>
                 <p style="margin:0 0 0.5rem;color:#555;">El valor més alt que assoleix <strong>la meitat + 1</strong> de les unitats. Els valors s'engloben: una comarca amb un 4 també compta per al 3 i per al 2. El risc de Catalunya és el mateix càlcul aplicat sobre les 8 regions.</p>
