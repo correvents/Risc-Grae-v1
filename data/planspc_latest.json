@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-08-29T17:14:57.730Z",
-  "plans": []
+  "actualitzat": "2026-08-30T10:41:54.847Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_CAMCAT.png"
+      },
+      "plaacronim": "CAMCAT",
+      "planom": "CAMCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "30/08/2026 10:18",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126870_INICI--NOACTIVAT_CAMCAT_202608301147.pdf"
+      },
+      "descripcio": "Platja tancada l'Escala - "
+    }
+  ]
 }
