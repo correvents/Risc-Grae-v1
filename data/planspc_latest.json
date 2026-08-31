@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-08-31T11:50:56.033Z",
-  "plans": []
+  "actualitzat": "2026-08-31T16:01:43.775Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_CAMCAT.png"
+      },
+      "plaacronim": "CAMCAT",
+      "planom": "CAMCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "31/08/2026 17:16",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126902_ACTUALITZACIO--NOACTIVAT_CAMCAT_202608311732.pdf"
+      },
+      "descripcio": "ACA-Abocament aigua residual via emissari submarí - "
+    }
+  ]
 }
