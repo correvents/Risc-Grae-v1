@@ -1,11 +1,11 @@
 {
-  "dataConsulta": "2026-08-31T16:01:41.771Z",
+  "dataConsulta": "2026-08-31T19:32:16.556Z",
   "avui": {
     "data": "2026-08-31",
     "variables": {
-      "estatDelCel": "El cel estarà serè o poc ennuvolat, amb el predomini l'ambient assolellat al centre del dia. Malgrat tot, hi haurà alguns intervals de núvols baixos al sector central del litoral i prelitoral, més trencats al centre del dia. \nIndependentment, a partir del migdia creixeran algunes nuvolades al Pirineu i Prepirineu, sobretot l'oriental, i a l'interior del quadrant nord-est, així com de forma més aïllada també al prelitoral.",
-      "precipitacions": "A partir de migdia, s'esperen alguns ruixats aïllats al sector oriental del Pirineu i Prepirineu i al nord de la Catalunya Central. A més, no es descarta algun ruixat local entorn del Montseny i, puntualment, a les Muntanyes de Prades. Seran febles o localment moderats, tot i que és possible que siguin localment forts. No es descarta que vagin acompanyats de tempesta.\nA banda, fins a migdia no es descarta alguna roina puntual a punts de la costa central. ",
-      "temperatures": "La temperatura màxima serà similar o lleugerament més baixa, excepte a l'interior de les Terres de l'Ebre on quedarà semblant.",
+      "estatDelCel": "Durant la tarda es mantindrà el cel entre mig i molt ennuvolat per nuvolades al Pirineu Prepirineu, sobretot l'oriental, i al Prelitoral. Durant la nit minvarà la nuvolositat en sectors de muntanya quedant el cel serè o poc ennuvolat. Independentment, s'incrementarà la nuvolositat a la meitat sud del litoral i prelitoral, quedant el cel entre mig i molt ennuvolat durant la nit.",
+      "precipitacions": "A la tarda són possibles alguns ruixats aïllats al sector oriental del Pirineu i Prepirineu, al nord de la Catalunya Central i a la serralada Transversal. Seran febles o localment moderats, tot i que no es descarta que siguin localment forts al Pirineu i Prepirineu oriental i punts de l'interior del quadrant nord-est. A més, podran anar, localment acompanyats de tempesta.\n",
+      "temperatures": "La temperatura serà semblant o lleugerament més baixa.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent.",
       "vent": "S'imposarà el vent de component sud i oest. Serà d'intensitat entre fluixa i moderada, amb alguns cops forts durant la tarda al prelitoral sud i sud de Ponent. Al final del dia, bufarà fluix i variable en general."
     }
@@ -13,11 +13,11 @@
   "dema": {
     "data": "2026-09-01",
     "variables": {
-      "estatDelCel": "El cel estarà mig o molt ennuvolat a les Terres de l'Ebre fins a migdia i poc o mig ennuvolat a partir de llavors. A la resta, en general predominarà el cel serè o poc ennuvolat per algunes bandes núvols alts i prims, sobretot al litoral i prelitoral on seran més abundants durant les hores central del dia. A banda, de matinada i primeres hores del matí hi haurà estrats baixos al nord de la depressió Central, i a partir de migdia creixeran nuvolades al Pirineu i punts del Prepirineu. Al final del dia, la nuvolositat minvarà en general, tret del terç sud on es mantindrà poc o mig ennuvolat.",
-      "precipitacions": "És possible algun plugim feble al terç sud fins a migdia i al litoral central durant les hores centrals del dia. A banda, a partir de migdia és probable algun ruixat local a partir de migdia, puntualment acompanyat de tempesta i calamarsa. En general seran d'intensitat feble, o localment moderada, i acumularan quantitats entre minses i poc abundants.",
+      "estatDelCel": "De matinada i durant les primeres hores del matí el cel estarà mig o molt ennuvolat per núvols baixos al litoral i prelitoral sud així com també a punts del sud de la Catalunya central, a la resta cel serè o poc ennuvolat. A partir de migdia i durant la tarda arribaran bandes de núvols alts i mitjans que circularan de sud-oest a nord-est i deixaran progressivament el cel entre mig i molt ennuvolat, sobretot al sector litoral i prelitoral. Avançaran al llarg de la tarda de sud a nord i seran menys compactes cap a l'interior i el Pirineu occidental. Al final del dia, la nuvolositat minvarà en general.",
+      "precipitacions": "És possible algun plugim feble al terç sud fins a migdia i no se'n descarta algun al litoral central durant les hores centrals del dia. La precipitació serà d'intensitat feble, i s'acumularan quantitats entre minses i poc abundants.",
       "temperatures": "La temperatura mínima serà semblant o lleugerament més alta. Per la seva banda, la màxima serà semblant.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent, si bé serà puntualment regular al terç sud.",
-      "vent": "El vent bufarà fluix i variable al principi i al final de la jornada, si bé al litoral sud predominarà el component est. A partir de mig matí, s'imposarà el component sud i est en general. Serà d'intensitat entre fluixa i moderada, amb alguns cops forts a la meitat nord del litoral, i durant la tarda al prelitoral sud i al sud de Ponent."
+      "visibilitat": "La visibilitat serà entre bona i excel·lent, si bé serà puntualment regular al terç sud durant la matinada.",
+      "vent": "El vent bufarà fluix i variable al principi i al final de la jornada, si bé al litoral sud predominarà el component est. A partir de mig matí, s'imposarà el component sud i est en general. Serà d'intensitat entre fluixa i moderada, amb alguns cops forts a la meitat nord del litoral, i durant la tarda al litoral i prelitoral sud i al sud de Ponent."
     }
   }
 }
