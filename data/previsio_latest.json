@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-01T13:21:05.587Z",
+  "dataConsulta": "2026-09-01T17:21:07.587Z",
   "avui": {
     "data": "2026-09-01",
     "variables": {
-      "estatDelCel": "Cel mig ennuvolat, o puntualment molt ennuvolat a les Terres de l'Ebre i altres punts del litoral sud, tot i que a partir de la tarda tendirà a minvar i quedar restringida cap a les Terres de l'Ebre. A la resta del país, el cel estarà serè o poc ennuvolat en general, tot i que durant les hores centrals del dia hi haurà bandes de núvols alts i mitjans que circularan de sud-oest a nord-est i deixaran progressivament el cel poc o mig ennuvolat, sobretot a la meitat sud del litoral i prelitoral. A més, durant les hores centrals del dia creixeran nuvolades al Pirineu.",
-      "precipitacions": "És probable algun plugim feble a les Terres de l'Ebre fins a la tarda. A banda, és probable algun ruixat feble al Pirineu, sobretot al sector oriental de la zona. La precipitació serà d'intensitat feble, i s'acumularan quantitats minses de precipitació.",
-      "temperatures": "La temperatura màxima serà semblant.",
+      "estatDelCel": "Durant la tarda el cel estarà entre mig i molt ennuvolat per núvols alts i mitjans a la meitat est que circularan de sud-oest a nord-est. A la meitat oest cel serè o poc ennuvolat amb nuvolades al Pirineu occidental i alguns núvols alts que arribaran a darrera hora.",
+      "precipitacions": "Durant la tarda no es descarta algun plugim  molt feble a punts del litoral. A banda, és probable algun ruixat feble al Pirineu, sobretot al sector oriental de la zona. La precipitació serà d'intensitat feble, i s'acumularan quantitats minses de precipitació.",
+      "temperatures": "La temperatura serà lleugerament més baixa.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que a les Terres de l'Ebre serà puntualment regular.",
-      "vent": "S'imposarà el vent de component sud i est en general, entre fluix i moderat, amb alguns cops forts durant la tarda al prelitoral sud i al sud de Ponent. Al final del dia, el vent quedarà fluix i variable, en conjunt."
+      "vent": "El vent bufarà de component sud i sud-est, entre fluix i moderat. Al final del dia, el vent quedarà fluix i variable, en conjunt."
     }
   },
   "dema": {
     "data": "2026-09-02",
     "variables": {
-      "estatDelCel": "Predominarà el cel serè en general, o puntualment poc ennuvolat pel pas d'alguns núvols alts i prims durant la tarda. Malgrat tot, durant la matinada i les primeres hores del matí hi haurà alguns intervals de núvols baixos a punts de les Terres de l'Ebre. A més, durant la tarda podran créixer algunes nuvolades al Pirineu oriental i hi haurà algun núvol d'evolució poc important a altres punts de muntanya de la meitat nord i al massís del Port. Al final del dia, la nuvolositat minvarà en general.",
+      "estatDelCel": "Predominarà el cel serè en general, o puntualment poc ennuvolat pel pas d'alguns núvols alts i prims durant la tarda. Malgrat això, de matinada i durant les primeres hores del matí hi haurà alguns intervals de núvols baixos a punts de les Terres de l'Ebre. A més, durant la tarda creixeran núvols d'evolució al Pirineu, a altres punts de muntanya de la meitat nord i al massís del Port. Al final del dia, la nuvolositat minvarà en general.",
       "precipitacions": "Durant la tarda no es descarta algun ruixat local, feble i minso al Pirineu oriental.",
       "temperatures": "La temperatura mínima serà similar en general.\nPer la seva banda, la màxima pujarà entre lleugerament i moderadament, sobretot a l'interior.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent, si bé serà puntualment regular a les Terres de l'Ebre durant la matinada.",
-      "vent": "El vent bufarà fluix i variable al principi i al final de la jornada, si bé al sector central del litoral predominarà el terral, així com al nord de la Costa Brava predominarà la tramuntana. A partir de mig matí, s'imposarà el component sud en general. Serà d'intensitat entre fluixa i moderada, amb alguns cops forts durant la tarda al prelitoral sud i al sud de Ponent."
+      "vent": "El vent bufarà fluix i variable al principi i al final de la jornada, si bé al sector central del litoral predominarà el terral, així com al nord de la Costa Brava predominarà la tramuntana. A partir de migdia, s'imposarà el component sud en general. Serà d'intensitat entre fluixa i moderada, amb alguns cops forts durant la tarda al prelitoral sud i al sud de Ponent."
     }
   }
 }
