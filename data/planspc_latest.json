@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-09-03T12:43:16.062Z",
+  "actualitzat": "2026-09-03T17:04:38.349Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126902_ACTUALITZACIO--NOACTIVAT_CAMCAT_202608311732.pdf"
       },
       "descripcio": "ACA-Abocament aigua residual via emissari submarí - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_AEROCAT.png"
+      },
+      "plaacronim": "AEROCAT",
+      "planom": "AEROCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "03/09/2026 17:15",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126975_INICI--NOACTIVAT_AEROCAT_202609031756.pdf"
+      },
+      "descripcio": "Alerta local - Aeroport de Barcelona"
     }
   ]
 }
