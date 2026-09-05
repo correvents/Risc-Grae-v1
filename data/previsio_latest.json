@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-04T16:53:53.727Z",
+  "dataConsulta": "2026-09-05T09:24:30.602Z",
   "avui": {
-    "data": "2026-09-04",
+    "data": "2026-09-05",
     "variables": {
-      "estatDelCel": "Cel serè en general. Tot i això, durant la tarda creixerà algun núvol d'evolució poc important a punts del Pirineu oriental.",
+      "estatDelCel": "Domini de l'ambient assolellat, en conjunt, durant bona part del dia, malgrat la presència d'algunes bandes de núvols alts i prims, sobretot al matí quan podran deixar el cel mig ennuvolat. A més, a la tarda creixeran núvols d'evolució al Pirineu, sobretot al sector oridental.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima pujarà entre lleugerament i moderadament en general. L'ambient serà molt calorós. Els valors més alts de temperatura rondaran els 40 ºC a punts de Ponent i l'interior de la vall de l'Ebre.",
-      "visibilitat": "La visibilitat serà bona o excel·lent.",
-      "vent": "S'imposarà el vent de component sud al litoral, prelitoral i la resta de la meitat est, mentre que a la resta del país bufarà de component oest. El vent de component sud acabarà entrant a l'interior del país de cara al vespre. Serà d'intensitat entre fluixa i moderada, amb algun cop fort al vespre al sud de Ponent. Independentment, durant les hores centrals del dia bufarà vent de component nord a l'extrem nord del Pirineu Occidental."
+      "temperatures": "La temperatura màxima serà semblant o lleugerament més alta en general, tot i que a les Terres de l'Ebre i a Ponent serà semblant o lleugerament més baixa. L'ambient serà molt calorós. Els valors més alts de temperatura rondaran els 38 o 39 ºC a punts de la Catalunya Central, i puntualment els 40 ºC a punts de Ponent.",
+      "visibilitat": "La visibilitat serà bona.",
+      "vent": "S'imposarà progressivament el vent de component sud, fluix en general, tot i que més reforçat a la tarda al litoral i prelitoral, sobretot al sector sud. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
     }
   },
   "dema": {
-    "data": "2026-09-05",
+    "data": "2026-09-06",
     "variables": {
-      "estatDelCel": "Domini de l'ambient assolellat en conjunt durant bona part del dia malgrat la presència d'algunes bandes de núvols alts i prims, sobretot al terç sud durant el matí on podran deixar el cel mig ennuvolat. A més, a la tarda creixeran algunes nuvolades al Pirineu, sobretot al sector occidental.",
+      "estatDelCel": "Domini de l'ambient assolellat si bé arribaran núvols alts per Ponent durant el matí. A la tarda, també n'arribaran de mitjans sobretot a la meitat oest. A banda, de matinada i fins a primeres hores del matí es podran formar alguns núvols baixos a l'extrem sud del litoral, mentre que se'n podran formar també a l'extrem nord de la Costa Brava cap al final del dia.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima pujarà lleugerament en general, però de forma moderada a zones de muntanya. La temperatura màxima serà similar o lleugerament més alta en general, tot i que a les Terres de l'Ebre i a Ponent serà similar o lleugerament més baixa.",
-      "visibilitat": "La visibilitat serà bona o excel·lent.",
-      "vent": "Vent fluix i de direcció variable fins a mig matí, amb tramuntana fluixa amb algun cop moderat al Cap de Creus. A partir d'aleshores s'imposarà progressivament el vent de component sud, fluix en general, tot i que més reforçat a la tarda al litoral i prelitoral, sobretot al sector sud. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
+      "temperatures": "Temperatura mínima. La temperatura màxima també serà similar, tot i que podrà pujar lleugerament a les Terres de l'Ebre i punts de la Catalunya Central.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "Vent fluix i de direcció variable fins a mig matí, amb tramuntana fluixa al Cap de Creus. A partir d'aleshores s'imposarà progressivament el vent de component sud, tot i que fins a la tarda bufarà de component est i sud al quadrant nord-est i de component oest a l'interior de la meitat oest. Bufarà fluix amb cops moderats, més reforçat a la tarda al terç sud. Al final del dia, el vent tornarà a quedar fluix i variable."
     }
   }
 }
