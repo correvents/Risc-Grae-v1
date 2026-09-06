@@ -4392,6 +4392,7 @@
         pes_plana_lleida:       p.zones['Plana de Lleida'],
         pes_camp_tarragona:     p.zones['Camp de Tarragona'],
         pes_terres_ebre:        p.zones["Terres de l'Ebre"],
+        pes_zona_maritima:      p.zones['Zona Marítima'],
         pes_periode_00_06:      p.periodes['00-06'],
         pes_periode_06_12:      p.periodes['06-12'],
         pes_periode_12_18:      p.periodes['12-18'],
@@ -4406,37 +4407,52 @@
     }
 
     function rowToRiscParams(row, base) {
+      // Una columna que no existeixi a la taula, o que hi sigui nul·la, no ha de
+      // desactivar res: es queda el valor de base. Sense això, una zona sense
+      // columna (o una columna nova encara buida) sortia NaN i el filtre
+      // `zones[z] > 0` la donava per apagada sense que ningú l'hagués tocat.
+      const val = (v, defecte) => (v == null || isNaN(+v)) ? defecte : +v;
       return {
         ...base,
         zones: {
-          'Pirineu Occidental': +row.pes_pirineu_occidental,
-          'Pirineu Oriental':   +row.pes_pirineu_oriental,
-          'Costa Brava':            +row.pes_emporda,
-          'Litoral Central':    +row.pes_litoral_central,
-          'Plana de Lleida':    +row.pes_plana_lleida,
-          'Camp de Tarragona':  +row.pes_camp_tarragona,
-          "Terres de l'Ebre":  +row.pes_terres_ebre,
+          ...base.zones,
+          'Pirineu Occidental': val(row.pes_pirineu_occidental, base.zones['Pirineu Occidental']),
+          'Pirineu Oriental':   val(row.pes_pirineu_oriental,   base.zones['Pirineu Oriental']),
+          'Costa Brava':        val(row.pes_emporda,            base.zones['Costa Brava']),
+          'Litoral Central':    val(row.pes_litoral_central,    base.zones['Litoral Central']),
+          'Plana de Lleida':    val(row.pes_plana_lleida,       base.zones['Plana de Lleida']),
+          'Camp de Tarragona':  val(row.pes_camp_tarragona,     base.zones['Camp de Tarragona']),
+          "Terres de l'Ebre":   val(row.pes_terres_ebre,        base.zones["Terres de l'Ebre"]),
+          'Zona Marítima':      val(row.pes_zona_maritima,      base.zones['Zona Marítima']),
         },
         periodes: {
-          '00-06': +row.pes_periode_00_06,
-          '06-12': +row.pes_periode_06_12,
-          '12-18': +row.pes_periode_12_18,
-          '18-24': +row.pes_periode_18_24,
+          ...base.periodes,
+          '00-06': val(row.pes_periode_00_06, base.periodes['00-06']),
+          '06-12': val(row.pes_periode_06_12, base.periodes['06-12']),
+          '12-18': val(row.pes_periode_12_18, base.periodes['12-18']),
+          '18-24': val(row.pes_periode_18_24, base.periodes['18-24']),
         },
         nivells: {
-          'Groc':    +row.pes_nivell_groc,
-          'Taronja': +row.pes_nivell_taronja,
-          'Vermell': +row.pes_nivell_vermell,
+          ...base.nivells,
+          'Groc':    val(row.pes_nivell_groc,    base.nivells['Groc']),
+          'Taronja': val(row.pes_nivell_taronja, base.nivells['Taronja']),
+          'Vermell': val(row.pes_nivell_vermell, base.nivells['Vermell']),
         },
-        normalitzador: +row.normalitzador,
-        maxSMP:        +row.max_smp,
+        normalitzador: val(row.normalitzador, base.normalitzador),
+        maxSMP:        val(row.max_smp,       base.maxSMP),
       };
     }
+
+    // El nom de la taula va en minúscules: PostgREST hi busca la relació pel nom
+    // exacte, i amb 'taula_config_Alertes_SMP' donava 404 sempre. La config de
+    // zones no ha arribat mai de Supabase — queia al localStorage de cada
+    // dispositiu — i el que es guardava des de Configuració no ho desava ningú.
+    const TAULA_CONFIG_SMP = 'taula_config_alertes_smp';
 
     async function carregarRiscConfig() {
       try {
         const { data, error } = await sbClient
-          .from('taula_config_Alertes_SMP')
+          .from(TAULA_CONFIG_SMP)
           .select('*')
           .eq('id', 1)
           .single();
@@ -4455,7 +4471,7 @@
       localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
       try {
         await sbClient
-          .from('taula_config_Alertes_SMP')
+          .from(TAULA_CONFIG_SMP)
           .upsert(riscParamsToRow(riscParams));
       } catch(e) {
         console.warn('Error guardant params a Supabase:', e);
