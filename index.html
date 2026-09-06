@@ -26,17 +26,31 @@
       margin: 0 auto;
     }
     
-    /* Navegació */
+    /* Navegació
+       Les pestanyes van en diverses files, no en una de sola que llisca: al Mac
+       i al mòbil el desplaçament lateral és natural (trackpad, dit), però a
+       Windows amb ratolí no hi ha manera d'arribar a les últimes — la barra
+       estava amagada i la roda no desplaça en horitzontal. Amb wrap es veuen
+       totes sempre, sense haver de desplaçar res. */
     .nav-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 0;
       margin-bottom: 1rem;
       border-bottom: 2px solid #0082d9;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
     }
-    .nav-tabs::-webkit-scrollbar { display: none; }
+    /* En pantalles estretes es manté la fila que llisca amb el dit, però amb la
+       barra visible (fina) perquè es vegi que hi ha més pestanyes a la dreta. */
+    @media (max-width: 600px) {
+      .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      .nav-tabs::-webkit-scrollbar { height: 4px; }
+      .nav-tabs::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 2px; }
+    }
     .nav-tab { white-space: nowrap; flex-shrink: 0; }
     
     .nav-tab {
@@ -2384,10 +2398,32 @@
       'Girona':             [2, 10, 20, 28, 34, 19, 31],
       'Centre':             [7, 24, 14, 35, 42, 43, 15],
       'Lleida':             [33, 23, 38, 27, 18, 32],
-      'Pirineus':           [39, 5, 26, 25, 4],
+      'Pirineus':           [5, 26, 25, 4],
       'Tarragona':          [36, 8, 1, 12, 16, 29],
       "Terres de l'Ebre":   [9, 22, 30, 37]
     };
+
+    // Territori que no cobreixen els Bombers de la Generalitat i que, per tant,
+    // no ha de comptar al risc de cap regió. Es pinta en gris al mapa, amb el
+    // seu perímetre propi i el valor de l'SMP al tooltip: la meteorologia hi és
+    // igualment, el que no hi és som nosaltres.
+    //
+    //   · Aran (39): el decret la posa a la regió Pirineus, però l'Aran manté
+    //     el seu propi cos de bombers (vegeu REGIONS-EMERGENCIA.md).
+    //
+    // La ciutat de Barcelona també va a part (bombers municipals), però no és
+    // una comarca: el Barcelonès continua comptant per la Metropolitana Sud,
+    // perquè l'Hospitalet i la resta sí que són nostres, i al mapa se'n marca
+    // només el terme municipal (CONTORN_BARCELONA).
+    const COMARQUES_FORA_REGIO = {
+      39: 'Aran — cos de bombers propi'
+    };
+    const COLOR_FORA_REGIO = '#cfd8dc';
+
+    // Contorn del terme municipal de Barcelona: anell principal del municipi
+    // 080193 de municipis_simplificat_500m.geojson, copiat aquí perquè carregar
+    // 545 KB de municipis per dibuixar una ratlla no surt a compte.
+    const CONTORN_BARCELONA = [[2.2076,41.4419],[2.1787,41.4682],[2.1642,41.4501],[2.1346,41.4472],[2.1213,41.4258],[2.0712,41.4353],[2.0798,41.4162],[2.0722,41.4035],[2.1006,41.4083],[2.102,41.3812],[2.135,41.3626],[2.1369,41.3485],[2.1005,41.336],[2.1189,41.3227],[2.1499,41.3207],[2.1592,41.3272],[2.1652,41.3414],[2.1569,41.3422],[2.1459,41.331],[2.1509,41.3465],[2.1669,41.3471],[2.1847,41.3807],[2.1854,41.3577],[2.1983,41.3869],[2.1997,41.3833],[2.2021,41.3901],[2.218,41.4043],[2.229,41.4104],[2.2078,41.425],[2.2076,41.4419]];
 
     const REGIONS_ORDRE = Object.keys(REGIONS_BOMBERS);
     const PERIODES_SMP = ['00-06', '06-12', '12-18', '18-00'];
@@ -2557,21 +2593,60 @@
       const px = (lon) => (MARGE + (lon - minLon) * cosLat * escala).toFixed(1);
       const py = (lat) => (MARGE + (maxLat - lat) * escala).toFixed(1);
 
-      const anell = (coords) => 'M' + coords.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join('L') + 'Z';
+      const punts = (coords) => coords.map(([lon, lat]) => `${px(lon)},${py(lat)}`);
+      const anell = (coords) => 'M' + punts(coords).join('L') + 'Z';
       const camins = (geom) => geom.type === 'Polygon'
         ? geom.coordinates.map(anell).join('')
         : geom.coordinates.map(pol => pol.map(anell).join('')).join('');
+      const comarques = geoComarques.features.map(f => ({
+        codi: parseInt(f.properties.CODICOMAR, 10),
+        nom: f.properties.NOMCOMAR,
+        d: camins(f.geometry)
+      }));
+
+      const dPerCodi = {};
+      comarques.forEach(c => { dPerCodi[c.codi] = c.d; });
+      const dDeCodis = (codis) => codis.map(c => dPerCodi[c] || '').join('');
 
       projeccioCache = {
         ample: AMPLE,
         alt: alt.toFixed(0),
-        comarques: geoComarques.features.map(f => ({
-          codi: parseInt(f.properties.CODICOMAR, 10),
-          nom: f.properties.NOMCOMAR,
-          d: camins(f.geometry)
-        }))
+        comarques,
+        // Cada regió com un sol camí (les seves comarques encadenades). Serveix
+        // per marcar-ne el perímetre: vegeu svgDefsPerimetres.
+        regions: REGIONS_ORDRE.map(r => ({ id: 'r' + REGIONS_ORDRE.indexOf(r), nom: r, d: dDeCodis(REGIONS_BOMBERS[r]) })),
+        fora: Object.keys(COMARQUES_FORA_REGIO).map(Number)
+          .map(codi => ({ id: 'f' + codi, nom: nomComarcaLocal(codi), d: dDeCodis([codi]) }))
+          .concat([{ id: 'fbcn', nom: 'Barcelona',
+                     d: 'M' + CONTORN_BARCELONA.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join('L') + 'Z' }])
       };
       return projeccioCache;
+    }
+
+    // El perímetre d'una regió no es pot treure ajuntant les seves comarques i
+    // esborrant les fronteres de dins: el GeoJSON està simplificat sense
+    // topologia i dues comarques veïnes no comparteixen tots els vèrtexs, o
+    // sigui que les fronteres internes no s'anul·len i queden trossos de ratlla
+    // pel mig.
+    //
+    // Es fa amb SVG: es dibuixa el contorn de totes les comarques de la regió
+    // amb un traç gruixut i es retalla amb *tot menys la regió* (el rectangle
+    // sencer més els seus anells, amb evenodd). Del traç només en queda la
+    // meitat que cau a fora, i les ratlles de dins desapareixen soles.
+    //
+    // Es defineix un sol cop i cada mapa el reutilitza amb <use>: quatre còpies
+    // de tota la geometria serien uns 240 KB de DOM per no canviar res.
+    function svgDefsPerimetres() {
+      const p = projeccioComarques();
+      const arees = [...p.regions, ...p.fora];
+      const clips = arees.map(a =>
+        `<clipPath id="smpb-clip-${a.id}"><path clip-rule="evenodd" d="M0,0H${p.ample}V${p.alt}H0Z${a.d}"/></clipPath>`
+      ).join('');
+      const traços = arees.map(a =>
+        `<path d="${a.d}" fill="none" stroke="#000" stroke-width="4" stroke-linejoin="round" clip-path="url(#smpb-clip-${a.id})"/>`
+      ).join('');
+      return `<svg width="0" height="0" style="position:absolute;" aria-hidden="true">` +
+             `<defs>${clips}<g id="smpb-perimetres">${traços}</g></defs></svg>`;
     }
 
     // Esquelet d'un mapa: els camins amb el codi de comarca a sobre i sense
@@ -2584,12 +2659,17 @@
         `<path data-codi="${c.codi}" d="${c.d}" fill="#eceff1" stroke="#fff" stroke-width="0.8"><title></title></path>`
       ).join('');
 
-      // Contorn de cada regió per sobre, per veure-les separades
-      const contorns = p.comarques.filter(c => comarcaARegio[c.codi]).map(c =>
-        `<path d="${c.d}" fill="none" stroke="#37474f" stroke-width="0.4" opacity="0.5"/>`
-      ).join('');
+      // La ciutat de Barcelona, per sobre del Barcelonès: bombers municipals.
+      const bcnD = (p.fora.find(f => f.id === 'fbcn') || {}).d || '';
+      const bcn = `<path d="${bcnD}" fill="${COLOR_FORA_REGIO}">` +
+                  `<title>Barcelona — bombers municipals, fora de les regions de Bombers de la Generalitat</title></path>`;
 
-      return `<svg id="smpb-svg-${idMapa}" viewBox="0 0 ${p.ample} ${p.alt}" style="width:100%;height:auto;display:block;">${paths}${contorns}</svg>`;
+      // El perímetre de cada regió, en negre i per sobre de tot: sense ell, amb
+      // totes les comarques d'una regió pintades del mateix color, no es veia
+      // on acaba una regió i on comença la següent.
+      const perimetres = `<use href="#smpb-perimetres" pointer-events="none"/>`;
+
+      return `<svg id="smpb-svg-${idMapa}" viewBox="0 0 ${p.ample} ${p.alt}" style="width:100%;height:auto;display:block;">${paths}${bcn}${perimetres}</svg>`;
     }
 
     // Pinta els quatre mapes d'una franja canviant només el fill i el títol de
@@ -2614,9 +2694,18 @@
           const nom = nomComarcaLocal(codi);
           const regio = comarcaARegio[codi];
           const valorCom = riscComarca(matriu, codi, dia, periode);
+          const titol = el.querySelector('title');
+
+          // Territori de fora: gris sempre, però el valor de l'SMP es diu igual
+          // al tooltip — que no sigui nostre no vol dir que no hi faci mal temps.
+          if (COMARQUES_FORA_REGIO[codi]) {
+            el.setAttribute('fill', COLOR_FORA_REGIO);
+            if (titol) titol.textContent = `${COMARQUES_FORA_REGIO[codi]} · SMP ${valorCom} (${periode})`;
+            return;
+          }
+
           const valor = (m.vista === 'regions' && regio) ? valorRegio[regio] : valorCom;
           el.setAttribute('fill', colorRisc(valor));
-          const titol = el.querySelector('title');
           if (titol) titol.textContent = (m.vista === 'regions' && regio)
             ? `${regio} — risc ${valor} · ${nom}: ${valorCom} (${periode})`
             : `${nom} — risc ${valorCom}${regio ? ' · ' + regio : ''} (${periode})`;
@@ -2900,6 +2989,7 @@
             ${PERIODES_SMP.map(p => `<button class="smpb-franja" data-periode="${p}" onclick="fixarFranjaSMPBombers('${p}')">${p}</button>`).join('')}
             <span style="font-size:0.75rem;color:#888;">Les quatre franges passen soles cada 2 s; clica'n una per aturar-les.</span>
           </div>
+          ${geoComarques ? svgDefsPerimetres() : ''}
           <div id="smpb-mapes" class="smpb-graella">
             ${SMPB_MAPES.map(m => `
               <div>
@@ -2907,8 +2997,11 @@
                 ${svgComarques(m.id)}
               </div>`).join('')}
           </div>
-          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem;font-size:0.8rem;">
+          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;align-items:center;margin-top:0.75rem;font-size:0.8rem;">
             ${COLORS_SMP.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
+            <span style="background:${COLOR_FORA_REGIO};color:#37474f;padding:2px 10px;border-radius:4px;border:1px solid #90a4ae;">fora</span>
+            <span style="color:#666;">La línia negra és el perímetre de la regió. En gris, el territori amb bombers propis
+            (Aran i la ciutat de Barcelona): no compta al risc de cap regió.</span>
           </div>
         </div>
       `;
@@ -4392,6 +4485,7 @@
         pes_plana_lleida:       p.zones['Plana de Lleida'],
         pes_camp_tarragona:     p.zones['Camp de Tarragona'],
         pes_terres_ebre:        p.zones["Terres de l'Ebre"],
+        pes_zona_maritima:      p.zones['Zona Marítima'],
         pes_periode_00_06:      p.periodes['00-06'],
         pes_periode_06_12:      p.periodes['06-12'],
         pes_periode_12_18:      p.periodes['12-18'],
@@ -4406,37 +4500,52 @@
     }
 
     function rowToRiscParams(row, base) {
+      // Una columna que no existeixi a la taula, o que hi sigui nul·la, no ha de
+      // desactivar res: es queda el valor de base. Sense això, una zona sense
+      // columna (o una columna nova encara buida) sortia NaN i el filtre
+      // `zones[z] > 0` la donava per apagada sense que ningú l'hagués tocat.
+      const val = (v, defecte) => (v == null || isNaN(+v)) ? defecte : +v;
       return {
         ...base,
         zones: {
-          'Pirineu Occidental': +row.pes_pirineu_occidental,
-          'Pirineu Oriental':   +row.pes_pirineu_oriental,
-          'Costa Brava':            +row.pes_emporda,
-          'Litoral Central':    +row.pes_litoral_central,
-          'Plana de Lleida':    +row.pes_plana_lleida,
-          'Camp de Tarragona':  +row.pes_camp_tarragona,
-          "Terres de l'Ebre":  +row.pes_terres_ebre,
+          ...base.zones,
+          'Pirineu Occidental': val(row.pes_pirineu_occidental, base.zones['Pirineu Occidental']),
+          'Pirineu Oriental':   val(row.pes_pirineu_oriental,   base.zones['Pirineu Oriental']),
+          'Costa Brava':        val(row.pes_emporda,            base.zones['Costa Brava']),
+          'Litoral Central':    val(row.pes_litoral_central,    base.zones['Litoral Central']),
+          'Plana de Lleida':    val(row.pes_plana_lleida,       base.zones['Plana de Lleida']),
+          'Camp de Tarragona':  val(row.pes_camp_tarragona,     base.zones['Camp de Tarragona']),
+          "Terres de l'Ebre":   val(row.pes_terres_ebre,        base.zones["Terres de l'Ebre"]),
+          'Zona Marítima':      val(row.pes_zona_maritima,      base.zones['Zona Marítima']),
         },
         periodes: {
-          '00-06': +row.pes_periode_00_06,
-          '06-12': +row.pes_periode_06_12,
-          '12-18': +row.pes_periode_12_18,
-          '18-24': +row.pes_periode_18_24,
+          ...base.periodes,
+          '00-06': val(row.pes_periode_00_06, base.periodes['00-06']),
+          '06-12': val(row.pes_periode_06_12, base.periodes['06-12']),
+          '12-18': val(row.pes_periode_12_18, base.periodes['12-18']),
+          '18-24': val(row.pes_periode_18_24, base.periodes['18-24']),
         },
         nivells: {
-          'Groc':    +row.pes_nivell_groc,
-          'Taronja': +row.pes_nivell_taronja,
-          'Vermell': +row.pes_nivell_vermell,
+          ...base.nivells,
+          'Groc':    val(row.pes_nivell_groc,    base.nivells['Groc']),
+          'Taronja': val(row.pes_nivell_taronja, base.nivells['Taronja']),
+          'Vermell': val(row.pes_nivell_vermell, base.nivells['Vermell']),
         },
-        normalitzador: +row.normalitzador,
-        maxSMP:        +row.max_smp,
+        normalitzador: val(row.normalitzador, base.normalitzador),
+        maxSMP:        val(row.max_smp,       base.maxSMP),
       };
     }
+
+    // El nom de la taula va en minúscules: PostgREST hi busca la relació pel nom
+    // exacte, i amb 'taula_config_Alertes_SMP' donava 404 sempre. La config de
+    // zones no ha arribat mai de Supabase — queia al localStorage de cada
+    // dispositiu — i el que es guardava des de Configuració no ho desava ningú.
+    const TAULA_CONFIG_SMP = 'taula_config_alertes_smp';
 
     async function carregarRiscConfig() {
       try {
         const { data, error } = await sbClient
-          .from('taula_config_Alertes_SMP')
+          .from(TAULA_CONFIG_SMP)
           .select('*')
           .eq('id', 1)
           .single();
@@ -4455,7 +4564,7 @@
       localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
       try {
         await sbClient
-          .from('taula_config_Alertes_SMP')
+          .from(TAULA_CONFIG_SMP)
           .upsert(riscParamsToRow(riscParams));
       } catch(e) {
         console.warn('Error guardant params a Supabase:', e);
@@ -4694,6 +4803,14 @@
     }
     
     // Funció per actualitzar risc automàticament quan es carreguen dades
+    // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
+    // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
+    // l'usuari hi és a dins, l'expulsa enmig del que estigui ajustant.
+    function desarIPintarRisc() {
+      localStorage.setItem('riscGRAE', JSON.stringify(riscState));
+      if (!document.getElementById('pagina-parametres')) renderRisc();
+    }
+
     async function actualitzarRiscAuto() {
       if (!riscState.today && !riscState.tomorrow) return;
 
@@ -4701,54 +4818,67 @@
       const dema = getRiscDateString(1);
 
       // Actualitzar avui
-      if (riscState.today) {
-        if (!riscState.today.modificatManualment) {
-          const valsAvui = calcularValorsAuto(avui);
-          riscState.today.smp = valsAvui.smp;
-          riscState.today.smpDetall = valsAvui.smpDetall;
-          riscState.today.allaus = valsAvui.allaus;
-          riscState.today.allausDetall = valsAvui.allausDetall || null;
-          riscState.today.hc = valsAvui.hc;
-          riscState.today.canvi = valsAvui.canvi;
-          riscState.today.canviDetall = valsAvui.canviDetall || null;
-          riscState.today.planspc = valsAvui.planspc || 0;
-          if (valsAvui.notes.length > 0 && !riscState.today.notes) {
-            riscState.today.notes = valsAvui.notes.join('. ');
-          }
+      if (riscState.today && !riscState.today.modificatManualment) {
+        const valsAvui = calcularValorsAuto(avui);
+        riscState.today.smp = valsAvui.smp;
+        riscState.today.smpDetall = valsAvui.smpDetall;
+        riscState.today.allaus = valsAvui.allaus;
+        riscState.today.allausDetall = valsAvui.allausDetall || null;
+        riscState.today.hc = valsAvui.hc;
+        riscState.today.canvi = valsAvui.canvi;
+        riscState.today.canviDetall = valsAvui.canviDetall || null;
+        riscState.today.planspc = valsAvui.planspc || 0;
+        if (valsAvui.notes.length > 0 && !riscState.today.notes) {
+          riscState.today.notes = valsAvui.notes.join('. ');
         }
-        const opAvui = await avaluarOperativitat(avui);
-        riscState.today.operativitatHelis = opAvui.count;
-        riscState.today.operativitatTotal = opAvui.total;
-        riscState.today.operativitatDetall = opAvui.detall;
       }
 
       // Actualitzar demà
-      if (riscState.tomorrow) {
-        if (!riscState.tomorrow.modificatManualment) {
-          const valsDema = calcularValorsAuto(dema);
-          riscState.tomorrow.smp = valsDema.smp;
-          riscState.tomorrow.smpDetall = valsDema.smpDetall;
-          riscState.tomorrow.allaus = valsDema.allaus;
-          riscState.tomorrow.allausDetall = valsDema.allausDetall || null;
-          riscState.tomorrow.hc = valsDema.hc;
-          riscState.tomorrow.canvi = valsDema.canvi;
-          riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
-          riscState.tomorrow.planspc = valsDema.planspc || 0;
-          if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
-            riscState.tomorrow.notes = valsDema.notes.join('. ');
-          }
+      if (riscState.tomorrow && !riscState.tomorrow.modificatManualment) {
+        const valsDema = calcularValorsAuto(dema);
+        riscState.tomorrow.smp = valsDema.smp;
+        riscState.tomorrow.smpDetall = valsDema.smpDetall;
+        riscState.tomorrow.allaus = valsDema.allaus;
+        riscState.tomorrow.allausDetall = valsDema.allausDetall || null;
+        riscState.tomorrow.hc = valsDema.hc;
+        riscState.tomorrow.canvi = valsDema.canvi;
+        riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
+        riscState.tomorrow.planspc = valsDema.planspc || 0;
+        if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
+          riscState.tomorrow.notes = valsDema.notes.join('. ');
         }
-        const opDema = await avaluarOperativitat(dema);
-        riscState.tomorrow.operativitatHelis = opDema.count;
-        riscState.tomorrow.operativitatTotal = opDema.total;
-        riscState.tomorrow.operativitatDetall = opDema.detall;
       }
 
-      // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
-      // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
-      // l'usuari hi és a dins, l'expulsa enmig del que estigui ajustant.
-      localStorage.setItem('riscGRAE', JSON.stringify(riscState));
-      if (!document.getElementById('pagina-parametres')) renderRisc();
+      // Els factors ja calculats es desen i es pinten ABANS d'esperar
+      // l'operativitat: aquella consulta va a Supabase i a Open-Meteo, i mentre
+      // no tornava, l'SMP i les allaus del dia es quedaven només a la memòria.
+      // Com que renderRisc() rellegeix el localStorage (carregarRiscEstat), el
+      // primer redibuix els llençava i la targeta ensenyava el valor vell — un
+      // SMP 0 a la portada amb un 2 a la pestanya Alertes, fins a recarregar.
+      desarIPintarRisc();
+
+      // L'operativitat arriba quan pot i només afegeix el seu increment. Si peta
+      // (xarxa, Supabase), es queda el que ja hi ha dibuixat: no ha de tombar la
+      // resta del càlcul.
+      try {
+        if (riscState.today) {
+          const opAvui = await avaluarOperativitat(avui);
+          riscState.today.operativitatHelis = opAvui.count;
+          riscState.today.operativitatTotal = opAvui.total;
+          riscState.today.operativitatDetall = opAvui.detall;
+        }
+        if (riscState.tomorrow) {
+          const opDema = await avaluarOperativitat(dema);
+          riscState.tomorrow.operativitatHelis = opDema.count;
+          riscState.tomorrow.operativitatTotal = opDema.total;
+          riscState.tomorrow.operativitatDetall = opDema.detall;
+        }
+      } catch(e) {
+        logError('Operativitat', e.message);
+        return;
+      }
+
+      desarIPintarRisc();
     }
     
     // ==================== FÓRMULA DE RISC (configurable) ====================
@@ -4982,7 +5112,9 @@
       try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
           '&hourly=visibility,wind_gusts_10m,is_day&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
-        const resp = await fetch(url);
+        // Amb timeout: un fetch pelat que no torna deixa penjada l'operativitat
+        // i, amb ella, l'actualització del risc que l'espera.
+        const resp = await fetchAmbTimeout(url, 8000);
         const data = await resp.json();
         const H = data.hourly;
         // Es busca la finestra més llarga d'hores seguides dins de límits. Si el
@@ -5025,7 +5157,13 @@
     // carrega), i sense cau faria desenes de consultes redundants a Supabase/Open-Meteo.
     const operativitatCache = {};
     function avaluarOperativitat(dataStr) {
-      if (!operativitatCache[dataStr]) operativitatCache[dataStr] = _avaluarOperativitat(dataStr);
+      if (!operativitatCache[dataStr]) {
+        // Es memoritza la promesa, no el resultat: si falla, s'ha de treure de la
+        // cau o tots els intents posteriors del dia fallarien igual sense tornar
+        // a provar-ho.
+        operativitatCache[dataStr] = _avaluarOperativitat(dataStr)
+          .catch(e => { delete operativitatCache[dataStr]; throw e; });
+      }
       return operativitatCache[dataStr];
     }
     function invalidarOperativitat() {

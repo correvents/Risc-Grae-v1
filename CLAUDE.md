@@ -61,7 +61,23 @@ Només afecta el frontend — el backend (`risc-diari.js`) no pot llegir el `loc
 
 **Taules de "què suma cada factor"** (`renderExplicacioFactors`). Dos desplegables a la mateixa pestanya que ensenyen, per a cada valor de cada factor, què aporta de veritat — perquè cap factor suma el seu valor tal qual i això s'ha de poder justificar a un cap. **Es generen des de `riscFormula`, no escrites a mà**, o sigui que segueixen sols qualsevol canvi de punts: no els has d'actualitzar.
 
-Per unificar-les caldrà, com a mínim:Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_Alertes_SMP` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
+Per unificar-les caldrà, com a mínim: moure la config de la fórmula de `localStorage` a Supabase (ja hi ha `taula_config_alertes_smp` per als altres paràmetres) i afegir una columna d'operativitat a `risc_historic`, que ara no existeix.
+
+**El perímetre de les regions no surt de fusionar comarques.** El
+`comarques_simplificat_500m.geojson` està simplificat **sense topologia**: dues comarques veïnes no
+comparteixen tots els vèrtexs. Si mires de treure el contorn d'una regió ajuntant les seves
+comarques i esborrant les arestes que surten dues vegades, les fronteres de dins no s'anul·len i
+queden trossos de ratlla pel mig (provat, amb tolerància inclosa: no s'arregla). Es fa amb SVG a
+`svgDefsPerimetres()`: traç gruixut sobre el contorn de totes les comarques de la regió, retallat
+amb **tot menys la regió** (rectangle sencer + els seus anells, `clip-rule="evenodd"`). En queda
+només la meitat de fora i les ratlles interiors desapareixen soles. Es defineix un cop i els quatre
+mapes el reutilitzen amb `<use href="#smpb-perimetres">`; no en facis una còpia per mapa.
+
+**L'Aran i la ciutat de Barcelona no són territori nostre** (`COMARQUES_FORA_REGIO`,
+`CONTORN_BARCELONA`): bombers propis. Es pinten en gris i no compten al risc de cap regió, però el
+valor de l'SMP es continua veient al tooltip. L'Aran és una comarca i se'n pot sortir del càlcul;
+**Barcelona no**, perquè les dades són per comarca i el Barcelonès també porta l'Hospitalet i
+companyia — se'n marca només el terme municipal. Vegeu `REGIONS-EMERGENCIA.md`.
 
 **Els quatre mapes de l'SMP Bombers es dibuixen un cop i es repinten.** `projeccioComarques()`
 projecta les 43 comarques una sola vegada i en guarda els camins; `svgComarques(idMapa)` només en fa
@@ -118,6 +134,19 @@ hores petites com a part del dia operatiu anterior. Ancorar l'hora del cron no n
 **9. Dues claus de Supabase.**
 
 Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts → `service_role`, sempre via GitHub Secrets. **Mai** posis la `service_role` a `index.html`.
+
+**10. El nom d'una taula de Supabase distingeix majúscules.** PostgREST busca la relació pel nom
+exacte: `taula_config_Alertes_SMP` no és `taula_config_alertes_smp` i dona **404**, no un error
+visible. Va estar mesos així: la config de zones mai va arribar de Supabase (queia al `localStorage`
+de cada dispositiu) i el que es guardava des de Configuració no anava enlloc. Totes les taules van
+en minúscules; si n'afegeixes una, comprova-ho contra `information_schema.tables`.
+
+**11. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
+L'operativitat va a Supabase i a Open-Meteo, i mentre no tornava, l'SMP i les allaus del dia es
+quedaven només a la memòria: la targeta ensenyava el valor vell i `renderRisc()` —que rellegeix el
+`localStorage` a `carregarRiscEstat`— el llençava al primer redibuix. Sortia un SMP 0 a la portada
+amb un 2 a la pestanya Alertes. Si hi afegeixes factors nous, posa'ls **abans** del primer
+`desarIPintarRisc()`, i deixa després només el que depengui de la xarxa.
 
 ## Operativitat dels helicòpters (frontend)
 

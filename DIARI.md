@@ -8,6 +8,51 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-06 — L'SMP que es quedava a 0 a la portada, i el perímetre de les regions
+
+Reportat: al Risc GRAE surt «⚠️ Alertes SMP · Cap alerta · 0/6» mentre la pestanya Alertes ensenya
+un 2 per al mateix dia.
+
+**Causa.** Els dos llocs criden `calcularSMPPonderat`, però la pestanya el calcula en el moment de
+dibuixar-se i la targeta llegeix el que hi ha desat al `localStorage`. `actualitzarRiscAuto()` desava
+i pintava *després* d'esperar `avaluarOperativitat()`, que va a Supabase i a Open-Meteo: si aquella
+crida trigava o quedava penjada (`meteoPermetVol` feia un `fetch` sense timeout), l'SMP, les allaus i
+el canvi de temps es quedaven només a la memòria. I com que `renderRisc()` rellegeix el `localStorage`
+(`carregarRiscEstat`), el primer redibuix els llençava: canviar de pestanya i tornar deixava el 0
+enganxat fins a recarregar.
+
+Reproduït amb Chromium sobre les dades del 6-09 (7 zones grogues per calor → SMP 2) amb Open-Meteo
+sense resposta: la targeta d'avui deia «Cap alerta 0/6» i, després del canvi, «Avís groc · Calor 2/6».
+
+**Fet:**
+
+- Els factors es desen i es pinten abans d'esperar l'operativitat (`desarIPintarRisc`), que ara només
+  hi afegeix el seu increment quan arriba i, si peta, deixa el que ja hi ha dibuixat.
+- `meteoPermetVol` passa a `fetchAmbTimeout` (8 s) i la cau d'operativitat esborra la promesa si es
+  rebutja, perquè el següent intent ho torni a provar.
+- **`carregarRiscConfig()` no havia funcionat mai:** demanava `taula_config_Alertes_SMP` i la taula es
+  diu `taula_config_alertes_smp`. PostgREST hi busca el nom exacte → 404 silenciós, la config de zones
+  queia sempre al `localStorage` de cada dispositiu i el que es desava des de Configuració no anava
+  enlloc. A més, `rowToRiscParams` muntava les zones de zero i una columna absent (`NaN`) apagava la
+  zona; ara manté el valor de base. Afegida la columna `pes_zona_maritima`, que no existia.
+- **Pestanyes a Windows:** la barra era una sola fila amb desplaçament horitzontal i la barra amagada.
+  Al Mac i al mòbil s'hi arriba (trackpad, dit); amb un ratolí normal, no — les últimes pestanyes eren
+  inabastables. Ara fa wrap (dues files a 1024 i 1366 px) i per sota de 600 px es manté la fila que
+  llisca, amb la barra visible.
+- **Perímetre de les regions al mapa d'SMP Bombers**, en negre gruixut: amb totes les comarques d'una
+  regió pintades igual no es veia on acabava. No es pot treure fusionant comarques (el GeoJSON està
+  simplificat sense topologia i queden trossos de ratlla pel mig, provat); es fa amb un traç retallat
+  per *tot menys la regió* amb `evenodd`. Vegeu `CLAUDE.md`.
+- **L'Aran i la ciutat de Barcelona**, en gris i fora del risc de cap regió: tenen bombers propis.
+  L'Aran surt de `REGIONS_BOMBERS.Pirineus` (era una comarca sencera); Barcelona no es pot treure del
+  càlcul perquè les dades són per comarca i el Barcelonès també porta l'Hospitalet, o sigui que només
+  se'n marca el terme municipal. Vegeu `REGIONS-EMERGENCIA.md`.
+
+**Pendent:** els tres de sempre (unificar les fórmules, `canvi` al backend, operativitat al càlcul
+nocturn). Nou: quan l'SMP arribi per municipis, Barcelona també podrà sortir del càlcul.
+
+---
+
 ## 2026-08-28 — Les regions es despleguen i ensenyen els avisos de cada comarca
 
 A la taula, clicant una regió s'obre el detall: **les comarques que hi tenen avís** —les que estan a
