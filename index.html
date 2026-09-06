@@ -2398,10 +2398,32 @@
       'Girona':             [2, 10, 20, 28, 34, 19, 31],
       'Centre':             [7, 24, 14, 35, 42, 43, 15],
       'Lleida':             [33, 23, 38, 27, 18, 32],
-      'Pirineus':           [39, 5, 26, 25, 4],
+      'Pirineus':           [5, 26, 25, 4],
       'Tarragona':          [36, 8, 1, 12, 16, 29],
       "Terres de l'Ebre":   [9, 22, 30, 37]
     };
+
+    // Territori que no cobreixen els Bombers de la Generalitat i que, per tant,
+    // no ha de comptar al risc de cap regió. Es pinta en gris al mapa, amb el
+    // seu perímetre propi i el valor de l'SMP al tooltip: la meteorologia hi és
+    // igualment, el que no hi és som nosaltres.
+    //
+    //   · Aran (39): el decret la posa a la regió Pirineus, però l'Aran manté
+    //     el seu propi cos de bombers (vegeu REGIONS-EMERGENCIA.md).
+    //
+    // La ciutat de Barcelona també va a part (bombers municipals), però no és
+    // una comarca: el Barcelonès continua comptant per la Metropolitana Sud,
+    // perquè l'Hospitalet i la resta sí que són nostres, i al mapa se'n marca
+    // només el terme municipal (CONTORN_BARCELONA).
+    const COMARQUES_FORA_REGIO = {
+      39: 'Aran — cos de bombers propi'
+    };
+    const COLOR_FORA_REGIO = '#cfd8dc';
+
+    // Contorn del terme municipal de Barcelona: anell principal del municipi
+    // 080193 de municipis_simplificat_500m.geojson, copiat aquí perquè carregar
+    // 545 KB de municipis per dibuixar una ratlla no surt a compte.
+    const CONTORN_BARCELONA = [[2.2076,41.4419],[2.1787,41.4682],[2.1642,41.4501],[2.1346,41.4472],[2.1213,41.4258],[2.0712,41.4353],[2.0798,41.4162],[2.0722,41.4035],[2.1006,41.4083],[2.102,41.3812],[2.135,41.3626],[2.1369,41.3485],[2.1005,41.336],[2.1189,41.3227],[2.1499,41.3207],[2.1592,41.3272],[2.1652,41.3414],[2.1569,41.3422],[2.1459,41.331],[2.1509,41.3465],[2.1669,41.3471],[2.1847,41.3807],[2.1854,41.3577],[2.1983,41.3869],[2.1997,41.3833],[2.2021,41.3901],[2.218,41.4043],[2.229,41.4104],[2.2078,41.425],[2.2076,41.4419]];
 
     const REGIONS_ORDRE = Object.keys(REGIONS_BOMBERS);
     const PERIODES_SMP = ['00-06', '06-12', '12-18', '18-00'];
@@ -2571,21 +2593,60 @@
       const px = (lon) => (MARGE + (lon - minLon) * cosLat * escala).toFixed(1);
       const py = (lat) => (MARGE + (maxLat - lat) * escala).toFixed(1);
 
-      const anell = (coords) => 'M' + coords.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join('L') + 'Z';
+      const punts = (coords) => coords.map(([lon, lat]) => `${px(lon)},${py(lat)}`);
+      const anell = (coords) => 'M' + punts(coords).join('L') + 'Z';
       const camins = (geom) => geom.type === 'Polygon'
         ? geom.coordinates.map(anell).join('')
         : geom.coordinates.map(pol => pol.map(anell).join('')).join('');
+      const comarques = geoComarques.features.map(f => ({
+        codi: parseInt(f.properties.CODICOMAR, 10),
+        nom: f.properties.NOMCOMAR,
+        d: camins(f.geometry)
+      }));
+
+      const dPerCodi = {};
+      comarques.forEach(c => { dPerCodi[c.codi] = c.d; });
+      const dDeCodis = (codis) => codis.map(c => dPerCodi[c] || '').join('');
 
       projeccioCache = {
         ample: AMPLE,
         alt: alt.toFixed(0),
-        comarques: geoComarques.features.map(f => ({
-          codi: parseInt(f.properties.CODICOMAR, 10),
-          nom: f.properties.NOMCOMAR,
-          d: camins(f.geometry)
-        }))
+        comarques,
+        // Cada regió com un sol camí (les seves comarques encadenades). Serveix
+        // per marcar-ne el perímetre: vegeu svgDefsPerimetres.
+        regions: REGIONS_ORDRE.map(r => ({ id: 'r' + REGIONS_ORDRE.indexOf(r), nom: r, d: dDeCodis(REGIONS_BOMBERS[r]) })),
+        fora: Object.keys(COMARQUES_FORA_REGIO).map(Number)
+          .map(codi => ({ id: 'f' + codi, nom: nomComarcaLocal(codi), d: dDeCodis([codi]) }))
+          .concat([{ id: 'fbcn', nom: 'Barcelona',
+                     d: 'M' + CONTORN_BARCELONA.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join('L') + 'Z' }])
       };
       return projeccioCache;
+    }
+
+    // El perímetre d'una regió no es pot treure ajuntant les seves comarques i
+    // esborrant les fronteres de dins: el GeoJSON està simplificat sense
+    // topologia i dues comarques veïnes no comparteixen tots els vèrtexs, o
+    // sigui que les fronteres internes no s'anul·len i queden trossos de ratlla
+    // pel mig.
+    //
+    // Es fa amb SVG: es dibuixa el contorn de totes les comarques de la regió
+    // amb un traç gruixut i es retalla amb *tot menys la regió* (el rectangle
+    // sencer més els seus anells, amb evenodd). Del traç només en queda la
+    // meitat que cau a fora, i les ratlles de dins desapareixen soles.
+    //
+    // Es defineix un sol cop i cada mapa el reutilitza amb <use>: quatre còpies
+    // de tota la geometria serien uns 240 KB de DOM per no canviar res.
+    function svgDefsPerimetres() {
+      const p = projeccioComarques();
+      const arees = [...p.regions, ...p.fora];
+      const clips = arees.map(a =>
+        `<clipPath id="smpb-clip-${a.id}"><path clip-rule="evenodd" d="M0,0H${p.ample}V${p.alt}H0Z${a.d}"/></clipPath>`
+      ).join('');
+      const traços = arees.map(a =>
+        `<path d="${a.d}" fill="none" stroke="#000" stroke-width="4" stroke-linejoin="round" clip-path="url(#smpb-clip-${a.id})"/>`
+      ).join('');
+      return `<svg width="0" height="0" style="position:absolute;" aria-hidden="true">` +
+             `<defs>${clips}<g id="smpb-perimetres">${traços}</g></defs></svg>`;
     }
 
     // Esquelet d'un mapa: els camins amb el codi de comarca a sobre i sense
@@ -2598,12 +2659,17 @@
         `<path data-codi="${c.codi}" d="${c.d}" fill="#eceff1" stroke="#fff" stroke-width="0.8"><title></title></path>`
       ).join('');
 
-      // Contorn de cada regió per sobre, per veure-les separades
-      const contorns = p.comarques.filter(c => comarcaARegio[c.codi]).map(c =>
-        `<path d="${c.d}" fill="none" stroke="#37474f" stroke-width="0.4" opacity="0.5"/>`
-      ).join('');
+      // La ciutat de Barcelona, per sobre del Barcelonès: bombers municipals.
+      const bcnD = (p.fora.find(f => f.id === 'fbcn') || {}).d || '';
+      const bcn = `<path d="${bcnD}" fill="${COLOR_FORA_REGIO}">` +
+                  `<title>Barcelona — bombers municipals, fora de les regions de Bombers de la Generalitat</title></path>`;
 
-      return `<svg id="smpb-svg-${idMapa}" viewBox="0 0 ${p.ample} ${p.alt}" style="width:100%;height:auto;display:block;">${paths}${contorns}</svg>`;
+      // El perímetre de cada regió, en negre i per sobre de tot: sense ell, amb
+      // totes les comarques d'una regió pintades del mateix color, no es veia
+      // on acaba una regió i on comença la següent.
+      const perimetres = `<use href="#smpb-perimetres" pointer-events="none"/>`;
+
+      return `<svg id="smpb-svg-${idMapa}" viewBox="0 0 ${p.ample} ${p.alt}" style="width:100%;height:auto;display:block;">${paths}${bcn}${perimetres}</svg>`;
     }
 
     // Pinta els quatre mapes d'una franja canviant només el fill i el títol de
@@ -2628,9 +2694,18 @@
           const nom = nomComarcaLocal(codi);
           const regio = comarcaARegio[codi];
           const valorCom = riscComarca(matriu, codi, dia, periode);
+          const titol = el.querySelector('title');
+
+          // Territori de fora: gris sempre, però el valor de l'SMP es diu igual
+          // al tooltip — que no sigui nostre no vol dir que no hi faci mal temps.
+          if (COMARQUES_FORA_REGIO[codi]) {
+            el.setAttribute('fill', COLOR_FORA_REGIO);
+            if (titol) titol.textContent = `${COMARQUES_FORA_REGIO[codi]} · SMP ${valorCom} (${periode})`;
+            return;
+          }
+
           const valor = (m.vista === 'regions' && regio) ? valorRegio[regio] : valorCom;
           el.setAttribute('fill', colorRisc(valor));
-          const titol = el.querySelector('title');
           if (titol) titol.textContent = (m.vista === 'regions' && regio)
             ? `${regio} — risc ${valor} · ${nom}: ${valorCom} (${periode})`
             : `${nom} — risc ${valorCom}${regio ? ' · ' + regio : ''} (${periode})`;
@@ -2914,6 +2989,7 @@
             ${PERIODES_SMP.map(p => `<button class="smpb-franja" data-periode="${p}" onclick="fixarFranjaSMPBombers('${p}')">${p}</button>`).join('')}
             <span style="font-size:0.75rem;color:#888;">Les quatre franges passen soles cada 2 s; clica'n una per aturar-les.</span>
           </div>
+          ${geoComarques ? svgDefsPerimetres() : ''}
           <div id="smpb-mapes" class="smpb-graella">
             ${SMPB_MAPES.map(m => `
               <div>
@@ -2921,8 +2997,11 @@
                 ${svgComarques(m.id)}
               </div>`).join('')}
           </div>
-          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin-top:0.75rem;font-size:0.8rem;">
+          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;align-items:center;margin-top:0.75rem;font-size:0.8rem;">
             ${COLORS_SMP.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
+            <span style="background:${COLOR_FORA_REGIO};color:#37474f;padding:2px 10px;border-radius:4px;border:1px solid #90a4ae;">fora</span>
+            <span style="color:#666;">La línia negra és el perímetre de la regió. En gris, el territori amb bombers propis
+            (Aran i la ciutat de Barcelona): no compta al risc de cap regió.</span>
           </div>
         </div>
       `;
