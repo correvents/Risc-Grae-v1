@@ -4694,6 +4694,14 @@
     }
     
     // Funció per actualitzar risc automàticament quan es carreguen dades
+    // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
+    // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
+    // l'usuari hi és a dins, l'expulsa enmig del que estigui ajustant.
+    function desarIPintarRisc() {
+      localStorage.setItem('riscGRAE', JSON.stringify(riscState));
+      if (!document.getElementById('pagina-parametres')) renderRisc();
+    }
+
     async function actualitzarRiscAuto() {
       if (!riscState.today && !riscState.tomorrow) return;
 
@@ -4701,54 +4709,67 @@
       const dema = getRiscDateString(1);
 
       // Actualitzar avui
-      if (riscState.today) {
-        if (!riscState.today.modificatManualment) {
-          const valsAvui = calcularValorsAuto(avui);
-          riscState.today.smp = valsAvui.smp;
-          riscState.today.smpDetall = valsAvui.smpDetall;
-          riscState.today.allaus = valsAvui.allaus;
-          riscState.today.allausDetall = valsAvui.allausDetall || null;
-          riscState.today.hc = valsAvui.hc;
-          riscState.today.canvi = valsAvui.canvi;
-          riscState.today.canviDetall = valsAvui.canviDetall || null;
-          riscState.today.planspc = valsAvui.planspc || 0;
-          if (valsAvui.notes.length > 0 && !riscState.today.notes) {
-            riscState.today.notes = valsAvui.notes.join('. ');
-          }
+      if (riscState.today && !riscState.today.modificatManualment) {
+        const valsAvui = calcularValorsAuto(avui);
+        riscState.today.smp = valsAvui.smp;
+        riscState.today.smpDetall = valsAvui.smpDetall;
+        riscState.today.allaus = valsAvui.allaus;
+        riscState.today.allausDetall = valsAvui.allausDetall || null;
+        riscState.today.hc = valsAvui.hc;
+        riscState.today.canvi = valsAvui.canvi;
+        riscState.today.canviDetall = valsAvui.canviDetall || null;
+        riscState.today.planspc = valsAvui.planspc || 0;
+        if (valsAvui.notes.length > 0 && !riscState.today.notes) {
+          riscState.today.notes = valsAvui.notes.join('. ');
         }
-        const opAvui = await avaluarOperativitat(avui);
-        riscState.today.operativitatHelis = opAvui.count;
-        riscState.today.operativitatTotal = opAvui.total;
-        riscState.today.operativitatDetall = opAvui.detall;
       }
 
       // Actualitzar demà
-      if (riscState.tomorrow) {
-        if (!riscState.tomorrow.modificatManualment) {
-          const valsDema = calcularValorsAuto(dema);
-          riscState.tomorrow.smp = valsDema.smp;
-          riscState.tomorrow.smpDetall = valsDema.smpDetall;
-          riscState.tomorrow.allaus = valsDema.allaus;
-          riscState.tomorrow.allausDetall = valsDema.allausDetall || null;
-          riscState.tomorrow.hc = valsDema.hc;
-          riscState.tomorrow.canvi = valsDema.canvi;
-          riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
-          riscState.tomorrow.planspc = valsDema.planspc || 0;
-          if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
-            riscState.tomorrow.notes = valsDema.notes.join('. ');
-          }
+      if (riscState.tomorrow && !riscState.tomorrow.modificatManualment) {
+        const valsDema = calcularValorsAuto(dema);
+        riscState.tomorrow.smp = valsDema.smp;
+        riscState.tomorrow.smpDetall = valsDema.smpDetall;
+        riscState.tomorrow.allaus = valsDema.allaus;
+        riscState.tomorrow.allausDetall = valsDema.allausDetall || null;
+        riscState.tomorrow.hc = valsDema.hc;
+        riscState.tomorrow.canvi = valsDema.canvi;
+        riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
+        riscState.tomorrow.planspc = valsDema.planspc || 0;
+        if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
+          riscState.tomorrow.notes = valsDema.notes.join('. ');
         }
-        const opDema = await avaluarOperativitat(dema);
-        riscState.tomorrow.operativitatHelis = opDema.count;
-        riscState.tomorrow.operativitatTotal = opDema.total;
-        riscState.tomorrow.operativitatDetall = opDema.detall;
       }
 
-      // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
-      // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
-      // l'usuari hi és a dins, l'expulsa enmig del que estigui ajustant.
-      localStorage.setItem('riscGRAE', JSON.stringify(riscState));
-      if (!document.getElementById('pagina-parametres')) renderRisc();
+      // Els factors ja calculats es desen i es pinten ABANS d'esperar
+      // l'operativitat: aquella consulta va a Supabase i a Open-Meteo, i mentre
+      // no tornava, l'SMP i les allaus del dia es quedaven només a la memòria.
+      // Com que renderRisc() rellegeix el localStorage (carregarRiscEstat), el
+      // primer redibuix els llençava i la targeta ensenyava el valor vell — un
+      // SMP 0 a la portada amb un 2 a la pestanya Alertes, fins a recarregar.
+      desarIPintarRisc();
+
+      // L'operativitat arriba quan pot i només afegeix el seu increment. Si peta
+      // (xarxa, Supabase), es queda el que ja hi ha dibuixat: no ha de tombar la
+      // resta del càlcul.
+      try {
+        if (riscState.today) {
+          const opAvui = await avaluarOperativitat(avui);
+          riscState.today.operativitatHelis = opAvui.count;
+          riscState.today.operativitatTotal = opAvui.total;
+          riscState.today.operativitatDetall = opAvui.detall;
+        }
+        if (riscState.tomorrow) {
+          const opDema = await avaluarOperativitat(dema);
+          riscState.tomorrow.operativitatHelis = opDema.count;
+          riscState.tomorrow.operativitatTotal = opDema.total;
+          riscState.tomorrow.operativitatDetall = opDema.detall;
+        }
+      } catch(e) {
+        logError('Operativitat', e.message);
+        return;
+      }
+
+      desarIPintarRisc();
     }
     
     // ==================== FÓRMULA DE RISC (configurable) ====================
@@ -4982,7 +5003,9 @@
       try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
           '&hourly=visibility,wind_gusts_10m,is_day&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
-        const resp = await fetch(url);
+        // Amb timeout: un fetch pelat que no torna deixa penjada l'operativitat
+        // i, amb ella, l'actualització del risc que l'espera.
+        const resp = await fetchAmbTimeout(url, 8000);
         const data = await resp.json();
         const H = data.hourly;
         // Es busca la finestra més llarga d'hores seguides dins de límits. Si el
@@ -5025,7 +5048,13 @@
     // carrega), i sense cau faria desenes de consultes redundants a Supabase/Open-Meteo.
     const operativitatCache = {};
     function avaluarOperativitat(dataStr) {
-      if (!operativitatCache[dataStr]) operativitatCache[dataStr] = _avaluarOperativitat(dataStr);
+      if (!operativitatCache[dataStr]) {
+        // Es memoritza la promesa, no el resultat: si falla, s'ha de treure de la
+        // cau o tots els intents posteriors del dia fallarien igual sense tornar
+        // a provar-ho.
+        operativitatCache[dataStr] = _avaluarOperativitat(dataStr)
+          .catch(e => { delete operativitatCache[dataStr]; throw e; });
+      }
       return operativitatCache[dataStr];
     }
     function invalidarOperativitat() {
