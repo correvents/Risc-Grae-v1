@@ -26,17 +26,31 @@
       margin: 0 auto;
     }
     
-    /* Navegació */
+    /* Navegació
+       Les pestanyes van en diverses files, no en una de sola que llisca: al Mac
+       i al mòbil el desplaçament lateral és natural (trackpad, dit), però a
+       Windows amb ratolí no hi ha manera d'arribar a les últimes — la barra
+       estava amagada i la roda no desplaça en horitzontal. Amb wrap es veuen
+       totes sempre, sense haver de desplaçar res. */
     .nav-tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 0;
       margin-bottom: 1rem;
       border-bottom: 2px solid #0082d9;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
     }
-    .nav-tabs::-webkit-scrollbar { display: none; }
+    /* En pantalles estretes es manté la fila que llisca amb el dit, però amb la
+       barra visible (fina) perquè es vegi que hi ha més pestanyes a la dreta. */
+    @media (max-width: 600px) {
+      .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      .nav-tabs::-webkit-scrollbar { height: 4px; }
+      .nav-tabs::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 2px; }
+    }
     .nav-tab { white-space: nowrap; flex-shrink: 0; }
     
     .nav-tab {
