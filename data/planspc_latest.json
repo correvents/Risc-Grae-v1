@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-09-07T14:07:51.096Z",
+  "actualitzat": "2026-09-07T18:17:28.184Z",
   "plans": [
     {
       "plaicona": {
@@ -17,15 +17,29 @@
     },
     {
       "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
+      },
+      "plaacronim": "TRANSCAT",
+      "planom": "Nou transcat",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "07/09/2026 19:17",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127094_INICI--NOACTIVAT_TRANSCAT_202609071936.pdf"
+      },
+      "descripcio": "MMPP fuita hidrogen Av/ Garrigues - "
+    },
+    {
+      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "07/09/2026 10:38",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "07/09/2026 19:26",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127065_INICI--NOACTIVAT_INUNCAT_202609071114.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127065_ACTUALITZACIO--ACTIVAT_INUNCAT_202609071946.pdf"
       },
       "descripcio": "SMP Intensitat de pluja >20mm/30min dies 08 i 09/09 "
     }
