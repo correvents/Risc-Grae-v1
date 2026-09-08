@@ -1533,19 +1533,45 @@
         : velles.length ? `<div style="width:100%;color:#e65100;margin-top:0.25rem;">Dades de fa més de ${FONT_VELLA_H} h a: ${velles.map(k => FONTS_DADES[k].etiqueta).join(', ')}. Pot haver-hi avisos nous que encara no hi són.</div>`
         : '';
 
+      // Configuració que anul·la factors en silenci. Un factor desmarcat o totes
+      // les zones apagades fan sortir un risc baix amb dades bones, i això només
+      // es veia entrant a Configuració a mirar-ho: aquí es diu a la cara.
+      const avisosConfig = [];
+      if (!riscFormula.smp.actiu) avisosConfig.push('el factor <strong>Alertes SMP</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
+      if (!riscFormula.allaus.actiu) avisosConfig.push('el factor <strong>Allaus</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
+      if (Object.values(riscParams.zones || {}).filter(v => v > 0).length === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
+      const avisConfig = avisosConfig.length
+        ? `<div style="width:100%;color:#6a1b9a;background:#f3e5f5;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;">⚙️ ${avisosConfig.join(' · ')}</div>` : '';
+
+      // La data del fitxer que serveix el navegador: si no quadra amb l'últim
+      // canvi publicat, el que es veu és una còpia de la memòria cau.
+      const versio = `<span title="data de l'index.html que té carregat aquest navegador. Si és vella, recarrega amb Ctrl+F5 o amb el botó del costat." style="color:#78909c;">app: ${escapeHtml(document.lastModified)}</span>`;
+
       cont.innerHTML = `
         <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;font-size:0.75rem;
                     background:${colorFons};border:1px solid ${colorVora};border-radius:6px;
                     padding:0.4rem 0.6rem;margin-bottom:0.75rem;">
           <strong style="color:#37474f;">📡 Dades</strong>
           ${xips}
-          <button class="risc-btn" onclick="recarregarTotesLesDades()" style="padding:0.15rem 0.5rem;font-size:0.72rem;margin-left:auto;">🔄 Actualitzar</button>
+          <span style="margin-left:auto;display:flex;gap:0.4rem;align-items:center;">
+            ${versio}
+            <button class="risc-btn" onclick="recarregarTotesLesDades()" style="padding:0.15rem 0.5rem;font-size:0.72rem;">🔄 Actualitzar dades</button>
+            <button class="risc-btn" onclick="recarregarApp()" title="Torna a baixar l'index.html saltant-se la memòria cau del navegador" style="padding:0.15rem 0.5rem;font-size:0.72rem;">⬇️ Recarregar l'app</button>
+          </span>
           ${avis}
+          ${avisConfig}
         </div>`;
     }
 
     // Torna a demanar-ho tot. Els JSON porten ?t= per saltar-se la cau del
     // navegador, o sigui que això sí que va a buscar el fitxer de veritat.
+    // Recarrega l'app saltant-se la memòria cau: GitHub Pages serveix
+    // l'index.html amb cache de 10 min i el navegador s'hi pot quedar enganxat
+    // molt més (i llavors sembla que un canvi publicat no ha arribat).
+    function recarregarApp() {
+      location.replace(location.pathname + '?v=' + Date.now());
+    }
+
     function recarregarTotesLesDades() {
       Object.keys(FONTS_DADES).forEach(k => { delete estatFonts[k]; });
       invalidarOperativitat();
