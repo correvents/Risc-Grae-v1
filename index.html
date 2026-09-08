@@ -1470,6 +1470,9 @@
 
     // clau → { estat: 'ok'|'error', ts: ISO de la consulta a l'origen, origen, missatge }
     const estatFonts = {};
+    // Últim error del càlcul del risc. Un error aquí feia que el número no
+    // s'actualitzés sense que res ho digués: ara surt a la franja de dades.
+    let errorCalculRisc = '';
 
     function marcarFont(clau, ts, origen) {
       estatFonts[clau] = { estat: 'ok', ts: ts || null, origen: origen || '' };
@@ -1556,6 +1559,11 @@
       const avisConfig = avisosConfig.length
         ? `<div style="width:100%;color:#6a1b9a;background:#f3e5f5;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;">⚙️ ${avisosConfig.join(' · ')}</div>` : '';
 
+      const avisErrorCalcul = errorCalculRisc
+        ? `<div style="width:100%;color:#b71c1c;background:#ffcdd2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;font-weight:700;">
+             ⚠️ El càlcul del risc ha donat error (${escapeHtml(errorCalculRisc)}): el número pot no correspondre a les dades d'ara.
+           </div>` : '';
+
       // La data del fitxer que serveix el navegador: si no quadra amb l'últim
       // canvi publicat, el que es veu és una còpia de la memòria cau.
       const versio = `<span title="data de l'index.html que té carregat aquest navegador. Si és vella, recarrega amb Ctrl+F5 o amb el botó del costat." style="color:#78909c;">app: ${escapeHtml(document.lastModified)}</span>`;
@@ -1575,6 +1583,7 @@
           </span>
           ${avis}
           ${avisConfig}
+          ${avisErrorCalcul}
         </div>`;
     }
 
@@ -5047,7 +5056,11 @@
       const avui = getRiscDateString(0);
       const dema = getRiscDateString(1);
 
-      // Actualitzar avui
+      // Actualitzar avui. Va dins d'un try: si el càlcul d'un dia peta, abans
+      // s'avortava tota la funció abans de desar res —silenciosament, perquè
+      // ningú espera aquesta promesa— i la targeta es quedava amb el que hi
+      // hagués al localStorage, que podia ser d'una càrrega anterior.
+      try {
       if (riscState.today && !riscState.today.modificatManualment) {
         const valsAvui = calcularValorsAuto(avui);
         riscState.today.smp = valsAvui.smp;
@@ -5077,6 +5090,10 @@
         if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
           riscState.tomorrow.notes = valsDema.notes.join('. ');
         }
+      }
+      } catch(e) {
+        errorCalculRisc = e.message;
+        logError('CàlculRisc', e.message);
       }
 
       // Els factors ja calculats es desen i es pinten ABANS d'esperar
@@ -5570,7 +5587,31 @@
       days.forEach(dayKey => {
         const dia = riscState[dayKey];
         if (!dia) return;
-        
+
+        // Els dies en viu es recalculen aquí mateix, en comptes de llegir el que
+        // hi hagi desat al localStorage. La pestanya Alertes sempre ho ha fet
+        // així i per això anava bé mentre la targeta ensenyava un 0: si el
+        // càlcul d'actualitzarRiscAuto petava (o encara no havia arribat), el
+        // valor desat es quedava vell i ningú se n'assabentava. Ara les dues
+        // pantalles surten del mateix càlcul i no poden dir coses diferents.
+        // Els dies editats a mà i "ahir" no es toquen: no són càlcul nostre.
+        const enViu = dayKey !== 'yesterday' && !dia.modificatManualment;
+        if (enViu) {
+          try {
+            const vals = calcularValorsAuto(dia.data);
+            dia.smp = vals.smp;
+            dia.smpDetall = vals.smpDetall;
+            dia.allaus = vals.allaus;
+            dia.allausDetall = vals.allausDetall || null;
+            dia.canvi = vals.canvi;
+            dia.canviDetall = vals.canviDetall || null;
+            dia.planspc = vals.planspc || 0;
+          } catch(e) {
+            errorCalculRisc = e.message;
+            logError('CàlculRisc', e.message);
+          }
+        }
+
         const calc = detallarRisc(dia);
         const risc = calc.risc;
         const colorClass = getRiscColorClass(risc);
@@ -5606,7 +5647,6 @@
         // «no passa res». Es marca a la seva línia i a la capçalera de la targeta:
         // el número que hi ha a sobre està calculat sense aquell factor.
         // Els dies editats a mà porten els valors de l'usuari, no els de la font.
-        const enViu = dayKey !== 'yesterday' && !dia.modificatManualment;
         const faltants = enViu ? fontsQueFalten() : [];
         const faltaFont = clau => faltants.includes(clau);
         const senseDades = `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;background:#ffcdd2;color:#b71c1c;font-weight:700;">SENSE DADES</span>`;

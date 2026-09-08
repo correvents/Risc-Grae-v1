@@ -160,7 +160,16 @@ crida `marcarFont`/`marcarFontError` als dos camins de la seva càrrega — si n
 un 0 legítim. Els dies editats a mà (`modificatManualment`) no es marquen: els valors són de
 l'usuari, no de la font.
 
-**13. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
+**13. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
+`dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és
+el que la pestanya Alertes ha fet sempre. Mentre no ho feia, la portada podia ensenyar un 0 amb la
+pestanya marcant 4: n'hi havia prou que el càlcul d'`actualitzarRiscAuto` petés a mig camí —cosa que
+avortava la funció **abans de desar**, i en silenci, perquè ningú espera aquella promesa— i la targeta
+es quedava amb el valor d'una càrrega anterior. Ara els dos llocs surten del mateix càlcul i no poden
+dir coses diferents; els dies editats a mà i «ahir» no es toquen. Si el càlcul peta, es diu a la
+franja de dades (`errorCalculRisc`) en comptes de deixar un número vell amb bona cara.
+
+**14. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
 L'operativitat va a Supabase i a Open-Meteo, i mentre no tornava, l'SMP i les allaus del dia es
 quedaven només a la memòria: la targeta ensenyava el valor vell i `renderRisc()` —que rellegeix el
 `localStorage` a `carregarRiscEstat`— el llençava al primer redibuix. Sortia un SMP 0 a la portada
