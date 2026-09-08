@@ -36,7 +36,7 @@ retorna l'API SMP de Meteocat** (comprovat contra `scripts/fetch-smp.js` i
 | **Girona** | Alt Empordà (02) · Baix Empordà (10) · Gironès (20) · Pla de l'Estany (28) · Selva (34) · Garrotxa (19) · Ripollès (31) |
 | **Centre** | Bages (07) · Osona (24) · Berguedà (14) · Solsonès (35) · Moianès (42) · Lluçanès (43) · Cerdanya³ (15) |
 | **Lleida** | Segrià (33) · Noguera (23) · Urgell (38) · Pla d'Urgell (27) · Garrigues (18) · Segarra (32) |
-| **Pirineus** (nova) | Aran (39) · Alta Ribagorça (05) · Pallars Sobirà (26) · Pallars Jussà (25) · Alt Urgell (04) |
+| **Pirineus** (nova) | Alta Ribagorça (05) · Pallars Sobirà (26) · Pallars Jussà (25) · Alt Urgell (04) — l'Aran (39) hi és al decret, però va a part⁴ |
 | **Tarragona** | Tarragonès (36) · Baix Camp (08) · Alt Camp (01) · Baix Penedès (12) · Conca de Barberà (16) · Priorat (29) |
 | **Terres de l'Ebre** | Baix Ebre (09) · Montsià (22) · Ribera d'Ebre (30) · Terra Alta (37) |
 
@@ -56,6 +56,19 @@ els altres 25 (Igualada, Piera, Capellades…) són de la Metropolitana Sud.
 **³ La Cerdanya va al Centre.** El decret la posa a Pirineus, però operativament
 continua depenent de la sala de Manresa, i això és el que s'ha decidit reflectir.
 Canviar-ho és tocar una línia de `REGIONS_BOMBERS` a `index.html`.
+
+**⁴ L'Aran i la ciutat de Barcelona van a part** (`COMARQUES_FORA_REGIO` a
+`index.html`). No és territori dels Bombers de la Generalitat: l'Aran té cos de
+bombers propi i Barcelona, bombers municipals. Al mapa surten en gris, amb el
+seu perímetre marcat, i **no compten al risc de cap regió** — el valor de l'SMP
+es continua veient al tooltip, perquè el mal temps hi és igualment.
+
+Amb un matís que ve del gra de les dades: l'Aran és una comarca sencera i se'n
+pot sortir del càlcul, però **Barcelona no ho és**. El Barcelonès continua
+comptant per la Metropolitana Sud, perquè l'Hospitalet, Badalona, Sant Adrià i
+Santa Coloma sí que són territori nostre; del mapa només se'n marca el terme
+municipal (`CONTORN_BARCELONA`, l'anell principal del municipi 080193). Si algun
+dia l'SMP arriba per municipis, Barcelona també es podrà treure del càlcul.
 
 **Zones marítimes.** L'SMP també emet avisos per zones marítimes, que no són
 comarques. Cada zona s'adjunta a la comarca costanera que té al davant
@@ -145,6 +158,16 @@ La pestanya tampoc no té dades fins que el workflow no torni a generar
 Leaflet ni cap altra dependència, amb dues vistes: *per regions* (totes les
 comarques d'una regió pintades amb el valor de la regió) i *per comarques*. El
 GeoJSON només es baixa quan s'obre la pestanya.
+
+El **perímetre de cada regió** va marcat en negre gruixut (`svgDefsPerimetres`).
+No es calcula ajuntant les comarques i esborrant les fronteres de dins: el
+GeoJSON està simplificat sense topologia i les comarques veïnes no comparteixen
+tots els vèrtexs, o sigui que les fronteres internes no s'anul·len i queden
+trossos de ratlla escampats (provat, es veu). Es fa amb SVG: el contorn de totes
+les comarques de la regió amb un traç gruixut, retallat amb *tot menys la regió*
+(rectangle sencer + els seus anells, amb `clip-rule="evenodd"`). Del traç només
+en queda la meitat de fora i les ratlles de dins desapareixen soles. Es defineix
+un cop i els quatre mapes el reutilitzen amb `<use>`.
 
 ---
 
