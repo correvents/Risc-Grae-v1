@@ -8,6 +8,40 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-08 — Saber si les dades hi són: franja d'estat i risc marcat com a incomplet
+
+Reportat: «al matí no s'havia carregat cap risc SMP i ara sí», i el Risc GRAE segueix a 0 mentre la
+pestanya Alertes marca 2 i 4. Dues coses diferents, i cap de les dues es podia veure des de la web.
+
+**1. Al matí no hi havia res per carregar.** El butlletí del 7-09 a les 18:17 UTC era literalment
+`{"avisos": []}`: Meteocat no tenia cap episodi obert. L'avís de tempesta (intensitat de pluja) va
+entrar al repositori amb la passada de les 10:05 UTC del 8-09. O sigui que no era un problema de
+càrrega: no hi havia dades, i **la web no ho distingia de «cap alerta»**.
+
+**2. El 0 de la portada** és el bug del 6-09, que encara no és a `main`.
+
+**Fet — que es vegi si tenim les dades:**
+
+- `estatFonts` + franja `#estat-dades` sota les pestanyes, visible a totes: per a cada font (SMP,
+  allaus, canvi de temps, plans PC, previsió) l'hora de consulta a l'origen, l'antiguitat, i d'on ve
+  (JSON del repositori o Supabase, que per a l'SMP no porta comarques). Botó d'actualitzar.
+- Una font que no arriba surt en vermell com a **SENSE DADES** i la franja diu quines falten.
+- La targeta del risc dels dies en viu es marca **INCOMPLET** quan falta una font que entra al
+  càlcul: número en gris amb asterisc, banda vermella a dalt i `SENSE DADES` a la línia del factor,
+  en comptes d'un «Cap alerta 0/6» que sembla una lectura bona. Els dies editats a mà no es marquen.
+- Una font amb més de 8 h (`FONT_VELLA_H`) surt en taronja: hi és, però pot haver-hi avisos nous.
+- La pestanya **Alertes** distingeix els tres casos que abans es veien tots com «0 · Cap alerta»:
+  *no tenim les dades* (targetes a `—`, banda vermella i, si ha petat la càrrega, «això no vol dir
+  que no hi hagi avisos: vol dir que no ho sabem»), *Meteocat no té cap episodi obert* (0 de veritat,
+  dient l'hora de la consulta) i *cap avís per a aquell dia* concret. Amb dades velles, banda taronja.
+- El workflow `data_diari.yml` passa de 3 a 5 passades (s'hi afegeixen les 10:00 i les 16:00 UTC).
+  GitHub endarrereix els crons fins a 3 h i amb tres passades hi havia forats de 6-8 h. Compte: són
+  més crides a l'API de Meteocat; si la quota va justa, treure una línia ho desfà.
+
+**Pendent:** fusionar el PR perquè tot això arribi a la web. I els tres de sempre.
+
+---
+
 ## 2026-09-06 — L'SMP que es quedava a 0 a la portada, i el perímetre de les regions
 
 Reportat: al Risc GRAE surt «⚠️ Alertes SMP · Cap alerta · 0/6» mentre la pestanya Alertes ensenya
