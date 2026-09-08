@@ -8,6 +8,32 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-08 (vespre) — La targeta del risc recalcula, no llegeix
+
+Reportat: «l'SMP sí que dona els riscos, però després no passen a la principal». Amb la pestanya
+Alertes marcant 1 avui i 4 demà, la targeta del Risc GRAE seguia a 0, en mode auto i sense cap avís
+de dades que faltessin.
+
+**Causa.** La pestanya calcula al moment de dibuixar-se; la targeta llegia `dia.smp` del
+`localStorage`. Aquell valor només s'actualitza si `actualitzarRiscAuto` arriba fins al
+`desarIPintarRisc()`, i el càlcul dels dos dies quedava **fora de qualsevol try**: qualsevol error a
+`calcularValorsAuto` avortava la funció abans de desar res. Com que ningú espera aquella promesa,
+l'error no sortia enlloc i la targeta es quedava amb el número d'una càrrega anterior — indefinidament.
+
+**Fet:**
+
+- `renderRisc` recalcula els factors dels dies en viu (avui i demà, si no estan editats a mà) just
+  abans de pintar. Les dues pantalles surten del mateix càlcul i ja no poden divergir.
+- El càlcul d'`actualitzarRiscAuto` va dins d'un try: un error deixa de tombar el desat.
+- Si el càlcul peta, la franja de dades ho diu en vermell (`errorCalculRisc`) en comptes de deixar un
+  número vell amb cara de bo.
+
+Comprovat al navegador amb un `localStorage` que porta els dos dies a 0 i les dades reals del
+8-09 (17:17 UTC): la portada passa a ensenyar 1 avui i 4 demà, igual que la pestanya, i un dia marcat
+com a editat a mà es queda com estava.
+
+---
+
 ## 2026-09-08 (tarda) — L'Empordà no comptava, i la franja diu què anul·la el risc
 
 Amb l'SMP a 2 i 4 a la pestanya Alertes, el Risc GRAE seguia a 0. Buscant-ho es va veure que
