@@ -1,34 +1,6 @@
 {
-  "actualitzat": "2026-09-07T18:17:28.184Z",
+  "actualitzat": "2026-09-08T10:05:55.857Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
-      },
-      "plaacronim": "INFOCAT",
-      "planom": "INFOCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "04/09/2026 17:21",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126993_ACTUALITZACIO--ACTIVAT_INFOCAT_202609061539.pdf"
-      },
-      "descripcio": "Previsió risc d'incendi 04/09/2026 - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
-      },
-      "plaacronim": "TRANSCAT",
-      "planom": "Nou transcat",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "07/09/2026 19:17",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127094_INICI--NOACTIVAT_TRANSCAT_202609071936.pdf"
-      },
-      "descripcio": "MMPP fuita hidrogen Av/ Garrigues - "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
@@ -42,6 +14,48 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127065_ACTUALITZACIO--ACTIVAT_INUNCAT_202609071946.pdf"
       },
       "descripcio": "SMP Intensitat de pluja >20mm/30min dies 08 i 09/09 "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "08/09/2026 09:50",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127082_INICI--NOACTIVAT_PROCICAT_202609080958.pdf"
+      },
+      "descripcio": "Vaga educativa 8/09/26 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "04/09/2026 17:21",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-126993_ACTUALITZACIO--ACTIVAT_INFOCAT_202609081030.pdf"
+      },
+      "descripcio": "Previsió risc d'incendi 04/09/2026 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "08/09/2026 11:32",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127069_INICI--NOACTIVAT_PROCICAT_202609081147.pdf"
+      },
+      "descripcio": "SMP Estat de la mar 09/09 - Onatge"
     }
   ]
 }
