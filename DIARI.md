@@ -8,6 +8,33 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-08 (tarda) — L'Empordà no comptava, i la franja diu què anul·la el risc
+
+Amb l'SMP a 2 i 4 a la pestanya Alertes, el Risc GRAE seguia a 0. Buscant-ho es va veure que
+`calcularSMPPonderat` **descarta en silenci** els avisos de zones que no tenen pes > 0, i que això
+tapa dues coses molt diferents: una zona que l'usuari ha apagat i una zona que el mapatge no coneix.
+
+**L'Empordà era del segon cas.** `zonesGrup` no la tenia i Meteocat hi emet avisos: **941 a
+`smp_historic`**, l'últim per a demà. Cap d'ells no ha comptat mai. Comprovat contra
+`select distinct zona from smp_historic`: les zones que fa servir l'SMP són quinze més les
+marítimes, i era l'única que faltava.
+
+**Fet:**
+
+- `Empordà` → `Costa Brava` al mapatge, que ara viu en una sola constant (`RISC_PARAMS_DEFAULT`).
+  N'hi havia una segona còpia dins de `resetRiscParams` que s'havia quedat enrere — sense el Gironès,
+  sense l'Empordà i sense les marítimes: prémer «Valors per defecte» deixava el mapatge pitjor.
+- Els paràmetres desats al `localStorage` es fusionen amb els del codi: els pesos són decisió de
+  l'usuari, els noms de zona no, i un dispositiu amb una còpia antiga ja no perd zones.
+- La franja de dades avisa dels dos casos: *avisos a zones desactivades a Configuració* i *avisos a
+  una zona que l'app no coneix*. I hi surt un xip nou amb les zones actives i **d'on ve la
+  configuració** (Supabase o la còpia d'aquest dispositiu quan Supabase no respon).
+
+Avui i demà el número no canvia (l'Empordà no era decisiu), però un dia que ho fos, el risc hauria
+sortit més baix del que toca sense que res ho digués.
+
+---
+
 ## 2026-09-08 — Saber si les dades hi són: franja d'estat i risc marcat com a incomplet
 
 Reportat: «al matí no s'havia carregat cap risc SMP i ara sí», i el Risc GRAE segueix a 0 mentre la

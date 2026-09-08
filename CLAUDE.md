@@ -141,6 +141,15 @@ visible. Va estar mesos així: la config de zones mai va arribar de Supabase (qu
 de cada dispositiu) i el que es guardava des de Configuració no anava enlloc. Totes les taules van
 en minúscules; si n'afegeixes una, comprova-ho contra `information_schema.tables`.
 
+**11. Una zona que no és al mapatge desapareix del càlcul sense dir res.** `calcularSMPPonderat`
+tradueix la zona de Meteocat a grup amb `riscParams.zonesGrup` i, si el grup no té pes > 0, **salta
+l'avís**. Una zona que no hi consti cau pel mateix forat: hi va estar **l'Empordà**, amb 941 avisos a
+`smp_historic` que no han comptat mai. Les zones que fa servir l'SMP són les quinze de
+`RISC_PARAMS_DEFAULT.zonesGrup` més les marítimes; per comprovar-ho, `select distinct zona from
+smp_historic`. La franja de dades avisa dels dos casos (zona apagada per l'usuari, zona desconeguda
+per l'app), i els paràmetres desats al `localStorage` es fusionen sempre amb el mapatge del codi: els
+pesos són decisió de l'usuari, els noms de zona no.
+
 **12. Un factor sense dades no pot semblar un factor a zero.** El risc es calcula amb el que hi ha
 carregat: si l'SMP no ha arribat, val 0 i el número surt igual de tranquil que un dia sense avisos.
 `estatFonts` registra, per a cada font (`FONTS_DADES`), si ha arribat, quan es va consultar l'origen
