@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-06T16:20:28.705Z",
+  "dataConsulta": "2026-09-08T10:05:53.334Z",
   "avui": {
-    "data": "2026-09-06",
+    "data": "2026-09-08",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat per la presència de núvols alts i prims, sobretot a l'oest del país. Avançada la tarda arribarà una banda de núvols mitjans per l'oest del país, que es mouran ràpidament direcció est i deixarà momentàniament el cel entre mig i molt ennuvolat. A banda, hi haurà algun estrat baixa al final del dia a l'Alt i Baix Empordà, especialment arran de costa.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "Temperatura màxima similar o lleugerament més baixa, en conjunt. Amb tot, podrà pujar lleugerament a les Terres de l'Ebre, a l'interior de Tarragona i a punts de la Catalunya Central.",
+      "estatDelCel": "Dominarà el serè o poc ennuvolat en general fins a la tarda. Amb tot, a partir de migdia es formaran alguns núvols d'evolució i alguna nuvolada al Pirineu i Prepirineu. Durant la tarda arribaran núvols alts i mitjans que es mouran d'oest a est i deixaran el cel entre mig i molt ennuvolat, sobretot a les Terres de l'Ebre. Independentment, fins al migdia hi haurà algun núvol baix al litoral sud.",
+      "precipitacions": "A la tarda s'espera algun ruixat localment acompanyat de tempesta i d'intensitat entre feble i moderada a l'extrem nord del Pirineu i, de forma local, a punts del prelitoral o litoral, així com és possible algun xàfec fort al Prepirineu i Pirineu oriental a partir del vespre. Al final del dia, s'espera precipitació feble al vessant nord del Pirineu.",
+      "temperatures": "La temperatura màxima serà semblant, en conjunt. Malgrat això serà lleugerament més alta a les Terres de l'Ebre, a la Catalunya Central i, sobretot, al prelitoral nord. Continuarà l'ambient molt calorós a migdia, i xafogós a la costa.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Vent fluix i de direcció variable fins a mig matí, amb tramuntana fluixa al nord del Cap de Creus. A partir d'aleshores s'imposarà progressivament el vent de component sud, tot i que fins a la tarda bufarà de component est i sud al quadrant nord-est i de component oest a l'interior de la meitat oest. Bufarà fluix amb cops moderats, més reforçat a la tarda al terç sud. Al final del dia, el vent tornarà a quedar fluix i variable."
+      "vent": "S'imposarà el vent de component sud i oest d'intensitat entre fluixa i moderada, més reforçat a cotes altes i a la meitat nord del litoral i prelitoral on hi haurà ratxes fortes. Al final del dia el vent tendirà a quedar fluix i variable.\nA banda, en moments de xàfec el vent serà ratxejat."
     }
   },
   "dema": {
-    "data": "2026-09-07",
+    "data": "2026-09-09",
     "variables": {
-      "estatDelCel": "Dominarà el cel serè o poc ennuvolat per núvols alts i prims que deixaran el cel momentàniament poc ennuvolat. A banda, fins a primeres hores del matí es podran formar núvols baixos a l'extrem nord de la Costa Brava que deixaran el cel localment entre mig i molt ennuvolat en aquest sector. A banda, a la tarda es formaran núvols d'evolució al Pirineu, més abundants al sector oriental, on deixaran el cel mig ennuvolat.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima es mantindrà semblant. La temperatura màxima baixarà lleugerament, però es mantindrà la calor molt intensa.",
-      "visibilitat": "La visibilitat serà bona o excel·lent. Amb tot, durant la matinada podrà ser dolenta per bancs de boira a l'extrem nord de la Costa Brava.",
-      "vent": "El vent bufarà fluix i de direcció variable durant el matí. A partir del final del matí, s'imposarà el vent de component sud en general fluix amb algun cop moderat al litoral i prelitoral sud i central. Al final del dia el vent quedarà fluix i variable."
+      "estatDelCel": "De matinada s'incrementarà la nuvolositat arreu del territori deixant el cel molt ennuvolat o cobert arreu, amb creixement de nuvolades. Tot i això, durant la tarda la nuvolositat quedarà restringida a la meitat est i resta del sector central del litoral i prelitoral, obrint-se clarianes per Ponent. Al final del dia el cel quedarà serè o poc ennuvolat arreu, llevat de punts de l'interior del quadrant nord-est i del sector central del litoral i prelitoral on es mantindrà molt ennuvolat.",
+      "precipitacions": "Durant la matinada i primeres hores del matí s'esperen xàfecs localment forts o torrencials. Al llarg del matí n'apareixeran a altres punts de Catalunya, preferentment al Pirineu, Prepirineu, a la Catalunya Central i a la resta del prelitoral. Al final del dia es restringiran a punts del sector central del litoral i prelitoral. Aniran acompanyats de tempesta i localment d'algun fenomen de temps violent\nEn general s'acumularan quantitats poc abundants; amb tot, podran ser entre abundants i molt abundants i, localment, extremament abundants, a punts del Pirineu i Prepirineu oriental i altres punts del sector central del litoral i prelitoral i de la Catalunya Central.\nLa cota de neu rondarà els 3.000 metres.",
+      "temperatures": "La temperatura mínima baixarà de forma generalitzada i es registrarà al final del dia. La temperatura màxima baixarà entre moderadament i acusadament arreu.",
+      "visibilitat": "La visibilitat serà entre bona i regular en general. Amb tot, serà dolenta en moments de xàfec i fins al vespre al vessant nord del Pirineu. ",
+      "vent": "Durant tot el dia bufarà el mestral i la tramuntana als dos extrems del país, bufaran forts amb alguns cops molts forts, sobretot al nord de la Costa Brava i al massís del Port. A la resta del territori el vent serà fluix amb alguns cops moderats, amb predomini del component est al litoral i prelitoral. "
     }
   }
 }
