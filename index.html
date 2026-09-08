@@ -1215,7 +1215,10 @@
         🗺️ Mapa
       </a>
     </nav>
-    
+
+    <!-- Estat de les dades: sempre visible, a totes les pestanyes -->
+    <div id="estat-dades"></div>
+
     <!-- Secció Risc Operacional -->
     <section id="seccio-risc" class="section active">
       <div id="app-risc">
@@ -1447,6 +1450,112 @@
       planspc: null,
       canvi: null
     };
+
+    // ==================== ESTAT DE LES DADES ====================
+    // El risc es calcula amb el que hi ha carregat en aquell moment. Si una
+    // font no ha arribat, el seu factor val 0 i el número surt igual de tranquil
+    // que un dia sense avisos: un 0 per manca de dades no es pot ensenyar com un
+    // 0 de veritat. Aquí es registra què ha arribat, quan i d'on, i tant la
+    // franja de dalt com la targeta del risc ho diuen.
+    const FONTS_DADES = {
+      smp:      { etiqueta: 'Alertes SMP',   emoji: '⚠️',  factor: true  },
+      bpa:      { etiqueta: 'Allaus',        emoji: '🏔️', factor: true  },
+      canvi:    { etiqueta: 'Canvi temps',   emoji: '🌦️', factor: true  },
+      planspc:  { etiqueta: 'Plans PC',      emoji: '🚨',  factor: false },
+      previsio: { etiqueta: 'Previsió',      emoji: '🌤️', factor: false }
+    };
+    // Els JSON es regeneren unes quantes vegades al dia; passades aquestes hores
+    // vol dir que t'has perdut algun butlletí i el que veus pot ser vell.
+    const FONT_VELLA_H = 8;
+
+    // clau → { estat: 'ok'|'error', ts: ISO de la consulta a l'origen, origen, missatge }
+    const estatFonts = {};
+
+    function marcarFont(clau, ts, origen) {
+      estatFonts[clau] = { estat: 'ok', ts: ts || null, origen: origen || '' };
+      renderEstatDades();
+    }
+    function marcarFontError(clau, missatge) {
+      estatFonts[clau] = { estat: 'error', ts: null, origen: '', missatge: String(missatge || 'no ha carregat') };
+      renderEstatDades();
+    }
+
+    const horesDe = (ts) => ts ? (Date.now() - new Date(ts).getTime()) / 3600000 : null;
+    const formatAntiguitat = (h) => h == null ? '—'
+      : h < 1 ? `fa ${Math.max(1, Math.round(h * 60))} min`
+      : h < 48 ? `fa ${Math.round(h)} h`
+      : `fa ${Math.round(h / 24)} dies`;
+
+    // Fonts que entren al càlcul del risc i no hi són (o han petat)
+    function fontsQueFalten() {
+      return Object.keys(FONTS_DADES).filter(k => FONTS_DADES[k].factor &&
+        (!estatFonts[k] || estatFonts[k].estat !== 'ok'));
+    }
+    // Fonts que hi són però amb dades velles
+    function fontsVelles() {
+      return Object.keys(FONTS_DADES).filter(k => {
+        const e = estatFonts[k];
+        if (!e || e.estat !== 'ok') return false;
+        const h = horesDe(e.ts);
+        return h != null && h > FONT_VELLA_H;
+      });
+    }
+
+    function renderEstatDades() {
+      const cont = document.getElementById('estat-dades');
+      if (!cont) return;
+
+      const falten = fontsQueFalten();
+      const velles = fontsVelles();
+      const pendents = Object.keys(FONTS_DADES).filter(k => !estatFonts[k]);
+      // Mentre encara està carregant no s'alarma ningú: només es diu que hi treballa
+      const carregant = pendents.length > 0 && falten.length === pendents.length;
+
+      const colorFons = falten.length && !carregant ? '#ffebee'
+        : velles.length ? '#fff8e1' : '#f1f8e9';
+      const colorVora = falten.length && !carregant ? '#e53935'
+        : velles.length ? '#f59e0b' : '#c5e1a5';
+
+      const xips = Object.entries(FONTS_DADES).map(([k, f]) => {
+        const e = estatFonts[k];
+        if (!e) return `<span title="encara s'està carregant" style="background:#eceff1;color:#78909c;padding:2px 7px;border-radius:4px;">${f.emoji} ${f.etiqueta} · carregant…</span>`;
+        if (e.estat !== 'ok') return `<span title="${escapeHtml(e.missatge || '')}" style="background:#ffcdd2;color:#b71c1c;padding:2px 7px;border-radius:4px;font-weight:700;">${f.emoji} ${f.etiqueta} · SENSE DADES</span>`;
+        const h = horesDe(e.ts);
+        const vella = h != null && h > FONT_VELLA_H;
+        const hora = e.ts ? new Date(e.ts).toLocaleTimeString('ca-ES', { hour: '2-digit', minute: '2-digit' }) : '';
+        const titol = `Consulta a l'origen: ${e.ts ? new Date(e.ts).toLocaleString('ca-ES') : '—'}${e.origen ? ' · via ' + e.origen : ''}`;
+        return `<span title="${escapeHtml(titol)}" style="background:${vella ? '#ffe0b2' : '#dcedc8'};color:${vella ? '#e65100' : '#33691e'};padding:2px 7px;border-radius:4px;">` +
+               `${f.emoji} ${f.etiqueta} · ${hora} <span style="opacity:0.75;">${formatAntiguitat(h)}</span>${vella ? ' ⚠️' : ''}</span>`;
+      }).join('');
+
+      const avis = carregant ? ''
+        : falten.length ? `<div style="width:100%;color:#b71c1c;font-weight:700;margin-top:0.25rem;">⚠️ Falten dades de: ${falten.map(k => FONTS_DADES[k].etiqueta).join(', ')} — el risc que es mostra està calculat sense aquests factors.</div>`
+        : velles.length ? `<div style="width:100%;color:#e65100;margin-top:0.25rem;">Dades de fa més de ${FONT_VELLA_H} h a: ${velles.map(k => FONTS_DADES[k].etiqueta).join(', ')}. Pot haver-hi avisos nous que encara no hi són.</div>`
+        : '';
+
+      cont.innerHTML = `
+        <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;font-size:0.75rem;
+                    background:${colorFons};border:1px solid ${colorVora};border-radius:6px;
+                    padding:0.4rem 0.6rem;margin-bottom:0.75rem;">
+          <strong style="color:#37474f;">📡 Dades</strong>
+          ${xips}
+          <button class="risc-btn" onclick="recarregarTotesLesDades()" style="padding:0.15rem 0.5rem;font-size:0.72rem;margin-left:auto;">🔄 Actualitzar</button>
+          ${avis}
+        </div>`;
+    }
+
+    // Torna a demanar-ho tot. Els JSON porten ?t= per saltar-se la cau del
+    // navegador, o sigui que això sí que va a buscar el fitxer de veritat.
+    function recarregarTotesLesDades() {
+      Object.keys(FONTS_DADES).forEach(k => { delete estatFonts[k]; });
+      invalidarOperativitat();
+      renderEstatDades();
+      carregarSMP();
+      carregarBPA();
+      carregarPrevisio();
+      carregarPlansPC();
+      carregarCanviTempsJSON();
+    }
     
     // ==================== NAVEGACIÓ ====================
     function mostrarSeccio(ev, seccio) {
@@ -1692,6 +1801,7 @@
         const bpa = await response.json();
         if (bpa.error) throw new Error(bpa.error);
         if (!bpa.data) {
+          marcarFontError('bpa', 'el butlletí encara no s\'ha generat');
           document.getElementById('app-bpa').innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">El butlletí s'actualitzarà demà a les 06:45h.</p><button onclick="carregarBPA()">Tornar a provar</button></div>`;
           return;
         }
@@ -1724,10 +1834,12 @@
         } catch(_) { /* Si falla ICGC, continuem amb les dades del Gist */ }
 
         dadesCarregades.bpa = bpa;
+        marcarFont('bpa', bpa.actualitzat || bpa.data, 'JSON del repositori');
         renderBPA(bpa);
         actualitzarRiscAuto();
         guardarBPASupabase(bpa).catch(() => {});
       } catch (error) {
+        marcarFontError('bpa', error.message);
         document.getElementById('app-bpa').innerHTML = `
           <div class="error">
             <div style="font-size: 3rem;">⚠️</div>
@@ -1852,9 +1964,11 @@
           return;
         }
         dadesCarregades.previsio = data;  // Guardar dades
+        marcarFont('previsio', data.dataConsulta, 'JSON del repositori');
         renderPrevisio(data);
         actualitzarRiscAuto();  // Actualitzar risc amb noves dades
       } catch (error) {
+        marcarFontError('previsio', error.message);
         logError('Previsió', error.message);
         document.getElementById('app-previsio').innerHTML = `
           <div class="error">
@@ -1976,6 +2090,36 @@
         return '#f44336';
       };
 
+      // Un 0 pot voler dir tres coses molt diferents i s'han de poder distingir:
+      // que Meteocat no té cap avís, que el butlletí encara no arriba a aquell
+      // dia, o que no tenim les dades. Un «0 · Cap alerta» per a totes tres és
+      // una mentida amb bona cara.
+      const fontSmp = estatFonts.smp || {};
+      const smpSenseDades = fontSmp.estat !== 'ok';
+      const hSmp = horesDe(fontSmp.ts || data.dataConsulta);
+      const smpVell = hSmp != null && hSmp > FONT_VELLA_H;
+      const diesAmbButlleti = new Set((data.avisos || []).flatMap(a => (a.dies || []).map(d => d.dia)));
+      const capEpisodi = diesAmbButlleti.size === 0;
+
+      // La targeta d'un dia. El «—» és només per a quan no tenim les dades: un
+      // 0 amb el butlletí a la mà és una lectura bona i s'ha de veure com un 0,
+      // però dient d'on surt — que Meteocat no tingui cap episodi obert i que
+      // un dia concret no hi surti no són ben bé el mateix.
+      const targetaSMP = (titol, calc, dia, gran) => {
+        const senseAvisosDelDia = !smpSenseDades && !diesAmbButlleti.has(dia) && dia !== ahir;
+        const color = smpSenseDades ? '#9e9e9e' : getColorClass(calc.valor);
+        const nota = smpSenseDades ? 'SENSE DADES'
+          : senseAvisosDelDia ? (capEpisodi ? 'cap episodi obert a Meteocat' : 'cap avís per a aquest dia')
+          : calc.explicacio;
+        return `
+          <div style="text-align:center;padding:1rem;background:${gran ? '#fff' : '#fafafa'};border-radius:8px;border:${gran ? '2px solid ' + color : '1px solid #eee'};">
+            <div style="font-size:0.75rem;color:${gran ? '#e53935' : '#888'};text-transform:uppercase;${gran ? 'font-weight:600;' : ''}">${titol}</div>
+            <div style="font-size:${gran ? '3rem' : '2.5rem'};font-weight:700;color:${color};">${smpSenseDades ? '—' : calc.valor}</div>
+            <div style="font-size:0.72rem;color:${smpSenseDades ? '#b71c1c' : '#666'};${smpSenseDades ? 'font-weight:700;' : ''}">${nota}</div>
+            ${smpSenseDades ? '' : `<div style="font-size:0.65rem;color:#999;margin-top:0.25rem;">🟡${calc.zones?.groc||0} 🟠${calc.zones?.taronja||0} 🔴${calc.zones?.vermell||0}</div>`}
+          </div>`;
+      };
+
       let html = `
         <header>
           <div class="header-icon">⚠️</div>
@@ -1983,27 +2127,19 @@
           <p class="data">Situacions Meteorològiques de Perill</p>
           <p class="actualitzat">Consulta: ${new Date(data.dataConsulta).toLocaleString('ca-ES')}</p>
         </header>
+        ${smpSenseDades ? `
+          <div style="background:#ffcdd2;color:#b71c1c;border:1px solid #e53935;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-weight:700;">
+            ⚠️ No tenim les dades d'SMP. El que es veu a sota no és «cap alerta»: és que no s'han pogut carregar.
+          </div>` : smpVell ? `
+          <div style="background:#fff8e1;color:#e65100;border:1px solid #f59e0b;border-radius:8px;padding:0.6rem 1rem;margin-bottom:1rem;">
+            🕐 Dades de ${formatAntiguitat(hSmp)}${fontSmp.origen ? ' · ' + escapeHtml(fontSmp.origen) : ''}. Meteocat pot haver obert avisos nous que aquí encara no hi són.
+          </div>` : ''}
         <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;margin-bottom:1.5rem;">
           <h3 style="margin:0 0 1rem;font-size:1rem;color:#e53935;display:flex;align-items:center;gap:0.5rem;">📊 Càlcul Risc SMP per GRAE</h3>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;">
-            <div style="text-align:center;padding:1rem;background:#fafafa;border-radius:8px;border:1px solid #eee;">
-              <div style="font-size:0.75rem;color:#888;text-transform:uppercase;">Ahir</div>
-              <div style="font-size:2.5rem;font-weight:700;color:${getColorClass(smpAhir.valor)};">${smpAhir.valor}</div>
-              <div style="font-size:0.7rem;color:#666;">${smpAhir.explicacio}</div>
-              <div style="font-size:0.65rem;color:#999;margin-top:0.25rem;">🟡${smpAhir.zones?.groc||0} 🟠${smpAhir.zones?.taronja||0} 🔴${smpAhir.zones?.vermell||0}</div>
-            </div>
-            <div style="text-align:center;padding:1rem;background:#fff;border-radius:8px;border:2px solid ${getColorClass(smpAvui.valor)};">
-              <div style="font-size:0.75rem;color:#e53935;text-transform:uppercase;font-weight:600;">Avui</div>
-              <div style="font-size:3rem;font-weight:700;color:${getColorClass(smpAvui.valor)};">${smpAvui.valor}</div>
-              <div style="font-size:0.75rem;color:#666;">${smpAvui.explicacio}</div>
-              <div style="font-size:0.7rem;color:#999;margin-top:0.25rem;">🟡${smpAvui.zones?.groc||0} 🟠${smpAvui.zones?.taronja||0} 🔴${smpAvui.zones?.vermell||0}</div>
-            </div>
-            <div style="text-align:center;padding:1rem;background:#fafafa;border-radius:8px;border:1px solid #eee;">
-              <div style="font-size:0.75rem;color:#888;text-transform:uppercase;">Demà</div>
-              <div style="font-size:2.5rem;font-weight:700;color:${getColorClass(smpDema.valor)};">${smpDema.valor}</div>
-              <div style="font-size:0.7rem;color:#666;">${smpDema.explicacio}</div>
-              <div style="font-size:0.65rem;color:#999;margin-top:0.25rem;">🟡${smpDema.zones?.groc||0} 🟠${smpDema.zones?.taronja||0} 🔴${smpDema.zones?.vermell||0}</div>
-            </div>
+            ${targetaSMP('Ahir', smpAhir, ahir, false)}
+            ${targetaSMP('Avui', smpAvui, avui, true)}
+            ${targetaSMP('Demà', smpDema, dema, false)}
           </div>
           <details>
             <summary style="font-size:0.82rem;color:#888;cursor:pointer;list-style:none;display:flex;align-items:center;gap:0.3rem;">▶ 📐 Com es calcula</summary>
@@ -2036,8 +2172,12 @@
         html += `
           <div class="no-alertes">
             <div class="icon">✅</div>
-            <h3>Cap alerta activa</h3>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">No hi ha situacions meteorològiques de perill vigents.</p>
+            <h3>Cap episodi obert a Meteocat</h3>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">
+              No hi ha cap situació meteorològica de perill oberta segons la consulta
+              de les ${new Date(data.dataConsulta).toLocaleTimeString('ca-ES', { hour: '2-digit', minute: '2-digit' })}
+              (${formatAntiguitat(horesDe(data.dataConsulta))}). Això és una resposta de Meteocat, no una absència de dades.
+            </p>
           </div>
         `;
       } else {
@@ -2348,30 +2488,35 @@
       `;
       try {
         // 1) Intentar JSON estàtic (ràpid, sense cost)
-        let data = null;
+        let data = null, origen = '';
         try {
           const resp = await fetchAmbTimeout(URLS.smp + '?t=' + Date.now(), 8000);
           if (resp.ok) {
             const json = await resp.json();
             const diesAntigues = (Date.now() - new Date(json.dataConsulta).getTime()) / 86400000;
-            if (json.dataConsulta && diesAntigues <= 1) data = json;
+            if (json.dataConsulta && diesAntigues <= 1) { data = json; origen = 'JSON del repositori'; }
           }
         } catch(_) {}
 
-        // 2) Fallback a Supabase si el JSON és antic o no disponible
-        if (!data) data = await smpDesDeSupabase();
+        // 2) Fallback a Supabase si el JSON és antic o no disponible. Compte: la
+        // taula desa la zona, no la comarca, i la pestanya SMP Bombers no en pot
+        // fer el càlcul per regions — per això l'origen es diu a la franja de dalt.
+        if (!data) { data = await smpDesDeSupabase(); origen = 'Supabase (sense comarques)'; }
 
         dadesCarregades.smp = data;
+        marcarFont('smp', data.dataConsulta, origen);
         renderSMP(data);
         renderSMPBombers();
         actualitzarRiscAuto();
       } catch (error) {
+        marcarFontError('smp', error.message);
         logError('SMP', error.message);
         document.getElementById('app-smp').innerHTML = `
           <div class="error">
             <div style="font-size: 3rem;">⚠️</div>
-            <h2>Error</h2>
-            <p style="opacity: 0.8;">${error.message}</p>
+            <h2>No s'han pogut carregar les alertes SMP</h2>
+            <p style="opacity:0.9;font-weight:700;">Això <u>no</u> vol dir que no hi hagi avisos: vol dir que no ho sabem.</p>
+            <p style="opacity: 0.8;">${escapeHtml(error.message)}</p>
             <button onclick="carregarSMP()">Tornar a provar</button>
           </div>
         `;
@@ -5371,6 +5516,20 @@
         // anar a mirar cada pestanya. Només hi ha detall per a avui/demà (calculat
         // en viu); els dies desats (ahir) no el guarden — vegeu CLAUDE.md.
         const motiuHtml = txt => txt ? ` · ${escapeHtml(txt)}` : '';
+
+        // Un factor sense dades val 0 al càlcul i, sense dir-ho, es llegeix com
+        // «no passa res». Es marca a la seva línia i a la capçalera de la targeta:
+        // el número que hi ha a sobre està calculat sense aquell factor.
+        // Els dies editats a mà porten els valors de l'usuari, no els de la font.
+        const enViu = dayKey !== 'yesterday' && !dia.modificatManualment;
+        const faltants = enViu ? fontsQueFalten() : [];
+        const faltaFont = clau => faltants.includes(clau);
+        const senseDades = `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;background:#ffcdd2;color:#b71c1c;font-weight:700;">SENSE DADES</span>`;
+        const avisIncomplet = faltants.length
+          ? `<div style="background:#ffcdd2;color:#b71c1c;font-size:0.7rem;font-weight:700;padding:0.25rem 0.5rem;border-radius:4px;margin-bottom:0.4rem;">
+               ⚠️ Càlcul incomplet — falten ${faltants.map(k => FONTS_DADES[k].etiqueta).join(', ')}
+             </div>` : '';
+
         const smpMotiu = (dia.smpDetall && dia.smpDetall.length)
           ? [...new Set(dia.smpDetall.flatMap(d => d.meteors || []))].join(', ') : '';
         const allausNiv = nivellAllaus(dia);
@@ -5391,24 +5550,25 @@
               </div>
               ${canEdit ? `<button class="risc-btn" onclick="obrirRiscConfig('${dayKey}')">✏️</button>` : ''}
             </div>
+            ${avisIncomplet}
             <div class="risc-value">
-              <div class="risc-number ${colorClass}">${formatarRisc(risc)}</div>
-              <div class="risc-level ${colorClass}">${label}${calc.topat ? ' <span style="font-size:0.6rem;opacity:0.7;">(topat a 6)</span>' : ''}</div>
+              <div class="risc-number ${colorClass}"${faltants.length ? ' style="color:#9e9e9e;"' : ''}>${formatarRisc(risc)}${faltants.length ? '<span style="font-size:1.2rem;color:#b71c1c;" title="calculat sense totes les dades">*</span>' : ''}</div>
+              <div class="risc-level ${colorClass}"${faltants.length ? ' style="color:#9e9e9e;"' : ''}>${label}${calc.topat ? ' <span style="font-size:0.6rem;opacity:0.7;">(topat a 6)</span>' : ''}${faltants.length ? ' <span style="font-size:0.6rem;color:#b71c1c;font-weight:700;">INCOMPLET</span>' : ''}</div>
             </div>
             <div class="risc-bar">
-              <div class="risc-bar-fill ${bgClass}" style="width: ${Math.min(100, (risc / 6) * 100)}%"></div>
+              <div class="risc-bar-fill ${bgClass}" style="width: ${Math.min(100, (risc / 6) * 100)}%${faltants.length ? ';opacity:0.3' : ''}"></div>
             </div>
             <div class="risc-breakdown">
               <div class="risc-breakdown-title">Desglossament</div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
                 <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}${esBase('smp')}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}${motiuHtml(smpMotiu)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.smp||0)}/6</span>
+                ${faltaFont('smp') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}${motiuHtml(smpMotiu)}</span>`}
+                <span class="risc-breakdown-value">${faltaFont('smp') ? '—' : Math.round(dia.smp||0)}/6</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu && !allausConfig.desactivat)}">
                 <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${allausConfig.desactivat ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;" title="Allaus desactivades a Configuració → Allaus BPA: compten 0">🌞 fora de temporada</span>' : ''}${esBase('allaus')}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(allausNiv)}${motiuHtml(allausConfig.desactivat ? '' : allausMotiu)}</span>
-                <span class="risc-breakdown-value">${allausNiv}/5${mesPts(allausPts)}</span>
+                ${(faltaFont('bpa') && !allausConfig.desactivat) ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(allausNiv)}${motiuHtml(allausConfig.desactivat ? '' : allausMotiu)}</span>`}
+                <span class="risc-breakdown-value">${(faltaFont('bpa') && !allausConfig.desactivat) ? '—' : allausNiv}/5${mesPts(allausPts)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
                 <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
@@ -5422,8 +5582,8 @@
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
                 <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}${motiuHtml(canviMotiu)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.canvi||0)}/2${mesPts(calc.increments.canvi)}</span>
+                ${faltaFont('canvi') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}${motiuHtml(canviMotiu)}</span>`}
+                <span class="risc-breakdown-value">${faltaFont('canvi') ? '—' : Math.round(dia.canvi||0)}/2${mesPts(calc.increments.canvi)}</span>
               </div>
               <div class="risc-breakdown-item" style="opacity:0.6;">
                 <span class="risc-breakdown-label">🚨 Plans PC</span>
@@ -7395,11 +7555,13 @@
     async function carregarCanviTempsJSON() {
       try {
         const resp = await fetchAmbTimeout(URLS.canvi + '?t=' + Date.now(), 8000);
-        if (resp.ok) {
-          dadesCarregades.canvi = await resp.json();
-          actualitzarRiscAuto();
-        }
-      } catch(_) {}
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        dadesCarregades.canvi = await resp.json();
+        marcarFont('canvi', dadesCarregades.canvi.actualitzat || dadesCarregades.canvi.data, 'JSON del repositori');
+        actualitzarRiscAuto();
+      } catch(e) {
+        marcarFontError('canvi', e.message);
+      }
     }
 
     // Avís quan s'obre la còpia de proves (publicada a /proves/ des de la branca `proves`),
@@ -7421,6 +7583,7 @@
     marcarWebDeProves();
 
     // Carregar tot al iniciar
+    renderEstatDades();     // La franja d'estat surt de seguida, dient què està carregant
     carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
     carregarRiscConfig().then(() => { renderRisc(); sincronitzarSMPAhir(); });  // Config de Supabase primer (riscParams), després renderitza risc i sincronitza "Ahir" de la pestanya Alertes
     sincronitzarRiscAhir();  // "Ahir" del Risc GRAE ve sempre de Supabase, no del localStorage del dispositiu
@@ -9008,13 +9171,16 @@
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         if (!data.actualitzat) {
+          marcarFontError('planspc', 'els plans encara no s\'han generat');
           cont.innerHTML = `<div class="error"><div style="font-size:3rem;">🕐</div><h2>Dades no disponibles</h2><p style="opacity:0.8;">Els plans s'actualitzaran demà a les 06:45h.</p><button onclick="carregarPlansPC()">Tornar a provar</button></div>`;
           return;
         }
         dadesCarregades.planspc = data;
+        marcarFont('planspc', data.actualitzat, 'JSON del repositori');
         actualitzarRiscAuto();
         renderPlansPC(data);
       } catch (e) {
+        marcarFontError('planspc', e.message);
         cont.innerHTML = `
           <div class="error">
             <div style="font-size:2rem">⚠️</div>

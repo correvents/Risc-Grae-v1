@@ -141,7 +141,17 @@ visible. Va estar mesos així: la config de zones mai va arribar de Supabase (qu
 de cada dispositiu) i el que es guardava des de Configuració no anava enlloc. Totes les taules van
 en minúscules; si n'afegeixes una, comprova-ho contra `information_schema.tables`.
 
-**11. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
+**12. Un factor sense dades no pot semblar un factor a zero.** El risc es calcula amb el que hi ha
+carregat: si l'SMP no ha arribat, val 0 i el número surt igual de tranquil que un dia sense avisos.
+`estatFonts` registra, per a cada font (`FONTS_DADES`), si ha arribat, quan es va consultar l'origen
+i per quin camí; la franja `#estat-dades` (sota les pestanyes, a totes les pestanyes) ho ensenya, i
+`renderRisc` marca la targeta com a **INCOMPLET** i posa `SENSE DADES` a la línia del factor que
+falta. Si hi afegeixes una font que entri al càlcul, posa-la a `FONTS_DADES` amb `factor: true` i
+crida `marcarFont`/`marcarFontError` als dos camins de la seva càrrega — si no, tornarà a passar per
+un 0 legítim. Els dies editats a mà (`modificatManualment`) no es marquen: els valors són de
+l'usuari, no de la font.
+
+**13. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
 L'operativitat va a Supabase i a Open-Meteo, i mentre no tornava, l'SMP i les allaus del dia es
 quedaven només a la memòria: la targeta ensenyava el valor vell i `renderRisc()` —que rellegeix el
 `localStorage` a `carregarRiscEstat`— el llençava al primer redibuix. Sortia un SMP 0 a la portada
