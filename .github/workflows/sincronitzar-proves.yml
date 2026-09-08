@@ -1,8 +1,13 @@
 name: Sincronitzar el web de proves
 
 # GitHub Pages publica la branca `main` tal com està, així que el banc de proves
-# és la carpeta `proves/` dins de `main`. Aquest workflow la manté igual que la
-# branca `proves`: cada push a `proves` hi copia l'app.
+# és la carpeta `proves/` dins de `main`. Aquest workflow hi copia l'app a cada
+# canvi d'index.html o mapa.html.
+#
+# Abans copiava des de la branca `proves` i només s'activava amb pushes a
+# `proves`. Aquella branca es va abandonar el 27-08-2026 i des d'aleshores el
+# workflow no s'ha executat mai: /proves/ es va quedar amb una còpia de fa
+# setmanes i semblava que els canvis publicats no arribessin.
 #
 # Només es copien index.html i mapa.html. Els GeoJSON i les dades (data/) no es
 # dupliquen: index.html llegeix els JSON per URL absoluta i mapa.html busca els
@@ -10,7 +15,10 @@ name: Sincronitzar el web de proves
 
 on:
   push:
-    branches: [proves]
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'mapa.html'
   workflow_dispatch:
 
 permissions:
@@ -30,18 +38,11 @@ jobs:
         with:
           ref: main
 
-      - name: Branca proves
-        uses: actions/checkout@v4
-        with:
-          ref: proves
-          path: .proves-src
-
       - name: Copiar l'app a proves/
         run: |
           mkdir -p proves
-          cp .proves-src/index.html proves/index.html
-          cp .proves-src/mapa.html  proves/mapa.html
-          rm -rf .proves-src
+          cp index.html proves/index.html
+          cp mapa.html  proves/mapa.html
 
       - name: Commit a main si hi ha canvis
         run: |
