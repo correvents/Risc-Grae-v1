@@ -2,9 +2,14 @@ name: Dades diàries GRAE
 
 on:
   schedule:
+    # GitHub endarrereix els crons de manera irregular (s'ha vist +3 h), o sigui
+    # que amb tres passades al dia hi podia haver forats de 6-8 h: un avís de
+    # tempesta que Meteocat obre al matí no arribava a la web fins al migdia.
     - cron: '45 5 * * *'   # 06:45 CET hivern (força guardat)
     - cron: '0 8 * * *'    # 09:00 CET hivern (guarda si canvis)
+    - cron: '0 10 * * *'   # 12:00 CET hivern (guarda si canvis)
     - cron: '30 13 * * *'  # 14:30 CET hivern (guarda si canvis)
+    - cron: '0 16 * * *'   # 18:00 CET hivern (guarda si canvis)
   workflow_dispatch:
     inputs:
       force:
