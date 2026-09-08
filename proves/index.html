@@ -1539,13 +1539,27 @@
       const avisosConfig = [];
       if (!riscFormula.smp.actiu) avisosConfig.push('el factor <strong>Alertes SMP</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (!riscFormula.allaus.actiu) avisosConfig.push('el factor <strong>Allaus</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
-      if (Object.values(riscParams.zones || {}).filter(v => v > 0).length === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
+      const zonesActives = Object.values(riscParams.zones || {}).filter(v => v > 0).length;
+      const zonesTotals = Object.keys(riscParams.zones || {}).length;
+      if (zonesActives === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
+
+      // Avisos que hi són i no compten perquè la seva zona està desactivada.
+      // És el cas que fa sortir un 0 amb el butlletí ple d'avisos.
+      if (estatFonts.smp && estatFonts.smp.estat === 'ok') {
+        const avui = calcularSMPPonderat(getRiscDateString(0));
+        const dema = calcularSMPPonderat(getRiscDateString(1));
+        const fora = new Set([...(avui.descartades || []), ...(dema.descartades || [])]);
+        const noConegudes = new Set([...(avui.desconegudes || []), ...(dema.desconegudes || [])]);
+        if (fora.size) avisosConfig.push(`hi ha avisos a <strong>${[...fora].join(', ')}</strong> que <strong>no compten</strong>: aquestes zones estan desactivades a Configuració → Alertes SMP`);
+        if (noConegudes.size) avisosConfig.push(`Meteocat avisa a <strong>${[...noConegudes].join(', ')}</strong> i l'app no coneix aquesta zona: els seus avisos no compten (cal afegir-la al mapatge de zones)`);
+      }
       const avisConfig = avisosConfig.length
         ? `<div style="width:100%;color:#6a1b9a;background:#f3e5f5;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;">⚙️ ${avisosConfig.join(' · ')}</div>` : '';
 
       // La data del fitxer que serveix el navegador: si no quadra amb l'últim
       // canvi publicat, el que es veu és una còpia de la memòria cau.
       const versio = `<span title="data de l'index.html que té carregat aquest navegador. Si és vella, recarrega amb Ctrl+F5 o amb el botó del costat." style="color:#78909c;">app: ${escapeHtml(document.lastModified)}</span>`;
+      const xipConfig = `<span title="Zones de muntanya activades a Configuració → Alertes SMP. Un avís en una zona apagada no compta." style="background:#ede7f6;color:#4527a0;padding:2px 7px;border-radius:4px;">⚙️ zones ${zonesActives}/${zonesTotals} · ${escapeHtml(origenRiscParams)}</span>`;
 
       cont.innerHTML = `
         <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;font-size:0.75rem;
@@ -1553,6 +1567,7 @@
                     padding:0.4rem 0.6rem;margin-bottom:0.75rem;">
           <strong style="color:#37474f;">📡 Dades</strong>
           ${xips}
+          ${xipConfig}
           <span style="margin-left:auto;display:flex;gap:0.4rem;align-items:center;">
             ${versio}
             <button class="risc-btn" onclick="recarregarTotesLesDades()" style="padding:0.15rem 0.5rem;font-size:0.72rem;">🔄 Actualitzar dades</button>
@@ -4590,7 +4605,15 @@
     }
     
     // Configuració de paràmetres per càlcul automàtic
-    let riscParams = {
+    //
+    // ⚠️ Les claus de `zonesGrup` són els noms de zona **tal com els escriu
+    // Meteocat**. Una zona que no hi sigui es descarta del càlcul en silenci:
+    // va passar amb l'Empordà, que no hi era i té 941 avisos a l'històric —
+    // cap d'ells no ha comptat mai. Les zones que fa servir l'SMP són aquestes
+    // quinze més les marítimes (comprovat contra `select distinct zona from
+    // smp_historic`); si Meteocat n'estrena una, la franja de dades avisa que
+    // hi ha avisos en una zona desconeguda.
+    const RISC_PARAMS_DEFAULT = {
       zones: {
         'Pirineu Occidental': 1,
         'Pirineu Oriental': 1,
@@ -4609,6 +4632,7 @@
         'Prepirineu': 'Pirineu Oriental',
         'Costa Brava': 'Costa Brava',
         'Litoral Nord': 'Costa Brava',
+        'Empordà': 'Costa Brava',
         "Gironès i Pla de l'Estany": 'Costa Brava',
         'Litoral Central': 'Litoral Central',
         'Vallès': 'Litoral Central',
@@ -4645,7 +4669,9 @@
       normalitzador: 1,  // Dividir punts totals per aquest valor per obtenir 0-6
       maxSMP: 6,         // Valor màxim SMP
     };
-    
+
+    let riscParams = JSON.parse(JSON.stringify(RISC_PARAMS_DEFAULT));
+
     function riscParamsToRow(p) {
       return {
         id: 1,
@@ -4713,6 +4739,11 @@
     // dispositiu — i el que es guardava des de Configuració no ho desava ningú.
     const TAULA_CONFIG_SMP = 'taula_config_alertes_smp';
 
+    // D'on han sortit els paràmetres que s'estan fent servir. Es diu a la franja
+    // de dades: si Supabase no respon es fa servir la còpia d'aquest dispositiu,
+    // que pot ser antiga i tenir zones desactivades que ningú recorda haver tocat.
+    let origenRiscParams = 'valors per defecte';
+
     async function carregarRiscConfig() {
       try {
         const { data, error } = await sbClient
@@ -4722,13 +4753,30 @@
           .single();
         if (!error && data) {
           riscParams = rowToRiscParams(data, riscParams);
+          origenRiscParams = 'Supabase';
           localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
+          renderEstatDades();
           return;
         }
       } catch(e) { logError('RiscParams', e.message); }
-      // Fallback localStorage
-      const saved = localStorage.getItem('riscGRAE_params');
-      if (saved) riscParams = JSON.parse(saved);
+      // Fallback localStorage. El mapatge de zones no és una preferència de
+      // ningú: és com s'anomenen les zones a Meteocat, i una còpia antiga del
+      // dispositiu en pot tenir menys de les que hi ha ara (l'Empordà, sense
+      // anar més lluny). Els pesos, que sí que són decisió de l'usuari, manen;
+      // el mapatge es completa sempre amb el del codi.
+      try {
+        const saved = JSON.parse(localStorage.getItem('riscGRAE_params') || 'null');
+        if (saved) {
+          riscParams = {
+            ...RISC_PARAMS_DEFAULT,
+            ...saved,
+            zones:     { ...RISC_PARAMS_DEFAULT.zones,     ...(saved.zones || {}) },
+            zonesGrup: { ...RISC_PARAMS_DEFAULT.zonesGrup, ...(saved.zonesGrup || {}) },
+          };
+          origenRiscParams = 'aquest dispositiu (Supabase no ha respost)';
+        }
+      } catch(e) { logError('RiscParams', e.message); }
+      renderEstatDades();
     }
 
     async function guardarRiscParams() {
@@ -4818,6 +4866,11 @@
 
       const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
       const infoPerZona = {}; // zonaGrup → { nivell màxim, meteors Set }
+      // Avisos que hi són però que no compten perquè la seva zona no està
+      // activada a Configuració → Alertes SMP. Sense això, un dia amb avisos
+      // pertot arreu podia donar 0 sense cap explicació enlloc.
+      const descartades = new Set();   // zona coneguda, però apagada per l'usuari
+      const desconegudes = new Set();  // zona que el mapatge no coneix: forat nostre
 
       for (const avis of dadesCarregades.smp.avisos) {
         const meteor = avis.meteor || '';
@@ -4827,7 +4880,13 @@
             const zonaOriginal = afectacio.zona || '';
             const nivell = afectacio.nivell || '';
             const zonaGrup = riscParams.zonesGrup[zonaOriginal] || zonaOriginal;
-            if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) continue;
+            if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) {
+              if (nivellOrdre[nivell]) {
+                if (zonaGrup in riscParams.zones) descartades.add(zonaGrup);
+                else desconegudes.add(zonaOriginal);
+              }
+              continue;
+            }
             if (!nivellOrdre[nivell]) continue;
 
             if (!infoPerZona[zonaGrup]) {
@@ -4842,7 +4901,7 @@
         }
       }
 
-      return avaluarZonesSMPPerNivell(infoPerZona);
+      return { ...avaluarZonesSMPPerNivell(infoPerZona), descartades: [...descartades], desconegudes: [...desconegudes] };
     }
 
     // Descarrega d'smp_historic (Supabase) les alertes reals d'ahir i les avalua
@@ -6184,38 +6243,13 @@
     // ==================== PARÀMETRES RISC ====================
     function resetRiscParams() {
       if (confirm('Segur que vols restablir els paràmetres per defecte?')) {
-        riscParams = {
-          zones: {
-            'Pirineu Occidental': 1,
-            'Pirineu Oriental': 1,
-            'Costa Brava': 1,
-            'Litoral Central': 1,
-            'Plana de Lleida': 1,
-            'Camp de Tarragona': 1,
-            "Terres de l'Ebre": 1,
-          },
-          zonesGrup: {
-            'Pirineu Occidental': 'Pirineu Occidental',
-            'Pirineu Central': 'Pirineu Occidental',
-            'Pirineu Oriental': 'Pirineu Oriental',
-            'Prepirineu': 'Pirineu Oriental',
-            'Costa Brava': 'Costa Brava',
-            'Litoral Nord': 'Costa Brava',
-            'Litoral Central': 'Litoral Central',
-            'Vallès': 'Litoral Central',
-            'Penedès': 'Litoral Central',
-            'Plana de Lleida': 'Plana de Lleida',
-            'Catalunya Central': 'Plana de Lleida',
-            'Camp de Tarragona': 'Camp de Tarragona',
-            'Serres de Prades i Montsant': 'Camp de Tarragona',
-            "Terres de l'Ebre": "Terres de l'Ebre",
-          },
-          periodes: { '00-06': 0.3, '06-12': 0.8, '12-18': 1.0, '18-24': 0.6 },
-          nivells: { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 },
-          normalitzador: 1,
-          maxSMP: 6,
-        };
+        // Els mateixos valors que porta el codi. Abans n'hi havia una segona
+        // còpia escrita aquí que s'havia quedat enrere: li faltaven el Gironès,
+        // l'Empordà i les zones marítimes, o sigui que «restablir els valors per
+        // defecte» deixava el mapatge pitjor que abans.
+        riscParams = JSON.parse(JSON.stringify(RISC_PARAMS_DEFAULT));
         guardarRiscParams();
+        renderEstatDades();
         renderPaginaParametres();
       }
     }
