@@ -1543,6 +1543,7 @@
       const avisosConfig = [];
       if (!riscFormula.smp.actiu) avisosConfig.push('el factor <strong>Alertes SMP</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (!riscFormula.allaus.actiu) avisosConfig.push('el factor <strong>Allaus</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
+      if (boletairesConfig.actiu) avisosConfig.push('🍄 <strong>temporada de bolets</strong> activada a Configuració → Boletaires: suma a tots els dies');
       const zonesActives = Object.values(riscParams.zones || {}).filter(v => v > 0).length;
       const zonesTotals = Object.keys(riscParams.zones || {}).length;
       if (zonesActives === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
@@ -4792,6 +4793,10 @@
           .single();
         if (!error && data) {
           riscParams = rowToRiscParams(data, riscParams);
+          if (typeof data.boletaires_actiu === 'boolean') {
+            boletairesConfig.actiu = data.boletaires_actiu;
+            try { localStorage.setItem(LS_BOLETAIRES_KEY, JSON.stringify(boletairesConfig)); } catch(e) {}
+          }
           origenRiscParams = 'Supabase';
           localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
           renderEstatDades();
@@ -4979,6 +4984,10 @@
         allaus: 0,
         hc: 0,
         canvi: 0,
+        // Mentre hi ha temporada de bolets (Configuració → Boletaires), el factor
+        // val 1 per a tots els dies automàtics. Abans no el posava ningú: la
+        // casella de la fórmula només diu si compta, i el valor es quedava a 0.
+        boletaires: boletairesConfig.actiu ? 1 : 0,
         notes: []
       };
       
@@ -5101,6 +5110,7 @@
         riscState.today.canvi = valsAvui.canvi;
         riscState.today.canviDetall = valsAvui.canviDetall || null;
         riscState.today.planspc = valsAvui.planspc || 0;
+        riscState.today.boletaires = valsAvui.boletaires || 0;
         if (valsAvui.notes.length > 0 && !riscState.today.notes) {
           riscState.today.notes = valsAvui.notes.join('. ');
         }
@@ -5117,6 +5127,7 @@
         riscState.tomorrow.canvi = valsDema.canvi;
         riscState.tomorrow.canviDetall = valsDema.canviDetall || null;
         riscState.tomorrow.planspc = valsDema.planspc || 0;
+        riscState.tomorrow.boletaires = valsDema.boletaires || 0;
         if (valsDema.notes.length > 0 && !riscState.tomorrow.notes) {
           riscState.tomorrow.notes = valsDema.notes.join('. ');
         }
@@ -5288,6 +5299,57 @@
       const resum = document.getElementById('allaus-resum');
       if (resum) resum.textContent = resumAllausConfig();
       actualitzarRiscAuto();
+    }
+
+    // ---- BOLETAIRES: interruptor de temporada ----
+    // El factor existia però ningú n'establia el valor: la casella de Fórmula de
+    // risc només diu si compta, i `dia.boletaires` es quedava a 0 tret que
+    // s'edités el dia a mà —cosa que, a més, congela la resta de factors d'aquell
+    // dia. Amb aquest interruptor, mentre hi ha temporada el factor val 1 per a
+    // tots els dies automàtics.
+    //
+    // A diferència de l'interruptor d'allaus, es desa a **Supabase** i no al
+    // navegador: que hi hagi bolets o no és una decisió de tot l'equip i ha de
+    // valer per a tothom, no per a qui la va marcar. El localStorage només serveix
+    // de reserva quan Supabase no respon.
+    const LS_BOLETAIRES_KEY = 'riscGRAE_boletaires';
+    let boletairesConfig = { actiu: false };
+
+    function carregarBoletairesConfigLocal() {
+      try {
+        const s = JSON.parse(localStorage.getItem(LS_BOLETAIRES_KEY) || 'null');
+        if (s && typeof s.actiu === 'boolean') boletairesConfig.actiu = s.actiu;
+      } catch(e) {}
+    }
+    carregarBoletairesConfigLocal();
+
+    const resumBoletairesConfig = () => boletairesConfig.actiu
+      ? 'Ara mateix: temporada activada — els boletaires sumen al risc de tots els dies.'
+      : 'Ara mateix: fora de temporada — els boletaires no sumen res.';
+
+    // Llegeix la casella de Configuració → Boletaires, la desa i recalcula
+    async function aplicarBoletairesConfig() {
+      const el = document.getElementById('boletaires-actiu');
+      if (el) boletairesConfig.actiu = el.checked;
+      try { localStorage.setItem(LS_BOLETAIRES_KEY, JSON.stringify(boletairesConfig)); } catch(e) {}
+
+      const resum = document.getElementById('boletaires-resum');
+      if (resum) resum.textContent = resumBoletairesConfig();
+      actualitzarRiscAuto();
+      renderEstatDades();
+
+      // A Supabase, perquè la vegi tothom. Si falla, queda desat al navegador i
+      // es diu, en comptes de fer creure que ja està compartit.
+      const avis = document.getElementById('boletaires-desat');
+      try {
+        const { error } = await sbClient.from(TAULA_CONFIG_SMP)
+          .update({ boletaires_actiu: boletairesConfig.actiu }).eq('id', 1);
+        if (error) throw error;
+        if (avis) { avis.style.color = '#2e7d32'; avis.textContent = '✅ Desat per a tothom (Supabase)'; }
+      } catch(e) {
+        logError('Boletaires', e.message);
+        if (avis) { avis.style.color = '#c62828'; avis.textContent = '⚠️ Desat només en aquest navegador: Supabase no ha respost (' + e.message + ')'; }
+      }
     }
 
     // ---- OPERATIVITAT HC (estat + meteo per base) ----
@@ -5636,6 +5698,7 @@
             dia.canvi = vals.canvi;
             dia.canviDetall = vals.canviDetall || null;
             dia.planspc = vals.planspc || 0;
+            dia.boletaires = vals.boletaires || 0;
           } catch(e) {
             errorCalculRisc = e.message;
             logError('CàlculRisc', e.message);
@@ -6665,6 +6728,7 @@
           <button class="risc-btn risc-btn-primary" id="tab-formula" onclick="mostrarTabParam('formula')">🧮 Fórmula de risc</button>
           <button class="risc-btn" id="tab-smp" onclick="mostrarTabParam('smp')">⚠️ Alertes SMP</button>
           <button class="risc-btn" id="tab-allaus" onclick="mostrarTabParam('allaus')">❄️ Allaus BPA</button>
+          <button class="risc-btn" id="tab-boletaires" onclick="mostrarTabParam('boletaires')">🍄 Boletaires</button>
           <button class="risc-btn" id="tab-hc" onclick="mostrarTabParam('hc')">🚁 Operativitat HC</button>
           <button class="risc-btn" id="tab-afluencia" onclick="mostrarTabParam('afluencia')">👥 Afluència</button>
           <button class="risc-btn" id="tab-canvi" onclick="mostrarTabParam('canvi')">🌦️ Canvi Temps</button>
@@ -6867,7 +6931,42 @@
             </p>
           </div>
         </div>
-        
+
+        <!-- Tab Boletaires -->
+        <div id="param-boletaires" class="param-tab" style="display: none;">
+          <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;">
+            <h3 style="margin:0 0 1rem;font-size:1rem;color:#795548;">🍄 Temporada de boletaires</h3>
+
+            <div style="background:#efebe9;border:1px solid #a1887f;border-radius:6px;padding:0.75rem;margin-bottom:1.25rem;font-size:0.85rem;">
+              <strong>📐 Què aporta al risc:</strong><br>
+              Amb temporada activada, el factor suma <strong>+${+(riscFormula.boletaires.punts[1] ?? 0)}</strong> a tots els dies.
+              És un increment, no un perill: se suma al perill dominant i comparteix el sostre
+              d'increments amb l'afluència, el canvi de temps i l'operativitat.
+              Els punts s'editen a <strong>Configuració → Fórmula de risc</strong>.
+            </div>
+
+            <div style="background:#fff;border:2px solid #795548;border-radius:6px;padding:0.9rem;margin-bottom:1rem;">
+              <div style="font-weight:700;font-size:0.9rem;color:#4e342e;margin-bottom:0.6rem;">🍄 Hi ha bolets</div>
+              <label style="font-size:0.85rem;color:#37474f;display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                <input type="checkbox" id="boletaires-actiu" ${boletairesConfig.actiu ? 'checked' : ''} onchange="aplicarBoletairesConfig()">
+                <span><strong>Temporada de bolets</strong> — el factor boletaires compta <strong>1</strong> cada dia</span>
+              </label>
+              <p id="boletaires-resum" style="font-size:0.78rem;color:#555;margin:0.7rem 0 0;">${resumBoletairesConfig()}</p>
+              <p id="boletaires-desat" style="font-size:0.75rem;margin:0.3rem 0 0;color:#888;"></p>
+              <p style="font-size:0.75rem;color:#888;margin:0.5rem 0 0;">
+                Es desa a <strong>Supabase</strong>, o sigui que val per a tothom que obri la web, no
+                només per a aquest navegador — que és el que té sentit en una cosa que dura setmanes.
+                Cal treure-la quan s'acabi la temporada: no s'apaga sola.
+              </p>
+              <p style="font-size:0.75rem;color:#888;margin:0.5rem 0 0;">
+                Marcar la casella <strong>🍄 Boletaires</strong> de <em>Fórmula de risc</em> no n'hi ha prou:
+                allà només es diu que el factor compti, i el valor del dia es quedava a 0. Aquesta
+                casella és la que el posa a 1. Un dia editat a mà manté el valor que li hagis posat.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- Tab Operativitat HC -->
         <div id="param-hc" class="param-tab" style="display: none;">
           <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem;">

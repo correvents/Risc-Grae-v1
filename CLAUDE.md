@@ -57,6 +57,16 @@ si algú torna a llegir `dia.allaus` cru, l'interruptor deixa de fer efecte en a
 simulador se'l salta a posta (`simulacio: true`): serveix per calibrar amb valors inventats.
 Només afecta el frontend — el backend (`risc-diari.js`) no pot llegir el `localStorage`.
 
+**Interruptor de temporada de boletaires.** El factor `boletaires` existia a la fórmula però **ningú
+n'establia mai el valor**: la casella de Fórmula de risc només diu si compta, i `dia.boletaires` es
+quedava a 0 tret que s'edités el dia a mà — cosa que, a sobre, marca el dia com a editat i congela
+la resta de factors. Ara `boletairesConfig.actiu` (Configuració → Boletaires) el posa a 1 a
+`calcularValorsAuto` per a tots els dies automàtics. **Es desa a Supabase**
+(`taula_config_alertes_smp.boletaires_actiu`), no al `localStorage` com el d'allaus: que hi hagi
+bolets o no val per a tot l'equip i ha de valer per a tothom, no per a qui va marcar la casella; el
+`localStorage` només és la reserva quan Supabase no respon, i llavors es diu a la pantalla. No
+s'apaga sol quan s'acaba la temporada: la franja de dades recorda que està activat.
+
 **Simulador.** A Configuració → Fórmula de risc hi ha un simulador que calcula amb valors inventats i ensenya el desglossament pas a pas. Serveix per calibrar sense tocar cap dia real; no desa res.
 
 **Taules de "què suma cada factor"** (`renderExplicacioFactors`). Dos desplegables a la mateixa pestanya que ensenyen, per a cada valor de cada factor, què aporta de veritat — perquè cap factor suma el seu valor tal qual i això s'ha de poder justificar a un cap. **Es generen des de `riscFormula`, no escrites a mà**, o sigui que segueixen sols qualsevol canvi de punts: no els has d'actualitzar.
