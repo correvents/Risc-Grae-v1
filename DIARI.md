@@ -8,6 +8,30 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-09 — Interruptor de temporada de boletaires
+
+Demanat: un interruptor per decidir si els boletaires compten. Reportat també que marcar la casella
+de la fórmula «no activa res».
+
+**I era veritat.** El factor `boletaires` existia, però **ningú n'establia mai el valor**: la casella
+de Configuració → Fórmula de risc només diu si el factor compta, i `dia.boletaires` es quedava a 0
+si no s'editava el dia a mà — cosa que, a sobre, marca el dia com a editat i congela la resta de
+factors d'aquell dia. O sigui que el factor no havia sumat mai res pel camí automàtic.
+
+**Fet:** pestanya nova **Configuració → 🍄 Boletaires** amb una casella de temporada. Mentre està
+activada, `calcularValorsAuto` posa el factor a 1 a tots els dies automàtics; els dies editats a mà
+mantenen el seu valor. Es desa a **Supabase** (`taula_config_alertes_smp.boletaires_actiu`, columna
+nova) i no al navegador com l'interruptor d'allaus: que hi hagi bolets val per a tot l'equip, i avui
+mateix hem vist com de mal va la configuració que només té un dispositiu. Si Supabase no respon,
+queda desat al navegador i la pantalla ho diu, en comptes de fer creure que ja està compartit.
+
+La franja de dades recorda que la temporada està activada: no s'apaga sola quan s'acaba.
+
+Comprovat al navegador: la línia passa de «🍄 Boletaires · — · 0/2» a «Temporada · 1/2 · +1»,
+l'increment entra a `detallarRisc`, i un dia editat a mà amb 0 es queda a 0.
+
+---
+
 ## 2026-09-09 — L'app es refresca sola
 
 Reportat al matí: la franja de dades marcava totes les fonts «fa 15 h», de les 21:20 del dia abans.
