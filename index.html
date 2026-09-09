@@ -1475,11 +1475,11 @@
     let errorCalculRisc = '';
 
     function marcarFont(clau, ts, origen) {
-      estatFonts[clau] = { estat: 'ok', ts: ts || null, origen: origen || '' };
+      estatFonts[clau] = { estat: 'ok', ts: ts || null, origen: origen || '', baixat: Date.now() };
       renderEstatDades();
     }
     function marcarFontError(clau, missatge) {
-      estatFonts[clau] = { estat: 'error', ts: null, origen: '', missatge: String(missatge || 'no ha carregat') };
+      estatFonts[clau] = { estat: 'error', ts: null, origen: '', baixat: Date.now(), missatge: String(missatge || 'no ha carregat') };
       renderEstatDades();
     }
 
@@ -1526,7 +1526,8 @@
         const h = horesDe(e.ts);
         const vella = h != null && h > FONT_VELLA_H;
         const hora = e.ts ? new Date(e.ts).toLocaleTimeString('ca-ES', { hour: '2-digit', minute: '2-digit' }) : '';
-        const titol = `Consulta a l'origen: ${e.ts ? new Date(e.ts).toLocaleString('ca-ES') : '—'}${e.origen ? ' · via ' + e.origen : ''}`;
+        const titol = `Consulta a l'origen: ${e.ts ? new Date(e.ts).toLocaleString('ca-ES') : '—'}${e.origen ? ' · via ' + e.origen : ''}`
+          + (e.baixat ? `\nBaixat per aquesta pantalla: ${new Date(e.baixat).toLocaleTimeString('ca-ES')}` : '');
         return `<span title="${escapeHtml(titol)}" style="background:${vella ? '#ffe0b2' : '#dcedc8'};color:${vella ? '#e65100' : '#33691e'};padding:2px 7px;border-radius:4px;">` +
                `${f.emoji} ${f.etiqueta} · ${hora} <span style="opacity:0.75;">${formatAntiguitat(h)}</span>${vella ? ' ⚠️' : ''}</span>`;
       }).join('');
@@ -1606,7 +1607,36 @@
       carregarPlansPC();
       carregarCanviTempsJSON();
     }
-    
+
+    // ── Refresc automàtic ──────────────────────────────────────
+    // Aquesta pantalla es queda oberta tot el dia, i l'app només baixava les
+    // dades en obrir-se: qui tornava a la pestanya l'endemà veia les d'ahir amb
+    // la mateixa cara de bones (l'hora de la franja ho delatava, però calia
+    // mirar-la). Ara es refresca sola quan torna a ser visible i, mentre s'està
+    // mirant, cada quart d'hora.
+    const REFRESC_MINUTS = 15;
+
+    function minutsDesDeLaDescarrega() {
+      const moments = Object.values(estatFonts).map(e => e.baixat).filter(Boolean);
+      if (!moments.length) return Infinity;
+      return (Date.now() - Math.min(...moments)) / 60000;
+    }
+
+    function refrescarSiCal() {
+      if (document.visibilityState !== 'visible') return;
+      // El dia també pot haver canviat amb la pestanya oberta: renderRisc fa
+      // rotar ahir/avui/demà a carregarRiscEstat.
+      if (riscState.today && riscState.today.data !== getRiscDateString(0)) {
+        if (!document.getElementById('pagina-parametres')) renderRisc();
+      }
+      if (minutsDesDeLaDescarrega() >= REFRESC_MINUTS) recarregarTotesLesDades();
+    }
+
+    document.addEventListener('visibilitychange', refrescarSiCal);
+    window.addEventListener('focus', refrescarSiCal);
+    setInterval(refrescarSiCal, 5 * 60 * 1000);
+    // ───────────────────────────────────────────────────────────
+
     // ==================== NAVEGACIÓ ====================
     function mostrarSeccio(ev, seccio) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));

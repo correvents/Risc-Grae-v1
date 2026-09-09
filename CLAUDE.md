@@ -160,7 +160,15 @@ crida `marcarFont`/`marcarFontError` als dos camins de la seva càrrega — si n
 un 0 legítim. Els dies editats a mà (`modificatManualment`) no es marquen: els valors són de
 l'usuari, no de la font.
 
-**13. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
+**13. L'app es refresca sola: aquesta pantalla es queda oberta tot el dia.** Les dades es baixaven
+només en obrir-la, o sigui que una pestanya deixada oberta al vespre ensenyava l'endemà els avisos
+d'ahir amb la mateixa cara de bones (l'hora de la franja ho delatava, però calia mirar-la). Ara
+`refrescarSiCal()` es dispara amb `visibilitychange`, amb `focus` i cada 5 min, i torna a baixar-ho
+tot si fa més de `REFRESC_MINUTS` (15) de l'última descàrrega — `estatFonts[k].baixat`, que és quan
+ho vam baixar, no la `dataConsulta` de l'origen. També refà les targetes si el dia ha canviat amb la
+pestanya oberta. Si hi afegeixes una font, res a fer: va per `recarregarTotesLesDades()`.
+
+**14. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
 `dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és
 el que la pestanya Alertes ha fet sempre. Mentre no ho feia, la portada podia ensenyar un 0 amb la
 pestanya marcant 4: n'hi havia prou que el càlcul d'`actualitzarRiscAuto` petés a mig camí —cosa que
@@ -169,7 +177,7 @@ es quedava amb el valor d'una càrrega anterior. Ara els dos llocs surten del ma
 dir coses diferents; els dies editats a mà i «ahir» no es toquen. Si el càlcul peta, es diu a la
 franja de dades (`errorCalculRisc`) en comptes de deixar un número vell amb bona cara.
 
-**14. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
+**15. `actualitzarRiscAuto` desa i pinta ABANS d'esperar l'operativitat.** L'ordre no és casual.
 L'operativitat va a Supabase i a Open-Meteo, i mentre no tornava, l'SMP i les allaus del dia es
 quedaven només a la memòria: la targeta ensenyava el valor vell i `renderRisc()` —que rellegeix el
 `localStorage` a `carregarRiscEstat`— el llençava al primer redibuix. Sortia un SMP 0 a la portada
