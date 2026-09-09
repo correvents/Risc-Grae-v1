@@ -8,6 +8,24 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-09 — L'app es refresca sola
+
+Reportat al matí: la franja de dades marcava totes les fonts «fa 15 h», de les 21:20 del dia abans.
+
+**No era cap error del sistema.** El workflow de dades havia corregut a les 10:08 UTC i Pages havia
+desplegat el commit a les 10:08:39, tots dos amb èxit. El que estava congelat era **la pestanya**:
+`app: 09/08 21:21:51` és l'hora en què aquell navegador va rebre l'HTML, i les dades eren del mateix
+moment. L'app només baixava els JSON en obrir-se, o sigui que una pantalla deixada oberta al vespre
+ensenyava l'endemà els avisos d'ahir amb la mateixa cara de bones.
+
+**Fet:** `refrescarSiCal()` es dispara amb `visibilitychange`, amb `focus` i cada 5 minuts, i torna a
+baixar-ho tot si fa més de 15 min (`REFRESC_MINUTS`) de l'última descàrrega — es mesura per
+`estatFonts[k].baixat`, que és quan ho vam baixar nosaltres, no per la `dataConsulta` de l'origen.
+També refà les targetes si el dia ha canviat amb la pestanya oberta. Amb dades fresques no demana
+res: comprovat que tornar a la pestanya dues vegades seguides només fa una petició.
+
+---
+
 ## 2026-09-08 (vespre) — La targeta del risc recalcula, no llegeix
 
 Reportat: «l'SMP sí que dona els riscos, però després no passen a la principal». Amb la pestanya
