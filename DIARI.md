@@ -18,6 +18,11 @@ desplegat el commit a les 10:08:39, tots dos amb èxit. El que estava congelat e
 moment. L'app només baixava els JSON en obrir-se, o sigui que una pantalla deixada oberta al vespre
 ensenyava l'endemà els avisos d'ahir amb la mateixa cara de bones.
 
+**També:** un factor desmarcat a la fórmula ja no ensenya el seu valor. Sortia «❄️ Risc allaus ·
+desactivat · Feble · 1/5», que es llegeix com si sumés 1 quan no suma res; ara el valor és **—** a
+tots els factors apagats (SMP, allaus, afluència, operativitat, canvi, boletaires). Atenuar la fila
+no n'hi havia prou.
+
 **Fet:** `refrescarSiCal()` es dispara amb `visibilitychange`, amb `focus` i cada 5 minuts, i torna a
 baixar-ho tot si fa més de 15 min (`REFRESC_MINUTS`) de l'última descàrrega — es mesura per
 `estatFonts[k].baixat`, que és quan ho vam baixar nosaltres, no per la `dataConsulta` de l'origen.

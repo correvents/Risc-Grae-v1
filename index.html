@@ -5668,6 +5668,10 @@
         // Un factor desactivat no suma: el desglossament ho ha de deixar veure
         const fOff  = on => on ? '' : 'opacity:0.45;';
         const fMarca = on => on ? '' : ' <span style="font-size:0.6rem;color:#999;font-weight:400;">desactivat</span>';
+        // ...i el seu valor passa a ser un guió. Atenuar la fila no n'hi havia
+        // prou: un «Feble · 1/5» amb el factor apagat es continua llegint com si
+        // comptés, i el que aporta al risc és exactament res.
+        const fGuio = (actiu, contingut) => actiu ? contingut : '—';
         // El "per què": no n'hi ha prou amb el nivell, cal poder-lo justificar sense
         // anar a mirar cada pestanya. Només hi ha detall per a avui/demà (calculat
         // en viu); els dies desats (ahir) no el guarden — vegeu CLAUDE.md.
@@ -5717,28 +5721,28 @@
               <div class="risc-breakdown-title">Desglossament</div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
                 <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}${esBase('smp')}</span>
-                ${faltaFont('smp') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getSMPLabelRisc(dia.smp||0)}${motiuHtml(smpMotiu)}</span>`}
-                <span class="risc-breakdown-value">${faltaFont('smp') ? '—' : Math.round(dia.smp||0)}/6</span>
+                ${faltaFont('smp') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.smp.actiu, getSMPLabelRisc(dia.smp||0) + motiuHtml(smpMotiu))}</span>`}
+                <span class="risc-breakdown-value">${!riscFormula.smp.actiu ? '—' : (faltaFont('smp') ? '—/6' : Math.round(dia.smp||0) + '/6')}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu && !allausConfig.desactivat)}">
                 <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${allausConfig.desactivat ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;" title="Allaus desactivades a Configuració → Allaus BPA: compten 0">🌞 fora de temporada</span>' : ''}${esBase('allaus')}</span>
-                ${(faltaFont('bpa') && !allausConfig.desactivat) ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAllausLabel(allausNiv)}${motiuHtml(allausConfig.desactivat ? '' : allausMotiu)}</span>`}
-                <span class="risc-breakdown-value">${(faltaFont('bpa') && !allausConfig.desactivat) ? '—' : allausNiv}/5${mesPts(allausPts)}</span>
+                ${(faltaFont('bpa') && !allausConfig.desactivat) ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.allaus.actiu, getAllausLabel(allausNiv) + motiuHtml(allausConfig.desactivat ? '' : allausMotiu))}</span>`}
+                <span class="risc-breakdown-value">${!riscFormula.allaus.actiu ? '—' : ((faltaFont('bpa') && !allausConfig.desactivat) ? '—' : allausNiv) + '/5' + mesPts(allausPts)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
                 <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${getAfluenciaLabel(dia.afluencia||0)}${motiuHtml(afluMotiu)}</span>
-                <span class="risc-breakdown-value">${calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${calc.afluenciaBruta}</span> ${calc.afluenciaEfectiva}` : Math.round(dia.afluencia||0)}/3${mesPts(calc.increments.afluencia)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.afluencia.actiu, getAfluenciaLabel(dia.afluencia||0) + motiuHtml(afluMotiu))}</span>
+                <span class="risc-breakdown-value">${!riscFormula.afluencia.actiu ? '—' : (calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${calc.afluenciaBruta}</span> ${calc.afluenciaEfectiva}` : Math.round(dia.afluencia||0)) + '/3' + mesPts(calc.increments.afluencia)}</span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(opActiu)}">
                 <span class="risc-breakdown-label">🚁 Operativitat${fMarca(opActiu)}</span>
                 <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(opMotiuTxt)}${opPts>0?` · +${opPts}`:''}</span>
-                <span class="risc-breakdown-value">${opValorTxt} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
+                <span class="risc-breakdown-value">${opActiu ? opValorTxt : '—'} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
                 <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
-                ${faltaFont('canvi') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${getCanviLabel(dia.canvi||0)}${motiuHtml(canviMotiu)}</span>`}
-                <span class="risc-breakdown-value">${faltaFont('canvi') ? '—' : Math.round(dia.canvi||0)}/2${mesPts(calc.increments.canvi)}</span>
+                ${faltaFont('canvi') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${fGuio(riscFormula.canvi.actiu, getCanviLabel(dia.canvi||0) + motiuHtml(canviMotiu))}</span>`}
+                <span class="risc-breakdown-value">${!riscFormula.canvi.actiu ? '—' : (faltaFont('canvi') ? '—' : Math.round(dia.canvi||0)) + '/2' + mesPts(calc.increments.canvi)}</span>
               </div>
               <div class="risc-breakdown-item" style="opacity:0.6;">
                 <span class="risc-breakdown-label">🚨 Plans PC</span>
@@ -5747,8 +5751,8 @@
               </div>
               <div class="risc-breakdown-item" style="${fOff(riscFormula.boletaires.actiu)}">
                 <span class="risc-breakdown-label">🍄 Boletaires${fMarca(riscFormula.boletaires.actiu)}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${(dia.boletaires||0) > 0 ? 'Temporada' : '—'}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.boletaires||0)}/2${mesPts(calc.increments.boletaires)}</span>
+                <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${fGuio(riscFormula.boletaires.actiu, (dia.boletaires||0) > 0 ? 'Temporada' : '—')}</span>
+                <span class="risc-breakdown-value">${!riscFormula.boletaires.actiu ? '—' : Math.round(dia.boletaires||0) + '/2' + mesPts(calc.increments.boletaires)}</span>
               </div>
             </div>
           </div>
