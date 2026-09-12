@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-11T19:03:36.508Z",
+  "dataConsulta": "2026-09-12T09:36:29.296Z",
   "avui": {
-    "data": "2026-09-11",
-    "variables": {
-      "estatDelCel": "El cel romandrà serè. Amb tot, hi haurà intervals de núvols baixos a punts de la meitat nord del litoral i prelitoral que s'endinsaran a altres punts del nord-est.",
-      "precipitacions": "És probable algun ruixat local entorn del massís del Montseny i del Prepirineu oriental. A més, al final del dia no se'n descarta algun de local a la costa central. Seria d'intensitat feble o localment moderada i acumularia quantitats de precipitació minses o localment poc abundants.",
-      "temperatures": "La temperatura quedarà lleugerament més alta.",
-      "visibilitat": "La visibilitat serà excel·lent.",
-      "vent": "El vent serà fluix amb alguns cops moderats, amb predomini del component sud al litoral i prelitoral, i el component oest a l'interior. Al final del dia quedarà fluix i de direcció variable."
-    }
-  },
-  "dema": {
     "data": "2026-09-12",
     "variables": {
       "estatDelCel": "El cel romandrà serè en general, si bé hi haurà intervals de núvols baixos a punts del sector central del litoral i prelitoral i zones pròximes, amb alguna nuvolada local al centre del dia. Independentment, es formaran alguns núvols d'evolució al Pirineu al migdia i algunes nuvolades a la tarda. ",
-      "precipitacions": "S'espera algun ruixat al centre del dia a punts del sector central del litoral i prelitoral. Seran molt locals, de distribució irregular i de curta durada, però descarregaran amb intensitat entre fluixa i moderada. A banda, a partir de mitja tarda també en seran possibles a punts del Prepirineu oriental, de mateixes característiques. S'acumularan quantitats minses o localment poc abundants de precipitació.",
-      "temperatures": "La temperatura mínima serà lleugerament més alta. Mentre que la màxima serà similar o lleugerament més baixa.",
-      "visibilitat": "La visibilitat serà excel·lent, excepte a zones elevades del sector central del litoral i prelitoral on quedarà regular.",
-      "vent": "Fins a mig matí i de nou a partir del vespre el vent serà fluix i de direcció variable, amb predomini del terral al litoral de matinada. La resta del dia, s'imposarà el vent fluix amb cops moderats de component sud al litoral i prelitoral, i el component sud i oest fluix a l'interior. \nAmb tot, fins a mig matí bufarà el mestral fluix al terç sud, mentre que la tramuntana bufarà fins al migdia a l'extrem nord de la Costa Brava."
+      "precipitacions": "S'espera algun ruixat al centre del dia a punts del sector central del litoral i prelitoral. Seran molt locals, de distribució irregular i de curta durada, però descarregaran amb intensitat entre fluixa i moderada. A banda, a partir de mitja tarda també en seran possibles a punts del Prepirineu oriental, de les mateixes característiques. S'acumularan quantitats minses o localment poc abundants de precipitació.",
+      "temperatures": "La temperatura màxima serà similar.",
+      "visibilitat": "La visibilitat serà excel·lent, excepte a zones elevades del sector central del litoral i prelitoral, on quedarà regular.",
+      "vent": "S'imposarà el vent fluix amb cops moderats de component sud al litoral i prelitoral, i el component sud i oest fluix a l'interior. \nAmb tot, fins a mig matí bufarà el mestral fluix al terç sud, mentre que la tramuntana bufarà fins al migdia a l'extrem nord de la Costa Brava.\nA partir del vespre el vent tendirà a quedar fluix i de direcció variable."
+    }
+  },
+  "dema": {
+    "data": "2026-09-13",
+    "variables": {
+      "estatDelCel": "El cel romandrà serè en general. Amb tot, fins a primera hora del matí pot haver-hi alguns intervals de núvols baixos a punts de l'interior que deixin el cel mig ennuvolat. A més, al migdia, creixeran alguns núvols d'evolució al Pirineu, com també al sector central del prelitoral.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà semblant o lleugerament més alta. La màxima pujarà lleugerament.",
+      "visibilitat": "La visibilitat serà entre excel·lent i bona. Amb tot, hi haurà alguna boirina o banc de boira puntual fins a l'inici del matí a punts de l'altiplà central i de l'interior del nord-est.",
+      "vent": "Fins a mig matí i de nou a partir del vespre el vent serà fluix i de direcció variable, amb predomini del terral al litoral de matinada. La resta del dia, s'imposarà el vent fluix amb cops moderats de component sud al litoral i prelitoral, i el component sud i oest fluix a l'interior. \n"
     }
   }
 }
