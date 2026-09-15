@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-09-15T10:28:27.190Z",
+  "actualitzat": "2026-09-15T13:21:15.295Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127288_INICI--ACTIVAT_INUNCAT_202609151157.pdf"
       },
       "descripcio": "SMP Intensitat de Pluja 30min 16/09 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_CAMCAT.png"
+      },
+      "plaacronim": "CAMCAT",
+      "planom": "CAMCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "15/09/2026 12:48",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127317_INICI--NOACTIVAT_CAMCAT_202609151311.pdf"
+      },
+      "descripcio": "ACA_Avís abocament aigües residuals a mar - "
     }
   ]
 }
