@@ -366,7 +366,13 @@ Es va provar primer de publicar per Actions (`pages.yml`, esborrat): el desplega
 - **Scripts d'ingesta**: comparen amb la instantània anterior i només escriuen a Supabase si hi ha canvis, tret que `FORCE=true`. Mantén aquest patró als scripts nous.
 - **Dates**: sempre `Europe/Madrid` per al "dia" operatiu (`avuiMadrid()`), no UTC. Els crons dels workflows sí que són UTC.
 - **Commits**: en català, imperatiu, amb el cos explicant el *per què*. Un commit per canvi lògic.
-- **`data/*.json`**: els commiteja el workflow. No els editis a mà.
+- **`data/*.json`**: els commiteja el workflow. No els editis a mà. I **els commiteja per
+  `scripts/commit-dades.sh`**, no amb `git push` a pèl: hi ha dos workflows que escriuen a `data/`
+  («Dades diàries GRAE» i «Captura del risc») i es solapen sovint, perquè la captura reintenta fins
+  a mitja hora. Són instantànies regenerables, o sigui que **no es rebasen mai** —un `pull --rebase`
+  els dona per fusionables i acaba en conflicte als quatre alhora, com el 15-09-2026—: mana el més
+  nou, que és qui empeny l'últim. Si hi afegeixes un workflow que escrigui a `data/`, crida el
+  mateix script.
 
 ## Comprovacions abans de donar per bona una feina
 

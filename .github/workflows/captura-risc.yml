@@ -89,19 +89,9 @@ jobs:
             FORCA_CAPTURA=true node scripts/captura-risc.js
           fi
 
+      # El rebase que hi havia aquí no servia: els JSON són instantànies
+      # regenerables i un rebase els dona per fusionables. El 15-09-2026 la
+      # captura del vespre va xocar amb la passada de dades i va morir amb
+      # CONFLICT als quatre fitxers alhora. Vegeu `scripts/commit-dades.sh`.
       - name: Commit JSON
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
-          if git diff --staged --quiet; then
-            echo "Sense canvis als JSON"
-          else
-            git commit -m "chore: dades $(date -u '+%Y-%m-%d %H:%M UTC')"
-            # El workflow de dades pot haver empès mentrestant: es reintenta amb
-            # rebase en comptes de deixar la captura sense els JSON al repositori.
-            for i in 1 2 3; do
-              git push && break
-              git pull --rebase origin main || exit 1
-            done
-          fi
+        run: bash scripts/commit-dades.sh
