@@ -41,8 +41,14 @@ Decidit amb en Jordi: disparar les captures des de Supabase (`pg_cron`) perquè 
 onze pestanyes sense errors; i la captura s'ha executat sencera contra un PostgREST de mentida,
 inclosos el camí del reintent (codi 75) i el de la captura forçada.
 
+**Afegit el mateix dia:** la pestanya **Historial → Risc** ja no ensenya la foto final del dia sinó
+les captures: «com es veia venir» (el risc que es donava per a aquell dia a cada captura, començant
+per la del vespre anterior), una taula per horitzó amb els factors i les fletxes de canvi entre
+captures, el desglossament desplegable de cadascuna i l'SMP Bombers per regió. Els dies anteriors al
+15-09-2026 continuen ensenyant la foto de `risc_historic`, amb un avís que diu per què no hi ha més.
+
 **Pendent:** activar el `pg_cron` a Supabase (cal un token de GitHub, instruccions a
-`PLA-CAPTURES.md` §4), la pestanya Historial nova (§7) i fer que `bpa_historic` deixi d'escriure's
+`PLA-CAPTURES.md` §4), fer que `bpa_historic` deixi d'escriure's
 a sobre perquè les allaus també tinguin evolució. L'SMP Bombers dins de la fórmula del risc queda
 previst, com es va demanar: la captura ja el desa, així que hi haurà història per calibrar-lo.
 

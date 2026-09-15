@@ -7,8 +7,10 @@ Document de disseny i estat de la feina.
 config de la fórmula/allaus/llindars HC moguda a Supabase, `scripts/captura-risc.js` i el workflow
 `captura-risc.yml` amb el reintent.
 
-**Falta**: activar el disparador de Supabase (§4, necessita un token teu), la pestanya Historial
-nova (§7) i l'evolució de les allaus (`bpa_historic` encara s'escriu a sobre).
+També la pestanya **Historial → Risc** (§7), que ja ensenya les captures.
+
+**Falta**: activar el disparador de Supabase (§4, necessita un token teu) i l'evolució de les allaus
+(`bpa_historic` encara s'escriu a sobre).
 
 ## 1. El problema
 

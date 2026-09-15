@@ -6549,6 +6549,7 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr style="background:#e8f5e9;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><strong>risc_captures</strong></td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Foto del risc (avui i demà) amb tot el desglossament, els factors i l'SMP Bombers. <strong>No s'escriu mai a sobre</strong>: és el que permet veure com evoluciona el risc al llarg del dia.</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (08:15, 12:30 i 20:30)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">risc_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Risc GRAE diari calculat</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">1× dia (22:00 CET) + manual</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Avisos SMP actius per dia/zona</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_override_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Overrides manuals SMP per la simulació</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Quan l'usuari fa un override</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
@@ -6899,6 +6900,7 @@
                 <ol style="margin:0;padding-left:1.3rem;color:#555;">
                   <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>sincronitzarSMPAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
                   <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>. Quan torna la config de Supabase es torna a cridar: fins llavors no hi ha <code>riscState</code> i les crides anteriors no fan res.</li>
+                  <li><strong>Captura del risc:</strong> tres cops al dia, <code>scripts/captura-risc.js</code> desa a <code>risc_captures</code> el risc d'avui i de demà amb el desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què s'ha calculat. Ho fa amb <code>formula-risc.js</code>, el mateix fitxer que carrega aquesta pàgina, perquè el número desat sigui el que es veu aquí. La pestanya <strong>Historial → Risc</strong> ho ensenya: les captures del dia, què va moure el número entre una i l'altra i què es preveia per a aquell dia des del dia abans.</li>
                   <li><strong>Operativitat dels helicòpters:</strong> és l'únic factor asíncron (Supabase + Open-Meteo) i té sostre de 20 s. Si no arriba, la targeta posa <code>sense dades</code> amb el motiu i la franja avisa que el risc es calcula sense aquest factor.</li>
                   <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
                   <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
@@ -8442,15 +8444,219 @@
       }
     }
 
+    // ---- HISTORIAL DEL RISC: les captures del dia ----
+    // `risc_historic` només guarda l'última foto del dia (té UNIQUE (data) i
+    // s'escriu a sobre). `risc_captures` en guarda una per franja i horitzó, i
+    // és el que permet veure **com hi hem arribat**: què deia la previsió ahir
+    // al vespre, què deia aquest matí i què diu ara.
+    const FRANGES_CAPTURA = [
+      { id: 'mati',   etiqueta: 'Matí',   hora: '08:15' },
+      { id: 'migdia', etiqueta: 'Migdia', hora: '12:30' },
+      { id: 'vespre', etiqueta: 'Vespre', hora: '20:30' },
+      { id: 'extra',  etiqueta: 'Extra',  hora: 'fora d\'hora' },
+    ];
+
+    const horaCaptura = (c) =>
+      new Date(c.capturat_at).toLocaleTimeString('ca-ES', { hour: '2-digit', minute: '2-digit' });
+
+    // Fletxa de canvi respecte de la captura anterior. El que interessa d'una
+    // sèrie no és el valor sinó el moviment.
+    function deltaCaptura(valor, anterior) {
+      if (anterior == null || valor == null || valor === anterior) return '';
+      const puja = valor > anterior;
+      return `<span style="font-size:0.7rem;font-weight:700;color:${puja ? '#c62828' : '#2e7d32'};">` +
+             `${puja ? '▲' : '▼'}${Math.abs(valor - anterior)}</span>`;
+    }
+
+    function filaFactor(etiqueta, clau, captures, max) {
+      let anterior = null;
+      const cel·les = captures.map(c => {
+        const v = c ? c[clau] : null;
+        const txt = v == null ? '—' : `${v}${max ? '/' + max : ''}`;
+        const d = c ? deltaCaptura(v, anterior) : '';
+        if (c) anterior = v;
+        return `<td style="text-align:center;padding:0.3rem 0.5rem;border-top:1px solid #eee;">
+                  <span style="font-weight:600;">${txt}</span> ${d}</td>`;
+      }).join('');
+      return `<tr><td style="padding:0.3rem 0.5rem;border-top:1px solid #eee;color:#555;">${etiqueta}</td>${cel·les}</tr>`;
+    }
+
+    function blocHoritzo(titol, dataObjectiu, captures) {
+      const caps = FRANGES_CAPTURA.map(f => captures.find(c => c.franja === f.id) || null);
+      const visibles = FRANGES_CAPTURA.filter((f, n) => caps[n] || f.id !== 'extra');
+      const idx = FRANGES_CAPTURA.map((f, n) => n).filter(n => caps[n] || FRANGES_CAPTURA[n].id !== 'extra');
+      const capsV = idx.map(n => caps[n]);
+
+      const capsalera = idx.map(n => {
+        const c = caps[n];
+        return `<th style="padding:0.35rem 0.5rem;font-size:0.75rem;color:#555;text-align:center;">
+                  ${FRANGES_CAPTURA[n].etiqueta}<br>
+                  <span style="font-weight:400;color:#888;">${c ? horaCaptura(c) : '—'}</span>
+                </th>`;
+      }).join('');
+
+      const filaRisc = idx.map(n => {
+        const c = caps[n];
+        if (!c) return `<td style="text-align:center;padding:0.4rem;color:#bbb;">sense captura</td>`;
+        const cls = getRiscColorClass(c.risc);
+        return `<td style="text-align:center;padding:0.4rem;">
+                  <span class="${cls}" style="font-size:1.6rem;font-weight:800;line-height:1;">${c.risc}</span>
+                  <div style="font-size:0.65rem;color:#888;">${getRiscLabel(c.risc)}</div>
+                  ${c.dades_completes === false ? '<div style="font-size:0.62rem;color:#e65100;font-weight:700;">INCOMPLET</div>' : ''}
+                </td>`;
+      }).join('');
+
+      const detalls = capsV.filter(Boolean).map(c => {
+        const d = c.desglossament || {};
+        const inc = d.increments || {};
+        const parts = Object.entries(inc).filter(([, v]) => v).map(([k, v]) => `${k} +${v}`);
+        return `<details style="margin-top:0.3rem;">
+          <summary style="cursor:pointer;font-size:0.75rem;color:#0082d9;">
+            ${FRANGES_CAPTURA.find(f => f.id === c.franja).etiqueta} · ${horaCaptura(c)} · com surt el ${c.risc}
+          </summary>
+          <div style="font-size:0.75rem;color:#555;padding:0.35rem 0 0.2rem 0.6rem;line-height:1.6;">
+            Perill base <strong>${d.base ?? c.perill_base ?? 0}</strong>
+            ${c.dominant ? `(mana ${c.dominant === 'smp' ? 'l\'SMP' : 'les allaus'}${c.suplement ? `, +${c.suplement} pel segon perill` : ''})` : '(cap perill)'}
+            ${parts.length ? ` · increments: ${parts.join(', ')}` : ' · cap increment'}
+            ${d.extraTopat ? ` <span style="color:#e65100;">(topats a ${d.extra})</span>` : ''}
+            ${d.reduccioAfluencia ? `<br>Afluència ${d.afluenciaBruta} → ${d.afluenciaEfectiva} pel mal temps` : ''}
+            ${(d.notes && d.notes.length) ? `<br>${escapeHtml(d.notes.join(' · '))}` : ''}
+            ${(c.operativitat_detall || []).filter(h => !h.operatiu).length
+              ? `<br>🚁 ${(c.operativitat_detall || []).filter(h => !h.operatiu).map(h => `${escapeHtml(h.nom)}: ${escapeHtml(h.motiu)}`).join(' · ')}`
+              : ''}
+            <br><span style="color:#999;">fórmula v${c.formula_versio ?? '?'}</span>
+          </div>
+        </details>`;
+      }).join('');
+
+      return `
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.3rem;">${titol}
+            <span style="font-weight:400;color:#888;font-size:0.8rem;">${formatRiscDate(dataObjectiu)}</span></div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+            <thead><tr><th style="text-align:left;padding:0.35rem 0.5rem;font-size:0.75rem;color:#888;">Captura</th>${capsalera}</tr></thead>
+            <tbody>
+              <tr><td style="padding:0.4rem 0.5rem;font-weight:700;color:#333;">Risc</td>${filaRisc}</tr>
+              ${filaFactor('⚠️ Alertes SMP', 'smp', capsV, 6)}
+              ${filaFactor('❄️ Allaus', 'allaus', capsV, 5)}
+              ${filaFactor('👥 Afluència', 'afluencia', capsV, 3)}
+              ${filaFactor('🚁 HC operatius', 'operativitat', capsV, 4)}
+              ${filaFactor('🌦️ Canvi temps', 'canvi', capsV, 2)}
+              ${filaFactor('🍄 Boletaires', 'boletaires', capsV, 1)}
+              ${filaFactor('🚨 Plans PC', 'planspc', capsV, 3)}
+            </tbody>
+          </table>
+          ${detalls}
+        </div>`;
+    }
+
+    // Què s'havia previst per a aquest dia, i quan. És la pregunta que fins ara
+    // no es podia respondre: el risc d'ahir per a avui desapareixia en desar-se
+    // el d'avui a sobre.
+    function blocPrevisio(perAquestDia, dataObjectiu) {
+      if (!perAquestDia.length) return '';
+      const ordenades = [...perAquestDia].sort((a, b) => new Date(a.capturat_at) - new Date(b.capturat_at));
+      const punts = ordenades.map((c, n) => {
+        const quan = new Date(c.capturat_at);
+        const mateixDia = c.dia_captura === dataObjectiu;
+        const etiqueta = (mateixDia ? '' : formatRiscDate(c.dia_captura) + ' ') +
+                         (FRANGES_CAPTURA.find(f => f.id === c.franja) || { etiqueta: c.franja }).etiqueta.toLowerCase();
+        const anterior = n > 0 ? ordenades[n - 1].risc : null;
+        return `<span style="display:inline-block;margin:0.15rem 0.35rem 0.15rem 0;padding:0.15rem 0.45rem;border-radius:4px;background:#f5f5f5;">
+                  <span style="color:#888;font-size:0.72rem;">${etiqueta} ${quan.toLocaleTimeString('ca-ES',{hour:'2-digit',minute:'2-digit'})}</span>
+                  <strong class="${getRiscColorClass(c.risc)}" style="font-size:0.95rem;margin-left:0.25rem;">${c.risc}</strong>
+                  ${deltaCaptura(c.risc, anterior)}
+                </span>`;
+      }).join('');
+      return `
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">📈 Com es veia venir</div>
+          <div style="font-size:0.75rem;color:#888;margin-bottom:0.35rem;">
+            El risc que es donava per al ${formatRiscDate(dataObjectiu)} a cada captura, de la més antiga a la més nova.
+          </div>
+          <div>${punts}</div>
+        </div>`;
+    }
+
+    function blocSMPBombers(captures) {
+      const ambDades = captures.filter(c => c.smp_bombers && Object.keys(c.smp_bombers).length);
+      if (!ambDades.length) return '';
+      const regions = Object.keys(ambDades[0].smp_bombers);
+      const files = regions.map(r => {
+        const cel·les = ambDades.map(c => {
+          const v = (c.smp_bombers[r] || {}).dia || 0;
+          return `<td style="text-align:center;padding:0.25rem 0.5rem;border-top:1px solid #eee;background:${colorRisc(v)};color:${textSobreRisc(v)};font-weight:600;">${v}</td>`;
+        }).join('');
+        return `<tr><td style="padding:0.25rem 0.5rem;border-top:1px solid #eee;">${r}</td>${cel·les}</tr>`;
+      }).join('');
+      return `
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
+          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">🔥 SMP Bombers per regió</div>
+          <div style="font-size:0.75rem;color:#888;margin-bottom:0.35rem;">Valor màxim del dia a cada regió d'emergència, tal com era a cada captura.</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+            <thead><tr><th style="text-align:left;padding:0.25rem 0.5rem;font-size:0.75rem;color:#888;">Regió</th>
+              ${ambDades.map(c => `<th style="padding:0.25rem 0.5rem;font-size:0.75rem;color:#555;">${(FRANGES_CAPTURA.find(f=>f.id===c.franja)||{etiqueta:c.franja}).etiqueta}<br><span style="font-weight:400;color:#888;">${horaCaptura(c)}</span></th>`).join('')}
+            </tr></thead>
+            <tbody>${files}</tbody>
+          </table>
+        </div>`;
+    }
+
     async function renderHistRisc(cont) {
       try {
+        const { data, error } = await sbClient
+          .from('risc_captures')
+          .select('*')
+          .or(`dia_captura.eq.${histDataActiva},dia_objectiu.eq.${histDataActiva}`)
+          .order('capturat_at');
+        if (error) throw error;
+
+        const captures = data || [];
+        const delDia = captures.filter(c => c.dia_captura === histDataActiva);
+        if (!delDia.length) {
+          // Dia anterior a les captures (o dia sense cap): s'ensenya el que hi ha
+          // i es diu per què no hi ha més.
+          return renderHistRiscAntic(cont, `
+            <div style="margin:0 1rem;padding:0.5rem 0.7rem;background:#fff3e0;border-radius:6px;color:#e65100;font-size:0.8rem;">
+              📸 D'aquest dia no hi ha captures: només la foto final que es desava a <code>risc_historic</code>,
+              sense hores ni desglossament. Les captures van començar el 15-09-2026.
+            </div>`);
+        }
+
+        const avuiCaps = delDia.filter(c => c.horitzo === 'avui');
+        const demaCaps = delDia.filter(c => c.horitzo === 'dema');
+        const perAquestDia = captures.filter(c => c.dia_objectiu === histDataActiva);
+        const demaData = demaCaps.length ? demaCaps[0].dia_objectiu : offsetData(histDataActiva, 1);
+
+        cont.innerHTML = `
+          <div class="risc-header"><div class="risc-title">⚠️ Risc GRAE · captures del dia</div></div>
+          <div style="padding:0 1rem 1rem;">
+            ${blocPrevisio(perAquestDia, histDataActiva)}
+            ${avuiCaps.length ? blocHoritzo('El risc d\'aquell mateix dia', histDataActiva, avuiCaps) : ''}
+            ${demaCaps.length ? blocHoritzo('El que es preveia per a l\'endemà', demaData, demaCaps) : ''}
+            ${blocSMPBombers(avuiCaps)}
+            <div style="font-size:0.72rem;color:#999;">
+              Cada captura és la foto de les dades en aquell moment, amb la fórmula que hi havia.
+              No se n'escriu mai cap a sobre: si un dia falta, és que no es va arribar a fer.
+            </div>
+          </div>`;
+      } catch (e) {
+        cont.innerHTML = errorHistorial(e.message);
+      }
+    }
+
+    // Abans de les captures (15-09-2026) només hi ha la foto final del dia a
+    // `risc_historic`, sense hores ni desglossament. Es continua ensenyant per
+    // als dies vells, dient clarament què és.
+    async function renderHistRiscAntic(cont, avis) {
+      try {
         const { data, error } = await sbClient.from('risc_historic').select('*').eq('data', histDataActiva).single();
-        if (error || !data) { cont.innerHTML = buidatHistorial('Risc GRAE'); return; }
+        if (error || !data) { cont.innerHTML = (avis || '') + buidatHistorial('Risc GRAE'); return; }
         const dia = { planspc: data.planspc||0, smp: data.smp||0, allaus: data.allaus||0, afluencia: data.afluencia||0, hc: data.hc||0, canvi: data.canvi||0, boletaires: data.boletaires||0, data: histDataActiva, notes: data.notes||'' };
         const risc = calcularRisc(dia);
         const colorClass = getRiscColorClass(risc);
         const label = getRiscLabel(risc);
-        cont.innerHTML = `
+        cont.innerHTML = (avis || '') + `
           <div class="risc-header"><div class="risc-title">⚠️ Risc GRAE</div></div>
           <div style="padding:0 1rem 1rem;">
             <div class="risc-card today" style="max-width:420px;">
