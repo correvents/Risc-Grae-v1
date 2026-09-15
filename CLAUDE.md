@@ -196,8 +196,14 @@ amb RLS i les escriptures et reboten, mira la clau abans de tocar les polítique
 Els secrets de GitHub s'enganxen a mà i és fàcil que hi entri un salt de línia o un espai. Una
 capçalera HTTP no els admet, i `fetch` llança `Headers.append: "..." is an invalid header value`
 **abans** de fer la petició. Al log surt emmascarat (`"***\n***"`), que és justament la pista: el
-secret ocupa dues línies. `utils.js` fa `.trim()` de la URL i de la clau i avisa si en queden a
-dins. Va passar el 15-09-2026 en canviar la clau per la `service_role`.
+secret ocupa dues línies. Va passar el 15-09-2026 en canviar la clau per la `service_role`.
+
+**Un `trim()` no n'hi ha prou**, i val la pena saber per què: el salt era **enmig** de la clau, no
+als extrems — la pantalla de Supabase la ensenya partida i el retorn hi entra en copiar-la. Es va
+provar, es va tornar a fallar igual, i el que ho va destapar va ser l'avís que havíem posat
+nosaltres. Ara `utils.js` (i `captura-risc.js`, que llegeix la clau pel seu compte) fa
+`.replace(/\s+/g, '')`: **cap clau de Supabase conté espais**, o sigui que treure'ls tots és segur.
+L'avís es manté i diu que ja s'han tret, perquè el codi no ha d'amagar que el secret està mal desat.
 
 **10. El nom d'una taula de Supabase distingeix majúscules.** PostgREST busca la relació pel nom
 exacte: `taula_config_Alertes_SMP` no és `taula_config_alertes_smp` i dona **404**, no un error
