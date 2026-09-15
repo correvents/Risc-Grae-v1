@@ -98,10 +98,9 @@ jobs:
           FORCE: ${{ steps.cfg.outputs.force }}
         run: node scripts/fetch-canvi-temps.js
 
+      # Aquí el `git push` anava pelat, sense cap reintent: si la captura del
+      # risc havia empès mentrestant, el push rebotava i el pas queia. És la
+      # mateixa cursa que va petar a `captura-risc.yml` el 15-09-2026, vista
+      # des de l'altre costat. Vegeu `scripts/commit-dades.sh`.
       - name: Commit JSON
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git diff --staged --quiet && echo "Sense canvis als JSON" || \
-            (git commit -m "chore: dades $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
+        run: bash scripts/commit-dades.sh
