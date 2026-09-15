@@ -17,21 +17,36 @@ Frontend estàtic (GitHub Pages) + scripts Node que s'executen per GitHub Action
 
 ## Trampes importants
 
-**1. Hi ha DUES fórmules de risc diferents, i no coincideixen.**
+**1. La fórmula del risc viu a `formula-risc.js`, i és l'única que hi ha.**
 
-| | Frontend (`index.html`, `detallarRisc`) | Backend (`scripts/risc-diari.js`) |
-| --- | --- | --- |
-| Model | **perill dominant + increments** | suma ponderada |
-| Perill | el més gran entre SMP (0–6) i allaus (1→0, 2→0, 3→2, 4→4, 5→5), **+ suplement** si el segon perill també hi és (val 1–2 → +1; ≥3 → +2), topat a `RISC_PERILL_MAX` = 5 | — |
-| Increments | operativitat HC, afluència, canvi, boletaires; **topats a `incrementsMax` = 3** entre tots | — |
-| Factors | SMP, allaus, operativitat, afluència, canvi, boletaires | planspc, smp, allaus, afluència, hc, canvi |
-| Plans PC | informatiu, no suma | suma 0–3 |
-| Escala | `min(6, perill + increments)`, **només nombres enters** | `min(6, round((suma / 21) × 6))` |
-| Configurable | sí, per l'usuari (localStorage, amb versió) | no |
+El fitxer el carreguen **tots dos costats**: l'`index.html` amb `<script src="formula-risc.js?v=…">`
+i els scripts de Node amb `require('../formula-risc.js')`. És l'excepció conscient a la regla que
+l'app és un sol fitxer (trampa 4), i té un motiu concret: **fins al 15-09-2026 n'hi havia dues i no
+donaven el mateix número** — el frontend feia perill dominant + increments i `risc-diari.js` una suma
+ponderada `min(6, round((suma/21)×6))`. Amb les captures del risc això deixava de ser un detall: el
+que es desa ha de ser exactament el que es veu a la pantalla.
 
-**Què mesura:** no és el perill de la muntanya sinó la **probabilitat que els GRAE quedin desbordats** — si podran atendre tot el que surti. Per això el perill d'allaus pesa tant (una allau gran satura per si sola) i per això hi compten la gent que hi ha a la muntanya i els helicòpters disponibles. El perill es limita a 5 perquè quedi sempre un punt de marge per als increments.
+| | Com és ara |
+| --- | --- |
+| Model | **perill dominant + increments** |
+| Perill | el més gran entre SMP (0–6) i allaus (1→0, 2→0, 3→2, 4→4, 5→5), **+ suplement** si el segon perill també hi és (val 1–2 → +1; ≥3 → +2), topat a `RISC_PERILL_MAX` = 5 |
+| Increments | operativitat HC, afluència, canvi, boletaires; **topats a `incrementsMax` = 3** entre tots |
+| Plans PC | informatiu, no suma |
+| Escala | `min(6, perill + increments)`, **només nombres enters** |
+| Configurable | sí, per l'usuari |
 
-La del frontend és la nova (08-08-2026); la del backend és l'antiga i és **la que es desa cada nit a `risc_historic`**. Migrar-la és la feina pendent, i arrossega els altres dos pendents: el backend no calcula ni `canvi` ni l'operativitat dels helis. Si toques una de les dues, comprova si l'altra també ho necessita.
+**`detallarRisc(dia, formula)` no llegeix res de fora**: ni `localStorage`, ni Supabase, ni
+`riscFormula`. `dia.allaus` hi ha d'arribar **ja resolt** per l'interruptor de temporada i la config
+li entra per paràmetre. És el que fa que el backend en tregui el mateix número que la pantalla; si hi
+tornes a posar una lectura de config a dins, es trenca.
+
+**Què mesura:** no és el perill de la muntanya sinó la **probabilitat que els GRAE quedin desbordats**
+— si podran atendre tot el que surti. Per això el perill d'allaus pesa tant (una allau gran satura per
+si sola) i per això hi compten la gent que hi ha a la muntanya i els helicòpters disponibles. El
+perill es limita a 5 perquè quedi sempre un punt de marge per als increments.
+
+**Pendent:** `risc-diari.js` encara desa a `risc_historic` amb la fórmula antiga; ha de passar a
+`formula-risc.js` com la resta. Vegeu `PLA-CAPTURES.md`.
 
 ### Les correccions de la fórmula del frontend
 
@@ -112,9 +127,15 @@ El factor `canvi` sempre es desa a 0 des del càlcul automàtic (i `boletaires` 
 
 `risc-diari.js` no sobreescriu una entrada de `risc_historic` si la seva `font` no és `auto_github` ni `auto_gas`. No canviïs aquest comportament sense parlar-ho.
 
-**4. `index.html` és un sol fitxer de ~380 KB.**
+**4. `index.html` és un sol fitxer de ~380 KB, amb una sola excepció.**
 
-Tot (HTML, CSS, JS) hi va dins, sense build ni mòduls. És deliberat: es publica directament a GitHub Pages. Fes servir edicions puntuals; no el reescriguis sencer. Conté un **manual d'ús integrat** a la pestanya Configuració: si canvies un càlcul, actualitza també la documentació que hi ha allà dins.
+Tot (HTML, CSS, JS) hi va dins, sense build ni mòduls. És deliberat: es publica directament a GitHub
+Pages. Fes servir edicions puntuals; no el reescriguis sencer. Conté un **manual d'ús integrat** a la
+pestanya Configuració: si canvies un càlcul, actualitza també la documentació que hi ha allà dins.
+
+L'única excepció és **`formula-risc.js`** (trampa 1), que ha de ser compartit amb Node. Va per camí
+relatiu, o sigui que el web de proves en necessita la seva còpia: `sincronitzar-proves.yml` ja la fa.
+Si n'hi afegissis un altre, recorda-ho — i pensa-t'ho dues vegades.
 
 **5. La pàgina de Configuració viu dins d'`app-risc`.**
 
