@@ -8,6 +8,44 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-09 — «🚁 Operativitat · sense dades»: l'arrencada arribava tard
+
+Reportat: la targeta del risc ensenyava `🚁 Operativitat · sense dades · — HC`. No hi havia cap
+error al log, ni al del navegador ni a `error_log` de Supabase, i els helis hi són (quatre files a
+`helicopters_historic`). Reproduït al contenidor amb Supabase i Open-Meteo responent: donava `4/4`.
+
+**La causa és una cursa d'arrencada, no la xarxa.** `riscState` no existeix fins que `renderRisc`
+crida `carregarRiscEstat`, i `renderRisc` només s'executa **quan torna la config de Supabase**.
+`actualitzarRiscAuto()` se'n torna a la primera línia si `riscState` encara no hi és
+(`if (!riscState.today && !riscState.tomorrow) return;`). Els JSON del disc arriben abans que
+Supabase, o sigui que **totes** les crides que fan en carregar-se queien en va: ningú tornava a
+demanar l'operativitat i la targeta es quedava amb «sense dades» tota la sessió. Els altres factors
+no ho notaven perquè `renderRisc` els recalcula al moment de pintar; l'operativitat no, perquè és
+asíncrona.
+
+**Fet:**
+
+- `carregarRiscConfig().then(...)` acaba amb un `actualitzarRiscAuto()`: quan `riscState` ja hi és,
+  es torna a demanar el que es va perdre.
+- **`ambSostre(promesa, ms, etiqueta)`**, nou. El client de Supabase no accepta timeout: si una
+  consulta no torna, la promesa no es resol **mai** i s'emporta en silenci tot el que l'esperava.
+- La config de risc va amb sostre de 10 s. Sense això, un Supabase que no respon deixava la pàgina
+  **sense targeta de risc**, perquè tot l'arrencada l'espera.
+- `avaluarOperativitat` va amb sostre de 20 s, treu l'entrada de la cau (si no, l'error es quedaria
+  memoritzat per sempre), ho registra i **ho diu**: la targeta posa `sense dades: no ha respost en
+  20 s` i la franja avisa que el risc es calcula sense aquest factor. Un factor que falta no pot
+  semblar un factor a zero.
+- Les consultes de meteo dels quatre helis van en paral·lel. En sèrie, quatre timeouts de 8 s
+  seguits es menjaven el sostre del càlcul sencer.
+- Un error d'operativitat ja no avorta el desat de la resta de factors, i la pestanya HC ofereix un
+  botó «🔄 Torna-ho a provar».
+
+Comprovat al navegador amb Supabase penjat: la pàgina es dibuixa als 10 s amb la config del
+dispositiu, l'operativitat falla als 20 s amb el missatge a la franja i la cau queda buida per
+tornar-ho a provar. Amb Supabase i Open-Meteo responent, `4/4` com sempre.
+
+---
+
 ## 2026-09-09 — Interruptor de temporada de boletaires
 
 Demanat: un interruptor per decidir si els boletaires compten. Reportat també que marcar la casella

@@ -1390,6 +1390,20 @@
       }
     }
 
+    // Posa sostre de temps a una promesa que no en té. El client de Supabase no
+    // accepta timeout: si la consulta no torna, la promesa no es resol mai i
+    // s'emporta tot el que l'esperava, sense error i sense deixar rastre.
+    function ambSostre(promesa, ms, etiqueta) {
+      let id;
+      return Promise.race([
+        Promise.resolve(promesa).finally(() => clearTimeout(id)),
+        new Promise((_, rebutja) => {
+          id = setTimeout(() => rebutja(new Error(
+            (etiqueta ? etiqueta + ': ' : '') + `no ha respost en ${Math.round(ms / 1000)} s`)), ms);
+        })
+      ]);
+    }
+
     // ==================== LOG D'ERRORS ====================
     const LS_ERRORS_KEY = 'grae_error_log';
     const errorLog = (() => { try { return JSON.parse(localStorage.getItem(LS_ERRORS_KEY) || '[]'); } catch { return []; } })();
@@ -1473,6 +1487,10 @@
     // Últim error del càlcul del risc. Un error aquí feia que el número no
     // s'actualitzés sense que res ho digués: ara surt a la franja de dades.
     let errorCalculRisc = '';
+    // Últim error de l'operativitat dels helicòpters. Sense això, una consulta
+    // que no torna deixava un "sense dades" mut a la targeta: no es podia saber
+    // si és que no hi ha helis desats o és que Supabase/Open-Meteo no responen.
+    let errorOperativitat = '';
 
     function marcarFont(clau, ts, origen) {
       estatFonts[clau] = { estat: 'ok', ts: ts || null, origen: origen || '', baixat: Date.now() };
@@ -1566,6 +1584,11 @@
              ⚠️ El càlcul del risc ha donat error (${escapeHtml(errorCalculRisc)}): el número pot no correspondre a les dades d'ara.
            </div>` : '';
 
+      const avisOperativitat = errorOperativitat
+        ? `<div style="width:100%;color:#e65100;background:#ffe0b2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;">
+             🚁 No s'ha pogut saber l'operativitat dels helicòpters (${escapeHtml(errorOperativitat)}): el risc es calcula <strong>sense aquest factor</strong>.
+           </div>` : '';
+
       // La data del fitxer que serveix el navegador: si no quadra amb l'últim
       // canvi publicat, el que es veu és una còpia de la memòria cau.
       const versio = `<span title="data de l'index.html que té carregat aquest navegador. Si és vella, recarrega amb Ctrl+F5 o amb el botó del costat." style="color:#78909c;">app: ${escapeHtml(document.lastModified)}</span>`;
@@ -1586,6 +1609,7 @@
           ${avis}
           ${avisConfig}
           ${avisErrorCalcul}
+          ${avisOperativitat}
         </div>`;
     }
 
@@ -4786,11 +4810,14 @@
 
     async function carregarRiscConfig() {
       try {
-        const { data, error } = await sbClient
+        // Amb sostre: aquesta crida és la primera de l'arrencada i tot el que ve
+        // després (renderRisc inclòs) l'espera. Si Supabase no responia, la
+        // pàgina es quedava sense targeta de risc i sense dir-ho.
+        const { data, error } = await ambSostre(sbClient
           .from(TAULA_CONFIG_SMP)
           .select('*')
           .eq('id', 1)
-          .single();
+          .single(), 10000, 'Supabase');
         if (!error && data) {
           riscParams = rowToRiscParams(data, riscParams);
           if (typeof data.boletaires_actiu === 'boolean') {
@@ -5162,8 +5189,10 @@
           riscState.tomorrow.operativitatDetall = opDema.detall;
         }
       } catch(e) {
-        logError('Operativitat', e.message);
-        return;
+        // L'error ja s'ha registrat i mostrat a avaluarOperativitat. No es
+        // retorna: la resta de factors ja calculats s'han de desar i pintar
+        // igualment (abans, un error aquí avortava el desat de tot plegat).
+        errorOperativitat = e.message;
       }
 
       desarIPintarRisc();
@@ -5495,24 +5524,41 @@
     // Memoritzat per dia: actualitzarRiscAuto es crida moltes vegades (a cada JSON que
     // carrega), i sense cau faria desenes de consultes redundants a Supabase/Open-Meteo.
     const operativitatCache = {};
+    // Sostre de temps per a tot el càlcul (Supabase + una crida a Open-Meteo per
+    // heli). El client de Supabase no té timeout: si la consulta no torna, la
+    // promesa es queda penjada per sempre i, com que es memoritza, ningú hi
+    // torna mai més: la targeta es quedava amb un "sense dades" per tota la
+    // sessió i el log no deia res perquè no hi havia cap error.
+    const OP_TIMEOUT_MS = 20000;
     function avaluarOperativitat(dataStr) {
       if (!operativitatCache[dataStr]) {
         // Es memoritza la promesa, no el resultat: si falla, s'ha de treure de la
         // cau o tots els intents posteriors del dia fallarien igual sense tornar
         // a provar-ho.
-        operativitatCache[dataStr] = _avaluarOperativitat(dataStr)
-          .catch(e => { delete operativitatCache[dataStr]; throw e; });
+        operativitatCache[dataStr] = ambSostre(_avaluarOperativitat(dataStr), OP_TIMEOUT_MS).then(
+          r => { errorOperativitat = ''; return r; },
+          e => {
+            delete operativitatCache[dataStr];
+            errorOperativitat = e.message;
+            logError('Operativitat', e.message);
+            renderEstatDades();
+            throw e;
+          });
       }
       return operativitatCache[dataStr];
     }
     function invalidarOperativitat() {
+      errorOperativitat = '';
       Object.keys(operativitatCache).forEach(k => delete operativitatCache[k]);
       Object.keys(meteoVolCache).forEach(k => delete meteoVolCache[k]);
     }
     async function _avaluarOperativitat(dataStr) {
       const helis = await carregarHelisPerRisc(dataStr);
-      const detall = [];
-      for (const h of helis) {
+      // Les consultes de meteo van en paral·lel. En sèrie, quatre helis amb
+      // Open-Meteo lent sumaven quatre timeouts de 8 s seguits i es menjaven el
+      // sostre de tot el càlcul; a més, la primera crida omple el cau i les
+      // altres bases el poden aprofitar.
+      const detall = await Promise.all(helis.map(async h => {
         let operatiu = true, motiu = '', estatOk = true;
         const estat = (h.operativitat || 'Total').trim() || 'Total';
         if (estat !== 'Total') {
@@ -5521,11 +5567,11 @@
           const m = await meteoPermetVol(h.lat, h.lon, dataStr);
           if (!m.ok) { operatiu = false; motiu = m.motiu; }
         }
-        detall.push({ nom: h.recurs || h.base || '?', base: h.base || '',
-                      prov: provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon)),
-                      estat, obs: (h.observacions || '').trim(),
-                      operatiu, estatOk, motiu });
-      }
+        return { nom: h.recurs || h.base || '?', base: h.base || '',
+                 prov: provinciaDeBase(h.base) || provinciaDeCoords(parseFloat(h.lat), parseFloat(h.lon)),
+                 estat, obs: (h.observacions || '').trim(),
+                 operatiu, estatOk, motiu };
+      }));
 
       // "HC GRAE operatius" creua els tres paràmetres alhora: estat de plena
       // operativitat, condicions de vol des de la seva base i distribució pel
@@ -5724,7 +5770,7 @@
         const mesPts = n => n ? ` \u00b7 +${formatarRisc(n)}` : '';
         const opBaixes = opTeDades ? opDetall.filter(d => !d.operatiu) : [];
         const opMotiuTxt = !opActiu ? '—'
-          : !opTeDades ? 'sense dades'
+          : !opTeDades ? (errorOperativitat ? 'sense dades: ' + errorOperativitat : 'sense dades')
           : opBaixes.length ? opBaixes.map(d => `${d.nom}: ${d.motiu}`).join(' · ')
           : 'Tots operatius';
         const opValorTxt = opTeDades ? `${nHelis}/${totHelis}` : '—';
@@ -7527,7 +7573,8 @@
               <div style="padding:0.75rem 0 0;font-size:0.85rem;line-height:1.7;">
                 <ol style="margin:0;padding-left:1.3rem;color:#555;">
                   <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>sincronitzarSMPAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
-                  <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>.</li>
+                  <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>. Quan torna la config de Supabase es torna a cridar: fins llavors no hi ha <code>riscState</code> i les crides anteriors no fan res.</li>
+                  <li><strong>Operativitat dels helicòpters:</strong> és l'únic factor asíncron (Supabase + Open-Meteo) i té sostre de 20 s. Si no arriba, la targeta posa <code>sense dades</code> amb el motiu i la franja avisa que el risc es calcula sense aquest factor.</li>
                   <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
                   <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
                   <li><strong>"Ahir" al Risc GRAE (no editable):</strong> <code>sincronitzarRiscAhir()</code> el descarrega sempre de <code>risc_historic</code> a Supabase i sobreescriu qualsevol valor local (<code>riscAhirRemot</code>) — així surt igual des de qualsevol mòbil/ordinador, no depèn del <code>localStorage</code> de cada dispositiu.</li>
@@ -7818,7 +7865,14 @@
     // Carregar tot al iniciar
     renderEstatDades();     // La franja d'estat surt de seguida, dient què està carregant
     carregarRiscFormula();  // Config de la fórmula de risc (localStorage)
-    carregarRiscConfig().then(() => { renderRisc(); sincronitzarSMPAhir(); });  // Config de Supabase primer (riscParams), després renderitza risc i sincronitza "Ahir" de la pestanya Alertes
+    // Config de Supabase primer (riscParams), després renderitza risc i sincronitza "Ahir" de la pestanya Alertes.
+    // El actualitzarRiscAuto() final no és redundant: riscState no existeix fins
+    // que renderRisc crida carregarRiscEstat, i actualitzarRiscAuto se'n torna a
+    // la primera línia si encara no hi és. Els JSON del disc solen arribar abans
+    // que la config de Supabase, o sigui que totes les crides que fan en
+    // carregar-se queien en va: ningú tornava a demanar l'operativitat dels
+    // helicòpters i la targeta es quedava amb "sense dades" tota la sessió.
+    carregarRiscConfig().then(() => { renderRisc(); sincronitzarSMPAhir(); actualitzarRiscAuto(); });
     sincronitzarRiscAhir();  // "Ahir" del Risc GRAE ve sempre de Supabase, no del localStorage del dispositiu
     carregarBPA();
     carregarPrevisio();
@@ -8414,7 +8468,8 @@
         logError('HC operatius', e.message);
         if (valor) { valor.textContent = '–'; valor.style.color = '#c62828'; }
         if (sub) sub.textContent = '';
-        if (cont) cont.innerHTML = `<span style="font-size:0.78rem;color:#c62828;">No s'ha pogut calcular: ${escapeHtml(e.message)}</span>`;
+        if (cont) cont.innerHTML = `<span style="font-size:0.78rem;color:#c62828;">No s'ha pogut calcular: ${escapeHtml(e.message)}</span>
+          <button class="risc-btn" onclick="invalidarOperativitat(); renderHCGraeOperatius();" style="margin-left:0.4rem;padding:0.15rem 0.5rem;font-size:0.72rem;">🔄 Torna-ho a provar</button>`;
       }
     }
 

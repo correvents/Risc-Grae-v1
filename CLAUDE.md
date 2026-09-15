@@ -194,6 +194,24 @@ quedaven només a la memòria: la targeta ensenyava el valor vell i `renderRisc(
 amb un 2 a la pestanya Alertes. Si hi afegeixes factors nous, posa'ls **abans** del primer
 `desarIPintarRisc()`, i deixa després només el que depengui de la xarxa.
 
+**16. `actualitzarRiscAuto` no fa res si `riscState` encara no existeix.** La primera línia és
+`if (!riscState.today && !riscState.tomorrow) return;`, i `riscState` no es carrega fins que
+`renderRisc` crida `carregarRiscEstat` — o sigui **després** que torni la config de Supabase. Els
+JSON del disc arriben abans, i totes les crides que fan en carregar-se queien en va. Els factors
+sincrònics no ho notaven (`renderRisc` els refà al moment de pintar, vegeu 13), però
+**l'operativitat dels helis sí**: és asíncrona i ningú la tornava a demanar, o sigui que la targeta
+es quedava amb «sense dades» tota la sessió. Per això l'arrencada acaba amb un `actualitzarRiscAuto()`
+dins del `.then()` de `carregarRiscConfig`. Si hi afegeixes un factor asíncron, no confiïs que una
+càrrega de dades el demanarà.
+
+**17. Cap promesa de Supabase pot anar sense sostre de temps.** El client (`sbClient`) no accepta
+timeout: si la consulta no torna, la promesa **no es resol mai**, no llança res i s'emporta en
+silenci tot el que l'esperava. Va deixar la pàgina sense targeta de risc (l'arrencada espera
+`carregarRiscConfig`) i l'operativitat penjada per sempre a `operativitatCache`. Fes-les servir amb
+**`ambSostre(promesa, ms, etiqueta)`**, i quan salti, treu l'entrada de qualsevol cau —si no,
+l'error queda memoritzat— i **digues-ho** (`errorOperativitat` a la targeta i a la franja de dades):
+un factor que no ha arribat no pot semblar un factor a zero.
+
 ## Operativitat dels helicòpters (frontend)
 
 Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet volar: cal una finestra de **≥3 hores seguides** amb ratxa ≤50 km/h i visibilitat ≥2000 m (constants `OP_RATXA_MAX`, `OP_VIS_MIN`, `OP_HORES_MIN`, via Open-Meteo per coordenades de base).
