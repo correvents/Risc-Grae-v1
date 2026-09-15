@@ -156,11 +156,27 @@ Va passar a dues taules i va estar setmanes sense detectar-se: `risc_historic` (
 `canvi_temps_historic` (UNIQUE `data,tipus_dia,punt`). Si afegeixes una taula amb un UNIQUE que
 no sigui la primària, passa-li les columnes: `supabaseUpsert('taula', files, 'col1,col2')`.
 
-**8. El cron pot travessar la mitjanit.** GitHub Actions endarrereix els crons de manera
-irregular — s'ha vist un retard de **3 h 24 min**. Si el retard creua la mitjanit de Madrid,
-`avuiMadrid()` ja retorna l'endemà i la feina cau sobre el dia equivocat. Per això
-`risc-diari.js` no fa servir `avuiMadrid()` directament sinó `diaDeTancament()`, que tracta les
-hores petites com a part del dia operatiu anterior. Ancorar l'hora del cron no n'hi ha prou.
+**8. Les hores dels crons són ancoratges, no hores d'execució.** GitHub Actions els endarrereix
+de manera irregular i **molt**: mesurat entre l'11 i el 14 de setembre del 2026, de **2 h 14 min a
+6 h 53 min**, i creixent (abans s'havia vist 3 h 24 min). Se'n deriven dues coses:
+
+- **La primera passada del dia s'ha d'ancorar de matinada.** Amb el primer cron a les 05:45 UTC, la
+  primera passada queia entre les 09:36 i les 11:00 UTC: cada matí, fins al migdia, la web ensenyava
+  les dades del vespre anterior — i això es va reportar dues vegades com si fos un error de l'app.
+  Ara el primer ancoratge és a les **00:23 UTC**. Els minuts van **senars i lluny del :00**, que és
+  l'hora més congestionada. Si canvies el primer cron, canvia també la cadena que el compara a
+  `data_diari.yml` (el guardat forçat diari), o deixa de fer-se en silenci.
+- **Cap cron pot arribar a tocar la mitjanit de Madrid.** Si el retard la creua, `avuiMadrid()` ja
+  retorna l'endemà i la feina cau sobre el dia equivocat. Per això `risc-diari.js` no fa servir
+  `avuiMadrid()` directament sinó `diaDeTancament()`, que tracta les hores petites com a part del dia
+  operatiu anterior — però el seu marge acaba a les 6 h de Madrid (`HORA_INICI_DIA`), i amb 7 h de
+  retard l'ancoratge de les 21:00 UTC hi arribava just: ara és a les **18:43 UTC**. A
+  `data_diari.yml`, l'últim ancoratge no passa de les **14:00 UTC** per la mateixa raó
+  (`fetch-canvi-temps.js` fa servir `avuiMadrid()`).
+
+Quan les dades es vegin velles, mira **quan va córrer l'últim workflow**, no només què hi ha desat:
+si no ha corregut, la franja de dades diu la veritat i el que cal és una passada a mà
+(Actions → Dades diàries GRAE → Run workflow).
 
 **9. Dues claus de Supabase.**
 
