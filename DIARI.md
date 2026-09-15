@@ -8,6 +8,48 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-15 — Les dades velles del matí no eren de l'app: el cron arriba tard
+
+Reportat al migdia: totes les fonts marcades «fa 14 h», de les 22:13 del vespre anterior. L'app deia
+la veritat — **el workflow de dades no havia corregut cap vegada aquell dia**.
+
+**El retard dels crons de GitHub s'ha disparat.** Mesurat sobre les últimes passades (hores UTC):
+
+| Ancoratge | 11-09 | 12-09 | 13-09 | 14-09 |
+| --- | --- | --- | --- | --- |
+| 05:45 | +4 h 15 | +3 h 51 | +4 h 52 | +5 h 14 |
+| 08:00 | +4 h 43 | +4 h 03 | +5 h 13 | +6 h 53 |
+| 10:00 | +4 h 07 | +3 h 25 | +4 h 10 | +6 h 13 |
+| 13:30 | +3 h 33 | +2 h 53 | +3 h 29 | +5 h 14 |
+| 16:00 | +3 h 03 | +2 h 14 | +2 h 39 | +4 h 13 |
+
+O sigui que la primera passada del dia queia entre les **09:36 i les 11:00 UTC** (11:36-13:00
+local): cada matí, fins al migdia, la web ensenyava les dades del vespre anterior. Ja s'havia
+reportat el 09-09 i aleshores es va llegir com un problema de refresc del navegador; era això.
+
+**Fet:** els ancoratges dels crons ja no són l'hora a la qual es vol consultar sinó l'hora a la qual
+s'ha de demanar perquè arribi quan toca.
+
+- `data_diari.yml`: sis passades ancorades a **00:23, 03:37, 06:47, 09:53, 12:43 i 14:17 UTC**, amb
+  minuts senars (els crons a l'hora en punt són els més congestionats). Amb el retard d'aquests dies,
+  la primera arriba entre les 05 i les 09 del matí, hora local.
+- La cadena del guardat forçat s'ha canviat a `23 0 * * *`: compara el cron literal i, si no
+  coincideix, el `FORCE` diari deixa de fer-se **sense dir res**.
+- Cap ancoratge passa de les 14:00 UTC: amb 7 h de retard seria 21:00 UTC (23 h a Madrid) i, si
+  travessés la mitjanit, `fetch-canvi-temps.js` escriuria la fila del dia equivocat.
+- `risc_diari.yml` passa de les 21:00 a les **18:43 UTC**. `diaDeTancament()` protegeix fins a les
+  6 h de Madrid, i 21:00 + 7 h són exactament les 6 h: hi arribava just. Ara el pitjor cas cau a
+  les 03:43 i el dia que es tanca continua sent el bo.
+
+També s'ha llançat una passada a mà (`workflow_dispatch` amb `force`) per no esperar-se: commit
+`chore: dades 2026-09-15 10:07 UTC`.
+
+**Pendent:** això només retalla el retard, no el treu. Si algun dia cal garantir l'hora, l'única
+sortida és un disparador de fora (un cron extern cridant `workflow_dispatch`), amb el token que
+això comporta.
+
+---
+
 ## 2026-09-09 — «🚁 Operativitat · sense dades»: l'arrencada arribava tard
 
 Reportat: la targeta del risc ensenyava `🚁 Operativitat · sense dades · — HC`. No hi havia cap
