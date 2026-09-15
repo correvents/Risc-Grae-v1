@@ -3337,47 +3337,6 @@
     let afluenciaCarregat = false;
     
     // Calcular Setmana Santa (algorisme de Butcher) - DEFINIR ABANS D'USAR
-    const calcularSetmanaSanta = (any) => {
-      const a = any % 19;
-      const b = Math.floor(any / 100);
-      const c = any % 100;
-      const d = Math.floor(b / 4);
-      const e = b % 4;
-      const f = Math.floor((b + 8) / 25);
-      const g = Math.floor((b - f + 1) / 3);
-      const h = (19 * a + b - d - g + 15) % 30;
-      const i = Math.floor(c / 4);
-      const k = c % 4;
-      const l = (32 + 2 * e + 2 * i - h - k) % 7;
-      const m = Math.floor((a + 11 * h + 22 * l) / 451);
-      const mes = Math.floor((h + l - 7 * m + 114) / 31);
-      const dia = ((h + l - 7 * m + 114) % 31) + 1;
-      
-      // Diumenge de Pasqua
-      const pasqua = new Date(any, mes - 1, dia);
-      
-      // Divendres Sant (2 dies abans)
-      const divendresSant = new Date(pasqua);
-      divendresSant.setDate(pasqua.getDate() - 2);
-      
-      // Dilluns de Pasqua (1 dia després)
-      const dillunsPasqua = new Date(pasqua);
-      dillunsPasqua.setDate(pasqua.getDate() + 1);
-      
-      return {
-        pasqua: pasqua,
-        divendresSant: divendresSant,
-        dillunsPasqua: dillunsPasqua
-      };
-    };
-    
-    const formatDateStr = (date) => {
-      const any = date.getFullYear();
-      const mes = String(date.getMonth() + 1).padStart(2, '0');
-      const dia = String(date.getDate()).padStart(2, '0');
-      return `${any}-${mes}-${dia}`;
-    };
-    
     const carregarAfluenciaRemot = async () => {
       try {
         const { data, error } = await sbClient.from('afluencia_edicions').select('*');
@@ -3450,199 +3409,16 @@
       }
     };
     
+    // El calendari d'afluència (festius, ponts, vacances i Setmana Santa) viu a
+    // formula-risc.js: és un increment de la fórmula i el backend n'ha de treure
+    // el mateix nivell, o el risc desat no seria el de la pantalla.
+    const { formatDateStr, calcularSetmanaSanta } = FormulaRisc;
+
     const getInfoDia = (dataStr) => {
-      // Parsejar la data correctament evitant problemes de timezone
-      const [any, mes, dia] = dataStr.split('-').map(Number);
-      const data = new Date(any, mes - 1, dia);
-      const diaSemana = data.getDay();
-      const diesNom = ['Diumenge', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte'];
-      
-      let nivell = 0;
-      let motiu = "Dia feiner";
-      let esEditat = false;
-      
-      // Mirar edicions manuals (poden ser nivell 3)
-      if (afluenciaEdits[dataStr] !== undefined) {
-        if (typeof afluenciaEdits[dataStr] === 'object') {
-          nivell = afluenciaEdits[dataStr].nivell;
-          motiu = afluenciaEdits[dataStr].motiu || "Editat manualment";
-        } else {
-          nivell = afluenciaEdits[dataStr];
-          motiu = "Editat manualment";
-        }
-        esEditat = true;
-      } else {
-        // Generar dades dinàmicament per l'any de la data
-        const festiusDinamics = generarFestiusDinamics(any);
-        const periodesDinamics = generarPeriodesDinamics(any);
-        
-        // Comprovar períodes nivell 2 (ponts)
-        for (const periode of periodesDinamics.nivell2) {
-          const [ai, mi, di] = periode.inici.split('-').map(Number);
-          const [af, mf, df] = periode.fi.split('-').map(Number);
-          const inici = new Date(ai, mi - 1, di);
-          const fi = new Date(af, mf - 1, df);
-          if (data >= inici && data <= fi) {
-            nivell = 2;
-            motiu = periode.motiu;
-            break;
-          }
-        }
-        
-        // Festius (nivell 2)
-        if (nivell === 0 && festiusDinamics[dataStr]) {
-          nivell = festiusDinamics[dataStr].nivell;
-          motiu = festiusDinamics[dataStr].motiu;
-        }
-        
-        // Períodes nivell 1 (vacances)
-        if (nivell === 0) {
-          for (const periode of periodesDinamics.nivell1) {
-            const [ai, mi, di] = periode.inici.split('-').map(Number);
-            const [af, mf, df] = periode.fi.split('-').map(Number);
-            const inici = new Date(ai, mi - 1, di);
-            const fi = new Date(af, mf - 1, df);
-            if (data >= inici && data <= fi) {
-              nivell = 1;
-              motiu = periode.motiu;
-              break;
-            }
-          }
-        }
-        
-        // Cap de setmana
-        if (nivell === 0 && (diaSemana === 0 || diaSemana === 6)) {
-          nivell = 1;
-          motiu = "Cap de setmana";
-        }
-      }
-      
-      return {
-        data: dataStr,
-        diaSemana: diesNom[diaSemana],
-        nivell: nivell,
-        nomNivell: AFLUENCIA_DATA.nivells[nivell].nom,
-        motiu: motiu,
-        esEditat: esEditat
-      };
+      const info = FormulaRisc.afluenciaDelCalendari(dataStr, afluenciaEdits);
+      return { ...info, nomNivell: AFLUENCIA_DATA.nivells[info.nivell].nom };
     };
-    
-    // Generar festius dinàmicament per qualsevol any
-    const generarFestiusDinamics = (any) => {
-      const festius = {};
-      const ss = calcularSetmanaSanta(any);
-      
-      // Festius fixes
-      const fixes = [
-        // 1 i 6 gener -> nivell 1 (dins vacances Nadal)
-        { mes: 5, dia: 1, nom: "Dia del Treball" },
-        // 23 i 24 juny (Sant Joan) -> nivell 1 (baixa afluència)
-        { mes: 8, dia: 15, nom: "L'Assumpció" },
-        { mes: 9, dia: 11, nom: "Diada Nacional" },
-        { mes: 10, dia: 12, nom: "Festa Nacional Espanya" },
-        { mes: 11, dia: 1, nom: "Tots Sants" },
-        { mes: 12, dia: 6, nom: "Dia de la Constitució" },
-        { mes: 12, dia: 8, nom: "La Immaculada" }
-        // Nadal i Sant Esteve -> nivell 1 (baixa afluència real)
-        // Festius locals Barcelona -> nivell 1 (baixa afluència)
-      ];
-      
-      fixes.forEach(f => {
-        const dataStr = `${any}-${String(f.mes).padStart(2, '0')}-${String(f.dia).padStart(2, '0')}`;
-        festius[dataStr] = { nivell: 2, motiu: f.nom };
-      });
-      
-      // Festius mòbils (Setmana Santa)
-      festius[formatDateStr(ss.divendresSant)] = { nivell: 2, motiu: "Divendres Sant" };
-      festius[formatDateStr(ss.dillunsPasqua)] = { nivell: 2, motiu: "Dilluns de Pasqua" };
-      
-      return festius;
-    };
-    
-    // Generar períodes dinàmicament per qualsevol any
-    const generarPeriodesDinamics = (any) => {
-      const ss = calcularSetmanaSanta(any);
-      const iniciSS = new Date(ss.divendresSant);
-      iniciSS.setDate(iniciSS.getDate() - 1);
-      
-      // Calcular dies de Setmana Santa
-      const dlPasqua = new Date(ss.dillunsPasqua);
-      const dgPasqua = new Date(dlPasqua);
-      dgPasqua.setDate(dgPasqua.getDate() - 1);
-      const dsSant = new Date(dgPasqua);
-      dsSant.setDate(dsSant.getDate() - 1);
-      const dvSant = new Date(ss.divendresSant);
-      const djSant = new Date(dvSant);
-      djSant.setDate(djSant.getDate() - 1);
-      const dcSant = new Date(djSant);
-      dcSant.setDate(dcSant.getDate() - 1);
-      const dtSS = new Date(dcSant);
-      dtSS.setDate(dtSS.getDate() - 1);
-      const dlSS = new Date(dtSS);
-      dlSS.setDate(dlSS.getDate() - 1);
-      const dgAnterior = new Date(dlSS);
-      dgAnterior.setDate(dgAnterior.getDate() - 1);
-      const dsAnterior = new Date(dgAnterior);
-      dsAnterior.setDate(dsAnterior.getDate() - 1);
-      
-      // Detectar ponts dinàmicament segons el dia de la setmana dels festius
-      const periodes2 = [
-        // Cap de setmana anterior a Setmana Santa (nivell 2)
-        { inici: formatDateStr(dsAnterior), fi: formatDateStr(dgAnterior), motiu: "Cap setmana anterior Setmana Santa" },
-        // Dimecres i Dijous Sant (nivell 2)
-        { inici: formatDateStr(dcSant), fi: formatDateStr(djSant), motiu: "Dimecres i Dijous Sant" },
-        // Divendres Sant a Dilluns Pasqua (nivell 2)
-        { inici: formatDateStr(dvSant), fi: formatDateStr(dlPasqua), motiu: "Pont Setmana Santa" },
-        { inici: `${any}-08-01`, fi: `${any}-08-15`, motiu: "1a quinzena d'agost" },
-        { inici: `${any}-12-05`, fi: `${any}-12-08`, motiu: "Pont Puríssima" }
-      ];
-      
-      // Dilluns i Dimarts de Setmana Santa (nivell 1)
-      const periodes1Extra = [
-        { inici: formatDateStr(dlSS), fi: formatDateStr(dtSS), motiu: "Setmana Santa (dilluns-dimarts)" }
-      ];
-      
-      // Pont 1 de Maig
-      const dia1maig = new Date(any, 4, 1).getDay();
-      if (dia1maig === 5) { // Divendres
-        periodes2.push({ inici: `${any}-05-01`, fi: `${any}-05-03`, motiu: "Pont 1 de Maig" });
-      } else if (dia1maig === 4) { // Dijous
-        periodes2.push({ inici: `${any}-05-01`, fi: `${any}-05-04`, motiu: "Pont 1 de Maig" });
-      }
-      
-      // Temporada estiu-tardor - caps de setmana nivell 2
-      // Juliol, Agost, Setembre i 1a quinzena Octubre
-      let dataEstiu = new Date(any, 6, 1); // 1 juliol
-      const fiEstiu = new Date(any, 9, 15); // 15 octubre
-      while (dataEstiu <= fiEstiu) {
-        if (dataEstiu.getDay() === 6) { // Dissabte
-          const diumenge = new Date(dataEstiu);
-          diumenge.setDate(diumenge.getDate() + 1);
-          let motiu = "Cap de setmana estiu";
-          if (dataEstiu.getMonth() === 8 || dataEstiu.getMonth() === 9) {
-            motiu = "Temporada tardor (bolets)";
-          }
-          periodes2.push({ 
-            inici: formatDateStr(dataEstiu), 
-            fi: formatDateStr(diumenge), 
-            motiu: motiu 
-          });
-        }
-        dataEstiu.setDate(dataEstiu.getDate() + 1);
-      }
-      
-      return {
-        nivell1: [
-          { inici: `${any-1}-12-20`, fi: `${any}-01-07`, motiu: "Vacances de Nadal" },
-          { inici: `${any}-02-14`, fi: `${any}-02-17`, motiu: "Carnaval" },
-          ...periodes1Extra,
-          { inici: `${any}-06-22`, fi: `${any}-09-07`, motiu: "Vacances d'estiu" },
-          { inici: `${any}-12-20`, fi: `${any}-12-31`, motiu: "Vacances de Nadal" }
-        ],
-        nivell2: periodes2
-      };
-    };
-    
+
     const getNivellDia = (dataStr) => {
       return getInfoDia(dataStr).nivell;
     };
@@ -4902,80 +4678,18 @@
     // Funció per calcular SMP: compta zones de muntanya afectades per nivell màxim
     // A partir de {zonaGrup → {nivell màxim, meteors}}, aplica els llindars de zones
     // (0-6) i retorna el mateix format que fa servir calcularSMPPonderat.
-    function avaluarZonesSMPPerNivell(infoPerZona) {
-      const zonesPerNivell = { 'Groc': [], 'Taronja': [], 'Vermell': [] };
-      const detall = [];
-      for (const [zona, info] of Object.entries(infoPerZona)) {
-        zonesPerNivell[info.nivell].push(zona);
-        detall.push({ zona, nivell: info.nivell, meteors: [...info.meteors] });
-      }
+    // La ponderació viu a formula-risc.js, que comparteix el backend. Aquí només
+    // hi queda el que és del navegador: "ahir" no surt mai de l'avís en viu (que
+    // porta avui i demà) sinó del que hagi recuperat sincronitzarSMPAhir().
+    const avaluarZonesSMPPerNivell = FormulaRisc.avaluarZonesSMPPerNivell;
 
-      const numGroc    = zonesPerNivell['Groc'].length;
-      const numTaronja = zonesPerNivell['Taronja'].length;
-      const numVermell = zonesPerNivell['Vermell'].length;
-
-      let valor = 0, explicacio = 'Cap alerta';
-      if      (numVermell >= 3) { valor = 6; explicacio = `${numVermell} zones vermell (≥3)`; }
-      else if (numVermell >  0) { valor = 5; explicacio = `${numVermell} zona vermell (<3)`;  }
-      else if (numTaronja >= 3) { valor = 4; explicacio = `${numTaronja} zones taronja (≥3)`; }
-      else if (numTaronja >  0) { valor = 3; explicacio = `${numTaronja} zona taronja (<3)`;  }
-      else if (numGroc    >= 3) { valor = 2; explicacio = `${numGroc} zones groc (≥3)`;       }
-      else if (numGroc    >  0) { valor = 1; explicacio = `${numGroc} zona groc (<3)`;        }
-
-      return { valor, explicacio, zones: { groc: numGroc, taronja: numTaronja, vermell: numVermell }, detall };
-    }
-
-    // "Ahir" mai té dades a dadesCarregades.smp: és un avís de meteo.cat en viu,
-    // només avui/demà. Es guarda aquí el que hagi arribat de smp_historic
-    // (Supabase), calculat amb la mateixa ponderació, via sincronitzarSMPAhir().
     let smpAhirHistoric = null;
 
     function calcularSMPPonderat(data_str) {
       if (data_str === localDateStr(-1) && smpAhirHistoric && smpAhirHistoric.data === data_str) {
         return smpAhirHistoric;
       }
-      if (!dadesCarregades.smp || !dadesCarregades.smp.avisos) {
-        return { valor: 0, explicacio: 'Sense dades', zones: { groc: 0, taronja: 0, vermell: 0 }, detall: [] };
-      }
-
-      const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
-      const infoPerZona = {}; // zonaGrup → { nivell màxim, meteors Set }
-      // Avisos que hi són però que no compten perquè la seva zona no està
-      // activada a Configuració → Alertes SMP. Sense això, un dia amb avisos
-      // pertot arreu podia donar 0 sense cap explicació enlloc.
-      const descartades = new Set();   // zona coneguda, però apagada per l'usuari
-      const desconegudes = new Set();  // zona que el mapatge no coneix: forat nostre
-
-      for (const avis of dadesCarregades.smp.avisos) {
-        const meteor = avis.meteor || '';
-        for (const dia of (avis.dies || [])) {
-          if (dia.dia !== data_str) continue;
-          for (const afectacio of (dia.afectacions || [])) {
-            const zonaOriginal = afectacio.zona || '';
-            const nivell = afectacio.nivell || '';
-            const zonaGrup = riscParams.zonesGrup[zonaOriginal] || zonaOriginal;
-            if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) {
-              if (nivellOrdre[nivell]) {
-                if (zonaGrup in riscParams.zones) descartades.add(zonaGrup);
-                else desconegudes.add(zonaOriginal);
-              }
-              continue;
-            }
-            if (!nivellOrdre[nivell]) continue;
-
-            if (!infoPerZona[zonaGrup]) {
-              infoPerZona[zonaGrup] = { nivell, meteors: new Set([meteor]) };
-            } else {
-              if (nivellOrdre[nivell] > nivellOrdre[infoPerZona[zonaGrup].nivell]) {
-                infoPerZona[zonaGrup].nivell = nivell;
-              }
-              infoPerZona[zonaGrup].meteors.add(meteor);
-            }
-          }
-        }
-      }
-
-      return { ...avaluarZonesSMPPerNivell(infoPerZona), descartades: [...descartades], desconegudes: [...desconegudes] };
+      return FormulaRisc.ponderarSMP(dadesCarregades.smp && dadesCarregades.smp.avisos, data_str, riscParams);
     }
 
     // Descarrega d'smp_historic (Supabase) les alertes reals d'ahir i les avalua
