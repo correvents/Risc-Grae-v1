@@ -19,6 +19,7 @@ on:
     paths:
       - 'index.html'
       - 'mapa.html'
+      - 'formula-risc.js'
   workflow_dispatch:
 
 permissions:
@@ -41,8 +42,12 @@ jobs:
       - name: Copiar l'app a proves/
         run: |
           mkdir -p proves
-          cp index.html proves/index.html
-          cp mapa.html  proves/mapa.html
+          cp index.html      proves/index.html
+          cp mapa.html       proves/mapa.html
+          # La fórmula va per camí relatiu (<script src="formula-risc.js">), o sigui
+          # que sota /proves/ la busca a /proves/. Sense aquesta còpia, el web de
+          # proves es queda sense fórmula i no calcula res.
+          cp formula-risc.js proves/formula-risc.js
 
       - name: Commit a main si hi ha canvis
         run: |

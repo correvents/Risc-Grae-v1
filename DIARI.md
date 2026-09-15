@@ -8,6 +8,52 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-15 — Captures del risc: es desa l'evolució, no només el final
+
+Reportat: «cada cop que s'actualitzen dades es va modificant i sempre es queda amb les últimes
+dades». Cert i de mena estructural — `risc_historic` té `UNIQUE (data)`, o sigui una fila per dia
+que s'escriu a sobre. El mateix a `bpa_historic`, `canvi_temps_historic` i `helicopters_historic`.
+`smp_historic`, en canvi, ja acumula totes les consultes (1.030 combinacions zona/dia/meteor amb
+més d'una): de l'SMP ja teníem història; del risc calculat, no.
+
+Decidit amb en Jordi: disparar les captures des de Supabase (`pg_cron`) perquè siguin a l'hora, i
+**una sola fórmula** compartida entre navegador i Node.
+
+**Fet avui:**
+
+- **`risc_captures`** (taula nova, append-only, amb RLS: lectura per a tothom, escriptura només
+  `service_role`). Una fila per captura i horitzó, amb el risc, el desglossament sencer, tots els
+  factors, l'SMP Bombers, la fórmula amb què s'ha calculat i `dades_completes`/`fonts_estat` per no
+  confondre mai un factor que falta amb un factor a zero.
+- **`formula-risc.js`**, l'única definició de la fórmula, que carreguen tant l'`index.html`
+  (`<script src>`) com els scripts de Node (`require`). Hi han anat també el calendari d'afluència,
+  l'SMP ponderat, el criteri de vol dels helis i el nucli de l'SMP Bombers, perquè els factors
+  també s'han de calcular igual als dos costats. `detallarRisc(dia, formula)` és pur: no llegeix
+  `localStorage`, ni Supabase, ni cap variable global.
+- **La config passa a Supabase** (`formula`, `formula_versio`, `allaus_desactivat`, `op_config`):
+  sense això el backend calcularia amb els valors per defecte mentre el navegador en té d'editats.
+- **`scripts/captura-risc.js`** i **`captura-risc.yml`**, amb el reintent de mitja hora si Meteocat
+  encara no ha publicat (es detecta per l'empremta del butlletí; si al cap de 30 minuts continua
+  igual, es captura dient que no era nou).
+
+**Comprovacions:** el calendari s'ha comparat dia a dia amb el codi anterior (1.116 dies del 2025 al
+2027, cap diferència); la fórmula dona el mateix número a Node i al navegador; l'app passa per les
+onze pestanyes sense errors; i la captura s'ha executat sencera contra un PostgREST de mentida,
+inclosos el camí del reintent (codi 75) i el de la captura forçada.
+
+**Afegit el mateix dia:** la pestanya **Historial → Risc** ja no ensenya la foto final del dia sinó
+les captures: «com es veia venir» (el risc que es donava per a aquell dia a cada captura, començant
+per la del vespre anterior), una taula per horitzó amb els factors i les fletxes de canvi entre
+captures, el desglossament desplegable de cadascuna i l'SMP Bombers per regió. Els dies anteriors al
+15-09-2026 continuen ensenyant la foto de `risc_historic`, amb un avís que diu per què no hi ha més.
+
+**Pendent:** activar el `pg_cron` a Supabase (cal un token de GitHub, instruccions a
+`PLA-CAPTURES.md` §4), fer que `bpa_historic` deixi d'escriure's
+a sobre perquè les allaus també tinguin evolució. L'SMP Bombers dins de la fórmula del risc queda
+previst, com es va demanar: la captura ja el desa, així que hi haurà història per calibrar-lo.
+
+---
+
 ## 2026-09-15 — Les dades velles del matí no eren de l'app: el cron arriba tard
 
 Reportat al migdia: totes les fonts marcades «fa 14 h», de les 22:13 del vespre anterior. L'app deia
