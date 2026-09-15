@@ -142,7 +142,7 @@ async function operativitat(helis, dataStr, opConfig, cauMeteo) {
 // sencera cada vegada seria absurd d'aquí a un any.
 async function ultimaCaptura() {
   try {
-    const clau = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+    const clau = (process.env.SUPABASE_SERVICE_KEY || '').replace(/\s+/g, '');
     const url = `${(process.env.SUPABASE_URL || '').trim()}/rest/v1/risc_captures` +
                 `?select=fonts_estat,capturat_at&order=capturat_at.desc&limit=1`;
     const resp = await fetch(url, {

@@ -6,11 +6,17 @@ const path = require('path');
 // «invalid header value» i la petició no arriba a sortir, o sigui que sembla un
 // problema de permisos quan només és un caràcter de més. Es netegen sempre.
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim();
-const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_KEY || '').trim();
 
-if (SUPABASE_KEY && /\s/.test(SUPABASE_KEY)) {
-  console.warn('⚠️ SUPABASE_SERVICE_KEY porta espais o salts de línia **a dins**: ' +
-               'torna a enganxar el secret a GitHub, en una sola línia.');
+// **Cap clau de Supabase porta espais.** En canvi, enganxar-la a mà al secret de
+// GitHub sí que n'hi fica: copiant-la de la pantalla, el salt de línia amb què
+// es veu partida hi entra, i llavors `fetch` llança «invalid header value» i la
+// petició no arriba ni a sortir — sembla un problema de permisos quan no ho és.
+// Per això no es fa només `trim()`: es treuen tots els espais de la clau.
+const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_KEY || '').replace(/\s+/g, '');
+
+if (process.env.SUPABASE_SERVICE_KEY && /\s/.test(process.env.SUPABASE_SERVICE_KEY)) {
+  console.warn('⚠️ SUPABASE_SERVICE_KEY portava espais o salts de línia; s\'han tret. ' +
+               'Val la pena tornar-la a enganxar neta a GitHub → Settings → Secrets.');
 }
 
 // Un 42501 ("row-level security") vol dir que la clau no és la `service_role`:
