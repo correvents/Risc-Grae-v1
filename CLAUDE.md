@@ -238,6 +238,25 @@ tot si fa més de `REFRESC_MINUTS` (15) de l'última descàrrega — `estatFonts
 ho vam baixar, no la `dataConsulta` de l'origen. També refà les targetes si el dia ha canviat amb la
 pestanya oberta. Si hi afegeixes una font, res a fer: va per `recarregarTotesLesDades()`.
 
+**11 bis. L'SMP de demà pot ser 0 tot i que Meteocat ja n'hagi publicat els avisos.** Baixem l'SMP
+de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`, i «oberts» vol dir el que sembla: la
+documentació diu que retorna els episodis oberts i els avisos actius **que afecten el dia de la
+consulta**. Un avís emès aquest vespre per a demà, quan avui no hi ha cap episodi obert, **no hi
+surt**: l'API respon `[]` i el càlcul en treu un 0 tan tranquil com el d'un dia de bon temps.
+
+Comprovat el 15-09-2026, amb avisos formals al web de Meteocat per a l'endemà i `📥 Meteocat SMP:
+0 episodis, 0 avisos` al log. Les dades pròpies hi donen la raó: de les 3.504 files d'`smp_historic`
+amb `dia` posterior al de la consulta, **totes** venien d'un episodi que ja estava obert — les 2.940
+d'una consulta que també portava avisos per al mateix dia, i les 68 restants, totes `Ampliat`, d'un
+episodi obert que s'allargava a un dia veí. **Cap no ve d'un episodi encara no obert.**
+
+O sigui que no és cap error del nostre codi ni del filtre per estat (`ESTATS_QUE_COMPTEN`, que
+registra al log el que descarta): és **el que dona l'endpoint**. Per veure els avisos abans que
+l'episodi s'obri cal un altre camí de l'API de l'SMP — hi ha consulta d'episodi per codi i hi ha
+pre-alertes—, i això s'ha de mirar a `https://apidocs.meteocat.gencat.cat`. Mentre no es faci,
+**l'SMP de demà és una cota inferior, no el valor de debò**, i això val tant per a la pantalla com
+per a les captures.
+
 **14. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
 `dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és
 el que la pestanya Alertes ha fet sempre. Mentre no ho feia, la portada podia ensenyar un 0 amb la
