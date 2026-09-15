@@ -64,12 +64,20 @@ jobs:
             node scripts/fetch-planspc.js     || true
             node scripts/fetch-canvi-temps.js || true
 
-            if node scripts/captura-risc.js; then
+            # Compte amb l'estat de sortida: `codi=$?` després d'un `if` recull el
+            # de l'`if` (que és 0 quan la condició falla i no hi ha `else`), no el
+            # del node. Amb aquell error, una captura que fallava sortia com a
+            # èxit i ningú se n'assabentava. Es recull abans de res.
+            set +e
+            node scripts/captura-risc.js
+            codi=$?
+            set -e
+            if [ "$codi" -eq 0 ]; then
               fet=si
               break
             fi
-            codi=$?
             if [ "$codi" -ne 75 ]; then
+              echo "❌ La captura ha fallat amb el codi $codi."
               exit "$codi"
             fi
             echo "⏳ Meteocat encara no ha actualitzat ($i/6). Espero 5 minuts."

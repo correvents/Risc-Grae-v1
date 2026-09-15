@@ -17,7 +17,7 @@
 //        les dades no eren noves.
 
 const crypto = require('crypto');
-const { supabaseUpsert, supabaseSelect, readJSON } = require('./utils');
+const { supabaseUpsert, supabaseSelect, readJSON, nomComarca } = require('./utils');
 const F = require('../formula-risc.js');
 
 const FORCA = process.env.FORCA_CAPTURA === 'true';
@@ -157,6 +157,18 @@ async function ultimaCaptura() {
   }
 }
 
+// De la matriu sencera (comarca → dia → franja) en treu només el dia que toca,
+// que és el que ha de quedar desat a la captura d'aquell horitzó.
+function comarquesDelDia(matriu, dataStr) {
+  const fora = {};
+  for (const [codi, info] of Object.entries(matriu || {})) {
+    const dies = info.dies && info.dies[dataStr];
+    if (!dies) continue;
+    fora[codi] = { nom: info.nom, franges: dies };
+  }
+  return fora;
+}
+
 async function main() {
   const { dia, franja } = diaIFranja();
   const avui = dia, dema = diaMes(dia, 1);
@@ -192,7 +204,7 @@ async function main() {
   const helis = await carregarHelis(avui);
   const cauMeteo = {};
 
-  const smpBombers = F.resumSMPBombers((smp && smp.avisos) || [], [avui, dema]);
+  const smpBombers = F.resumSMPBombers((smp && smp.avisos) || [], [avui, dema], nomComarca);
 
   const files = [];
   for (const [horitzo, dataObjectiu] of [['avui', avui], ['dema', dema]]) {
@@ -224,7 +236,13 @@ async function main() {
       smp_detall: factors.smpDetall || [],
       allaus_detall: factors.allausDetall || null,
       operativitat_detall: op.detall,
-      smp_bombers: smpBombers.regions[dataObjectiu] || null,
+      // Regions **i** comarques: amb les regions soles es pot fer la taula, però
+      // no els mapes. Es desa el que cal per tornar-los a dibuixar tal com eren.
+      smp_bombers: {
+        regions: smpBombers.regions[dataObjectiu] || {},
+        comarques: comarquesDelDia(smpBombers.comarques, dataObjectiu),
+        periodes: F.PERIODES_SMP
+      },
       formula_versio: config.formulaVersio,
       formula_config: config.formula,
       dades_completes: completes && helis.length > 0,

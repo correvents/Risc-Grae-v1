@@ -8,6 +8,51 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-15 — La primera captura falla: la clau dels scripts no és la de servei
+
+La primera execució de `captura-risc.yml` va sortir **verda i sense desar res**. Dues coses, totes
+dues importants:
+
+**1. La clau.** `❌ Supabase risc_captures upsert error 401: new row violates row-level security
+policy`. El secret `SUPABASE_SERVICE_KEY` de GitHub **no és la clau `service_role`**: els scripts
+escriuen com a `anon`. Fins ara no s'havia notat perquè les taules on escriuen o tenen la RLS
+desactivada (`bpa_historic`, `planspc_historic`, `canvi_temps_historic`, `helicopters_historic`,
+`previsio_historic`, `afluencia_edicions`, `error_log`, `taula_config_alertes_smp`,
+`smp_override_historic`) o tenen polítiques que deixen escriure a tothom (`risc_historic`:
+«Escriptura autenticada», «Inserció des de GAS»; `smp_historic`: «Inserció GAS»). `risc_captures`
+és la primera taula que neix ben tancada, i per això és la primera que se'n queixa.
+
+**Cal canviar el secret** a la clau `service_role` de debò (Supabase → Project Settings → API keys).
+No s'ha afegit cap política d'escriptura per a `anon`: seria obrir la taula a qualsevol que tregui
+la clau pública de l'`index.html`, i la gràcia de les captures és justament que siguin de fiar.
+
+**2. El workflow amagava l'error.** `codi=$?` després d'un `if` recull l'estat **de l'`if`**, que
+és 0 quan la condició falla i no hi ha `else` — no el del `node`. O sigui que una captura fallada
+sortia com a execució correcta. Ara l'estat es recull abans de res i el pas peta si la captura peta.
+
+## 2026-09-15 — Historial: les captures de dos dies, amb el mateix desglossament i els mapes
+
+Demanat: veure matí, migdia i vespre **d'ahir i d'avui**, amb la més nova a punt; que el
+desglossament digui exactament el mateix que la portada (inclòs el motiu pel qual puja el risc); i
+que hi hagi l'SMP Bombers amb taula **i mapes**.
+
+- **`desglossamentHTML(d)`**: el desglossament passa a ser una sola funció que fan servir la targeta
+  de la portada i l'historial. Rep tot el que necessita per paràmetre, i per això es pot dibuixar
+  igual amb dades en viu o amb una captura desada. Comprovat que la portada queda idèntica (PERILL,
+  «2n · +2», «↓ mal temps» amb el 3 barrat, els motius de cada heli, els increments).
+- **L'historial ensenya tres blocs**: el risc del dia, el que se'n preveia l'endemà i **el dia
+  abans**, cadascun amb les seves franges i les fletxes del que va canviar.
+- **Selector de captures** (les d'ahir i les d'avui) amb la més nova triada per defecte, i a sota el
+  detall sencer: el desglossament i l'SMP Bombers d'aquella captura.
+- **Els mapes es tornen a dibuixar** amb el que va quedar desat: `captura-risc.js` ara desa, a més
+  de les regions, la **matriu per comarca i franja**, i el pintat de mapes s'ha separat de la
+  seqüència de la pestanya (`pintarSVGComarques`) perquè el mateix codi valgui per a un dia passat.
+
+Comprovat al navegador amb captures simulades de dos dies: les tres taules, el selector, el
+desglossament complet i els dos mapes (43 comarques pintades, franja triable).
+
+---
+
 ## 2026-09-15 — Captures del risc: es desa l'evolució, no només el final
 
 Reportat: «cada cop que s'actualitzen dades es va modificant i sempre es queda amb les últimes
