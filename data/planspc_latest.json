@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-09-15T13:21:15.295Z",
+  "actualitzat": "2026-09-15T17:59:40.708Z",
   "plans": [
     {
       "plaicona": {
@@ -28,6 +28,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127317_INICI--NOACTIVAT_CAMCAT_202609151311.pdf"
       },
       "descripcio": "ACA_Avís abocament aigües residuals a mar - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INFOCAT.png"
+      },
+      "plaacronim": "INFOCAT",
+      "planom": "INFOCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "15/09/2026 17:50",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127328_INICI--ACTIVAT_INFOCAT_202609151845.pdf"
+      },
+      "descripcio": "Previsió risc d'incendi 15/09/2026 - "
     }
   ]
 }
