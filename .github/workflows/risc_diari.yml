@@ -2,7 +2,12 @@ name: Risc diari GRAE
 
 on:
   schedule:
-    - cron: '0 21 * * *'  # 22:00 CET hivern
+    # Ancoratge, no hora d'execució: el retard de GitHub va de 2 h a 7 h. Amb
+    # l'anterior (21:00 UTC) un retard de 7 h el deixava a les 04:00 UTC, que
+    # són les 06:00 de Madrid: just el llindar d'`HORA_INICI_DIA` de
+    # `diaDeTancament()`, o sigui que hauria tancat el dia equivocat. Des de les
+    # 18:43 UTC, el pitjor cas cau a les 03:43 de Madrid i el dia encara és el bo.
+    - cron: '43 18 * * *'  # ~21:00-01:00 local un cop endarrerit
   workflow_dispatch:
 
 jobs:
