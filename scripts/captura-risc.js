@@ -142,11 +142,11 @@ async function operativitat(helis, dataStr, opConfig, cauMeteo) {
 // sencera cada vegada seria absurd d'aquí a un any.
 async function ultimaCaptura() {
   try {
-    const url = `${process.env.SUPABASE_URL}/rest/v1/risc_captures` +
+    const clau = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+    const url = `${(process.env.SUPABASE_URL || '').trim()}/rest/v1/risc_captures` +
                 `?select=fonts_estat,capturat_at&order=capturat_at.desc&limit=1`;
     const resp = await fetch(url, {
-      headers: { apikey: process.env.SUPABASE_SERVICE_KEY,
-                 Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}` }
+      headers: { apikey: clau, Authorization: `Bearer ${clau}` }
     });
     if (!resp.ok) throw new Error(`${resp.status} ${await resp.text()}`);
     const files = await resp.json();

@@ -192,6 +192,13 @@ taula que neix amb la RLS ben posada— va respondre **401 / 42501 row-level sec
 no política equivocada**: `errorSupabase()` a `utils.js` ja ho diu així. Si mai afegeixes una taula
 amb RLS i les escriptures et reboten, mira la clau abans de tocar les polítiques.
 
+**9 bis. Un secret amb un salt de línia no dona error de permisos: no arriba a sortir.**
+Els secrets de GitHub s'enganxen a mà i és fàcil que hi entri un salt de línia o un espai. Una
+capçalera HTTP no els admet, i `fetch` llança `Headers.append: "..." is an invalid header value`
+**abans** de fer la petició. Al log surt emmascarat (`"***\n***"`), que és justament la pista: el
+secret ocupa dues línies. `utils.js` fa `.trim()` de la URL i de la clau i avisa si en queden a
+dins. Va passar el 15-09-2026 en canviar la clau per la `service_role`.
+
 **10. El nom d'una taula de Supabase distingeix majúscules.** PostgREST busca la relació pel nom
 exacte: `taula_config_Alertes_SMP` no és `taula_config_alertes_smp` i dona **404**, no un error
 visible. Va estar mesos així: la config de zones mai va arribar de Supabase (queia al `localStorage`
