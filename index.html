@@ -5099,7 +5099,7 @@
       <div class="risc-breakdown-item" style="${fOff(F.boletaires.actiu)}">
         <span class="risc-breakdown-label">🍄 Boletaires${fMarca(F.boletaires.actiu)}</span>
         <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${fGuio(F.boletaires.actiu, (d.boletaires||0) > 0 ? 'Temporada' : '—')}</span>
-        <span class="risc-breakdown-value">${!F.boletaires.actiu ? '—' : Math.round(d.boletaires||0) + '/2' + mesPts(d.calc.increments.boletaires)}</span>
+        <span class="risc-breakdown-value">${!F.boletaires.actiu ? '—' : Math.round(d.boletaires||0) + '/1' + mesPts(d.calc.increments.boletaires)}</span>
       </div>`;
     }
 
@@ -5348,11 +5348,13 @@
               </div>
               
               <div class="risc-form-group">
-                <label class="risc-form-label">🍄 Boletaires (0-2) <span style="font-size:0.75rem;color:#aaa;">· només informatiu</span></label>
+                <!-- El factor és binari: la fórmula mira només si val més de 0, o
+                     sigui que un 2 sumava exactament el mateix que un 1. Oferir-lo
+                     feia creure que hi havia graus quan no n'hi ha. I sí que suma. -->
+                <label class="risc-form-label">🍄 Boletaires (0-1)</label>
                 <select class="risc-form-select" id="risc-config-boletaires">
-                  <option value="0">0 - Sense activitat</option>
-                  <option value="1">1 - Activitat moderada</option>
-                  <option value="2">2 - Alta activitat</option>
+                  <option value="0">0 - Fora de temporada</option>
+                  <option value="1">1 - Temporada de bolets</option>
                 </select>
               </div>
               
@@ -7127,7 +7129,9 @@
       document.getElementById('risc-config-afluencia').value = dia.afluencia || 0;
       document.getElementById('risc-config-hc').value = dia.hc || 0;
       document.getElementById('risc-config-canvi').value = dia.canvi || 0;
-      document.getElementById('risc-config-boletaires').value = dia.boletaires || 0;
+      // Topat a 1: un dia desat abans, quan el desplegable oferia fins a 2, deixaria
+      // el `select` sense cap opció triada i el valor es perdria en desar.
+      document.getElementById('risc-config-boletaires').value = Math.min(1, parseInt(dia.boletaires) || 0);
       document.getElementById('risc-config-notes').value = dia.notes || '';
       document.getElementById('risc-config-motiu').value = '';
       

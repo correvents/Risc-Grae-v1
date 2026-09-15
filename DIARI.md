@@ -8,6 +8,58 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-15 — Ja hi ha captures de veritat: el secret portava un salt de línia enmig
+
+**`risc_captures` ha deixat d'estar buida.** Les dues primeres files hi són:
+
+```
+2026-09-15 · extra · avui (15-09) → risc 0 · SMP 0 · allaus 1 · afluència 0 «Dia feiner» · HC 3/4 · canvi 0 · Plans PC 2
+2026-09-15 · extra · dema (16-09) → risc 1 · SMP 0 · allaus 1 · afluència 0 «Dia feiner» · HC 3/4 · canvi 1 · Plans PC 2
+```
+
+amb `dades_completes = true`, `formula_versio = 6`, la fórmula sencera, el desglossament, el detall
+dels quatre helis i l'SMP Bombers.
+
+**Què ho bloquejava.** Tres errors encadenats, cadascun amagant el següent:
+
+1. El workflow recollia `$?` **després d'un `if`**, o sigui l'estat de l'`if`: una captura fallada
+   sortia verda. Arreglat abans.
+2. El secret `SUPABASE_SERVICE_KEY` no era la clau `service_role` → 401 de la RLS. Canviat.
+3. En enganxar la clau nova hi va entrar un **salt de línia enmig**. `fetch` llança
+   `Headers.append: "***\n***" is an invalid header value` i **la petició no arriba ni a sortir**.
+   El `trim()` que hi vam posar només toca els extrems i no va servir de res; el que ho va
+   destapar va ser l'avís que havíem afegit nosaltres, que deia que l'espai era a dins.
+
+Ara la clau es neteja amb `.replace(/\s+/g, '')`: **cap clau de Supabase conté espais**, o sigui
+que treure'ls tots és segur i la captura funciona encara que el secret vingui brut. L'avís es
+manté i diu que ja s'han tret, perquè el codi no ha d'amagar que el secret està mal desat —
+**val la pena tornar-lo a enganxar net** amb el botó de copiar de Supabase.
+
+**L'escala dels boletaires.** Repassant el desglossament amb aquestes files de veritat, el mateix
+factor sortia amb dues escales a la mateixa pantalla: la taula de l'historial «0/1» i el
+desglossament de sota «0/2». Mana l'1 — la fórmula el tracta com a binari (mira si val més de 0 i
+suma `punts[1]`). Corregit el `/2`, i el desplegable de l'edició manual passa de 0-2 a 0-1: oferir
+un «2 - Alta activitat» que sumava exactament el mateix que un 1 feia creure que hi havia graus.
+També s'hi treu «només informatiu», que era fals. En obrir el formulari el valor es topa a 1,
+perquè un dia desat amb un 2 no deixi el desplegable sense cap opció triada.
+
+**Comprovat al navegador** amb les dues files reals: portada i historial diuen el mateix, el
+selector de captures funciona i els mapes de l'SMP Bombers es tornen a dibuixar (43 comarques, 42
+verdes i l'Aran en gris). El cas nou respecte de la prova amb dades inventades era
+`comarques: {}` —avui no hi ha cap avís de l'SMP, o sigui que la matriu és buida—, i els mapes
+surten tots verds, com toca, sense petar.
+
+**Què queda pendent:**
+
+- **Veure passar les tres captures del dia.** Els sis `cron.job` de Supabase hi són i estan actius,
+  però `cron.job_run_details` encara és buit: cap no ha arribat a disparar-se. La primera prova de
+  debò és la del vespre.
+- Tornar a enganxar el secret net (el codi ja se'n surt, però el secret continua brut).
+- Les dades dels helicòpters són del **06-09**: nou dies. L'operativitat es calcula amb l'últim
+  estat desat, que no és el d'avui.
+- `bpa_historic` encara s'escriu a sobre: de les allaus no en queda evolució.
+- La RLS continua desactivada a nou taules (vegeu `PLA-CAPTURES.md` §9).
+
 ## 2026-09-15 — La primera captura falla: la clau dels scripts no és la de servei
 
 La primera execució de `captura-risc.yml` va sortir **verda i sense desar res**. Dues coses, totes
