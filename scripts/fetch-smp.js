@@ -123,6 +123,38 @@ function registrarCodisDesconeguts(dades) {
   for (const [codi, af] of vistos) console.log(`   ${codi} → ${JSON.stringify(af)}`);
 }
 
+// Què ha arribat de Meteocat i què se n'ha descartat, abans de filtrar res.
+//
+// `processarSMP` només es queda els avisos amb estat "Vigent" o "Ampliat" i
+// salta la resta **en silenci**: si Meteocat en publica un amb un estat que no
+// coneixem, desapareix del càlcul i la pantalla ensenya un 0 igual de tranquil
+// que un dia sense avisos. És el mateix forat de la trampa 11, però per estat
+// en comptes de per zona, i no es pot diagnosticar sense veure el cru.
+//
+// Per això es registra sempre: quants episodis i avisos han vingut, i quants
+// se'n descarten per cada estat. Un dia que el log digui
+// `descartats per estat: Obert × 7`, ja se sap on mirar.
+const ESTATS_QUE_COMPTEN = ['Vigent', 'Ampliat'];
+
+function registrarEstatsRebuts(dades) {
+  const episodis = Array.isArray(dades) ? dades : [];
+  const compte = new Map();
+  let totalAvisos = 0;
+  for (const episodi of episodis)
+    for (const avis of (episodi.avisos || [])) {
+      totalAvisos++;
+      const estat = avis.estat || '(sense estat)';
+      if (ESTATS_QUE_COMPTEN.includes(estat)) continue;
+      compte.set(estat, (compte.get(estat) || 0) + 1);
+    }
+  console.log(`📥 Meteocat SMP: ${episodis.length} episodis, ${totalAvisos} avisos.`);
+  if (compte.size === 0) return;
+  const detall = [...compte].map(([estat, n]) => `${estat} × ${n}`).join(', ');
+  console.log(`⚠️ Avisos descartats per estat: ${detall}. ` +
+              `Només compten ${ESTATS_QUE_COMPTEN.join(' i ')} — si algun d'aquests ` +
+              `hauria de comptar, cal afegir-lo a ESTATS_QUE_COMPTEN.`);
+}
+
 function processarSMP(dades) {
   const resultat = { dataConsulta: new Date().toISOString(), avisos: [] };
   if (!dades || dades.length === 0) return resultat;
@@ -130,7 +162,7 @@ function processarSMP(dades) {
     const meteor = episodi.meteor?.nom || "Desconegut";
     if (!episodi.avisos) continue;
     for (const avis of episodi.avisos) {
-      if (avis.estat !== "Vigent" && avis.estat !== "Ampliat") continue;
+      if (!ESTATS_QUE_COMPTEN.includes(avis.estat)) continue;
       const avisS = {
         meteor, estat: avis.estat,
         dataInici: avis.dataInici || null, dataFi: avis.dataFi || null,
@@ -199,7 +231,9 @@ async function main() {
     headers: { 'X-Api-Key': API_KEY }
   });
   if (!resp.ok) throw new Error(`Meteocat SMP ${resp.status}: ${await resp.text()}`);
-  const dades = processarSMP(await resp.json());
+  const cru = await resp.json();
+  registrarEstatsRebuts(cru);
+  const dades = processarSMP(cru);
   registrarCodisDesconeguts(dades);
   const anterior = readJSON('smp_latest.json');
   const changed = hasChanged(dades, anterior);
@@ -218,4 +252,5 @@ if (require.main === module) {
   main().catch(e => { console.error(e.message); process.exit(1); });
 }
 
-module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts, ZONES };
+module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts,
+                   registrarEstatsRebuts, ESTATS_QUE_COMPTEN, ZONES };
