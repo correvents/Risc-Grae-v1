@@ -1,8 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+// Els secrets de GitHub s'enganxen a mà i és fàcil que hi entri un salt de línia
+// o un espai al final. Una capçalera HTTP no els admet: `fetch` llança
+// «invalid header value» i la petició no arriba a sortir, o sigui que sembla un
+// problema de permisos quan només és un caràcter de més. Es netegen sempre.
+const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim();
+const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+
+if (SUPABASE_KEY && /\s/.test(SUPABASE_KEY)) {
+  console.warn('⚠️ SUPABASE_SERVICE_KEY porta espais o salts de línia **a dins**: ' +
+               'torna a enganxar el secret a GitHub, en una sola línia.');
+}
 
 // Un 42501 ("row-level security") vol dir que la clau no és la `service_role`:
 // amb ella la RLS no s'aplica mai. Val més dir-ho que deixar el missatge de
