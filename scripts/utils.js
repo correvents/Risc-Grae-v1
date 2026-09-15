@@ -4,6 +4,18 @@ const path = require('path');
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+// Un 42501 ("row-level security") vol dir que la clau no és la `service_role`:
+// amb ella la RLS no s'aplica mai. Val més dir-ho que deixar el missatge de
+// PostgREST, que sona a problema de permisos de la taula i fa buscar on no toca.
+function errorSupabase(table, status, cos) {
+  if (cos.includes('42501') || cos.includes('row-level security')) {
+    return new Error(`Supabase ${table}: la RLS ha rebutjat l'escriptura (${status}). ` +
+      `Vol dir que SUPABASE_SERVICE_KEY no és la clau service_role — amb aquella, la RLS no s'aplica. ` +
+      `Canvia el secret de GitHub (Supabase → Project Settings → API keys → service_role).`);
+  }
+  return new Error(`Supabase ${table} error ${status}: ${cos}`);
+}
+
 async function supabaseInsert(table, rows) {
   if (!rows || rows.length === 0) return;
   for (let i = 0; i < rows.length; i += 500) {
@@ -18,7 +30,7 @@ async function supabaseInsert(table, rows) {
       },
       body: JSON.stringify(chunk)
     });
-    if (!resp.ok) throw new Error(`Supabase ${table} insert error ${resp.status}: ${await resp.text()}`);
+    if (!resp.ok) throw errorSupabase(table, resp.status, await resp.text());
   }
   console.log(`✅ Supabase ${table}: ${rows.length} files`);
 }
@@ -43,7 +55,7 @@ async function supabaseUpsert(table, rows, onConflict) {
     },
     body: JSON.stringify(data)
   });
-  if (!resp.ok) throw new Error(`Supabase ${table} upsert error ${resp.status}: ${await resp.text()}`);
+  if (!resp.ok) throw errorSupabase(table, resp.status, await resp.text());
   console.log(`✅ Supabase ${table}: ${data.length} files`);
 }
 

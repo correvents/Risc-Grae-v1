@@ -178,9 +178,19 @@ Quan les dades es vegin velles, mira **quan va córrer l'últim workflow**, no n
 si no ha corregut, la franja de dades diu la veritat i el que cal és una passada a mà
 (Actions → Dades diàries GRAE → Run workflow).
 
-**9. Dues claus de Supabase.**
+**9. Dues claus de Supabase, i comprova que la dels scripts sigui la bona.**
 
-Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts → `service_role`, sempre via GitHub Secrets. **Mai** posis la `service_role` a `index.html`.
+Frontend → clau `anon`, incrustada al JS (pública, és correcte). Scripts → `service_role`, sempre via
+GitHub Secrets. **Mai** posis la `service_role` a `index.html`.
+
+**El secret `SUPABASE_SERVICE_KEY` ha contingut durant mesos una clau que no era la `service_role`**,
+i no ho va delatar res: totes les taules on escrivien els scripts o tenen la RLS desactivada o tenen
+polítiques que deixen escriure a qualsevol (`risc_historic`: «Escriptura autenticada», «Inserció des
+de GAS»; `smp_historic`: «Inserció GAS»). Va sortir el 15-09-2026, quan `risc_captures` —la primera
+taula que neix amb la RLS ben posada— va respondre **401 / 42501 row-level security**. Amb la clau
+`service_role` la RLS no s'aplica mai, o sigui que **un 42501 en un script vol dir clau equivocada,
+no política equivocada**: `errorSupabase()` a `utils.js` ja ho diu així. Si mai afegeixes una taula
+amb RLS i les escriptures et reboten, mira la clau abans de tocar les polítiques.
 
 **10. El nom d'una taula de Supabase distingeix majúscules.** PostgREST busca la relació pel nom
 exacte: `taula_config_Alertes_SMP` no és `taula_config_alertes_smp` i dona **404**, no un error
