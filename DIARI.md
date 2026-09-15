@@ -8,6 +8,40 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-15 — Per què l'SMP de demà surt 0 amb avisos publicats: «episodis-oberts» vol dir això
+
+Reportat: «a Meteocat ara donen molts avisos per demà i la web no els ha detectat». Confirmat que
+eren **avisos SMP formals**, no la predicció general.
+
+**No és cap error nostre.** El log de la passada de les 18:36 UTC diu `📥 Meteocat SMP: 0 episodis,
+0 avisos`: l'API `pronostic/v1/smp/episodis-oberts` respon `[]`. I «oberts» vol dir el que sembla —
+la documentació diu que retorna els episodis oberts i els avisos actius **que afecten el dia de la
+consulta**. Un avís emès al vespre per a l'endemà, sense cap episodi obert avui, no hi surt.
+
+Les dades pròpies ho confirmen. De les files d'`smp_historic` amb `dia` posterior al de la consulta:
+
+| | consultes | files |
+| --- | --- | --- |
+| amb avisos també per al mateix dia | 177 | 2.940 |
+| **sense** avisos per al mateix dia | 6 | 68 |
+
+I els 6 casos sense són **tots `Ampliat`**: un episodi ja obert que s'allarga a un dia veí (p. ex.
+consultant el 05-08, dies 04 i 06). **Cap avís de dia futur no ha vingut mai d'un episodi encara no
+obert.** El patró aguanta les 3.504 files.
+
+**Es va descartar pel camí** que fos el filtre per estat. `processarSMP` només es queda els avisos
+`Vigent` i `Ampliat` i saltava la resta **en silenci** — era un candidat raonable, i ara el filtre
+registra al log què descarta i per quin estat (`ESTATS_QUE_COMPTEN`). Va servir per descartar-ho en
+una passada: no es descartava res, simplement no arribava res.
+
+**Què queda per fer, i és el que importa:** mentre l'SMP surti d'`episodis-oberts`, **l'SMP de demà
+és una cota inferior, no el valor de debò** — a la pantalla i a les captures. Per arreglar-ho cal un
+altre camí de l'API (consulta d'episodi per codi, pre-alertes), i la documentació
+(`apidocs.meteocat.gencat.cat`) no és accessible des del contenidor: s'ha de mirar des de fora.
+
+També caldrà decidir com es diu a la pantalla, perquè ara mateix un 0 per manca d'episodi obert té
+exactament la mateixa cara que un 0 de bon temps — que és justament el que la trampa 12 no vol.
+
 ## 2026-09-15 — Ja hi ha captures de veritat: el secret portava un salt de línia enmig
 
 **`risc_captures` ha deixat d'estar buida.** Les dues primeres files hi són:
