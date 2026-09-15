@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-14T20:13:07.543Z",
+  "dataConsulta": "2026-09-15T10:06:57.665Z",
   "avui": {
-    "data": "2026-09-14",
+    "data": "2026-09-15",
     "variables": {
-      "estatDelCel": "El cel romandrà serè o, transitòriament, lleugerament enteranyinat per algun núvol alt.",
+      "estatDelCel": "En general, el cel romandrà serè, amb la presència d'algun núvols fregant el litoral nord al llarg de la tarda.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura pujarà lleugerament en general.",
-      "visibilitat": "La visibilitat serà entre excel·lent i bona.",
-      "vent": "Bufarà el vent de component sud i est al quadrant nord-est, fluix amb cops moderats, el vent de component sud entre fluix i moderat a la resta del litoral i prelitoral, i el vent de component sud i oest fluix a la resta de l'interior. \nA partir del vespre el vent quedarà fluix i de direcció variable\n"
+      "temperatures": "La temperatura màxima serà semblant o lleugerament més alta, tot i això, a les comarques del nord-est quedarà lleugerament o moderadament més baixa.",
+      "visibilitat": "La visibilitat serà entre excel·lent i bona. Si bé, al llarg de la tarda i vespre és possible l'arribada d'alguna boira costanera a punts de la Costa Brava.",
+      "vent": "Bufarà vent de component sud en general, amb domini del sud-est a la meitat est del país, i de sud-oest al terç oest del país, tot i que al llarg de la tarda s'acabarà imposant el sud. El vent bufarà fluix amb algun cop moderat en general, tot i que hi haurà algun cop fort al final de la tarda al sud de Ponent. A banda, a l'extrem nord del Pirineu bufarà de component nord, fluix amb algun cop moderat. A partir del vespre, el vent serà fluix i de direcció variable."
     }
   },
   "dema": {
-    "data": "2026-09-15",
+    "data": "2026-09-16",
     "variables": {
-      "estatDelCel": "En general, el cel romandrà serè.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura mínima serà semblant o lleugerament més alta.  Amb tot a  l'interior de la meitat nord la pujada serà entre lleugera i moderada.\nLa màxima serà semblant o lleugerament més alta, tot i això, a les comarques del nord-est la temperatura màxima quedarà lleugerament o moderadament més baixa.",
-      "visibilitat": "La visibilitat serà entre excel·lent i bona. Si bé, al llarg de la tarda i vespre és possible l'arribada d'alguna boira costanera a punts de la Costa Brava.",
-      "vent": "Fins a mig matí i de nou a partir del vespre el vent serà fluix i de direcció variable, amb predomini del component nord fluix a la Costa Brava fins a primeres hores del matí, i del terral a la resta del litoral. La resta del dia, s'imposarà el vent de component sud i est a la meitat est, el component sud a la resta del litoral i prelitoral, i el component sud i oest a la resta de l'interior, tot i que al llarg de la tarda també s'hi acabarà imposant el component sud. El vent bufarà fluix amb algun cop moderat en general, tot i que hi haurà algun cop fort al final de la tarda al sud de Ponent. A banda, a l'extrem nord del Pirineu bufarà de component nord, fluix amb algun cop moderat."
+      "estatDelCel": "Fins a migdia, el cel estarà serè o poc ennuvolat en general pel pas d'alguns núvols alts i mitjans sobretot a l'oest del país. Tot i això, a partir de mig matí creixeran nuvolades a punts del sector central del litoral i prelitoral. A partir de migdia, també creixeran nuvolades al terç nord i la resta de la meitat est del país, on el cel quedarà molt ennuvolat o cobert. A més, arribaran núvols alts i mitjans més nombrosos per l'oest que deixaran el cel mig ennuvolat a la resta del país, o puntualment molt ennuvolat.",
+      "precipitacions": "A partir del final del matí, s'esperen alguns xàfecs a punts del litoral i prelitoral central i en són possibles al sud del litoral i prelitoral nord. \nA partir de migdia, també se n'esperen a la meitat est del territori, al Pirineu i Prepirineu, i de forma més aïllada a altres punts de la Catalunya Central. Seran d'intensitat entre feble i moderada, localment forts a punts de la meitat est del país durant la tarda. Al final del dia seran d'intensitat forta a punts del sector central del litoral i prelitoral, i és possible que localment siguin d'intensitat torrencial. Aniran acompanyats de tempesta i és possible que vagin associats a temps violent i, a més, que puntualment hi hagi calamarsa durant la tarda. \nS'acumularan quantitats poc abundants de precipitació en general, tot i que seran localment abundants al quadrant nord-est i és possible que molt abundants al sector central del litoral i prelitoral.\n",
+      "temperatures": "La temperatura mínima serà semblant o lleugerament més baixa i, en molts casos, es donarà al final de la jornada. La màxima baixarà moderadament a la meitat est i la resta del terç nord, i serà entre lleugerament i moderadament més baixa a la resta.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent en general, tot i que empitjorarà al llarg de la tarda a la meitat est, així com en moments de xàfec.",
+      "vent": "A primera hora del dia el vent serà fluix i de direcció variable. Durant la matinada s'imposarà el vent de component nord i oest amb tramuntana al nord de l'Empordà i mestral a l'interior de les Terres de l'Ebre, bufaran moderats amb alguns cops forts, i algun de molt fort al nord de la Costa Brava. A la resta del país bufarà el vent de component sud entre fluix i moderat amb algun cop fort a punts del sector central del litoral.\nEn moments de xàfec pot haver-hi, localment, ratxes fortes o molt fortes de vent."
     }
   }
 }

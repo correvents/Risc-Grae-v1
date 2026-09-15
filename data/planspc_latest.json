@@ -1,19 +1,19 @@
 {
-  "actualitzat": "2026-09-14T20:13:09.715Z",
+  "actualitzat": "2026-09-15T10:07:01.247Z",
   "plans": [
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
       },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "14/09/2026 14:05",
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "15/09/2026 10:44",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127291_ACTUALITZACIO--NOACTIVAT_PROCICAT_202609141425.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127288_INICI--ACTIVAT_INUNCAT_202609151157.pdf"
       },
-      "descripcio": "Incendi industria tèxtil Mataró "
+      "descripcio": "SMP Intensitat de Pluja 30min 16/09 - "
     }
   ]
 }
