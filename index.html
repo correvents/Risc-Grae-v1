@@ -2645,29 +2645,7 @@
     //   · Anoia (06)      → Sud (l'Alta Anoia, 8 municipis, és del Centre)
     // La Cerdanya (15) va al Centre: el decret la posa a Pirineus, però
     // operativament depèn de la sala de Manresa.
-    const REGIONS_BOMBERS = {
-      'Metropolitana Nord': [21, 40, 41],
-      'Metropolitana Sud':  [13, 11, 3, 17, 6],
-      'Girona':             [2, 10, 20, 28, 34, 19, 31],
-      'Centre':             [7, 24, 14, 35, 42, 43, 15],
-      'Lleida':             [33, 23, 38, 27, 18, 32],
-      'Pirineus':           [5, 26, 25, 4],
-      'Tarragona':          [36, 8, 1, 12, 16, 29],
-      "Terres de l'Ebre":   [9, 22, 30, 37]
-    };
-
-    // Territori que no cobreixen els Bombers de la Generalitat i que, per tant,
-    // no ha de comptar al risc de cap regió. Es pinta en gris al mapa, amb el
-    // seu perímetre propi i el valor de l'SMP al tooltip: la meteorologia hi és
-    // igualment, el que no hi és som nosaltres.
-    //
-    //   · Aran (39): el decret la posa a la regió Pirineus, però l'Aran manté
-    //     el seu propi cos de bombers (vegeu REGIONS-EMERGENCIA.md).
-    //
-    // La ciutat de Barcelona també va a part (bombers municipals), però no és
-    // una comarca: el Barcelonès continua comptant per la Metropolitana Sud,
-    // perquè l'Hospitalet i la resta sí que són nostres, i al mapa se'n marca
-    // només el terme municipal (CONTORN_BARCELONA).
+    const REGIONS_BOMBERS = FormulaRisc.REGIONS_BOMBERS;
     const COMARQUES_FORA_REGIO = {
       39: 'Aran — cos de bombers propi'
     };
@@ -2679,100 +2657,14 @@
     const CONTORN_BARCELONA = [[2.2076,41.4419],[2.1787,41.4682],[2.1642,41.4501],[2.1346,41.4472],[2.1213,41.4258],[2.0712,41.4353],[2.0798,41.4162],[2.0722,41.4035],[2.1006,41.4083],[2.102,41.3812],[2.135,41.3626],[2.1369,41.3485],[2.1005,41.336],[2.1189,41.3227],[2.1499,41.3207],[2.1592,41.3272],[2.1652,41.3414],[2.1569,41.3422],[2.1459,41.331],[2.1509,41.3465],[2.1669,41.3471],[2.1847,41.3807],[2.1854,41.3577],[2.1983,41.3869],[2.1997,41.3833],[2.2021,41.3901],[2.218,41.4043],[2.229,41.4104],[2.2078,41.425],[2.2076,41.4419]];
 
     const REGIONS_ORDRE = Object.keys(REGIONS_BOMBERS);
-    const PERIODES_SMP = ['00-06', '06-12', '12-18', '18-00'];
+    const PERIODES_SMP = FormulaRisc.PERIODES_SMP;
 
-    const comarcaARegio = {};
-    Object.entries(REGIONS_BOMBERS).forEach(([regio, codis]) => {
-      codis.forEach(c => comarcaARegio[c] = regio);
-    });
+    const { comarcaARegio, riscDeAfectacio, MARITIMES_A_COMARCA, agregarRisc,
+            riscComarca, valorsRegio } = FormulaRisc;
 
-    // Meteocat ja publica un grau de perill de 0 a 6 per comarca i franja de 6 h
-    // (el color n'és només l'agrupació). Ve al camp `perill` de cada afectació i
-    // `fetch-smp.js` el desa cru com a `grauPerill`: es fa servir tal com ve.
-    //
-    // L'escala de reserva de sota només actua amb dades antigues, anteriors al
-    // canvi de `fetch-smp.js`, que encara no porten `grauPerill`.
-    const RISC_BASE_NIVELL = { 'Groc': 1, 'Taronja': 3, 'Vermell': 5 };
-    const PROB_ALTA = ['Molt probable', 'Segur'];
-
-    function riscDeAfectacio(af) {
-      if (Number.isFinite(af.grauPerill)) return Math.max(0, Math.min(6, af.grauPerill));
-      const base = RISC_BASE_NIVELL[af.nivell];
-      if (!base) return 0;
-      return base + (PROB_ALTA.includes(af.probabilitat) ? 1 : 0);
-    }
-
-    // L'SMP també avisa per zones marítimes, que no són comarques. Cada zona
-    // s'adjunta a la comarca costanera que té al davant: si hi ha risc a la zona
-    // marítima, la comarca se'l queda (es pren el valor més alt dels dos).
-    //
-    // ⚠️ Els codis 88-99 són els que ja hi havia al projecte, però no s'han pogut
-    // verificar: no hem vist mai una alerta marítima passar per aquí. Ara
-    // `fetch-smp.js` registra al log del workflow qualsevol codi desconegut amb
-    // tots els seus camps, així que la primera alerta d'onatge ens dirà si la
-    // llista és aquesta i en quin ordre.
-    const MARITIMES_A_COMARCA = {
-      88: 2,   // Alt Empordà
-      89: 10,  // Baix Empordà
-      90: 34,  // Selva
-      91: 21,  // Maresme
-      92: 13,  // Barcelonès
-      93: 11,  // Baix Llobregat
-      94: 17,  // Garraf
-      95: 12,  // Baix Penedès
-      96: 36,  // Tarragonès
-      97: 8,   // Baix Camp
-      98: 9,   // Baix Ebre
-      99: 22   // Montsià
-    };
-
-    // Risc d'un conjunt (comarques d'una regió, o regions de Catalunya): el valor
-    // més alt que assoleix la meitat + 1 de les unitats. Els valors s'engloben,
-    // és a dir que una unitat amb un 4 també compta per al 3 i per al 2.
-    // Exemple del cap del GRAE: 8 regions amb 3,3,3,2,2,2,4,4 → llindar 5;
-    // n'hi ha 5 amb ≥3 i només 2 amb ≥4, o sigui que el total és 3.
-    function agregarRisc(valors) {
-      if (!valors.length) return 0;
-      const llindar = Math.floor(valors.length / 2) + 1;
-      for (let v = 6; v >= 1; v--) {
-        if (valors.filter(x => x >= v).length >= llindar) return v;
-      }
-      return 0;
-    }
-
-    // comarca → dia → període → { valor, riscos: [{meteor, nivell, probabilitat, llindar}] }
-    function matriuRiscComarques(data) {
-      const matriu = {};
-      for (const avis of (data?.avisos || [])) {
-        const meteor = avis.meteor || '';
-        for (const dia of (avis.dies || [])) {
-          for (const af of (dia.afectacions || [])) {
-            // Una zona marítima es compta com la comarca costanera que té al davant
-            const codi = MARITIMES_A_COMARCA[af.comarca] || af.comarca;
-            if (!codi || !comarcaARegio[codi]) continue;  // dades antigues sense comarca
-            const valor = riscDeAfectacio(af);
-            if (!valor) continue;
-            if (!matriu[codi]) matriu[codi] = { nom: nomComarcaLocal(codi) || af.comarcaNom, dies: {} };
-            if (!matriu[codi].dies[dia.dia]) matriu[codi].dies[dia.dia] = {};
-            for (const p of (af.periodes || [])) {
-              const cel = matriu[codi].dies[dia.dia][p] || { valor: 0, riscos: [] };
-              if (valor > cel.valor) cel.valor = valor;
-              cel.riscos.push({ meteor, nivell: af.nivell, probabilitat: af.probabilitat, llindar: af.llindar });
-              matriu[codi].dies[dia.dia][p] = cel;
-            }
-          }
-        }
-      }
-      return matriu;
-    }
-
-    // Valor d'una comarca en un dia i franja (0 si no hi ha avís).
-    const riscComarca = (matriu, codi, dia, periode) =>
-      matriu[codi]?.dies?.[dia]?.[periode]?.valor || 0;
-
-    function valorsRegio(matriu, regio, dia, periode) {
-      return REGIONS_BOMBERS[regio].map(c => riscComarca(matriu, c, dia, periode));
-    }
+    // La matriu per comarca la calcula el mòdul; aquí només se li passa com es
+    // diuen les comarques, que és cosa de la interfície.
+    const matriuRiscComarques = (data) => FormulaRisc.matriuRiscComarques(data, nomComarcaLocal);
 
     // Escala del risc del GRAE (l'usa el simulador de Configuració → Fórmula de risc).
     const COLORS_RISC = ['#4caf50', '#8bc34a', '#cddc39', '#ff9800', '#ff5722', '#f44336', '#b71c1c'];
@@ -5057,12 +4949,10 @@
     // Condicions de vol dels HC. Editables des de Configuració → Operativitat HC
     // i desades a localStorage; els valors per defecte són els contrastats amb
     // la pràctica de vol de muntanya i les mínimes HEMS (vegeu la pestanya).
-    const OP_DEFAULT = {
-      ratxaMax: 50,      // km/h — per sobre, no vola
-      visMin: 2000,      // m — per sota, no vola
-      horesMin: 3,       // hores seguides dins de límits
-      nomesDia: true     // de moment el GRAE no vola de nit
-    };
+    // Els llindars per defecte són a formula-risc.js: el backend també els
+    // necessita i han de ser els mateixos (50 km/h, 2000 m, 3 h seguides, només
+    // de dia). Aquí l'usuari els pot canviar des de Configuració → Operativitat HC.
+    const OP_DEFAULT = FormulaRisc.OP_DEFAULT;
     let opConfig = { ...OP_DEFAULT };
 
     function carregarOpConfig() {
@@ -5129,58 +5019,20 @@
     }
 
     const meteoVolCache = {};
-    // Llista d'hores → trams llegibles: [10,11,12,15] → "de 10 a 13 h i de 15 a 16 h"
-    function tramsHores(hores) {
-      if (!hores.length) return '';
-      const trams = [];
-      let ini = hores[0], prev = hores[0];
-      for (let i = 1; i < hores.length; i++) {
-        if (hores[i] === prev + 1) { prev = hores[i]; continue; }
-        trams.push([ini, prev]); ini = prev = hores[i];
-      }
-      trams.push([ini, prev]);
-      return trams.map(([a, b]) => `de ${a} a ${b + 1} h`).join(' i ');
-    }
+    const tramsHores = FormulaRisc.tramsHores;
 
+    // La baixada i la cau són d'aquí; el criteri de vol (finestra, ratxa,
+    // visibilitat, només de dia) és a formula-risc.js i el comparteix el backend.
     async function meteoPermetVol(lat, lon, dataStr) {
       if (lat == null || lon == null) return { ok: true, motiu: '' }; // sense coords → no penalitza
       const key = `${(+lat).toFixed(2)},${(+lon).toFixed(2)},${dataStr}`;
       if (meteoVolCache[key]) return meteoVolCache[key];
       try {
-        const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
-          '&hourly=visibility,wind_gusts_10m,is_day&forecast_days=3&timezone=Europe%2FMadrid&wind_speed_unit=kmh';
         // Amb timeout: un fetch pelat que no torna deixa penjada l'operativitat
         // i, amb ella, l'actualització del risc que l'espera.
-        const resp = await fetchAmbTimeout(url, 8000);
+        const resp = await fetchAmbTimeout(FormulaRisc.urlMeteoVol(lat, lon), 8000);
         const data = await resp.json();
-        const H = data.hourly;
-        // Es busca la finestra més llarga d'hores seguides dins de límits. Si el
-        // GRAE no vola de nit, les hores sense llum no compten i, a més, trenquen
-        // la ratxa: una finestra no pot travessar la nit.
-        let seguides = 0, maxSeguides = 0;
-        // Es guarda també *què* falla i *quan*, per poder dir-ho a la pestanya:
-        // "no vola (meteo)" no serveix per decidir res.
-        const horesVis = [], horesVent = [];
-        let pitjorVis = Infinity, pitjorRatxa = 0;
-        for (let hh = 0; hh <= 23; hh++) {
-          const idx = H.time.indexOf(dataStr + 'T' + String(hh).padStart(2, '0') + ':00');
-          if (idx < 0) continue;
-          if (opConfig.nomesDia && H.is_day && H.is_day[idx] === 0) { seguides = 0; continue; }
-          const ratxa = H.wind_gusts_10m[idx];
-          const vis = H.visibility[idx];
-          if (vis != null && vis < opConfig.visMin) { horesVis.push(hh); pitjorVis = Math.min(pitjorVis, vis); }
-          if (ratxa != null && ratxa > opConfig.ratxaMax) { horesVent.push(hh); pitjorRatxa = Math.max(pitjorRatxa, ratxa); }
-          const bo = (ratxa != null && ratxa <= opConfig.ratxaMax) && (vis != null && vis >= opConfig.visMin);
-          if (bo) { seguides++; maxSeguides = Math.max(maxSeguides, seguides); }
-          else seguides = 0;
-        }
-        const ok = maxSeguides >= opConfig.horesMin;
-        const parts = [];
-        if (horesVis.length) parts.push(`visibilitat de fins a ${Math.round(pitjorVis)} m ${tramsHores(horesVis)}`);
-        if (horesVent.length) parts.push(`ratxes de fins a ${Math.round(pitjorRatxa)} km/h ${tramsHores(horesVent)}`);
-        // Cap hora dolenta i tot i així no vola: la finestra la trenca la nit
-        if (!parts.length && !ok) parts.push(`cap tram de ${opConfig.horesMin} h seguides${opConfig.nomesDia ? ' amb llum de dia' : ''} (el més llarg, ${maxSeguides} h)`);
-        const res = { ok, motiu: ok ? '' : parts.join(' · '), maxSeguides };
+        const res = FormulaRisc.avaluarFinestraVol(data.hourly, dataStr, opConfig);
         meteoVolCache[key] = res;
         return res;
       } catch(e) {
@@ -5242,22 +5094,8 @@
                  operatiu, estatOk, motiu };
       }));
 
-      // "HC GRAE operatius" creua els tres paràmetres alhora: estat de plena
-      // operativitat, condicions de vol des de la seva base i distribució pel
-      // territori. Es compten **províncies cobertes** per helis que poden volar,
-      // no aparells: dos helis a la mateixa província no cobreixen el doble de
-      // territori, i abans comptaven com dos.
-      const provCobertes = new Set(detall.filter(d => d.operatiu && d.prov).map(d => d.prov));
-      const senseProv = detall.filter(d => d.operatiu && !d.prov).length;
-      const count = provCobertes.size + senseProv;
-
-      return {
-        count,
-        aparells: detall.filter(d => d.operatiu).length,
-        provincies: [...provCobertes],
-        total: detall.length,
-        detall
-      };
+      // El recompte (províncies cobertes, no aparells) és a formula-risc.js
+      return FormulaRisc.resumirOperativitat(detall);
     }
 
 
@@ -7983,33 +7821,7 @@
 
 
     // ==================== ÍNDEXS DISTRIBUCIÓ I OPERATIVITAT ====================
-    function provinciaDeBase(base) {
-      if (!base) return null;
-      const b = base.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      // Girona
-      const girona = ["girona","figueres","olot","ripoll","vic","manlleu","banyoles","blanes","lloret","santa coloma de farners","la bisbal","palafrugell","palamos","roses","escala","la jonquera","puigcerda","cerdanya","camprodon","sant feliu"];
-      if (girona.some(x => b.includes(x))) return "Girona";
-      // Tarragona
-      const tarragona = ["tarragona","reus","tortosa","valls","el vendrell","amposta","ametlla","calafell","cambrils","salou","mont-roig","gandesa","mora","deltebre","rapita","ebre"];
-      if (tarragona.some(x => b.includes(x))) return "Tarragona";
-      // Lleida
-      const lleida = ["lleida","balaguer","cervera","igualada","solsona","tremp","sort","vielha","seu d urgell","la seu","ponts","mollerussa","tarrega","artesa","pobla de segur","pont de suert"];
-      if (lleida.some(x => b.includes(x))) return "Lleida";
-      // Barcelona
-      const barcelona = ["barcelona","sabadell","terrassa","badalona","hospitalet","mataro","granollers","mollet","montcada","rubi","sant cugat","vilafranca","vilanova","berga","cardona","torello","puig-reig","navarcles","manresa","sant joan","martorell","abrera","esparreguera"];
-      if (barcelona.some(x => b.includes(x))) return "Barcelona";
-      return null; // no identificat
-    }
-
-    function provinciaDeCoords(lat, lon) {
-      // Fallback per coordenades quan no es pot determinar per nom
-      if (lat >= 41.7 && lon >= 2.3) return 'Girona';
-      if (lat < 41.35) return 'Tarragona';
-      if (lat < 41.5 && lon >= 0.8 && lon < 2.3) return 'Tarragona';
-      if (lon < 1.3) return 'Lleida';
-      if (lon < 1.85 && lat >= 41.5) return 'Lleida';
-      return 'Barcelona';
-    }
+    const { provinciaDeBase, provinciaDeCoords } = FormulaRisc;
 
     // Quines províncies queden cobertes i quines no: la coberta és la que té un HC
     // que pot volar de veritat, no només un HC assignat.
