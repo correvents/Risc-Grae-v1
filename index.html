@@ -4348,62 +4348,9 @@
     // quinze més les marítimes (comprovat contra `select distinct zona from
     // smp_historic`); si Meteocat n'estrena una, la franja de dades avisa que
     // hi ha avisos en una zona desconeguda.
-    const RISC_PARAMS_DEFAULT = {
-      zones: {
-        'Pirineu Occidental': 1,
-        'Pirineu Oriental': 1,
-        'Costa Brava': 1,
-        'Litoral Central': 1,
-        'Plana de Lleida': 1,
-        'Camp de Tarragona': 1,
-        "Terres de l'Ebre": 1,
-        'Zona Marítima': 1,
-      },
-      // Mapeig de zona original a grup (per agrupar alertes)
-      zonesGrup: {
-        'Pirineu Occidental': 'Pirineu Occidental',
-        'Pirineu Central': 'Pirineu Occidental',
-        'Pirineu Oriental': 'Pirineu Oriental',
-        'Prepirineu': 'Pirineu Oriental',
-        'Costa Brava': 'Costa Brava',
-        'Litoral Nord': 'Costa Brava',
-        'Empordà': 'Costa Brava',
-        "Gironès i Pla de l'Estany": 'Costa Brava',
-        'Litoral Central': 'Litoral Central',
-        'Vallès': 'Litoral Central',
-        'Penedès': 'Litoral Central',
-        'Plana de Lleida': 'Plana de Lleida',
-        'Catalunya Central': 'Plana de Lleida',
-        'Camp de Tarragona': 'Camp de Tarragona',
-        'Serres de Prades i Montsant': 'Camp de Tarragona',
-        "Terres de l'Ebre": "Terres de l'Ebre",
-        'Comarca 88': 'Zona Marítima',
-        'Comarca 89': 'Zona Marítima',
-        'Comarca 90': 'Zona Marítima',
-        'Comarca 91': 'Zona Marítima',
-        'Comarca 92': 'Zona Marítima',
-        'Comarca 93': 'Zona Marítima',
-        'Comarca 94': 'Zona Marítima',
-        'Comarca 95': 'Zona Marítima',
-        'Comarca 96': 'Zona Marítima',
-        'Comarca 97': 'Zona Marítima',
-        'Comarca 98': 'Zona Marítima',
-        'Comarca 99': 'Zona Marítima',
-      },
-      periodes: {
-        '00-06': 0.3,
-        '06-12': 0.8,
-        '12-18': 1.0,
-        '18-24': 0.6,
-      },
-      nivells: {
-        'Groc': 1,
-        'Taronja': 2,
-        'Vermell': 3,
-      },
-      normalitzador: 1,  // Dividir punts totals per aquest valor per obtenir 0-6
-      maxSMP: 6,         // Valor màxim SMP
-    };
+    // Els pesos per zona i el mapatge de zones viuen a formula-risc.js: el
+    // backend els necessita per calcular el mateix SMP ponderat.
+    const RISC_PARAMS_DEFAULT = FormulaRisc.RISC_PARAMS_DEFAULT;
 
     let riscParams = JSON.parse(JSON.stringify(RISC_PARAMS_DEFAULT));
 
@@ -4431,42 +4378,7 @@
       };
     }
 
-    function rowToRiscParams(row, base) {
-      // Una columna que no existeixi a la taula, o que hi sigui nul·la, no ha de
-      // desactivar res: es queda el valor de base. Sense això, una zona sense
-      // columna (o una columna nova encara buida) sortia NaN i el filtre
-      // `zones[z] > 0` la donava per apagada sense que ningú l'hagués tocat.
-      const val = (v, defecte) => (v == null || isNaN(+v)) ? defecte : +v;
-      return {
-        ...base,
-        zones: {
-          ...base.zones,
-          'Pirineu Occidental': val(row.pes_pirineu_occidental, base.zones['Pirineu Occidental']),
-          'Pirineu Oriental':   val(row.pes_pirineu_oriental,   base.zones['Pirineu Oriental']),
-          'Costa Brava':        val(row.pes_emporda,            base.zones['Costa Brava']),
-          'Litoral Central':    val(row.pes_litoral_central,    base.zones['Litoral Central']),
-          'Plana de Lleida':    val(row.pes_plana_lleida,       base.zones['Plana de Lleida']),
-          'Camp de Tarragona':  val(row.pes_camp_tarragona,     base.zones['Camp de Tarragona']),
-          "Terres de l'Ebre":   val(row.pes_terres_ebre,        base.zones["Terres de l'Ebre"]),
-          'Zona Marítima':      val(row.pes_zona_maritima,      base.zones['Zona Marítima']),
-        },
-        periodes: {
-          ...base.periodes,
-          '00-06': val(row.pes_periode_00_06, base.periodes['00-06']),
-          '06-12': val(row.pes_periode_06_12, base.periodes['06-12']),
-          '12-18': val(row.pes_periode_12_18, base.periodes['12-18']),
-          '18-24': val(row.pes_periode_18_24, base.periodes['18-24']),
-        },
-        nivells: {
-          ...base.nivells,
-          'Groc':    val(row.pes_nivell_groc,    base.nivells['Groc']),
-          'Taronja': val(row.pes_nivell_taronja, base.nivells['Taronja']),
-          'Vermell': val(row.pes_nivell_vermell, base.nivells['Vermell']),
-        },
-        normalitzador: val(row.normalitzador, base.normalitzador),
-        maxSMP:        val(row.max_smp,       base.maxSMP),
-      };
-    }
+    const rowToRiscParams = FormulaRisc.rowToRiscParams;
 
     // El nom de la taula va en minúscules: PostgREST hi busca la relació pel nom
     // exacte, i amb 'taula_config_Alertes_SMP' donava 404 sempre. La config de
@@ -4491,6 +4403,22 @@
           .single(), 10000, 'Supabase');
         if (!error && data) {
           riscParams = rowToRiscParams(data, riscParams);
+          // La config de la fórmula, les allaus i els llindars dels helis manen
+          // des de Supabase: si no, cada dispositiu en tindria una de diferent i
+          // el risc desat per les captures no seria el que es veu aquí.
+          if (data.formula && data.formula_versio === RISC_FORMULA_VERSIO) {
+            aplicarFormulaDesada(data.formula);
+          }
+          if (typeof data.allaus_desactivat === 'boolean') {
+            allausConfig.desactivat = data.allaus_desactivat;
+            try { localStorage.setItem(LS_ALLAUS_KEY, JSON.stringify(allausConfig)); } catch(e) {}
+          }
+          if (data.op_config) {
+            for (const k of Object.keys(OP_DEFAULT)) {
+              if (data.op_config[k] != null) opConfig[k] = data.op_config[k];
+            }
+            try { localStorage.setItem('riscGRAE_opHC', JSON.stringify(opConfig)); } catch(e) {}
+          }
           if (typeof data.boletaires_actiu === 'boolean') {
             boletairesConfig.actiu = data.boletaires_actiu;
             try { localStorage.setItem(LS_BOLETAIRES_KEY, JSON.stringify(boletairesConfig)); } catch(e) {}
@@ -4613,109 +4541,19 @@
     }
     
     // Funció per calcular valors automàtics des de les dades carregades
+    // Els factors d'un dia surten de formula-risc.js (els comparteix el backend).
+    // Aquí només s'hi posa el que és del navegador: què hi ha carregat, què diu
+    // la config de l'usuari i el cas d'"ahir", que no ve de l'avís en viu.
     function calcularValorsAuto(data) {
-      const resultat = {
-        smp: 0,
-        smpDetall: [],
-        allaus: 0,
-        hc: 0,
-        canvi: 0,
-        // Mentre hi ha temporada de bolets (Configuració → Boletaires), el factor
-        // val 1 per a tots els dies automàtics. Abans no el posava ningú: la
-        // casella de la fórmula només diu si compta, i el valor es quedava a 0.
-        boletaires: boletairesConfig.actiu ? 1 : 0,
-        notes: []
-      };
-      
-      // 1. ALERTES SMP - rang 0-6
-      const smpCalc = calcularSMPPonderat(data);
-      resultat.smp = smpCalc.valor;
-      resultat.smpDetall = smpCalc.detall;
-      if (smpCalc.valor > 0) {
-        resultat.notes.push(`SMP: ${smpCalc.explicacio}`);
-      }
-      
-      // 2. RISC ALLAUS (BPA) - valor màxim del dia directe (1-5)
-      // Fora de temporada es deixa a 0: vegeu l'interruptor d'allaus.
-      if (!allausConfig.desactivat && dadesCarregades.bpa && dadesCarregades.bpa.resum) {
-        const perillMax = dadesCarregades.bpa.resum.perill_maxim_numeric || 1;
-        resultat.allaus = perillMax;
-        if (perillMax >= 3) {
-          resultat.notes.push(`BPA: perill ${perillMax}/5`);
-          const zonesMax = (dadesCarregades.bpa.zones || []).filter(z => z.perill_numeric === perillMax);
-          resultat.allausDetall = {
-            zones: [...new Set(zonesMax.map(z => z.nom).filter(Boolean))],
-            situacions: [...new Set(zonesMax.map(z => z.situacio_primaria).filter(Boolean))]
-          };
-        }
-      }
-      
-      // 3. DIFICULTAT VOL HC - rang 0-2
-      // 0=vola, 1=limitació, 2=no vola
-      if (dadesCarregades.smp && dadesCarregades.smp.avisos) {
-        dadesCarregades.smp.avisos.forEach(avis => {
-          avis.dies?.forEach(dia => {
-            if (dia.dia === data) {
-              const meteor = avis.meteor?.toLowerCase() || '';
-              const esRellevant = meteor.includes('vent') || meteor.includes('neu') || meteor.includes('pluja');
-              if (!esRellevant) return;
-              dia.afectacions?.forEach(af => {
-                const nivell = af.nivell;
-                if ((meteor.includes('vent') || meteor.includes('neu')) && nivell === 'Vermell') {
-                  resultat.hc = Math.max(resultat.hc, 2);
-                } else if (nivell === 'Taronja') {
-                  resultat.hc = Math.max(resultat.hc, 1);
-                } else if ((meteor.includes('vent') || meteor.includes('neu')) && nivell === 'Groc') {
-                  resultat.hc = Math.max(resultat.hc, 1);
-                }
-              });
-            }
-          });
-        });
-        if (resultat.hc > 0) {
-          resultat.notes.push(`HC: dificultat ${resultat.hc}/2`);
-        }
-      }
-      
-      // 4. CANVI DE TEMPS - rang 0-2
-      if (dadesCarregades.canvi && dadesCarregades.canvi.resultats) {
-        const avui = dadesCarregades.canvi.data;
-        const clauDia = avui === data ? 'avui' : (data > avui ? 'dema' : null);
-        if (clauDia) {
-          const entrades = Object.values(dadesCarregades.canvi.resultats);
-          const maxNivell = entrades
-            .map(r => r[clauDia]?.nivell || 0)
-            .reduce((a, b) => Math.max(a, b), 0);
-          resultat.canvi = maxNivell;
-          if (maxNivell > 0) {
-            resultat.notes.push(`Canvi temps: nivell ${maxNivell}/2`);
-            const puntsMax = entrades.filter(r => (r[clauDia]?.nivell || 0) === maxNivell);
-            resultat.canviDetall = {
-              punts: [...new Set(puntsMax.map(r => r.punt?.nom).filter(Boolean))],
-              factors: [...new Set(puntsMax.flatMap(r => r[clauDia]?.factors || []))]
-            };
-          }
-        }
-      }
-
-      // 5. PLANS PC - rang 0-3 (0=cap, 1=prealerta, 2=alerta, 3=emergència)
-      if (dadesCarregades.planspc && dadesCarregades.planspc.plans) {
-        const ordre = { 'EMERGÈNCIA': 3, 'ALERTA': 2, 'PREALERTA': 1 };
-        let maxPla = 0;
-        dadesCarregades.planspc.plans.forEach(p => {
-          const val = ordre[(p.plafase || '').toUpperCase()] || 0;
-          if (val > maxPla) maxPla = val;
-        });
-        resultat.planspc = maxPla;
-        if (maxPla > 0) {
-          const labels = { 1: 'Prealerta', 2: 'Alerta', 3: 'Emergència' };
-          resultat.notes.push(`Plans PC: ${labels[maxPla]}`);
-        }
-      }
-      
-      return resultat;
+      return FormulaRisc.factorsDelDia(data, dadesCarregades, {
+        riscParams,
+        allausDesactivat: allausConfig.desactivat,
+        boletairesActiu: boletairesConfig.actiu,
+        smpPrecalculat: (data === localDateStr(-1) && smpAhirHistoric && smpAhirHistoric.data === data)
+          ? smpAhirHistoric : null
+      });
     }
-    
+
     // Funció per actualitzar risc automàticament quan es carreguen dades
     // Guardar i renderitzar. La pàgina de Configuració viu dins d'app-risc,
     // el mateix contenidor que renderRisc reescriu: si es dibuixa mentre
@@ -4819,6 +4657,22 @@
     // Llegeix la config desada sense confiar-hi: parteix sempre dels valors per
     // defecte i només n'agafa el que reconeix. Així una config antiga (la fórmula
     // de suma directa) no deixa forats ni valors sense sentit.
+    // Agafa d'una config desada només el que reconeix, sobre els valors per
+    // defecte: així una config antiga no deixa forats ni valors sense sentit.
+    function aplicarFormulaDesada(saved) {
+      for (const [nom, def] of Object.entries(riscFormula)) {
+        const s = saved[nom];
+        if (!s) continue;
+        def.actiu = s.actiu !== false;
+        if (def.punts && s.punts) {
+          for (const nivell of Object.keys(def.punts)) {
+            const v = parseFloat(s.punts[nivell]);
+            if (!isNaN(v)) def.punts[nivell] = v;
+          }
+        }
+      }
+    }
+
     function carregarRiscFormula() {
       try {
         const saved = JSON.parse(localStorage.getItem('riscGRAE_formula') || 'null');
@@ -4828,18 +4682,25 @@
           localStorage.removeItem('riscGRAE_formula');
           return;
         }
-        for (const [nom, def] of Object.entries(riscFormula)) {
-          const s = saved[nom];
-          if (!s) continue;
-          def.actiu = s.actiu !== false;
-          if (def.punts && s.punts) {
-            for (const nivell of Object.keys(def.punts)) {
-              const v = parseFloat(s.punts[nivell]);
-              if (!isNaN(v)) def.punts[nivell] = v;
-            }
-          }
-        }
+        aplicarFormulaDesada(saved);
       } catch(e) { logError('RiscFormula', e.message); }
+    }
+
+    // La config no és només d'aquest navegador: el backend la necessita per
+    // calcular el mateix risc a les captures, i fins ara vivia només al
+    // localStorage (com la de zones, que va estar mesos sense arribar enlloc).
+    // El localStorage queda com a reserva quan Supabase no respon.
+    async function desarConfigSupabase(camps) {
+      try {
+        const { error } = await sbClient
+          .from(TAULA_CONFIG_SMP)
+          .upsert({ id: 1, ...camps }, { onConflict: 'id' });
+        if (error) throw error;
+        return { ok: true };
+      } catch (e) {
+        logError('ConfigSupabase', e.message);
+        return { ok: false, error: e.message };
+      }
     }
 
     function guardarRiscFormula() {
@@ -4847,6 +4708,7 @@
         localStorage.setItem('riscGRAE_formula',
           JSON.stringify({ ...riscFormula, versio: RISC_FORMULA_VERSIO }));
       } catch(e) {}
+      desarConfigSupabase({ formula: riscFormula, formula_versio: RISC_FORMULA_VERSIO });
     }
 
     // ---- ALLAUS: interruptor de fora de temporada ----
@@ -4886,6 +4748,7 @@
       const el = document.getElementById('allaus-desactivat');
       if (el) allausConfig.desactivat = el.checked;
       try { localStorage.setItem(LS_ALLAUS_KEY, JSON.stringify(allausConfig)); } catch(e) {}
+      desarConfigSupabase({ allaus_desactivat: !!allausConfig.desactivat });
       const resum = document.getElementById('allaus-resum');
       if (resum) resum.textContent = resumAllausConfig();
       actualitzarRiscAuto();
@@ -4983,6 +4846,7 @@
       const dia = document.getElementById('op-nomesDia');
       if (dia) opConfig.nomesDia = dia.checked;
       guardarOpConfig();
+      desarConfigSupabase({ op_config: opConfig });
       invalidarOperativitat();
       const resum = document.getElementById('op-resum');
       if (resum) resum.textContent = resumOpConfig();

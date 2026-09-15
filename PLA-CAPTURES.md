@@ -1,7 +1,14 @@
 # Captures del risc: veure com evoluciona, no només com acaba
 
-Document de disseny. **Estat: proposta, res implementat.** Cal decidir dos punts (§4 i §5)
-abans de començar.
+Document de disseny i estat de la feina.
+
+**Fet** (15-09-2026): la taula `risc_captures` amb RLS, la fórmula compartida `formula-risc.js`
+(amb el calendari d'afluència, l'SMP ponderat, el criteri de vol dels helis i l'SMP Bombers), la
+config de la fórmula/allaus/llindars HC moguda a Supabase, `scripts/captura-risc.js` i el workflow
+`captura-risc.yml` amb el reintent.
+
+**Falta**: activar el disparador de Supabase (§4, necessita un token teu), la pestanya Historial
+nova (§7) i l'evolució de les allaus (`bpa_historic` encara s'escriu a sobre).
 
 ## 1. El problema
 
@@ -145,6 +152,36 @@ què s'executa; si ja hi ha captura d'aquella franja, no en fa cap altra.
 
 Igual que (a) però amb un servei de fora. Mateix token, una dependència més i un lloc més on mirar
 quan falli.
+
+### Com s'activa (a) — el que falta fer
+
+1. **Token de GitHub**: Settings → Developer settings → Personal access tokens → *Fine-grained*.
+   Només aquest repositori, permís **Actions: Read and write**, sense res més. Caducitat llarga.
+2. **Desar-lo a Supabase** (SQL editor):
+   ```sql
+   select vault.create_secret('ghp_…', 'github_actions_token', 'Token per disparar captures');
+   create extension if not exists pg_cron;
+   create extension if not exists pg_net;
+   ```
+3. **Programar les tres captures** (hores UTC; a l'estiu 08:15 locals són les 06:15 UTC):
+   ```sql
+   select cron.schedule('captura-mati', '15 6 * * *', $$
+     select net.http_post(
+       url := 'https://api.github.com/repos/correvents/Risc-Grae-v1/actions/workflows/captura-risc.yml/dispatches',
+       headers := jsonb_build_object(
+         'Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'github_actions_token'),
+         'Accept', 'application/vnd.github+json',
+         'User-Agent', 'supabase-cron'),
+       body := '{"ref":"main","inputs":{"franja":"mati"}}'::jsonb);
+   $$);
+   ```
+   I el mateix amb `'captura-migdia', '30 10 * * *'` (12:30 locals) i `'captura-vespre', '30 18 * * *'`
+   (20:30 locals). **A l'hivern cal sumar-hi una hora** o programar-ne dues versions.
+4. **Comprovar-ho**: `select * from cron.job;` i, després de la primera passada,
+   `select * from cron.job_run_details order by start_time desc limit 5;`.
+
+Mentre això no hi sigui, les captures les fan els crons de reserva de
+`captura-risc.yml` (00:23, 06:47 i 14:17 UTC), que arriben quan GitHub vol.
 
 **Recomanació: (a), amb (b) com a xarxa de seguretat** — els ancoratges de GitHub es queden com a
 reserva per si la crida de Supabase falla, i com que la captura és idempotent per `(dia, franja,

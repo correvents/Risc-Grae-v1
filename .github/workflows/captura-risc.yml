@@ -1,0 +1,99 @@
+name: Captura del risc
+
+# Tres captures al dia del risc d'avui i de demà, amb tot el desglossament, a
+# `risc_captures`. Serveix per veure **com evoluciona** el risc al llarg del dia:
+# `risc_historic` només en guarda l'última foto, perquè té UNIQUE (data).
+#
+# LES HORES NO LES MANA AQUEST FITXER. El cron de GitHub arriba de 2 a 7 hores
+# tard (vegeu la trampa 8 del CLAUDE.md), i una captura «de les 8:15» que cau a
+# les 13:00 no serveix per comparar dies. Qui les dispara a l'hora és Supabase
+# (`pg_cron` + `pg_net` cridant `workflow_dispatch`), que sí que és puntual:
+# vegeu PLA-CAPTURES.md §4 per al SQL.
+#
+# Els crons d'aquí són **la xarxa de seguretat**, per si la crida de Supabase
+# falla: ancorats ben aviat perquè, amb el retard, caiguin a prop de la franja.
+# Que es dupliquin no fa mal: la captura és idempotent per (dia, franja,
+# horitzó), o sigui que la segona completa la fila de la primera.
+
+on:
+  workflow_dispatch:
+    inputs:
+      franja:
+        description: 'Franja de la captura (mati, migdia, vespre, extra). Buit = per l''hora que és.'
+        type: string
+        default: ''
+  schedule:
+    - cron: '23 0 * * *'    # reserva de la captura del matí
+    - cron: '47 6 * * *'    # reserva de la del migdia
+    - cron: '17 14 * * *'   # reserva de la del vespre
+
+concurrency:
+  group: captura-risc
+  cancel-in-progress: false
+
+jobs:
+  capturar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Baixar dades i capturar (amb reintent si Meteocat no ha actualitzat)
+        env:
+          METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          FRANJA: ${{ github.event.inputs.franja }}
+        run: |
+          # Meteocat publica a hores fixes, però no sempre puntual. Si el butlletí
+          # és idèntic al de l'última captura, captura-risc.js surt amb 75: vol dir
+          # "encara no hi ha res nou". S'espera 5 minuts i s'hi torna, fins a 6
+          # vegades (mitja hora). Després es captura igualment, dient-ho: una
+          # captura que diu "aquí no hi havia res nou" val; una que no existeix, no.
+          fet=no
+          for i in $(seq 1 6); do
+            node scripts/fetch-smp.js         || true
+            node scripts/fetch-bpa.js         || true
+            node scripts/fetch-planspc.js     || true
+            node scripts/fetch-canvi-temps.js || true
+
+            if node scripts/captura-risc.js; then
+              fet=si
+              break
+            fi
+            codi=$?
+            if [ "$codi" -ne 75 ]; then
+              exit "$codi"
+            fi
+            echo "⏳ Meteocat encara no ha actualitzat ($i/6). Espero 5 minuts."
+            sleep 300
+          done
+
+          if [ "$fet" = "no" ]; then
+            echo "⚠️ Mitja hora sense butlletí nou: capturo igualment i ho deixo dit."
+            FORCA_CAPTURA=true node scripts/captura-risc.js
+          fi
+
+      - name: Commit JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "Sense canvis als JSON"
+          else
+            git commit -m "chore: dades $(date -u '+%Y-%m-%d %H:%M UTC')"
+            # El workflow de dades pot haver empès mentrestant: es reintenta amb
+            # rebase en comptes de deixar la captura sense els JSON al repositori.
+            for i in 1 2 3; do
+              git push && break
+              git pull --rebase origin main || exit 1
+            done
+          fi

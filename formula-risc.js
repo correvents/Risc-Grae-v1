@@ -694,6 +694,220 @@
     return { regions: resum, comarques: matriu };
   }
 
+
+  // ==================== ELS FACTORS D'UN DIA ====================
+  // Els factors d'un dia a partir de les dades tal com arriben (els JSON) i de
+  // la configuració. Pur: qui crida decideix què hi ha carregat i què diu la
+  // config, i per això el backend en treu exactament els mateixos valors.
+  //   dades  = { smp, bpa, canvi, planspc }
+  //   config = { riscParams, allausDesactivat, boletairesActiu, smpPrecalculat }
+  function factorsDelDia(data, dades, config) {
+  const conf = config || {};
+  dades = dades || {};
+    const resultat = {
+      smp: 0,
+      smpDetall: [],
+      allaus: 0,
+      hc: 0,
+      canvi: 0,
+      // Mentre hi ha temporada de bolets (Configuració → Boletaires), el factor
+      // val 1 per a tots els dies automàtics. Abans no el posava ningú: la
+      // casella de la fórmula només diu si compta, i el valor es quedava a 0.
+      boletaires: conf.boletairesActiu ? 1 : 0,
+      notes: []
+    };
+    
+    // 1. ALERTES SMP - rang 0-6
+    const smpCalc = conf.smpPrecalculat || ponderarSMP(dades.smp && dades.smp.avisos, data, conf.riscParams || {});
+    resultat.smp = smpCalc.valor;
+    resultat.smpDetall = smpCalc.detall;
+    if (smpCalc.valor > 0) {
+      resultat.notes.push(`SMP: ${smpCalc.explicacio}`);
+    }
+    
+    // 2. RISC ALLAUS (BPA) - valor màxim del dia directe (1-5)
+    // Fora de temporada es deixa a 0: vegeu l'interruptor d'allaus.
+    if (!conf.allausDesactivat && dades.bpa && dades.bpa.resum) {
+      const perillMax = dades.bpa.resum.perill_maxim_numeric || 1;
+      resultat.allaus = perillMax;
+      if (perillMax >= 3) {
+        resultat.notes.push(`BPA: perill ${perillMax}/5`);
+        const zonesMax = (dades.bpa.zones || []).filter(z => z.perill_numeric === perillMax);
+        resultat.allausDetall = {
+          zones: [...new Set(zonesMax.map(z => z.nom).filter(Boolean))],
+          situacions: [...new Set(zonesMax.map(z => z.situacio_primaria).filter(Boolean))]
+        };
+      }
+    }
+    
+    // 3. DIFICULTAT VOL HC - rang 0-2
+    // 0=vola, 1=limitació, 2=no vola
+    if (dades.smp && dades.smp.avisos) {
+      dades.smp.avisos.forEach(avis => {
+        avis.dies?.forEach(dia => {
+          if (dia.dia === data) {
+            const meteor = avis.meteor?.toLowerCase() || '';
+            const esRellevant = meteor.includes('vent') || meteor.includes('neu') || meteor.includes('pluja');
+            if (!esRellevant) return;
+            dia.afectacions?.forEach(af => {
+              const nivell = af.nivell;
+              if ((meteor.includes('vent') || meteor.includes('neu')) && nivell === 'Vermell') {
+                resultat.hc = Math.max(resultat.hc, 2);
+              } else if (nivell === 'Taronja') {
+                resultat.hc = Math.max(resultat.hc, 1);
+              } else if ((meteor.includes('vent') || meteor.includes('neu')) && nivell === 'Groc') {
+                resultat.hc = Math.max(resultat.hc, 1);
+              }
+            });
+          }
+        });
+      });
+      if (resultat.hc > 0) {
+        resultat.notes.push(`HC: dificultat ${resultat.hc}/2`);
+      }
+    }
+    
+    // 4. CANVI DE TEMPS - rang 0-2
+    if (dades.canvi && dades.canvi.resultats) {
+      const avui = dades.canvi.data;
+      const clauDia = avui === data ? 'avui' : (data > avui ? 'dema' : null);
+      if (clauDia) {
+        const entrades = Object.values(dades.canvi.resultats);
+        const maxNivell = entrades
+          .map(r => r[clauDia]?.nivell || 0)
+          .reduce((a, b) => Math.max(a, b), 0);
+        resultat.canvi = maxNivell;
+        if (maxNivell > 0) {
+          resultat.notes.push(`Canvi temps: nivell ${maxNivell}/2`);
+          const puntsMax = entrades.filter(r => (r[clauDia]?.nivell || 0) === maxNivell);
+          resultat.canviDetall = {
+            punts: [...new Set(puntsMax.map(r => r.punt?.nom).filter(Boolean))],
+            factors: [...new Set(puntsMax.flatMap(r => r[clauDia]?.factors || []))]
+          };
+        }
+      }
+    }
+
+    // 5. PLANS PC - rang 0-3 (0=cap, 1=prealerta, 2=alerta, 3=emergència)
+    if (dades.planspc && dades.planspc.plans) {
+      const ordre = { 'EMERGÈNCIA': 3, 'ALERTA': 2, 'PREALERTA': 1 };
+      let maxPla = 0;
+      dades.planspc.plans.forEach(p => {
+        const val = ordre[(p.plafase || '').toUpperCase()] || 0;
+        if (val > maxPla) maxPla = val;
+      });
+      resultat.planspc = maxPla;
+      if (maxPla > 0) {
+        const labels = { 1: 'Prealerta', 2: 'Alerta', 3: 'Emergència' };
+        resultat.notes.push(`Plans PC: ${labels[maxPla]}`);
+      }
+    }
+    
+    return resultat;
+  }
+  
+
+
+  // ==================== PARÀMETRES DE L'SMP (zones i pesos) ====================
+  // Els pesos per zona i el mapatge de zona Meteocat → grup. El backend els ha
+  // de llegir igual que el navegador: una zona que no hi consti desapareix del
+  // càlcul sense dir res (hi va estar l'Empordà, amb 941 avisos que no van
+  // comptar mai).
+  const RISC_PARAMS_DEFAULT = {
+    zones: {
+      'Pirineu Occidental': 1,
+      'Pirineu Oriental': 1,
+      'Costa Brava': 1,
+      'Litoral Central': 1,
+      'Plana de Lleida': 1,
+      'Camp de Tarragona': 1,
+      "Terres de l'Ebre": 1,
+      'Zona Marítima': 1,
+    },
+    // Mapeig de zona original a grup (per agrupar alertes)
+    zonesGrup: {
+      'Pirineu Occidental': 'Pirineu Occidental',
+      'Pirineu Central': 'Pirineu Occidental',
+      'Pirineu Oriental': 'Pirineu Oriental',
+      'Prepirineu': 'Pirineu Oriental',
+      'Costa Brava': 'Costa Brava',
+      'Litoral Nord': 'Costa Brava',
+      'Empordà': 'Costa Brava',
+      "Gironès i Pla de l'Estany": 'Costa Brava',
+      'Litoral Central': 'Litoral Central',
+      'Vallès': 'Litoral Central',
+      'Penedès': 'Litoral Central',
+      'Plana de Lleida': 'Plana de Lleida',
+      'Catalunya Central': 'Plana de Lleida',
+      'Camp de Tarragona': 'Camp de Tarragona',
+      'Serres de Prades i Montsant': 'Camp de Tarragona',
+      "Terres de l'Ebre": "Terres de l'Ebre",
+      'Comarca 88': 'Zona Marítima',
+      'Comarca 89': 'Zona Marítima',
+      'Comarca 90': 'Zona Marítima',
+      'Comarca 91': 'Zona Marítima',
+      'Comarca 92': 'Zona Marítima',
+      'Comarca 93': 'Zona Marítima',
+      'Comarca 94': 'Zona Marítima',
+      'Comarca 95': 'Zona Marítima',
+      'Comarca 96': 'Zona Marítima',
+      'Comarca 97': 'Zona Marítima',
+      'Comarca 98': 'Zona Marítima',
+      'Comarca 99': 'Zona Marítima',
+    },
+    periodes: {
+      '00-06': 0.3,
+      '06-12': 0.8,
+      '12-18': 1.0,
+      '18-24': 0.6,
+    },
+    nivells: {
+      'Groc': 1,
+      'Taronja': 2,
+      'Vermell': 3,
+    },
+    normalitzador: 1,  // Dividir punts totals per aquest valor per obtenir 0-6
+    maxSMP: 6,         // Valor màxim SMP
+  };
+
+  function rowToRiscParams(row, base) {
+    // Una columna que no existeixi a la taula, o que hi sigui nul·la, no ha de
+    // desactivar res: es queda el valor de base. Sense això, una zona sense
+    // columna (o una columna nova encara buida) sortia NaN i el filtre
+    // `zones[z] > 0` la donava per apagada sense que ningú l'hagués tocat.
+    const val = (v, defecte) => (v == null || isNaN(+v)) ? defecte : +v;
+    return {
+      ...base,
+      zones: {
+        ...base.zones,
+        'Pirineu Occidental': val(row.pes_pirineu_occidental, base.zones['Pirineu Occidental']),
+        'Pirineu Oriental':   val(row.pes_pirineu_oriental,   base.zones['Pirineu Oriental']),
+        'Costa Brava':        val(row.pes_emporda,            base.zones['Costa Brava']),
+        'Litoral Central':    val(row.pes_litoral_central,    base.zones['Litoral Central']),
+        'Plana de Lleida':    val(row.pes_plana_lleida,       base.zones['Plana de Lleida']),
+        'Camp de Tarragona':  val(row.pes_camp_tarragona,     base.zones['Camp de Tarragona']),
+        "Terres de l'Ebre":   val(row.pes_terres_ebre,        base.zones["Terres de l'Ebre"]),
+        'Zona Marítima':      val(row.pes_zona_maritima,      base.zones['Zona Marítima']),
+      },
+      periodes: {
+        ...base.periodes,
+        '00-06': val(row.pes_periode_00_06, base.periodes['00-06']),
+        '06-12': val(row.pes_periode_06_12, base.periodes['06-12']),
+        '12-18': val(row.pes_periode_12_18, base.periodes['12-18']),
+        '18-24': val(row.pes_periode_18_24, base.periodes['18-24']),
+      },
+      nivells: {
+        ...base.nivells,
+        'Groc':    val(row.pes_nivell_groc,    base.nivells['Groc']),
+        'Taronja': val(row.pes_nivell_taronja, base.nivells['Taronja']),
+        'Vermell': val(row.pes_nivell_vermell, base.nivells['Vermell']),
+      },
+      normalitzador: val(row.normalitzador, base.normalitzador),
+      maxSMP:        val(row.max_smp,       base.maxSMP),
+    };
+  }
+
+
   const api = {
     RISC_SOSTRE, RISC_PERILL_MAX, RISC_FORMULA_DEFAULT, RISC_FORMULA_VERSIO,
     detallarRisc, calcularRisc,
@@ -703,7 +917,8 @@
     provinciaDeBase, provinciaDeCoords, resumirOperativitat,
     REGIONS_BOMBERS, PERIODES_SMP, comarcaARegio, MARITIMES_A_COMARCA,
     riscDeAfectacio, agregarRisc,
-    matriuRiscComarques, riscComarca, valorsRegio, resumSMPBombers
+    matriuRiscComarques, riscComarca, valorsRegio, resumSMPBombers,
+    factorsDelDia, RISC_PARAMS_DEFAULT, rowToRiscParams
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;   // Node

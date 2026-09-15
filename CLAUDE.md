@@ -233,6 +233,28 @@ silenci tot el que l'esperava. Va deixar la pàgina sense targeta de risc (l'arr
 l'error queda memoritzat— i **digues-ho** (`errorOperativitat` a la targeta i a la franja de dades):
 un factor que no ha arribat no pot semblar un factor a zero.
 
+**18. Les captures del risc són append-only i no substitueixen `risc_historic`.** `risc_historic`
+té `UNIQUE (data)` i s'escriu a sobre: al final del dia només queda l'última foto i no es pot saber
+com hi ha arribat. `risc_captures` desa, tres vegades al dia, el risc d'avui i de demà amb el
+desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què es va calcular. **Cap fila no
+es toca mai**; el `UNIQUE (dia_captura, franja, horitzo)` hi és perquè un reintent completi la
+mateixa fila i no en creï una de nova. Ho fa `scripts/captura-risc.js`, que **no** calcula res pel
+seu compte: tot surt de `formula-risc.js`. Vegeu `PLA-CAPTURES.md`.
+
+**Les hores no les mana `captura-risc.yml`.** Els seus crons són la reserva; qui les dispara a
+l'hora és Supabase (`pg_cron` + `pg_net` → `workflow_dispatch`), perquè un `dispatch` per API
+arrenca de seguida i un cron de GitHub no (trampa 8). Si un dia les captures deixen d'arribar a
+l'hora, mira `select * from cron.job_run_details order by start_time desc` abans de tocar el
+workflow.
+
+**19. La configuració ja no és de cada navegador: mana Supabase.** La fórmula, l'interruptor
+d'allaus, els llindars dels helis i la temporada de boletaires es desen a
+`taula_config_alertes_smp` (`formula`, `formula_versio`, `allaus_desactivat`, `op_config`,
+`boletaires_actiu`) i el `localStorage` només és la reserva quan Supabase no respon. **És
+imprescindible per a les captures**: si el backend calculés amb els valors per defecte mentre el
+navegador en té d'editats, el risc desat no seria el que es veu. Si afegeixes un paràmetre nou que
+entri al càlcul, ha d'anar a Supabase, no només al navegador.
+
 ## Operativitat dels helicòpters (frontend)
 
 Un HC compta com a operatiu si el seu estat és `Total` **i** la meteo permet volar: cal una finestra de **≥3 hores seguides** amb ratxa ≤50 km/h i visibilitat ≥2000 m (constants `OP_RATXA_MAX`, `OP_VIS_MIN`, `OP_HORES_MIN`, via Open-Meteo per coordenades de base).
