@@ -2826,41 +2826,45 @@
     function pintarMapesSMPBombers(matriu, periode) {
       SMPB_MAPES.forEach(m => {
         const svg = document.getElementById('smpb-svg-' + m.id);
-        if (!svg) return;
-        const dia = localDateStr(m.desplacament);
-
-        const valorRegio = {};
-        if (m.vista === 'regions') {
-          REGIONS_ORDRE.forEach(r => { valorRegio[r] = agregarRisc(valorsRegio(matriu, r, dia, periode)); });
-        }
-
-        svg.querySelectorAll('path[data-codi]').forEach(el => {
-          const codi = parseInt(el.dataset.codi, 10);
-          const nom = nomComarcaLocal(codi);
-          const regio = comarcaARegio[codi];
-          const valorCom = riscComarca(matriu, codi, dia, periode);
-          const titol = el.querySelector('title');
-
-          // Territori de fora: gris sempre, però el valor de l'SMP es diu igual
-          // al tooltip — que no sigui nostre no vol dir que no hi faci mal temps.
-          if (COMARQUES_FORA_REGIO[codi]) {
-            el.setAttribute('fill', COLOR_FORA_REGIO);
-            if (titol) titol.textContent = `${COMARQUES_FORA_REGIO[codi]} · SMP ${valorCom} (${periode})`;
-            return;
-          }
-
-          const valor = (m.vista === 'regions' && regio) ? valorRegio[regio] : valorCom;
-          el.setAttribute('fill', colorRisc(valor));
-          if (titol) titol.textContent = (m.vista === 'regions' && regio)
-            ? `${regio} — risc ${valor} · ${nom}: ${valorCom} (${periode})`
-            : `${nom} — risc ${valorCom}${regio ? ' · ' + regio : ''} (${periode})`;
-        });
+        if (svg) pintarSVGComarques(svg, matriu, localDateStr(m.desplacament), periode, m.vista);
       });
 
       document.querySelectorAll('.smpb-franja').forEach(el => {
         const actiu = el.dataset.periode === periode;
         el.style.background = actiu ? '#0082d9' : '#eceff1';
         el.style.color = actiu ? '#fff' : '#37474f';
+      });
+    }
+
+    // Pinta un mapa. Separat de la seqüència de la pestanya perquè l'historial
+    // el reutilitza amb la matriu que va quedar desada a la captura: un mapa
+    // d'un dia passat s'ha de dibuixar exactament igual que el d'avui.
+    function pintarSVGComarques(svg, matriu, dia, periode, vista) {
+      const valorRegio = {};
+      if (vista === 'regions') {
+        REGIONS_ORDRE.forEach(r => { valorRegio[r] = agregarRisc(valorsRegio(matriu, r, dia, periode)); });
+      }
+
+      svg.querySelectorAll('path[data-codi]').forEach(el => {
+        const codi = parseInt(el.dataset.codi, 10);
+        const nom = nomComarcaLocal(codi);
+        const regio = comarcaARegio[codi];
+        const valorCom = riscComarca(matriu, codi, dia, periode);
+        const titol = el.querySelector('title');
+
+        // Territori de fora: gris sempre, però el valor de l'SMP es diu igual
+        // al tooltip — que no sigui nostre no vol dir que no hi faci mal temps.
+        if (COMARQUES_FORA_REGIO[codi]) {
+          el.setAttribute('fill', COLOR_FORA_REGIO);
+          if (titol) titol.textContent = `${COMARQUES_FORA_REGIO[codi]} · SMP ${valorCom} (${periode})`;
+          return;
+        }
+
+        const valor = (vista === 'regions' && regio) ? valorRegio[regio] : valorCom;
+        el.setAttribute('fill', colorRisc(valor));
+        if (titol) titol.textContent = (vista === 'regions' && regio)
+          ? `${regio} — risc ${valor} · ${nom}: ${valorCom} (${periode})`
+          : `${nom} — risc ${valorCom}${regio ? ' · ' + regio : ''} (${periode})`;
       });
     }
 
@@ -5039,6 +5043,66 @@
       return '—';
     }
     
+    // El desglossament del risc: què val cada factor i què aporta al número.
+    // **El fan servir la targeta de la portada i l'historial**, i per això rep
+    // tot el que necessita per paràmetre. Si l'historial en tingués una còpia,
+    // els dos llocs acabarien explicant de manera diferent el mateix dia — que
+    // és exactament el que ha passat sempre que s'ha duplicat alguna cosa aquí.
+    //   d = { calc, F, smp, smpMotiu, allausNiv, allausPts, allausMotiu,
+    //         allausDesactivat, afluencia, afluMotiu, opActiu, opTeDades,
+    //         opValorTxt, opMotiuTxt, opPts, canvi, canviMotiu, planspc,
+    //         boletaires, faltaFont }
+    function desglossamentHTML(d) {
+      const F = d.F || riscFormula;
+      const esBase = nom => d.calc.dominant === nom
+        ? ' <span style="font-size:0.6rem;color:#c62828;font-weight:700;">PERILL</span>'
+        : (d.calc.segonNom === nom ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;">2n · +' + formatarRisc(d.calc.suplement) + '</span>' : '');
+      const mesPts = n => n ? ` \u00b7 +${formatarRisc(n)}` : '';
+      const fOff  = on => on ? '' : 'opacity:0.45;';
+      const fMarca = on => on ? '' : ' <span style="font-size:0.6rem;color:#999;font-weight:400;">desactivat</span>';
+      const fGuio = (actiu, contingut) => actiu ? contingut : '—';
+      const motiuHtml = txt => txt ? ` · ${escapeHtml(txt)}` : '';
+      const senseDades = `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;background:#ffcdd2;color:#b71c1c;font-weight:700;">SENSE DADES</span>`;
+      return `
+    <div class="risc-breakdown">
+      <div class="risc-breakdown-title">Desglossament</div>
+      <div class="risc-breakdown-item" style="${fOff(F.smp.actiu)}">
+        <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(F.smp.actiu)}${esBase('smp')}</span>
+        ${d.faltaFont('smp') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(d.smp||0)>=5?'background:#ffebee;color:#c62828':((d.smp||0)>=3?'background:#fff3e0;color:#e65100':((d.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(F.smp.actiu, getSMPLabelRisc(d.smp||0) + motiuHtml(d.smpMotiu))}</span>`}
+        <span class="risc-breakdown-value">${!F.smp.actiu ? '—' : (d.faltaFont('smp') ? '—/6' : Math.round(d.smp||0) + '/6')}</span>
+      </div>
+      <div class="risc-breakdown-item" style="${fOff(F.allaus.actiu && !d.allausDesactivat)}">
+        <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(F.allaus.actiu)}${d.allausDesactivat ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;" title="Allaus desactivades a Configuració → Allaus BPA: compten 0">🌞 fora de temporada</span>' : ''}${esBase('allaus')}</span>
+        ${(d.faltaFont('bpa') && !d.allausDesactivat) ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${d.allausNiv>=4?'background:#ffebee;color:#c62828':(d.allausNiv>=3?'background:#fff3e0;color:#e65100':(d.allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(F.allaus.actiu, getAllausLabel(d.allausNiv) + motiuHtml(d.allausDesactivat ? '' : d.allausMotiu))}</span>`}
+        <span class="risc-breakdown-value">${!F.allaus.actiu ? '—' : ((d.faltaFont('bpa') && !d.allausDesactivat) ? '—' : d.allausNiv) + '/5' + mesPts(d.allausPts)}</span>
+      </div>
+      <div class="risc-breakdown-item" style="${fOff(F.afluencia.actiu)}">
+        <span class="risc-breakdown-label">📅 Afluència${fMarca(F.afluencia.actiu)}${d.calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${d.calc.afluenciaBruta} a ${d.calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
+        <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(d.afluencia||0)>=3?'background:#ffebee;color:#c62828':((d.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((d.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(F.afluencia.actiu, getAfluenciaLabel(d.afluencia||0) + motiuHtml(d.afluMotiu))}</span>
+        <span class="risc-breakdown-value">${!F.afluencia.actiu ? '—' : (d.calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${d.calc.afluenciaBruta}</span> ${d.calc.afluenciaEfectiva}` : Math.round(d.afluencia||0)) + '/3' + mesPts(d.calc.increments.afluencia)}</span>
+      </div>
+      <div class="risc-breakdown-item" style="${fOff(d.opActiu)}">
+        <span class="risc-breakdown-label">🚁 Operativitat${fMarca(d.opActiu)}</span>
+        <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${d.opPts>=2?'background:#ffebee;color:#c62828':(d.opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(d.opMotiuTxt)}${d.opPts>0?` · +${d.opPts}`:''}</span>
+        <span class="risc-breakdown-value">${d.opActiu ? d.opValorTxt : '—'} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
+      </div>
+      <div class="risc-breakdown-item" style="${fOff(F.canvi.actiu)}">
+        <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(F.canvi.actiu)}</span>
+        ${d.faltaFont('canvi') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(d.canvi||0)>=2?'background:#fff3e0;color:#e65100':((d.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${fGuio(F.canvi.actiu, getCanviLabel(d.canvi||0) + motiuHtml(d.canviMotiu))}</span>`}
+        <span class="risc-breakdown-value">${!F.canvi.actiu ? '—' : (d.faltaFont('canvi') ? '—' : Math.round(d.canvi||0)) + '/2' + mesPts(d.calc.increments.canvi)}</span>
+      </div>
+      <div class="risc-breakdown-item" style="opacity:0.6;">
+        <span class="risc-breakdown-label">🚨 Plans PC</span>
+        <span style="font-size:0.7rem;flex:1;text-align:center;color:#aaa;">${getPlanspcLabel(d.planspc||0)}</span>
+        <span class="risc-breakdown-value">${Math.round(d.planspc||0)}/3 <span style="font-size:0.6rem;color:#aaa;">info</span></span>
+      </div>
+      <div class="risc-breakdown-item" style="${fOff(F.boletaires.actiu)}">
+        <span class="risc-breakdown-label">🍄 Boletaires${fMarca(F.boletaires.actiu)}</span>
+        <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${fGuio(F.boletaires.actiu, (d.boletaires||0) > 0 ? 'Temporada' : '—')}</span>
+        <span class="risc-breakdown-value">${!F.boletaires.actiu ? '—' : Math.round(d.boletaires||0) + '/2' + mesPts(d.calc.increments.boletaires)}</span>
+      </div>`;
+    }
+
     function renderRisc() {
       carregarRiscEstat();
       
@@ -5151,43 +5215,17 @@
             <div class="risc-bar">
               <div class="risc-bar-fill ${bgClass}" style="width: ${Math.min(100, (risc / 6) * 100)}%${faltants.length ? ';opacity:0.3' : ''}"></div>
             </div>
-            <div class="risc-breakdown">
-              <div class="risc-breakdown-title">Desglossament</div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.smp.actiu)}">
-                <span class="risc-breakdown-label">⚠️ Alertes SMP${fMarca(riscFormula.smp.actiu)}${esBase('smp')}</span>
-                ${faltaFont('smp') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.smp||0)>=5?'background:#ffebee;color:#c62828':((dia.smp||0)>=3?'background:#fff3e0;color:#e65100':((dia.smp||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.smp.actiu, getSMPLabelRisc(dia.smp||0) + motiuHtml(smpMotiu))}</span>`}
-                <span class="risc-breakdown-value">${!riscFormula.smp.actiu ? '—' : (faltaFont('smp') ? '—/6' : Math.round(dia.smp||0) + '/6')}</span>
-              </div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.allaus.actiu && !allausConfig.desactivat)}">
-                <span class="risc-breakdown-label">❄️ Risc allaus${fMarca(riscFormula.allaus.actiu)}${allausConfig.desactivat ? ' <span style="font-size:0.6rem;color:#ef6c00;font-weight:700;" title="Allaus desactivades a Configuració → Allaus BPA: compten 0">🌞 fora de temporada</span>' : ''}${esBase('allaus')}</span>
-                ${(faltaFont('bpa') && !allausConfig.desactivat) ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${allausNiv>=4?'background:#ffebee;color:#c62828':(allausNiv>=3?'background:#fff3e0;color:#e65100':(allausNiv>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.allaus.actiu, getAllausLabel(allausNiv) + motiuHtml(allausConfig.desactivat ? '' : allausMotiu))}</span>`}
-                <span class="risc-breakdown-value">${!riscFormula.allaus.actiu ? '—' : ((faltaFont('bpa') && !allausConfig.desactivat) ? '—' : allausNiv) + '/5' + mesPts(allausPts)}</span>
-              </div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.afluencia.actiu)}">
-                <span class="risc-breakdown-label">📅 Afluència${fMarca(riscFormula.afluencia.actiu)}${calc.reduccioAfluencia > 0 ? ` <span style="font-size:0.6rem;color:#0277bd;font-weight:700;" title="Amb avisos SMP hi va menys gent: la previsió d'afluència es rebaixa de ${calc.afluenciaBruta} a ${calc.afluenciaEfectiva}">↓ mal temps</span>` : ''}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.afluencia||0)>=3?'background:#ffebee;color:#c62828':((dia.afluencia||0)>=2?'background:#fff3e0;color:#e65100':((dia.afluencia||0)>=1?'background:#fffde7;color:#f57f17':'color:#666'))}">${fGuio(riscFormula.afluencia.actiu, getAfluenciaLabel(dia.afluencia||0) + motiuHtml(afluMotiu))}</span>
-                <span class="risc-breakdown-value">${!riscFormula.afluencia.actiu ? '—' : (calc.reduccioAfluencia > 0 ? `<span style="color:#999;text-decoration:line-through;">${calc.afluenciaBruta}</span> ${calc.afluenciaEfectiva}` : Math.round(dia.afluencia||0)) + '/3' + mesPts(calc.increments.afluencia)}</span>
-              </div>
-              <div class="risc-breakdown-item" style="${fOff(opActiu)}">
-                <span class="risc-breakdown-label">🚁 Operativitat${fMarca(opActiu)}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${opPts>=2?'background:#ffebee;color:#c62828':(opPts>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${escapeHtml(opMotiuTxt)}${opPts>0?` · +${opPts}`:''}</span>
-                <span class="risc-breakdown-value">${opActiu ? opValorTxt : '—'} <span style="font-size:0.6rem;color:#aaa;">HC</span></span>
-              </div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.canvi.actiu)}">
-                <span class="risc-breakdown-label">🌦️ Canvi temps${fMarca(riscFormula.canvi.actiu)}</span>
-                ${faltaFont('canvi') ? senseDades : `<span style="font-size:0.7rem;flex:1;text-align:center;padding:0.1rem 0.3rem;border-radius:3px;${(dia.canvi||0)>=2?'background:#fff3e0;color:#e65100':((dia.canvi||0)>=1?'background:#fffde7;color:#f57f17':'color:#666')}">${fGuio(riscFormula.canvi.actiu, getCanviLabel(dia.canvi||0) + motiuHtml(canviMotiu))}</span>`}
-                <span class="risc-breakdown-value">${!riscFormula.canvi.actiu ? '—' : (faltaFont('canvi') ? '—' : Math.round(dia.canvi||0)) + '/2' + mesPts(calc.increments.canvi)}</span>
-              </div>
-              <div class="risc-breakdown-item" style="opacity:0.6;">
-                <span class="risc-breakdown-label">🚨 Plans PC</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;color:#aaa;">${getPlanspcLabel(dia.planspc||0)}</span>
-                <span class="risc-breakdown-value">${Math.round(dia.planspc||0)}/3 <span style="font-size:0.6rem;color:#aaa;">info</span></span>
-              </div>
-              <div class="risc-breakdown-item" style="${fOff(riscFormula.boletaires.actiu)}">
-                <span class="risc-breakdown-label">🍄 Boletaires${fMarca(riscFormula.boletaires.actiu)}</span>
-                <span style="font-size:0.7rem;flex:1;text-align:center;color:#666;">${fGuio(riscFormula.boletaires.actiu, (dia.boletaires||0) > 0 ? 'Temporada' : '—')}</span>
-                <span class="risc-breakdown-value">${!riscFormula.boletaires.actiu ? '—' : Math.round(dia.boletaires||0) + '/2' + mesPts(calc.increments.boletaires)}</span>
-              </div>
+            ${desglossamentHTML({
+              calc, F: riscFormula,
+              smp: dia.smp, smpMotiu,
+              allaus: dia.allaus, allausNiv, allausPts, allausMotiu,
+              allausDesactivat: allausConfig.desactivat,
+              afluencia: dia.afluencia, afluMotiu,
+              opActiu, opTeDades, opValorTxt, opMotiuTxt, opPts,
+              canvi: dia.canvi, canviMotiu,
+              planspc: dia.planspc, boletaires: dia.boletaires,
+              faltaFont
+            })}
             </div>
           </div>
         `;
@@ -8602,20 +8640,186 @@
         </div>`;
     }
 
+    // La captura que s'està mirant en detall, i la franja horària dels mapes.
+    let histCapturaSel = null;
+    let histFranjaSMPB = '12-18';
+    let histCaptures = [];
+
+    function triarCapturaHist(id) {
+      histCapturaSel = id;
+      const cont = document.getElementById('hist-contingut');
+      if (cont) renderHistRisc(cont);
+    }
+
+    function triarFranjaHist(p) {
+      histFranjaSMPB = p;
+      const c = histCaptures.find(x => x.id === histCapturaSel);
+      if (c) { pintarBombersHistoric(c); marcarFranjaHist(); }
+    }
+
+    function marcarFranjaHist() {
+      document.querySelectorAll('.histb-franja').forEach(el => {
+        const actiu = el.dataset.periode === histFranjaSMPB;
+        el.style.background = actiu ? '#0082d9' : '#eceff1';
+        el.style.color = actiu ? '#fff' : '#37474f';
+      });
+    }
+
+    // La matriu que esperen els mapes, refeta del que va quedar desat a la
+    // captura. Per això la captura desa les comarques i no només les regions:
+    // amb les regions soles es pot fer la taula, però no el mapa.
+    function matriuDesDeCaptura(c) {
+      const comarques = (c.smp_bombers && c.smp_bombers.comarques) || {};
+      const matriu = {};
+      for (const [codi, info] of Object.entries(comarques)) {
+        matriu[codi] = { nom: info.nom, dies: { [c.dia_objectiu]: info.franges || {} } };
+      }
+      return matriu;
+    }
+
+    async function pintarBombersHistoric(c) {
+      if (!c.smp_bombers || !c.smp_bombers.comarques) return;
+      await carregarGeoComarques();
+      const matriu = matriuDesDeCaptura(c);
+      for (const vista of ['comarques', 'regions']) {
+        const cont = document.getElementById('histb-' + vista);
+        if (!cont) continue;
+        if (!cont.querySelector('svg')) cont.innerHTML = svgComarques('hist-' + vista);
+        const svg = document.getElementById('smpb-svg-hist-' + vista);
+        if (svg) pintarSVGComarques(svg, matriu, c.dia_objectiu, histFranjaSMPB, vista);
+      }
+    }
+
+    // El desglossament d'una captura, amb la mateixa funció que la portada:
+    // el que es va desar s'ha de poder llegir igual que es llegia aquell dia.
+    function desglossamentCaptura(c) {
+      const F = c.formula_config || RISC_FORMULA_DEFAULT;
+      const det = c.desglossament || {};
+      const opDetall = c.operativitat_detall || [];
+      const opBaixes = opDetall.filter(h => !h.operatiu);
+      const fonts = c.fonts_estat || {};
+      return desglossamentHTML({
+        calc: det, F,
+        smp: c.smp,
+        smpMotiu: [...new Set((c.smp_detall || []).flatMap(x => x.meteors || []))].join(', '),
+        allaus: c.allaus, allausNiv: c.allaus,
+        allausPts: +((F.allaus && F.allaus.punts && F.allaus.punts[c.allaus]) ?? 0),
+        allausMotiu: ((c.allaus_detall || {}).situacions || []).join(', '),
+        allausDesactivat: false,
+        afluencia: c.afluencia, afluMotiu: det.afluenciaMotiu || '',
+        opActiu: !!(F.operativitat && F.operativitat.actiu),
+        opTeDades: opDetall.length > 0,
+        opValorTxt: opDetall.length ? `${c.operativitat}/${opDetall.length}` : '—',
+        opMotiuTxt: !opDetall.length ? 'sense dades'
+          : opBaixes.length ? opBaixes.map(h => `${h.nom}: ${h.motiu}`).join(' · ') : 'Tots operatius',
+        opPts: (det.increments || {}).operativitat || 0,
+        canvi: c.canvi,
+        canviMotiu: ((det.canviDetall || {}).factors || []).slice(0, 2).join(', '),
+        planspc: c.planspc, boletaires: c.boletaires,
+        faltaFont: clau => fonts[clau] && fonts[clau].hi_es === false
+      });
+    }
+
+    // Tria de captura: totes les d'ahir i les d'avui, la més nova marcada.
+    function selectorCaptures(captures) {
+      const perDia = {};
+      for (const c of captures) (perDia[c.dia_captura] = perDia[c.dia_captura] || []).push(c);
+      const dies = Object.keys(perDia).sort();
+      return `
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center;margin-bottom:0.6rem;">
+          <span style="font-size:0.78rem;color:#888;">Captura:</span>
+          ${dies.map(dia => `
+            <span style="display:flex;gap:0.25rem;align-items:center;">
+              <span style="font-size:0.72rem;color:#aaa;">${formatRiscDate(dia)}</span>
+              ${perDia[dia].sort((a, b) => new Date(a.capturat_at) - new Date(b.capturat_at)).map(c => {
+                const sel = c.id === histCapturaSel;
+                const f = FRANGES_CAPTURA.find(x => x.id === c.franja) || { etiqueta: c.franja };
+                return `<button onclick="triarCapturaHist(${c.id})"
+                  style="padding:0.2rem 0.5rem;border:1px solid ${sel ? '#b71c1c' : '#ddd'};border-radius:5px;cursor:pointer;
+                         background:${sel ? '#b71c1c' : '#fff'};color:${sel ? '#fff' : '#444'};font-size:0.74rem;font-weight:${sel ? '700' : '500'};">
+                  ${f.etiqueta} ${horaCaptura(c)}</button>`;
+              }).join('')}
+            </span>`).join('')}
+        </div>`;
+    }
+
+    function blocDetallCaptura(c) {
+      const f = FRANGES_CAPTURA.find(x => x.id === c.franja) || { etiqueta: c.franja };
+      const regions = (c.smp_bombers && c.smp_bombers.regions) || {};
+      const periodes = (c.smp_bombers && c.smp_bombers.periodes) || ['00-06', '06-12', '12-18', '18-00'];
+      const teBombers = Object.keys(regions).length > 0;
+
+      const taulaBombers = !teBombers ? '' : `
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-bottom:0.5rem;">
+          <thead><tr><th style="text-align:left;padding:0.25rem 0.5rem;font-size:0.72rem;color:#888;">Regió</th>
+            ${periodes.map(p => `<th style="padding:0.25rem;font-size:0.72rem;color:#555;">${p}</th>`).join('')}
+            <th style="padding:0.25rem;font-size:0.72rem;color:#555;">Dia</th></tr></thead>
+          <tbody>
+            ${Object.entries(regions).map(([reg, v]) => `
+              <tr><td style="padding:0.25rem 0.5rem;border-top:1px solid #eee;">${escapeHtml(reg)}</td>
+                ${periodes.map(p => {
+                  const val = v[p] || 0;
+                  return `<td style="text-align:center;padding:0.25rem;border-top:1px solid #eee;background:${colorRisc(val)};color:${textSobreRisc(val)};">${val}</td>`;
+                }).join('')}
+                <td style="text-align:center;padding:0.25rem;border-top:1px solid #eee;font-weight:700;background:${colorRisc(v.dia || 0)};color:${textSobreRisc(v.dia || 0)};">${v.dia || 0}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`;
+
+      const mapes = !teBombers ? '' : `
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin:0.4rem 0;">
+          ${periodes.map(p => `<button class="histb-franja" data-periode="${p}" onclick="triarFranjaHist('${p}')"
+            style="padding:0.2rem 0.55rem;border:none;border-radius:5px;cursor:pointer;font-size:0.74rem;background:#eceff1;color:#37474f;">${p}</button>`).join('')}
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <div style="flex:1;min-width:260px;">
+            <div style="font-size:0.72rem;color:#888;margin-bottom:0.2rem;">Per comarca</div>
+            <div id="histb-comarques"></div>
+          </div>
+          <div style="flex:1;min-width:260px;">
+            <div style="font-size:0.72rem;color:#888;margin-bottom:0.2rem;">Per regió d'emergència</div>
+            <div id="histb-regions"></div>
+          </div>
+        </div>`;
+
+      return `
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.7rem 0.85rem;margin-bottom:0.75rem;">
+          <div style="font-weight:700;font-size:0.92rem;margin-bottom:0.1rem;">
+            🔍 ${f.etiqueta} del ${formatRiscDate(c.dia_captura)} · ${horaCaptura(c)}
+            <span style="font-weight:400;color:#888;font-size:0.8rem;">
+              — risc per al ${formatRiscDate(c.dia_objectiu)}${c.horitzo === 'dema' ? ' (l\'endemà)' : ''}
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.6rem;margin:0.35rem 0 0.5rem;">
+            <span class="${getRiscColorClass(c.risc)}" style="font-size:2rem;font-weight:800;line-height:1;">${c.risc}</span>
+            <span class="${getRiscColorClass(c.risc)}" style="font-size:0.8rem;font-weight:700;">${getRiscLabel(c.risc)}</span>
+            ${c.dades_completes === false ? '<span style="font-size:0.7rem;color:#e65100;font-weight:700;background:#fff3e0;padding:0.1rem 0.4rem;border-radius:4px;">INCOMPLET</span>' : ''}
+            <span style="margin-left:auto;font-size:0.7rem;color:#aaa;">fórmula v${c.formula_versio ?? '?'}</span>
+          </div>
+          <div class="risc-card" style="box-shadow:none;border:none;padding:0;margin:0;">
+            ${desglossamentCaptura(c)}
+          </div>
+          ${teBombers ? `<div style="margin-top:0.7rem;border-top:1px solid #eee;padding-top:0.5rem;">
+            <div style="font-weight:700;font-size:0.88rem;margin-bottom:0.3rem;">🔥 SMP Bombers d'aquella captura</div>
+            ${taulaBombers}${mapes}
+          </div>` : ''}
+        </div>`;
+    }
+
     async function renderHistRisc(cont) {
       try {
+        const ahir = offsetData(histDataActiva, -1);
         const { data, error } = await sbClient
           .from('risc_captures')
           .select('*')
-          .or(`dia_captura.eq.${histDataActiva},dia_objectiu.eq.${histDataActiva}`)
+          .or(`dia_captura.in.(${ahir},${histDataActiva}),dia_objectiu.eq.${histDataActiva}`)
           .order('capturat_at');
         if (error) throw error;
 
         const captures = data || [];
+        histCaptures = captures;
         const delDia = captures.filter(c => c.dia_captura === histDataActiva);
         if (!delDia.length) {
-          // Dia anterior a les captures (o dia sense cap): s'ensenya el que hi ha
-          // i es diu per què no hi ha més.
           return renderHistRiscAntic(cont, `
             <div style="margin:0 1rem;padding:0.5rem 0.7rem;background:#fff3e0;border-radius:6px;color:#e65100;font-size:0.8rem;">
               📸 D'aquest dia no hi ha captures: només la foto final que es desava a <code>risc_historic</code>,
@@ -8623,8 +8827,19 @@
             </div>`);
         }
 
+        // Les d'ahir i les d'avui, per poder-les comparar. La tria per defecte és
+        // la més nova: quan s'obre l'historial, el que interessa és l'última foto.
+        const perTriar = captures
+          .filter(c => c.horitzo === 'avui' && (c.dia_captura === histDataActiva || c.dia_captura === ahir))
+          .sort((a, b) => new Date(a.capturat_at) - new Date(b.capturat_at));
+        if (!perTriar.some(c => c.id === histCapturaSel)) {
+          histCapturaSel = perTriar.length ? perTriar[perTriar.length - 1].id : null;
+        }
+        const seleccionada = perTriar.find(c => c.id === histCapturaSel);
+
         const avuiCaps = delDia.filter(c => c.horitzo === 'avui');
         const demaCaps = delDia.filter(c => c.horitzo === 'dema');
+        const ahirCaps = captures.filter(c => c.dia_captura === ahir && c.horitzo === 'avui');
         const perAquestDia = captures.filter(c => c.dia_objectiu === histDataActiva);
         const demaData = demaCaps.length ? demaCaps[0].dia_objectiu : offsetData(histDataActiva, 1);
 
@@ -8634,12 +8849,16 @@
             ${blocPrevisio(perAquestDia, histDataActiva)}
             ${avuiCaps.length ? blocHoritzo('El risc d\'aquell mateix dia', histDataActiva, avuiCaps) : ''}
             ${demaCaps.length ? blocHoritzo('El que es preveia per a l\'endemà', demaData, demaCaps) : ''}
-            ${blocSMPBombers(avuiCaps)}
+            ${ahirCaps.length ? blocHoritzo('El dia abans', ahir, ahirCaps) : ''}
+            ${perTriar.length ? selectorCaptures(perTriar) : ''}
+            ${seleccionada ? blocDetallCaptura(seleccionada) : ''}
             <div style="font-size:0.72rem;color:#999;">
               Cada captura és la foto de les dades en aquell moment, amb la fórmula que hi havia.
               No se n'escriu mai cap a sobre: si un dia falta, és que no es va arribar a fer.
             </div>
           </div>`;
+
+        if (seleccionada) { await pintarBombersHistoric(seleccionada); marcarFranjaHist(); }
       } catch (e) {
         cont.innerHTML = errorHistorial(e.message);
       }
