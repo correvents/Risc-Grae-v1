@@ -42,6 +42,26 @@ altre camí de l'API (consulta d'episodi per codi, pre-alertes), i la documentac
 També caldrà decidir com es diu a la pantalla, perquè ara mateix un 0 per manca d'episodi obert té
 exactament la mateixa cara que un 0 de bon temps — que és justament el que la trampa 12 no vol.
 
+**Confirmat l'endemà, i amb el preu mesurat.** El 16-09 l'episodi ja era obert i l'API va passar de
+0 a **8 avisos**, amb taronges a mig país. Les captures ensenyen el que va costar la diferència, per
+al **mateix dia objectiu** (16-09):
+
+| quan es va calcular | risc | SMP |
+| --- | --- | --- |
+| 15-09 18:15 | 1 | 0 |
+| 15-09 19:01 (vespre) | **0** | **0** |
+| 16-09 04:56 (matí) | **3** | **3** |
+| 16-09 10:30 (migdia) | **4** | **4** |
+
+O sigui: **al vespre es donava un 0 per a un dia que va ser un 4**, i tot el salt és de l'SMP. Els
+avisos ja eren públics; el que faltava era que l'episodi s'obrís. Això és el que cal tenir al cap
+per decidir si val la pena anar a buscar l'altre camí de l'API: la previsió del vespre —que és la
+que serveix per planificar l'endemà— és justament la que més se'n ressent.
+
+I val la pena adonar-se que **això només es veu perquè les captures ja funcionaven**: amb
+`risc_historic` sol hi hauria el 4 final i el 0 del vespre s'hauria perdut. És exactament per a
+això que es van fer.
+
 ## 2026-09-15 — Ja hi ha captures de veritat: el secret portava un salt de línia enmig
 
 **`risc_captures` ha deixat d'estar buida.** Les dues primeres files hi són:
