@@ -209,6 +209,12 @@ function processarSMP(dades) {
       const avisS = {
         meteor, estat: avis.estat,
         dataInici: avis.dataInici || null, dataFi: avis.dataFi || null,
+        // **Quan Meteocat va publicar aquest avís.** És la peça que permet
+        // saber cada quant s'actualitza de veritat sense haver de punxar l'API
+        // més sovint: cada consulta ja porta l'hora del que estem llegint.
+        // Meteocat ho escriu amb una sola `s` (`dataEmisio`); s'accepten les
+        // dues grafies per si algun dia ho corregeixen.
+        dataEmisio: avis.dataEmisio || avis.dataEmissio || null,
         comentari: avis.comentari ? avis.comentari.replace(/\n/g, ' ') : "",
         dies: []
       };
@@ -244,9 +250,17 @@ function processarSMP(dades) {
   return resultat;
 }
 
+// L'emissió compta com a canvi, a posta. Meteocat pot tornar a publicar el
+// mateix contingut amb una hora d'emissió nova, i abans això passava de llarg:
+// la fila no s'escrivia i la republicació no quedava enlloc. Com que el que
+// volem saber és **cada quant publiquen**, una emissió nova és precisament
+// l'esdeveniment que interessa, encara que els avisos diguin el mateix.
+// Costa alguna fila de més a `smp_historic`; recuperar el que no s'ha desat no
+// es pot.
 function hasChanged(nou, anterior) {
   if (!anterior) return true;
-  const key = d => JSON.stringify((d.avisos || []).map(a => ({ meteor: a.meteor, estat: a.estat, dies: a.dies })));
+  const key = d => JSON.stringify((d.avisos || []).map(a =>
+    ({ meteor: a.meteor, estat: a.estat, dataEmisio: a.dataEmisio, dies: a.dies })));
   return key(nou) !== key(anterior);
 }
 
@@ -258,6 +272,7 @@ function toRows(dades) {
         rows.push({
           data_consulta: dades.dataConsulta,
           data_inici: avis.dataInici || null, data_fi: avis.dataFi || null,
+          data_emisio: avis.dataEmisio || null,
           meteor: avis.meteor, estat: avis.estat, comentari: avis.comentari || '',
           dia: diaObj.dia, zona: af.zona, nivell: af.nivell,
           llindar: af.llindar || '', periodes: af.periodes || [],
