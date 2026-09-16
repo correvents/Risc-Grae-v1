@@ -1644,10 +1644,58 @@
     // mirant, cada quart d'hora.
     const REFRESC_MINUTS = 15;
 
+    // Les hores (de Madrid) en què la ingesta publica dades noves. Han de
+    // coincidir amb els jobs `ingesta-*` de `pg_cron`, que disparen uns minuts
+    // abans per deixar marge al runner i a GitHub Pages.
+    //
+    // **Per què no n'hi ha prou amb els 15 minuts.** Amb només el rellotge, una
+    // pestanya que hagués baixat a les 10:40 no tornaria a mirar fins a les
+    // 10:55, o sigui que a les 10:50 —l'hora en què hem promès que hi serien—
+    // encara ensenyaria les d'abans. Amb els ancoratges, si l'última descàrrega
+    // és anterior a l'últim que ha passat, es torna a baixar encara que faci
+    // dos minuts.
+    const ANCORATGES_MADRID = ['06:50', '10:50', '14:50', '20:30'];
+
+    // Quan va passar l'últim ancoratge, en ms. `null` si avui encara no n'ha
+    // passat cap. Es mira l'hora de **Madrid**, no la del navegador: els
+    // ancoratges són els de Meteocat i els crons, i el dispositiu pot estar en
+    // un altre fus. Si l'`Intl` amb fus no hi fos, es torna `null` i queda el
+    // refresc per rellotge de tota la vida.
+    function ultimAncoratge() {
+      try {
+        const ara = new Date();
+        const parts = new Intl.DateTimeFormat('ca-ES', {
+          timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit', hour12: false
+        }).formatToParts(ara);
+        const hora = +parts.find(p => p.type === 'hour').value;
+        const min  = +parts.find(p => p.type === 'minute').value;
+        const araMin = hora * 60 + min;
+        let quan = null;
+        for (const a of ANCORATGES_MADRID) {
+          const [h, m] = a.split(':').map(Number);
+          const ancMin = h * 60 + m;
+          if (ancMin > araMin) continue;
+          const t = ara.getTime() - (araMin - ancMin) * 60000;
+          if (quan === null || t > quan) quan = t;
+        }
+        return quan;
+      } catch (e) {
+        return null;
+      }
+    }
+
     function minutsDesDeLaDescarrega() {
       const moments = Object.values(estatFonts).map(e => e.baixat).filter(Boolean);
       if (!moments.length) return Infinity;
       return (Date.now() - Math.min(...moments)) / 60000;
+    }
+
+    // Hi ha alguna font baixada abans de l'últim ancoratge? Llavors el que es
+    // veu és d'abans de la publicació d'aquella hora.
+    function hiHaDadesDAbansDelAncoratge() {
+      const anc = ultimAncoratge();
+      if (anc === null) return false;
+      return Object.values(estatFonts).some(e => e.baixat && e.baixat < anc);
     }
 
     function refrescarSiCal() {
@@ -1657,7 +1705,9 @@
       if (riscState.today && riscState.today.data !== getRiscDateString(0)) {
         if (!document.getElementById('pagina-parametres')) renderRisc();
       }
-      if (minutsDesDeLaDescarrega() >= REFRESC_MINUTS) recarregarTotesLesDades();
+      if (minutsDesDeLaDescarrega() >= REFRESC_MINUTS || hiHaDadesDAbansDelAncoratge()) {
+        recarregarTotesLesDades();
+      }
     }
 
     document.addEventListener('visibilitychange', refrescarSiCal);

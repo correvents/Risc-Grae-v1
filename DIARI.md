@@ -8,6 +8,57 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-16 — Hores garantides: 06:50, 10:50, 14:50 i 20:30
+
+Demanat: que **a aquestes hores la web tingui les dades, amb certesa**. No una estimació: certesa.
+
+**On era el coll d'ampolla.** No a la cau del navegador (els JSON ja porten `?t=`) ni a GitHub Pages:
+
+| | |
+| --- | --- |
+| `data_diari.yml` | commiteja en ~25 s, però els seus crons són de GitHub → **2-7 h de retard** |
+| `captura-risc.yml` | arrenca puntual, però **el commit va després del bucle de reintents** |
+
+Mesurat aquell mateix matí: l'ancoratge era a les 06:15:14 i els JSON es van publicar a les
+**06:46:21** — 31 minuts després.
+
+**La solució no va ser un workflow nou.** `data_diari.yml` ja fa exactament el que cal; el que
+estava malament era **qui el dispara**. Ara també el dispara `pg_cron` de Supabase, amb vuit jobs
+`ingesta-*` (estiu i hivern) ancorats uns minuts abans de cada hora objectiu i escalonats respecte
+de les captures.
+
+**Provat en producció la mateixa nit:**
+
+```
+18:20:01  →  data_diari (dispatch de pg_cron)  →  18:20:28 publicat   (27 s)
+18:30:01  →  captura                            →  18:30:31 desada    (30 s)
+```
+
+**Les tres peces de fiabilitat que hi van amb això:**
+
+1. **El job ja no menteix quan una font cau.** Els cinc passos porten `continue-on-error` —hi són a
+   posta— però deixaven la passada **en verd**. Ara cada pas té `id` i un pas final la tanca en
+   vermell dient quines han fallat, després d'haver desat el que sí que ha arribat.
+2. **La captura tampoc.** Els noms dels `fetch-*` fallats van per `FONTS_KO`, es marquen amb
+   `ha_fallat` i la captura es desa com a **incompleta** (que l'Historial ja pinta). Cada font hi
+   porta `edat_min`.
+3. **L'app es refresca per ancoratge, no només per rellotge.** Amb els 15 minuts sols, una pestanya
+   que hagués baixat a les 10:40 no tornava a mirar fins a les 10:55. `ANCORATGES_MADRID` +
+   `hiHaDadesDAbansDelAncoratge()` fan que torni a baixar si la seva última descàrrega és anterior a
+   l'últim ancoratge passat.
+
+**Una dada nova que obliga a vigilar.** La captura del vespre va portar
+`meteocat_emissio = 20:20 de Madrid` — **més tard que tota la finestra documentada** (17:20–19:00).
+La captura de les 20:30 la va enganxar per deu minuts. O sigui que la finestra del vespre va com a
+mínim de les 17:22 a les 20:20, i **l'ancoratge de les 20:30 té menys marge del que semblava**. Amb
+una setmana de `data_emisio` es podrà decidir amb números si cal moure'l més tard.
+
+**Què queda:**
+
+- Vigilar si l'emissió del vespre passa de les 20:30 algun dia.
+- Quan hi hagi episodi obert, valorar passar a consultar cada hora de 06 a 23.
+- La quota de peticions del pla de Meteocat continua sent desconeguda.
+
 ## 2026-09-16 — Quan publica Meteocat de debò, i per què els ancoratges anaven malament
 
 Demanat: mesurar cada quant s'actualitza l'SMP per decidir cada quant s'ha de consultar.
