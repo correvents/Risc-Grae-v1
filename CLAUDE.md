@@ -161,7 +161,9 @@ com les captures les dispara `pg_cron` amb `workflow_dispatch` (`pg_net` → l'A
 token al Vault). Arriba **al segon** i la passada publica en menys de mig minut: mesurat, el dispatch
 de les 18:20:01 tenia els JSON al repositori a les 18:20:28.
 
-Hi ha **catorze jobs**, estiu i hivern de cadascun: sis `captura-*` i vuit `ingesta-*`. Es miren amb
+Hi ha **setze jobs**, estiu i hivern de cadascun: vuit `captura-*` i vuit `ingesta-*`. Cada captura
+va **10 minuts darrere de la seva ingesta** (06:45→06:50, 10:40→10:50, 14:45→14:50, 20:20→20:30 de
+Madrid), perquè capturi el que s'acaba de baixar i no el de la passada d'abans. Es miren amb
 `select jobname, schedule, active from cron.job order by jobname` i l'historial amb
 `select * from cron.job_run_details order by start_time desc`.
 
@@ -350,11 +352,33 @@ un factor que no ha arribat no pot semblar un factor a zero.
 
 **18. Les captures del risc són append-only i no substitueixen `risc_historic`.** `risc_historic`
 té `UNIQUE (data)` i s'escriu a sobre: al final del dia només queda l'última foto i no es pot saber
-com hi ha arribat. `risc_captures` desa, tres vegades al dia, el risc d'avui i de demà amb el
+com hi ha arribat. `risc_captures` desa, **quatre vegades al dia**, el risc d'avui i de demà amb el
 desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què es va calcular. **Cap fila no
 es toca mai**; el `UNIQUE (dia_captura, franja, horitzo)` hi és perquè un reintent completi la
 mateixa fila i no en creï una de nova. Ho fa `scripts/captura-risc.js`, que **no** calcula res pel
 seu compte: tot surt de `formula-risc.js`. Vegeu `PLA-CAPTURES.md`.
+
+**Les franges són quatre i els talls de `diaIFranja()` han d'aïllar-les.** `matinada` · `mati` ·
+`migdia` · `vespre`, una per ancoratge (06:50 · 10:50 · 14:50 · 20:30). Quan n'hi havia tres, el tall
+del matí era `hora < 11`: afegir-hi la captura de les 06:50 hauria fet que les dues primeres del dia
+caiguessin totes dues a `mati` i, amb el `UNIQUE (dia_captura, franja, horitzo)`, **la segona hauria
+esborrat la primera sense dir res**. Els noms de les tres velles es mantenen perquè les files ja
+desades continuïn volent dir el mateix. La llista **`FRANGES_CAPTURA` de l'`index.html` ha de portar
+els mateixos identificadors i en el mateix ordre**: és l'ordre de les columnes de l'historial i, si
+un identificador no hi consta, aquella captura no troba columna.
+
+**L'historial les ensenya totes vuit en una sola taula.** Quatre columnes de la vigília (horitzó
+`dema`) i quatre del mateix dia (horitzó `avui`), en ordre, perquè l'evolució es llegeixi d'esquerra
+a dreta. Les franges sense captura hi surten buides a posta: si s'amaguessin, un dia amb tres
+captures es veuria igual que un dia amb quatre. Sota el valor de cada factor hi va **el que aquell
+factor suma de veritat** (`aportacioFactor`), perquè cap factor no suma el seu valor tal qual i sense
+dir-ho la taula enganya: unes allaus a «1/5» semblen sumar 1 quan en sumen 0.
+
+**La captura desa també els interruptors de temporada** (`desglossament.allausDesactivat` i
+`.boletairesActiu`). Sense això, una captura amb `allaus: 1` no es distingeix d'un dia amb
+l'interruptor posat —que donaria 0— i l'historial ensenyava «1/5» sense poder dir si allò comptava.
+Les captures anteriors al 17-09-2026 no en porten constància i es llegeixen com a actives, que és el
+que el backend feia llavors.
 
 **Les hores no les mana `captura-risc.yml`.** Els seus crons són la reserva; qui les dispara a
 l'hora és Supabase (`pg_cron` + `pg_net` → `workflow_dispatch`), perquè un `dispatch` per API
@@ -366,7 +390,9 @@ workflow.
 20:30 suposant que eren les de Meteocat. Amb `dataEmisio` desat (trampa 11 ter) es va poder mirar, i
 les emissions reals cauen en **dues** finestres: **09:30–10:30** i **17:20–19:00** de Madrid. La del
 matí, doncs, preguntava **dues hores abans** que publiquessin: sempre agafava el butlletí del dia
-abans i cremava els 30 minuts sencers de reintents. Moguda a les **10:45**.
+abans i cremava els 30 minuts sencers de reintents. Moguda a les **10:50**, que és l'ancoratge de la
+ingesta del matí: les captures van a les mateixes hores que les passades de dades (06:50 · 10:50 ·
+14:50 · 20:30) perquè capturin el que s'acaba de baixar i no el de la passada d'abans.
 
 La del vespre es queda a les **20:30** a posta: per a una captura, **anar tard no fa mal i anar
 d'hora sí**. Amb les emissions arribant fins a les 18:53, ancorar a les 19:15 deixaria vint minuts de
@@ -387,6 +413,23 @@ d'allaus, els llindars dels helis i la temporada de boletaires es desen a
 imprescindible per a les captures**: si el backend calculés amb els valors per defecte mentre el
 navegador en té d'editats, el risc desat no seria el que es veu. Si afegeixes un paràmetre nou que
 entri al càlcul, ha d'anar a Supabase, no només al navegador.
+
+**I el camí de pujada és tan necessari com el de baixada.** Quan la config va passar a Supabase es va
+escriure només la baixada: el que ja hi havia desat al `localStorage` no hi va pujar mai i les
+columnes es van quedar a `null`. És exactament el cas que la trampa volia evitar, però al revés i
+sense veure's — la pantalla calculant amb la config bona i el backend amb els valors per defecte. Va
+passar amb l'interruptor d'allaus: apagat al navegador des de l'estiu, `allaus_desactivat` a `null`,
+i les captures desant `allaus: 1` amb el perill de la primavera congelat al `bpa_latest.json`.
+
+Ara `migrarConfigCapAmunt(data)` puja, en carregar la config, el que compleix **dues** condicions: que
+a Supabase el camp sigui `null` **i** que aquest dispositiu tingui la preferència desada de veritat al
+`localStorage`. La segona no és un detall: sense ella, el primer navegador que obrís l'app pujaria els
+valors per defecte i taparia per sempre la preferència del company que sí que l'havia posada, i amb la
+fórmula congelaria a Supabase uns punts per defecte que després no es podrien canviar des del codi. Un
+dispositiu que no té res a dir, no diu res. L'excepció és una `formula` amb una `formula_versio` que
+no és la d'ara — aquesta banda la llença per versió, però el backend la llegeix igualment i calcularia
+amb uns punts que aquí ja no volen dir el mateix. Si la pujada falla, es diu a la franja de dades
+(`configDivergent`): mentre duri, el risc desat no és el que es veu.
 
 ## Operativitat dels helicòpters (frontend)
 

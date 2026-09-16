@@ -8,6 +8,89 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — Quatre captures, vuit columnes, i la config que no havia pujat mai
+
+Demanat: veure a l'Historial **les quatre prediccions de la vigília i les quatre del mateix dia en
+columnes consecutives**, saber **què suma cada factor** a més del seu valor, i entendre per què les
+allaus hi surten a «1/5» si estan desactivades.
+
+### 1. Quatre captures al dia
+
+Hi havia tres franges (`mati`, `migdia`, `vespre`) i quatre ancoratges d'ingesta. Les captures
+anaven per lliure a 10:45 i 20:30, o sigui que les vuit columnes no existien: com a molt sis.
+
+Ara hi ha **quatre jobs de captura per temporada**, cadascun **10 minuts darrere de la seva
+ingesta** (06:50 · 10:50 · 14:50 · 20:30 de Madrid), perquè capturi el que s'acaba de baixar. Els
+jobs de `pg_cron` passen de catorze a **setze**.
+
+**El parany, trobat abans de publicar-ho.** El tall de franja del matí era `hora < 11`: afegir-hi la
+captura de les 06:50 hauria fet que les dues primeres del dia caiguessin totes dues a `mati` i, amb
+el `UNIQUE (dia_captura, franja, horitzo)`, **la segona hauria esborrat la primera sense dir res**.
+Els talls de `diaIFranja()` es van refer per aïllar cada ancoratge i la franja nova és `matinada`.
+Els tres noms vells es mantenen perquè les files ja desades continuïn volent dir el mateix.
+
+### 2. Les vuit prediccions en una taula
+
+L'historial tenia **tres taules** —el mateix dia, l'endemà, el dia abans— i per veure l'evolució
+calia saltar d'una a l'altra i quadrar hores pel cap. Ara n'hi ha **una de vuit columnes**: quatre de
+la vigília (horitzó `dema`) i quatre del mateix dia (horitzó `avui`), en ordre, amb capçalera de dos
+pisos i les fletxes de canvi entre columna i columna.
+
+Les franges **sense captura hi surten buides a posta**. Si s'amaguessin, un dia amb tres captures es
+veuria igual que un dia amb quatre, i justament el que volem saber és si alguna no s'ha fet.
+
+També es poden **obrir en detall les vuit**. Abans el selector només oferia les d'horitzó `avui`: el
+que s'havia dit la vigília es veia a la taula però no es podia desplegar.
+
+Retirats `blocPrevisio` (la fila de xips, que ara és la taula mateixa), `blocHoritzo` i
+`blocSMPBombers`, que ja no cridava ningú.
+
+### 3. Què suma cada factor
+
+Sota el valor de cada factor hi va ara **el que aquell factor suma de veritat** al risc.
+
+No és cosmètic: cap factor no suma el seu valor tal qual, i sense dir-ho la taula enganya. Unes
+allaus a «1/5» semblen sumar 1 quan en sumen **0** —el nivell 1 val 0 a l'escala de perill—, i l'SMP
+i les allaus competeixen pel perill dominant, de manera que el segon només hi posa un suplement.
+Quan els increments topen al màxim, la suma de la columna no dona el risc: també es diu.
+
+### 4. El motiu de debò de l'«1/5»: la config no havia pujat mai a Supabase
+
+Mirat a la taula:
+
+```
+allaus_desactivat = null · formula = null · formula_versio = null · op_config = null
+```
+
+Quan la configuració va passar del `localStorage` a Supabase (trampa 19) es va escriure **només el
+camí de baixada**. El que ja hi havia desat als navegadors no hi va pujar mai i les columnes es van
+quedar a `null`. El resultat és el pitjor possible perquè no es veu: **la pantalla calculava amb la
+config bona i el backend de les captures, que només llegeix Supabase, amb els valors per defecte**.
+Dos números diferents per al mateix dia, que és exactament el que les captures havien de resoldre.
+
+Amb l'interruptor d'allaus es veia a la cara: apagat al navegador, `null` a Supabase, i les captures
+desant `allaus: 1` amb el perill de la primavera congelat al `bpa_latest.json`.
+
+**`migrarConfigCapAmunt(data)`** ho puja en carregar la config, amb dues condicions alhora: que a
+Supabase el camp sigui `null` **i** que aquest dispositiu tingui la preferència desada de veritat.
+La segona no és un detall — sense ella, el primer navegador que obrís l'app pujaria els valors per
+defecte i taparia per sempre la preferència del company que sí que l'havia posada. Un dispositiu que
+no té res a dir, no diu res. Si la pujada falla, **es diu a la franja de dades**: mentre duri, el
+risc desat no és el que es veu.
+
+I la captura desa ara els **interruptors de temporada** (`allausDesactivat`, `boletairesActiu`) dins
+del desglossament, perquè una foto amb `allaus: 1` es pugui distingir d'un dia amb l'interruptor
+posat. Les captures anteriors a avui no en porten constància i es llegeixen com a actives, que és el
+que el backend feia llavors.
+
+De passada, la franja de dades avisa també quan les **allaus estan desactivades**: feia exactament el
+mateix que un factor desmarcat —posar el perill a 0— i només es veia entrant a Configuració.
+
+**Pendent:** que algú obri l'app perquè la migració s'executi i les columnes deixin de ser `null`;
+fins llavors les captures continuen calculant-se amb els valors per defecte. I l'emissió de les
+**21:43** de Madrid del 16-09, que és després de l'ancoratge de la captura del vespre: amb una
+setmana de `data_emisio` es podrà decidir si cal moure-la.
+
 ## 2026-09-16 — Neteja: els crons de GitHub ja no pintaven res
 
 Preguntat: si els crons de Supabase serien millors. **Ja hi eren** —des d'aquell mateix matí— i ja

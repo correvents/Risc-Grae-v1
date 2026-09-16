@@ -9,8 +9,21 @@ config de la fórmula/allaus/llindars HC moguda a Supabase, `scripts/captura-ris
 
 També la pestanya **Historial → Risc** (§7), que ja ensenya les captures.
 
-**Falta**: activar el disparador de Supabase (§4, necessita un token teu) i l'evolució de les allaus
-(`bpa_historic` encara s'escriu a sobre).
+**Fet** (16-09-2026): el disparador de Supabase de §4, amb `pg_cron` + `pg_net` cridant
+`workflow_dispatch`. Els crons de GitHub queden com a xarxa de seguretat, un per workflow.
+
+**Fet** (17-09-2026): **quatre captures al dia en comptes de tres**, a les mateixes hores que la
+ingesta (06:50 · 10:50 · 14:50 · 20:30 de Madrid) perquè capturin el que s'acaba de baixar. La franja
+nova és `matinada` i els talls de `diaIFranja()` es van refer per aïllar-les: amb els de tres, les
+dues primeres del dia haurien caigut totes dues a `mati` i el `UNIQUE` hauria esborrat la primera.
+L'historial les ensenya **totes vuit en una sola taula** —les quatre de la vigília i les quatre del
+mateix dia— amb el que suma cada factor sota el seu valor.
+
+Amb això els jobs de `pg_cron` són **setze** (estiu i hivern de cadascun): vuit `captura-*` i vuit
+`ingesta-*`. Cada captura va **10 minuts darrere de la seva ingesta** (`ingesta-matinada` a les 06:45
+i `captura-matinada` a les 06:50, i així les quatre), perquè capturi el que s'acaba de baixar.
+
+**Falta**: l'evolució de les allaus (`bpa_historic` encara s'escriu a sobre).
 
 ## 1. El problema
 
