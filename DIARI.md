@@ -62,6 +62,28 @@ I val la pena adonar-se que **això només es veu perquè les captures ja funcio
 `risc_historic` sol hi hauria el 4 final i el 0 del vespre s'hauria perdut. És exactament per a
 això que es van fer.
 
+### Rectificació (16-09, més tard): la conclusió anava massa lluny
+
+Es va escriure que l'API **no** dona els avisos fins que l'episodi s'obre, i això **no està
+demostrat**. L'argument que semblava fort —«de les 3.504 files amb dia futur, totes venien d'un
+episodi ja obert»— té un biaix de mostreig que se'l menja:
+
+| hora UTC de la consulta | 05 | 06 | 08 | … | 16 | 17 | **18** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| consultes amb canvi | 102 | 32 | 43 | … | 5 | 3 | **1** |
+
+**En tot l'històric hi ha una sola consulta a les 18 h UTC**, que és quan surt el butlletí de les
+20:30 de Madrid. Gairebé tot el que tenim és de matí, quan l'episodi ja sol estar obert. I dels 39
+dies vistos «amb el dia ja començat», 27 es van veure a les 05 h UTC: la primera passada del dia.
+Cap dels dos fets diu res sobre què hi havia la vigília — diu que no ho miràvem.
+
+O sigui que el que tenim és **una observació** (15-09, 18:36 i 19:01 UTC, `[]` amb avisos publicats),
+no un patró. El que sí que queda descartat és que la culpa sigui nostra: ni el filtre per estat ni
+el mapatge de zones; la resposta era buida de debò.
+
+**Ara es resoldrà sol.** Amb una captura cada vespre, comparar l'horitzó `dema` del vespre amb
+l'horitzó `avui` del matí següent dona la resposta en unes setmanes, sense haver de tocar res.
+
 ## 2026-09-15 — Ja hi ha captures de veritat: el secret portava un salt de línia enmig
 
 **`risc_captures` ha deixat d'estar buida.** Les dues primeres files hi són:
