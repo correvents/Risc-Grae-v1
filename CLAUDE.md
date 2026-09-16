@@ -333,6 +333,24 @@ arrenca de seguida i un cron de GitHub no (trampa 8). Si un dia les captures dei
 l'hora, mira `select * from cron.job_run_details order by start_time desc` abans de tocar el
 workflow.
 
+**Els ancoratges van darrere de l'emissió, no davant.** Les hores es van posar a 08:15 / 12:30 /
+20:30 suposant que eren les de Meteocat. Amb `dataEmisio` desat (trampa 11 ter) es va poder mirar, i
+les emissions reals cauen en **dues** finestres: **09:30–10:30** i **17:20–19:00** de Madrid. La del
+matí, doncs, preguntava **dues hores abans** que publiquessin: sempre agafava el butlletí del dia
+abans i cremava els 30 minuts sencers de reintents. Moguda a les **10:45**.
+
+La del vespre es queda a les **20:30** a posta: per a una captura, **anar tard no fa mal i anar
+d'hora sí**. Amb les emissions arribant fins a les 18:53, ancorar a les 19:15 deixaria vint minuts de
+marge i un dia que publiquessin més tard el perdríem. Si algun dia mous aquestes hores, mira primer
+`select distinct data_emisio at time zone 'Europe/Madrid' from smp_historic order by 1 desc`.
+
+**Una font caiguda no pot passar per una font a zero.** Els `fetch-*.js` es criden de manera que un
+error no aturi la captura, però els noms dels que han fallat van a **`FONTS_KO`** i `captura-risc.js`
+els marca (`fonts_estat[x].ha_fallat`) i posa `dades_completes` a fals. Abans era un `|| true` pelat:
+l'error es descartava, la captura llegia el JSON vell del disc i el desava com si fos d'ara — i
+`hi_es` no ho delatava, perquè val `!!smp` i el fitxer sempre hi és. Cada font desa també
+`edat_min`, els minuts que fa que es va consultar l'origen.
+
 **19. La configuració ja no és de cada navegador: mana Supabase.** La fórmula, l'interruptor
 d'allaus, els llindars dels helis i la temporada de boletaires es desen a
 `taula_config_alertes_smp` (`formula`, `formula_versio`, `allaus_desactivat`, `op_config`,

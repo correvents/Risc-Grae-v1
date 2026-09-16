@@ -8,6 +8,59 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-16 — Quan publica Meteocat de debò, i per què els ancoratges anaven malament
+
+Demanat: mesurar cada quant s'actualitza l'SMP per decidir cada quant s'ha de consultar.
+
+**La resposta no calia mesurar-la punxant més: ja la teníem i la llençàvem.** `processarSMP` agafava
+set camps de l'API i la resta ni es miraven. Registrant al log els camps no usats va sortir a la
+primera passada:
+
+```
+🔎 Camps de l'avis que no fem servir: tipus=<string>, dataEmisio="2026-09-15T16:53Z"
+```
+
+**`dataEmisio`** (amb una sola `s`) diu quan van publicar cada avís. Ara es desa a
+`smp_historic.data_emisio` i a `risc_captures.meteocat_emissio`, que era buida des del primer dia
+precisament perquè no sabíem d'on treure-la. De propina, com que els episodis oberts arrosseguen
+avisos de dies enrere, **una sola consulta ja va recuperar tres dies d'emissions**:
+
+| dia | emissions (Madrid) |
+| --- | --- |
+| dl 14 | 09:32 · 17:22 |
+| dt 15 | 10:21 · 10:24 · **18:45 · 18:53** |
+| dc 16 | 10:27 · 10:29 |
+
+**Publiquen dues vegades al dia**, no tres: cap a les **09:30–10:30** i cap a les **17:20–19:00**.
+
+**I això explica el que passava.** L'ancoratge del matí era a les 08:15 de Madrid: **dues hores
+abans** que publiquessin. Cada matí agafava el butlletí del dia anterior, cremava els 30 minuts
+sencers de reintents i acabava forçant la captura. Mogut a les **10:45**.
+
+El del vespre **es queda a les 20:30**. Ho havia proposat moure a les 19:15 i era mala idea: les
+emissions arriben fins a les 18:53, i per a una captura anar tard no fa mal mentre que anar d'hora
+sí. Vint minuts de marge no són marge.
+
+**I el 15-09 queda explicat amb hores:** les emissions d'aquell vespre van ser a les **18:45 i
+18:53**, i la nostra consulta a les **20:36** va tornar `[]`. Els avisos ja estaven emesos i tot i
+així no sortien a `episodis-oberts`. Això torna a apuntar cap a la primera hipòtesi (l'episodi no
+estava obert), però ara amb marques de temps en comptes d'un argument de mostreig.
+
+**Un forat trobat pel camí.** El workflow cridava els `fetch-*.js` amb `|| true`: si Meteocat
+fallava, l'error es descartava, `captura-risc.js` llegia el JSON vell del disc i el desava com si
+fos d'ara. I `fonts_estat.hi_es` no ho delatava, perquè val `!!smp` i el fitxer sempre hi és — la
+trampa 12 dins del camí de les captures. Ara els noms dels que fallen van per `FONTS_KO`, es marquen
+(`ha_fallat`) i la captura es desa com a **incompleta**. Cada font hi porta també `edat_min`.
+
+**Què queda:**
+
+- **Una setmana de `data_emisio`** per confirmar les dues finestres amb mostra gruixuda. Ara la
+  consulta és d'una línia.
+- **El forat del vespre per a la frescor**: l'emissió de les ~18:00 no arriba a la pantalla fins a
+  la captura de les 20:30, perquè l'última ingesta del dia és a les ~16:17 de Madrid. Caldria una
+  passada de dades cap a les 19:00, disparada per `pg_cron` com les captures.
+- La quota de peticions del pla de Meteocat continua sent desconeguda.
+
 ## 2026-09-15 — Per què l'SMP de demà surt 0 amb avisos publicats: «episodis-oberts» vol dir això
 
 Reportat: «a Meteocat ara donen molts avisos per demà i la web no els ha detectat». Confirmat que
