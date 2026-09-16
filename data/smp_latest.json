@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-09-16T16:44:24.116Z",
+  "dataConsulta": "2026-09-16T17:16:24.473Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 3 hores",
@@ -1198,36 +1198,6 @@
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
                 "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
-      "dataInici": "2026-09-16T15:20Z",
-      "dataFi": "2026-09-16T16:20Z",
-      "dataEmisio": "2026-09-16T15:27Z",
-      "comentari": "S'observa un xàfec que descarrega amb intensitat torrencial a la comarca del Gironès. ",
-      "dies": [
-        {
-          "dia": "2026-09-16",
-          "afectacions": [
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
-              "nivell": "Taronja",
-              "grauPerill": 6,
-              "probabilitat": "Prob 6",
-              "llindar": "Intensitat > 40 mm / 30 minuts",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
               ]
             }
           ]
