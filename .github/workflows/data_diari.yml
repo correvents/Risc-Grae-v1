@@ -56,6 +56,7 @@ jobs:
           echo "force=$FORCE" >> $GITHUB_OUTPUT
 
       - name: SMP
+        id: smp
         continue-on-error: true
         env:
           METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
@@ -65,6 +66,7 @@ jobs:
         run: node scripts/fetch-smp.js
 
       - name: Previsió
+        id: previsio
         continue-on-error: true
         env:
           METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
@@ -74,6 +76,7 @@ jobs:
         run: node scripts/fetch-previsio.js
 
       - name: Plans PC
+        id: planspc
         continue-on-error: true
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -82,6 +85,7 @@ jobs:
         run: node scripts/fetch-planspc.js
 
       - name: BPA
+        id: bpa
         continue-on-error: true
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -91,6 +95,7 @@ jobs:
         run: node scripts/fetch-bpa.js
 
       - name: Canvi Temps
+        id: canvi
         continue-on-error: true
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -104,3 +109,25 @@ jobs:
       # des de l'altre costat. Vegeu `scripts/commit-dades.sh`.
       - name: Commit JSON
         run: bash scripts/commit-dades.sh
+
+      # El `continue-on-error` de cada baixada hi és a posta: si una font cau,
+      # les altres quatre han d'arribar i commitejar-se igualment. Però també
+      # deixava el job **en verd**, i llavors una font caiguda no la veia ningú
+      # —ni a Actions, ni enlloc— fins que algú es mirava les dades de prop.
+      # Aquest pas tanca la passada en vermell i diu quines han fallat, després
+      # d'haver desat el que sí que ha arribat.
+      - name: Comprovar que totes les fonts han baixat
+        if: always()
+        run: |
+          ko=""
+          [ "${{ steps.smp.outcome }}"      = "failure" ] && ko="$ko SMP"
+          [ "${{ steps.previsio.outcome }}" = "failure" ] && ko="$ko Previsió"
+          [ "${{ steps.planspc.outcome }}"  = "failure" ] && ko="$ko Plans-PC"
+          [ "${{ steps.bpa.outcome }}"      = "failure" ] && ko="$ko BPA"
+          [ "${{ steps.canvi.outcome }}"    = "failure" ] && ko="$ko Canvi-temps"
+          if [ -n "$ko" ]; then
+            echo "❌ Fonts que no han baixat en aquesta passada:$ko"
+            echo "   La resta s'ha desat igualment; aquestes es queden amb les dades d'abans."
+            exit 1
+          fi
+          echo "✅ Les cinc fonts han baixat."
