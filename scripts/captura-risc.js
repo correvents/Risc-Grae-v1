@@ -228,6 +228,16 @@ async function main() {
 
     files.push({
       franja, dia_captura: avui, horitzo, dia_objectiu: dataObjectiu,
+      // **L'hora s'ha d'enviar sempre.** `capturat_at` té `default now()`, que
+      // només val per a l'INSERT: quan l'upsert actualitza una fila que ja hi
+      // era, la columna no viatja al payload i es queda amb l'hora de la
+      // primera escriptura. El 16-09-2026 la fila del matí deia 04:56 amb uns
+      // valors calculats a les 06:46 — i la captura forçada ho recalcula tot
+      // (operativitat, canvi de temps, afluència), no només l'SMP, o sigui que
+      // els números poden ser d'una hora i l'etiqueta d'una altra. La taula és
+      // «la foto de com estava tot en un moment concret»: si l'hora menteix,
+      // no serveix per a res.
+      capturat_at: new Date().toISOString(),
       risc: det.risc, perill_base: det.base, dominant: det.dominant, suplement: det.suplement,
       smp: factors.smp, allaus: factors.allaus, afluencia: afluencia.nivell,
       operativitat: helis.length ? op.count : null, canvi: factors.canvi,
