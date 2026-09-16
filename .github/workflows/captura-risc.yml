@@ -59,10 +59,18 @@ jobs:
           # captura que diu "aquí no hi havia res nou" val; una que no existeix, no.
           fet=no
           for i in $(seq 1 6); do
-            node scripts/fetch-smp.js         || true
-            node scripts/fetch-bpa.js         || true
-            node scripts/fetch-planspc.js     || true
-            node scripts/fetch-canvi-temps.js || true
+            # Una font caiguda no ha d'impedir capturar la resta, però **s'ha de
+            # saber quina ha caigut**. Amb el `|| true` que hi havia, l'error es
+            # descartava i `captura-risc.js` llegia el JSON vell del disc i el
+            # desava com si fos d'ara — i `hi_es` no ho delatava, perquè el
+            # fitxer sempre hi és. Ara els noms van a FONTS_KO i la captura ho
+            # diu i es marca com a incompleta.
+            FONTS_KO=""
+            node scripts/fetch-smp.js         || FONTS_KO="$FONTS_KO,smp"
+            node scripts/fetch-bpa.js         || FONTS_KO="$FONTS_KO,bpa"
+            node scripts/fetch-planspc.js     || FONTS_KO="$FONTS_KO,planspc"
+            node scripts/fetch-canvi-temps.js || FONTS_KO="$FONTS_KO,canvi"
+            export FONTS_KO
 
             # Compte amb l'estat de sortida: `codi=$?` després d'un `if` recull el
             # de l'`if` (que és 0 quan la condició falla i no hi ha `else`), no el

@@ -185,6 +185,26 @@ async function main() {
   const emissioSMP = ((smp && smp.avisos) || [])
     .map(a => a.dataEmisio).filter(Boolean).sort().pop() || null;
 
+  // **Quines baixades han fallat en aquesta passada.** El workflow crida els
+  // `fetch-*.js` amb `|| true` perquè una font caiguda no impedeixi capturar
+  // la resta — però sense saber quines han caigut, `captura-risc.js` llegeix
+  // el JSON vell del disc i desa dades d'abans com si fossin d'ara. I `hi_es`
+  // no ho delata: val `!!smp`, que és cert sempre, perquè el fitxer hi és.
+  // És la trampa 12 dins del camí de les captures. Ara el workflow passa els
+  // noms per `FONTS_KO` i aquí es diu, en comptes de dissimular-ho.
+  const fallades = (process.env.FONTS_KO || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (fallades.length) {
+    console.log(`⚠️ Baixades fallades en aquesta passada: ${fallades.join(', ')}. ` +
+                `La captura es desa igualment, marcada com a INCOMPLETA i dient quines dades són velles.`);
+  }
+
+  // Quants minuts fa que es va consultar l'origen, per saber si el que tenim és
+  // d'ara o d'una passada anterior.
+  const edatMin = (quan) => {
+    const t = quan && Date.parse(quan);
+    return t ? Math.round((Date.now() - t) / 60000) : null;
+  };
+
   // Què hi ha i què falta. Un factor sense dades no pot semblar un factor a zero.
   const fontsEstat = {
     smp:     { hi_es: !!smp,     consulta: smp && smp.dataConsulta,     empremta: empremta(smp && smp.avisos),
@@ -193,7 +213,14 @@ async function main() {
     canvi:   { hi_es: !!canvi,   consulta: canvi && canvi.actualitzat },
     planspc: { hi_es: !!planspc, consulta: planspc && planspc.actualitzat }
   };
-  const completes = Object.values(fontsEstat).every(f => f.hi_es);
+  for (const [nom, f] of Object.entries(fontsEstat)) {
+    f.ha_fallat = fallades.includes(nom);
+    f.edat_min  = edatMin(f.consulta);
+  }
+
+  // Una font que ha fallat compta com a font que falta: el que hi ha al disc és
+  // d'una altra estona, i una captura no pot dir que és la foto d'ara si no ho és.
+  const completes = Object.values(fontsEstat).every(f => f.hi_es && !f.ha_fallat);
 
   // Meteocat publica a hores fixes però no sempre puntual. Si el butlletí és
   // idèntic al de l'última captura, encara no ha sortit el nou: val més esperar
