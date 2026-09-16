@@ -238,24 +238,36 @@ tot si fa més de `REFRESC_MINUTS` (15) de l'última descàrrega — `estatFonts
 ho vam baixar, no la `dataConsulta` de l'origen. També refà les targetes si el dia ha canviat amb la
 pestanya oberta. Si hi afegeixes una font, res a fer: va per `recarregarTotesLesDades()`.
 
-**11 bis. L'SMP de demà pot ser 0 tot i que Meteocat ja n'hagi publicat els avisos.** Baixem l'SMP
-de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`, i «oberts» vol dir el que sembla: la
-documentació diu que retorna els episodis oberts i els avisos actius **que afecten el dia de la
-consulta**. Un avís emès aquest vespre per a demà, quan avui no hi ha cap episodi obert, **no hi
-surt**: l'API respon `[]` i el càlcul en treu un 0 tan tranquil com el d'un dia de bon temps.
+**11 bis. L'SMP de demà pot sortir 0 amb avisos ja publicats — i encara no sabem si passa sovint.**
+Baixem l'SMP de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`. El 15-09-2026, a les 18:36
+i a les 19:01 UTC —just després del butlletí de les 20:30 de Madrid—, l'API va respondre `[]`
+(`📥 Meteocat SMP: 0 episodis, 0 avisos` al log) mentre el web de Meteocat ja tenia avisos formals
+per a l'endemà. L'endemà al matí l'episodi era obert i en van arribar 8, amb taronges. El risc del
+16-09 va passar de **0** (previst el 15 al vespre) a **4** (mesurat el 16 al migdia).
 
-Comprovat el 15-09-2026, amb avisos formals al web de Meteocat per a l'endemà i `📥 Meteocat SMP:
-0 episodis, 0 avisos` al log. Les dades pròpies hi donen la raó: de les 3.504 files d'`smp_historic`
-amb `dia` posterior al de la consulta, **totes** venien d'un episodi que ja estava obert — les 2.940
-d'una consulta que també portava avisos per al mateix dia, i les 68 restants, totes `Ampliat`, d'un
-episodi obert que s'allargava a un dia veí. **Cap no ve d'un episodi encara no obert.**
+**Compte amb com es llegeix això.** És **una sola observació**, i no s'ha de convertir en una llei:
 
-O sigui que no és cap error del nostre codi ni del filtre per estat (`ESTATS_QUE_COMPTEN`, que
-registra al log el que descarta): és **el que dona l'endpoint**. Per veure els avisos abans que
-l'episodi s'obri cal un altre camí de l'API de l'SMP — hi ha consulta d'episodi per codi i hi ha
-pre-alertes—, i això s'ha de mirar a `https://apidocs.meteocat.gencat.cat`. Mentre no es faci,
-**l'SMP de demà és una cota inferior, no el valor de debò**, i això val tant per a la pantalla com
-per a les captures.
+- El 15-09 va ser el **primer dia** que miràvem just després del butlletí del vespre. Fins llavors
+  les passades eren gairebé totes de matí: a tot l'històric d'`smp_historic` hi ha **una** consulta
+  a les 18 h UTC, contra 102 a les 5 h. No teníem el costum de mirar-hi, o sigui que no en sabíem res.
+- Per això **no serveix** l'argument que semblava fort: «de les 3.504 files amb `dia` posterior al de
+  la consulta, totes venien d'un episodi ja obert». Gairebé totes aquelles consultes eren de matí,
+  quan l'episodi ja sol estar obert. El biaix de mostreig se les menja.
+- I els 39 dies que vam veure «amb el dia ja començat» tampoc no ho demostren: 27 es van veure a les
+  05 h UTC, la primera passada del dia. No vol dir que Meteocat no ho tingués la vigília; vol dir
+  que no ho vam demanar.
+
+El que **sí** que està descartat és que sigui cosa nostra: no és el filtre per estat
+(`ESTATS_QUE_COMPTEN` registra al log tot el que descarta, i aquell dia no descartava res) ni el
+mapatge de zones. La resposta era `[]` de debò.
+
+**Com se sabrà.** Ara que hi ha una captura cada vespre, la comparació surt sola: per a cada dia, el
+que deia la captura del vespre d'abans (horitzó `dema`) contra el que va dir la del matí (horitzó
+`avui`). Si l'SMP salta de 0 a un valor alt sovint, és sistemàtic i caldrà un altre camí de l'API;
+si el 15-09 va ser una excepció, no cal tocar res. En unes setmanes hi haurà resposta.
+
+Mentrestant, tracta l'SMP de demà com a **possible cota inferior** —a la pantalla i a les captures—,
+però sense donar per fet que sempre ho és.
 
 **14. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
 `dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és
