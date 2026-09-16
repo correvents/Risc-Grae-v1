@@ -8,6 +8,50 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-16 — Neteja: els crons de GitHub ja no pintaven res
+
+Preguntat: si els crons de Supabase serien millors. **Ja hi eren** —des d'aquell mateix matí— i ja
+manaven. El que havia quedat brut és que **ningú havia tret els de GitHub**, i feien la mateixa
+feina a hores aleatòries:
+
+| workflow | crons de GitHub | dispatches de `pg_cron` | passades/dia |
+| --- | --- | --- | --- |
+| `data_diari` | 6 | 4 | **10** |
+| `captura-risc` | 3 | 3 | **6** |
+
+Setze passades al dia on en calien set, i les de GitHub arribant de 2 a 7 hores tard, sense servir
+per a cap hora. A sobre, cada captura de reserva podia cremar mitja hora de reintents i sis
+consultes a Meteocat.
+
+**En queda un per workflow**, com a xarxa de seguretat: si el `pg_cron` caigués (projecte pausat,
+secret del Vault caducat, `pg_net` trencat), garanteixen una passada al dia — degradat, però viu — i
+que només n'hi hagi una es veu de seguida a Actions.
+
+**El guardat forçat diari passa a ser puntual.** El feia el cron de les 00:23 comparant la cadena
+del cron al pas «Determinar force»; ara el dispara també la passada de matinada del `pg_cron`, amb
+`{"inputs":{"force":"true"}}`. El cron de GitHub es manté com a reserva d'això mateix.
+
+**I el reintent deixa de cremar mitja hora els dies tranquils.** El bucle esperava un butlletí nou
+comparant empremtes, però **l'empremta d'una llista buida no canvia mai**: un dia sense cap avís
+—que són la majoria— feia els sis intents sencers per res. Ara, si no hi ha cap avís, no hi ha res
+a esperar i es captura de seguida.
+
+### La finestra del vespre és molt més ampla del que s'havia escrit
+
+Les emissions del 16-09, hora de Madrid: **10:27 · 10:29 · 20:20 · 21:43**.
+
+Les dues últimes són **després** de la finestra que s'havia documentat al matí (17:20–19:00), i la
+de les **21:43 cau més d'una hora després de l'ancoratge de la captura del vespre (20:30)**. O sigui
+que aquella captura s'està perdent sistemàticament l'última actualització del dia.
+
+No es toca encara —són dos dies de dades—, però és el primer candidat a canviar: o moure la captura
+del vespre cap a les 22:15, o afegir-ne una de tardana. Amb una setmana de `data_emisio` es podrà
+decidir amb números.
+
+**Un camp més que veiem i no fem servir:** l'avís porta `perill` (número) al seu nivell, a més de
+`llindar1` i `llindar2`. Nosaltres només llegim `perill` a dins de l'afectació. Queda apuntat per si
+algun dia fa falta.
+
 ## 2026-09-16 — Hores garantides: 06:50, 10:50, 14:50 i 20:30
 
 Demanat: que **a aquestes hores la web tingui les dades, amb certesa**. No una estimació: certesa.
