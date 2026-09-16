@@ -10,10 +10,12 @@ name: Captura del risc
 # (`pg_cron` + `pg_net` cridant `workflow_dispatch`), que sí que és puntual:
 # vegeu PLA-CAPTURES.md §4 per al SQL.
 #
-# Els crons d'aquí són **la xarxa de seguretat**, per si la crida de Supabase
-# falla: ancorats ben aviat perquè, amb el retard, caiguin a prop de la franja.
-# Que es dupliquin no fa mal: la captura és idempotent per (dia, franja,
-# horitzó), o sigui que la segona completa la fila de la primera.
+# N'hi havia tres de reserva, un per franja. Feien la mateixa feina que els
+# dispatches però a hores aleatòries: sis passades al dia on en calien tres, i
+# cadascuna podia cremar mitja hora de reintents i sis consultes a Meteocat.
+# En queda **un de sol**: si el `pg_cron` caigués, garanteix una captura al dia
+# —degradat, però viu— i que només n'hi hagi una es veu de seguida. La franja la
+# decideix l'hora real d'execució (`diaIFranja()`), no el cron.
 
 on:
   workflow_dispatch:
@@ -23,9 +25,7 @@ on:
         type: string
         default: ''
   schedule:
-    - cron: '23 0 * * *'    # reserva de la captura del matí
-    - cron: '47 6 * * *'    # reserva de la del migdia
-    - cron: '17 14 * * *'   # reserva de la del vespre
+    - cron: '47 6 * * *'    # reserva diària (~09:00-13:40 UTC un cop endarrerit)
 
 concurrency:
   group: captura-risc

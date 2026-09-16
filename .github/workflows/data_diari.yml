@@ -1,29 +1,25 @@
 name: Dades diàries GRAE
 
+# QUI MANA LES HORES: Supabase, no aquest fitxer.
+#
+# Les passades les dispara `pg_cron` amb `workflow_dispatch` (jobs `ingesta-*`,
+# estiu i hivern), ancorades uns minuts abans de les hores en què hem promès que
+# la web tindrà les dades: **06:50, 10:50, 14:50 i 20:30 de Madrid**. Arriben al
+# segon i publiquen en menys de mig minut.
+#
+# Un cron de GitHub no pot fer això: el retard mesurat va de 2 h 14 min a 6 h
+# 53 min (vegeu la trampa 8 del CLAUDE.md). N'hi havia sis, i des que hi ha els
+# dispatches feien la mateixa feina a hores aleatòries: deu passades al dia on
+# en calien quatre. S'han tret.
+#
+# En queda **un de sol, com a xarxa de seguretat**: si el `pg_cron` caigués
+# (projecte pausat, secret del Vault caducat, `pg_net` trencat), aquest garanteix
+# una passada al dia i la diferència es veu de seguida a Actions. També és el
+# que força el guardat diari — vegeu el pas «Determinar force», que compara la
+# cadena del cron: si canvies l'hora aquí, canvia-la també allà.
 on:
   schedule:
-    # ATENCIÓ: aquestes hores són ANCORATGES, no hores d'execució. GitHub
-    # endarrereix els crons de manera irregular i el retard aquí mesurat va de
-    # 2 h 14 min a 6 h 53 min (11-14 de setembre del 2026), i creixent. Amb els
-    # crons antics (05:45 UTC el primer) la primera passada del dia queia entre
-    # les 09:36 i les 11:00 UTC: cada matí, fins al migdia, la web ensenyava les
-    # dades del vespre anterior. Per això el primer ancoratge és de matinada:
-    # no és que es vulgui consultar a les 00:23, és que amb el retard arriba a
-    # primera hora del matí.
-    #
-    # Els minuts són senars i lluny del :00 a posta: els crons a l'hora en punt
-    # són els més congestionats i els que més s'endarrereixen.
-    #
-    # L'últim ancoratge no pot passar de les 14:00 UTC: amb 7 h de retard
-    # arribaria a les 21:00 UTC (23 h a Madrid) i, si travessés la mitjanit,
-    # `fetch-canvi-temps.js` (que fa servir `avuiMadrid()`) escriuria la fila
-    # del dia equivocat.
-    - cron: '23 0 * * *'   # ~05:00-09:00 local un cop endarrerit (força guardat)
-    - cron: '37 3 * * *'   # ~08:00-12:00 local (guarda si canvis)
-    - cron: '47 6 * * *'   # ~11:00-15:00 local (guarda si canvis)
-    - cron: '53 9 * * *'   # ~14:00-18:00 local (guarda si canvis)
-    - cron: '43 12 * * *'  # ~17:00-21:00 local (guarda si canvis)
-    - cron: '17 14 * * *'  # ~19:00-23:00 local (guarda si canvis)
+    - cron: '23 0 * * *'   # reserva diària (~05:00-09:00 de Madrid un cop endarrerit)
   workflow_dispatch:
     inputs:
       force:

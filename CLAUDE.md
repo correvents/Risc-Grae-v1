@@ -156,6 +156,23 @@ Va passar a dues taules i va estar setmanes sense detectar-se: `risc_historic` (
 `canvi_temps_historic` (UNIQUE `data,tipus_dia,punt`). Si afegeixes una taula amb un UNIQUE que
 no sigui la primària, passa-li les columnes: `supabaseUpsert('taula', files, 'col1,col2')`.
 
+**8 bis. Les hores les mana Supabase, no els crons de GitHub.** Des del 16-09-2026, tant la ingesta
+com les captures les dispara `pg_cron` amb `workflow_dispatch` (`pg_net` → l'API de GitHub, amb el
+token al Vault). Arriba **al segon** i la passada publica en menys de mig minut: mesurat, el dispatch
+de les 18:20:01 tenia els JSON al repositori a les 18:20:28.
+
+Hi ha **catorze jobs**, estiu i hivern de cadascun: sis `captura-*` i vuit `ingesta-*`. Es miren amb
+`select jobname, schedule, active from cron.job order by jobname` i l'historial amb
+`select * from cron.job_run_details order by start_time desc`.
+
+**Els crons de GitHub ja no serveixen per a cap hora.** N'hi havia nou fent la mateixa feina a hores
+aleatòries —deu passades al dia de `data_diari` on en calien quatre, sis de captura on en calien
+tres—, i es van treure el 16-09-2026. En queda **un per workflow**, com a xarxa de seguretat: si el
+`pg_cron` caigués (projecte pausat, secret del Vault caducat, `pg_net` trencat), garanteixen una
+passada al dia i que només n'hi hagi una es veu de seguida a Actions.
+
+Tot el que ve a continuació continua sent cert i és el motiu pel qual es va fer tot això.
+
 **8. Les hores dels crons són ancoratges, no hores d'execució.** GitHub Actions els endarrereix
 de manera irregular i **molt**: mesurat entre l'11 i el 14 de setembre del 2026, de **2 h 14 min a
 6 h 53 min**, i creixent (abans s'havia vist 3 h 24 min). Se'n deriven dues coses:

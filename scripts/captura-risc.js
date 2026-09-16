@@ -225,12 +225,19 @@ async function main() {
   // Meteocat publica a hores fixes però no sempre puntual. Si el butlletí és
   // idèntic al de l'última captura, encara no ha sortit el nou: val més esperar
   // i tornar-hi que desar dues vegades la mateixa foto amb hores diferents.
+  //
+  // **Però un dia sense cap avís no té res a esperar.** L'empremta d'una llista
+  // buida no canviarà mai, o sigui que el reintent cremava els 30 minuts sencers
+  // i sis consultes a Meteocat cada dia tranquil — que són la majoria. Si no hi
+  // ha cap avís, es captura de seguida i s'acaba.
+  const capAvis = !(((smp && smp.avisos) || []).length);
   const ultima = await ultimaCaptura();
   const empremtaVella = ultima && ultima.fonts_estat && ultima.fonts_estat.smp && ultima.fonts_estat.smp.empremta;
-  if (!FORCA && empremtaVella && empremtaVella === fontsEstat.smp.empremta) {
+  if (!FORCA && !capAvis && empremtaVella && empremtaVella === fontsEstat.smp.empremta) {
     console.log('⏳ El butlletí SMP és el mateix de l\'última captura: encara no s\'ha actualitzat.');
     process.exit(75);
   }
+  if (capAvis) console.log('🌤️ Cap avís SMP actiu: no hi ha cap butlletí nou per esperar, capturo ja.');
   fontsEstat.smp.actualitzat = !(empremtaVella && empremtaVella === fontsEstat.smp.empremta);
 
   const config = await carregarConfig();
