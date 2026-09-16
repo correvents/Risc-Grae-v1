@@ -1565,6 +1565,10 @@
       if (!riscFormula.smp.actiu) avisosConfig.push('el factor <strong>Alertes SMP</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (!riscFormula.allaus.actiu) avisosConfig.push('el factor <strong>Allaus</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (boletairesConfig.actiu) avisosConfig.push('🍄 <strong>temporada de bolets</strong> activada a Configuració → Boletaires: suma a tots els dies');
+      // L'interruptor d'allaus fa exactament el mateix que un factor desmarcat
+      // —posa el perill a 0— i no es veia enlloc fora de Configuració. És el que
+      // fa que la targeta digui «0/5» amb el BPA ple de dades.
+      if (allausConfig.desactivat) avisosConfig.push('❄️ <strong>allaus desactivades</strong> a Configuració → Allaus BPA: compten 0 encara que el BPA porti perill');
       const zonesActives = Object.values(riscParams.zones || {}).filter(v => v > 0).length;
       const zonesTotals = Object.keys(riscParams.zones || {}).length;
       if (zonesActives === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
@@ -1585,6 +1589,15 @@
       const avisErrorCalcul = errorCalculRisc
         ? `<div style="width:100%;color:#b71c1c;background:#ffcdd2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;font-weight:700;">
              ⚠️ El càlcul del risc ha donat error (${escapeHtml(errorCalculRisc)}): el número pot no correspondre a les dades d'ara.
+           </div>` : '';
+
+      // La config d'aquest navegador que no ha arribat a Supabase. Mentre duri,
+      // les captures del backend calculen amb uns altres valors: el risc desat
+      // no és el que es veu aquí, i això no pot quedar en silenci.
+      const avisConfigDivergent = configDivergent
+        ? `<div style="width:100%;color:#b71c1c;background:#ffcdd2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;font-weight:700;">
+             ⚠️ Aquesta configuració (${escapeHtml(configDivergent.join(', '))}) no s'ha pogut desar a Supabase:
+             les captures del risc es calculen amb uns altres valors fins que hi arribi.
            </div>` : '';
 
       const avisOperativitat = errorOperativitat
@@ -1612,6 +1625,7 @@
           ${avis}
           ${avisConfig}
           ${avisErrorCalcul}
+          ${avisConfigDivergent}
           ${avisOperativitat}
         </div>`;
     }
@@ -4445,6 +4459,75 @@
     // que pot ser antiga i tenir zones desactivades que ningú recorda haver tocat.
     let origenRiscParams = 'valors per defecte';
 
+    // Quan la config d'aquest navegador no ha arribat a Supabase. No és un
+    // detall estètic: el backend de les captures només llegeix Supabase, o sigui
+    // que mentre això duri el risc desat es calcula amb uns altres valors que el
+    // que es veu aquí. Es diu a la franja de dades.
+    let configDivergent = null;
+
+    // **La config que hi havia al navegador i no va pujar mai.**
+    //
+    // Els paràmetres del risc van viure mesos només al `localStorage`. Quan van
+    // passar a Supabase (trampa 19) es va escriure el camí de baixada —Supabase
+    // mana— però no el de pujada: les columnes es van quedar a `null` i el que
+    // ja hi havia desat en un navegador no hi va arribar mai. El resultat és el
+    // pitjor possible perquè no es veu: la pantalla calcula amb la config bona i
+    // el backend de les captures, que només llegeix Supabase, amb els valors per
+    // defecte. Dos números diferents per al mateix dia.
+    //
+    // Va passar de veritat amb l'interruptor d'allaus: apagat al navegador i
+    // `allaus_desactivat` a `null`, o sigui que les captures desaven `allaus: 1`
+    // amb el perill de la primavera congelat al `bpa_latest.json` mentre la
+    // pantalla en deia 0.
+    //
+    // **Dues condicions, i totes dues fan falta:**
+    //
+    // 1. Que a Supabase el camp no hi sigui (`null`). Si hi ha un valor, encara
+    //    que sigui `false`, mana Supabase: és la decisió de l'equip i no la pot
+    //    desfer el navegador que obri l'app més tard.
+    // 2. Que **aquest dispositiu tingui la preferència desada de veritat**, no
+    //    que en tingui una per defecte. Si no, el primer navegador que obrís
+    //    l'app pujaria els valors per defecte i taparia per sempre la
+    //    preferència del company que sí que l'havia posada — i, amb la fórmula,
+    //    congelaria a Supabase uns punts per defecte que després no es podrien
+    //    canviar des del codi. Un dispositiu que no té res a dir, no diu res.
+    //
+    // La fórmula, a més, es puja si la que hi ha desada és d'una altra versió:
+    // aquesta banda la llença per versió, però el backend la llegeix igualment i
+    // calcularia amb uns punts que aquí ja no volen dir el mateix.
+    const teDesat = (clau) => {
+      try { return localStorage.getItem(clau) != null; } catch(e) { return false; }
+    };
+
+    function migrarConfigCapAmunt(data) {
+      const migrar = {};
+      if ((data.formula == null || data.formula_versio !== RISC_FORMULA_VERSIO) && teDesat('riscGRAE_formula')) {
+        migrar.formula = riscFormula;
+        migrar.formula_versio = RISC_FORMULA_VERSIO;
+      }
+      if (data.allaus_desactivat == null && teDesat(LS_ALLAUS_KEY)) {
+        migrar.allaus_desactivat = !!allausConfig.desactivat;
+      }
+      if (data.op_config == null && teDesat('riscGRAE_opHC')) {
+        migrar.op_config = opConfig;
+      }
+      if (data.boletaires_actiu == null && teDesat(LS_BOLETAIRES_KEY)) {
+        migrar.boletaires_actiu = !!boletairesConfig.actiu;
+      }
+
+      const camps = Object.keys(migrar);
+      if (!camps.length) return;
+
+      console.log('⬆️ Config que Supabase no tenia i es puja:', camps.join(', '));
+      desarConfigSupabase(migrar).then(r => {
+        // Si no puja, es diu. Callar-ho deixaria les captures calculant amb uns
+        // altres valors sense que ho sàpiga ningú, que és exactament el que ha
+        // passat fins ara.
+        configDivergent = r.ok ? null : camps;
+        renderEstatDades();
+      });
+    }
+
     async function carregarRiscConfig() {
       try {
         // Amb sostre: aquesta crida és la primera de l'arrencada i tot el que ve
@@ -4477,6 +4560,7 @@
             boletairesConfig.actiu = data.boletaires_actiu;
             try { localStorage.setItem(LS_BOLETAIRES_KEY, JSON.stringify(boletairesConfig)); } catch(e) {}
           }
+          migrarConfigCapAmunt(data);
           origenRiscParams = 'Supabase';
           localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
           renderEstatDades();
