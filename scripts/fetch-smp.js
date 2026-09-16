@@ -136,6 +136,49 @@ function registrarCodisDesconeguts(dades) {
 // `descartats per estat: Obert × 7`, ja se sap on mirar.
 const ESTATS_QUE_COMPTEN = ['Vigent', 'Ampliat'];
 
+// Què més ens dona l'API que no mirem mai.
+//
+// `processarSMP` llegeix set camps (meteor, estat, dataInici, dataFi,
+// comentari, evolucions, afectacions) i llença la resta sense mirar-la. Entre
+// el que es llença hi podria haver **l'hora d'emissió del butlletí**, que és la
+// peça que falta per saber cada quant s'actualitza de veritat: amb l'emissió a
+// la mà, cada consulta ens diu quan es va publicar el que estem llegint, i no
+// cal punxar l'API més sovint per esbrinar-ho. `risc_captures.meteocat_emissio`
+// existeix i és buida des del primer dia precisament perquè no sabem d'on
+// treure-la.
+//
+// Es registra el **nom** dels camps, no el contingut, i el valor només dels que
+// semblen dates. Surt de la resposta que ja baixem: cap petició de més.
+const CAMPS_QUE_USEM = {
+  episodi: ['meteor', 'avisos'],
+  avis: ['estat', 'dataInici', 'dataFi', 'comentari', 'evolucions', 'afectacions']
+};
+const semblaData = (k) => /data|hora|time|emiss|actualitz|updat|publica/i.test(k);
+
+function registrarCampsNoUsats(dades) {
+  const episodis = Array.isArray(dades) ? dades : [];
+  if (!episodis.length) return;
+  const nous = { episodi: new Map(), avis: new Map() };
+  const apuntar = (nivell, obj) => {
+    for (const [k, v] of Object.entries(obj || {})) {
+      if (CAMPS_QUE_USEM[nivell].includes(k)) continue;
+      if (nous[nivell].has(k)) continue;
+      // Del valor només se'n guarda una mostra si el nom sembla una data; de la
+      // resta, prou de saber que existeix i de quin tipus és.
+      nous[nivell].set(k, semblaData(k) ? JSON.stringify(v) : `<${Array.isArray(v) ? 'array' : typeof v}>`);
+    }
+  };
+  for (const ep of episodis) {
+    apuntar('episodi', ep);
+    for (const av of (ep.avisos || [])) apuntar('avis', av);
+  }
+  for (const nivell of ['episodi', 'avis']) {
+    if (!nous[nivell].size) continue;
+    const llista = [...nous[nivell]].map(([k, v]) => `${k}=${v}`).join(', ');
+    console.log(`🔎 Camps de l'${nivell} que no fem servir: ${llista}`);
+  }
+}
+
 function registrarEstatsRebuts(dades) {
   const episodis = Array.isArray(dades) ? dades : [];
   const compte = new Map();
@@ -233,6 +276,7 @@ async function main() {
   if (!resp.ok) throw new Error(`Meteocat SMP ${resp.status}: ${await resp.text()}`);
   const cru = await resp.json();
   registrarEstatsRebuts(cru);
+  registrarCampsNoUsats(cru);
   const dades = processarSMP(cru);
   registrarCodisDesconeguts(dades);
   const anterior = readJSON('smp_latest.json');
@@ -252,5 +296,5 @@ if (require.main === module) {
   main().catch(e => { console.error(e.message); process.exit(1); });
 }
 
-module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts,
+module.exports = { processarSMP, agruparPerZona, toRows, registrarCodisDesconeguts, registrarCampsNoUsats,
                    registrarEstatsRebuts, ESTATS_QUE_COMPTEN, ZONES };
