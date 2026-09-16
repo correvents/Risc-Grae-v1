@@ -179,9 +179,16 @@ async function main() {
   const canvi = readJSON('canvi_temps_latest.json');
   const planspc = readJSON('planspc_latest.json');
 
+  // L'emissió més nova del butlletí que estem llegint. No és el mateix que la
+  // nostra hora de consulta: diu quan ho va publicar Meteocat, i és el que
+  // permet veure si arribem tard o si és que encara no ho havien tret.
+  const emissioSMP = ((smp && smp.avisos) || [])
+    .map(a => a.dataEmisio).filter(Boolean).sort().pop() || null;
+
   // Què hi ha i què falta. Un factor sense dades no pot semblar un factor a zero.
   const fontsEstat = {
-    smp:     { hi_es: !!smp,     consulta: smp && smp.dataConsulta,     empremta: empremta(smp && smp.avisos) },
+    smp:     { hi_es: !!smp,     consulta: smp && smp.dataConsulta,     empremta: empremta(smp && smp.avisos),
+               emissio: emissioSMP },
     bpa:     { hi_es: !!bpa,     consulta: bpa && bpa.actualitzat },
     canvi:   { hi_es: !!canvi,   consulta: canvi && canvi.actualitzat },
     planspc: { hi_es: !!planspc, consulta: planspc && planspc.actualitzat }
@@ -253,6 +260,8 @@ async function main() {
         comarques: comarquesDelDia(smpBombers.comarques, dataObjectiu),
         periodes: F.PERIODES_SMP
       },
+      // La columna existia buida des del primer dia: no sabíem d'on treure-la.
+      meteocat_emissio: emissioSMP,
       formula_versio: config.formulaVersio,
       formula_config: config.formula,
       dades_completes: completes && helis.length > 0,

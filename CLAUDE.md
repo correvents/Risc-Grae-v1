@@ -238,6 +238,22 @@ tot si fa més de `REFRESC_MINUTS` (15) de l'última descàrrega — `estatFonts
 ho vam baixar, no la `dataConsulta` de l'origen. També refà les targetes si el dia ha canviat amb la
 pestanya oberta. Si hi afegeixes una font, res a fer: va per `recarregarTotesLesDades()`.
 
+**11 ter. L'API diu quan va publicar cada avís: `dataEmisio`** (amb una sola `s`, tal com ve). Es
+llençava sense mirar-la des del primer dia — `processarSMP` només agafava set camps i la resta ni
+es miraven. Es va trobar el 16-09-2026 registrant al log els camps que no fem servir.
+
+**Per què importa:** la nostra `data_consulta` diu quan vam preguntar, que depèn del nostre
+calendari; `dataEmisio` diu **quan ho van publicar ells**. Sense això no es pot saber cada quant
+s'actualitza l'SMP de veritat, i per tant no es pot decidir cada quant s'ha de consultar. Ara es
+desa a `smp_historic.data_emisio` i a `risc_captures.meteocat_emissio` (columna que existia buida
+des del principi justament perquè no sabíem d'on treure-la).
+
+**Una emissió nova compta com a canvi** (`hasChanged`), encara que els avisos diguin exactament el
+mateix: si Meteocat republica, això és precisament l'esdeveniment que volem tenir desat. Costa
+alguna fila de més; recuperar el que no s'ha desat no es pot.
+
+Les files anteriors al 16-09-2026 tenen la columna a `null`, i això no es recupera.
+
 **11 bis. L'SMP de demà pot sortir 0 amb avisos ja publicats — i encara no sabem si passa sovint.**
 Baixem l'SMP de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`. El 15-09-2026, a les 18:36
 i a les 19:01 UTC —just després del butlletí de les 20:30 de Madrid—, l'API va respondre `[]`
