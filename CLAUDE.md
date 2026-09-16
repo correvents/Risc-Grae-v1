@@ -238,6 +238,18 @@ tot si fa més de `REFRESC_MINUTS` (15) de l'última descàrrega — `estatFonts
 ho vam baixar, no la `dataConsulta` de l'origen. També refà les targetes si el dia ha canviat amb la
 pestanya oberta. Si hi afegeixes una font, res a fer: va per `recarregarTotesLesDades()`.
 
+**I també es refresca quan passa un ancoratge**, no només per rellotge. Amb els 15 minuts sols, una
+pestanya que hagués baixat a les 10:40 no tornava a mirar fins a les 10:55 — o sigui que a les 10:50,
+l'hora en què hem promès que hi serien, encara ensenyava les d'abans. `ANCORATGES_MADRID`
+(`06:50 · 10:50 · 14:50 · 20:30`) i `hiHaDadesDAbansDelAncoratge()` ho tanquen: si l'última descàrrega
+és anterior a l'últim ancoratge passat, es torna a baixar encara que faci dos minuts.
+
+Es mira l'hora de **Madrid** amb `Intl`, no la del navegador: els ancoratges són els dels crons i el
+dispositiu pot estar en un altre fus. Si l'`Intl` amb fus fallés, `ultimAncoratge()` torna `null` i
+queda el refresc per rellotge de sempre. **Aquestes hores han de coincidir amb els jobs `ingesta-*`
+de `pg_cron`**, que disparen uns minuts abans per deixar marge al runner i a GitHub Pages; si en
+canvies unes, canvia les altres.
+
 **11 ter. L'API diu quan va publicar cada avís: `dataEmisio`** (amb una sola `s`, tal com ve). Es
 llençava sense mirar-la des del primer dia — `processarSMP` només agafava set camps i la resta ni
 es miraven. Es va trobar el 16-09-2026 registrant al log els camps que no fem servir.
