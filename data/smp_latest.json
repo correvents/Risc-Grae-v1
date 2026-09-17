@@ -1,17 +1,29 @@
 {
-  "dataConsulta": "2026-09-17T13:45:45.697Z",
+  "dataConsulta": "2026-09-17T18:20:16.884Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Vigent",
-      "dataInici": "2026-09-18T06:00Z",
+      "dataInici": "2026-09-18T00:00Z",
       "dataFi": "2026-09-18T11:59Z",
-      "dataEmisio": "2026-09-17T07:44Z",
+      "dataEmisio": "2026-09-17T16:19Z",
       "comentari": "",
       "dies": [
         {
           "dia": "2026-09-18",
           "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "06-12"
+              ]
+            },
             {
               "zona": "Litoral Central",
               "comarca": 11,
@@ -21,6 +33,7 @@
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
+                "00-06",
                 "06-12"
               ]
             },
@@ -33,6 +46,7 @@
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
+                "00-06",
                 "06-12"
               ]
             },
@@ -57,6 +71,7 @@
               "probabilitat": "Poc probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
               "periodes": [
+                "00-06",
                 "06-12"
               ]
             },
