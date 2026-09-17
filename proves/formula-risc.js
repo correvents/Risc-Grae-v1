@@ -727,8 +727,20 @@
     
     // 2. RISC ALLAUS (BPA) - valor màxim del dia directe (1-5)
     // Fora de temporada es deixa a 0: vegeu l'interruptor d'allaus.
+    //
+    // **Compte amb el 0.** Aquí hi havia `perill_maxim_numeric || 1`, i fora de
+    // temporada l'ICGC no publica butlletí: el resum arriba amb
+    // `perill_maxim: "Desconegut"` i `perill_maxim_numeric: 0`, i aquell `|| 1`
+    // ho convertia en un 1. La pantalla i les captures ensenyaven «1/5» com si
+    // hi hagués perill feble **mesurat**, quan el que passa és que no hi ha
+    // butlletí. És la trampa 12 al revés: un factor sense dades no pot semblar
+    // un factor a 1, igual que no pot semblar un factor a 0.
+    //
+    // El número del risc no en canvia: a l'escala de perill, tant el 0 com l'1
+    // valen 0 punts (`allaus.punts` va {1:0, 2:0, 3:2, 4:4, 5:5}). El que
+    // canvia és que el que es veu és el que hi ha.
     if (!conf.allausDesactivat && dades.bpa && dades.bpa.resum) {
-      const perillMax = dades.bpa.resum.perill_maxim_numeric || 1;
+      const perillMax = Number(dades.bpa.resum.perill_maxim_numeric) || 0;
       resultat.allaus = perillMax;
       if (perillMax >= 3) {
         resultat.notes.push(`BPA: perill ${perillMax}/5`);
