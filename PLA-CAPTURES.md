@@ -67,13 +67,14 @@ demà, el desglossament de cadascuna, i com ha anat canviant l'SMP i les allaus 
 ## 3. La taula nova: `risc_captures`
 
 **Append-only. Res s'escriu mai a sobre.** Una fila per captura i horitzó (avui / demà), o sigui
-sis files al dia.
+**vuit** files al dia des que les captures són quatre.
 
 ```sql
 create table if not exists public.risc_captures (
   id              bigserial primary key,
   capturat_at     timestamptz not null default now(),  -- quan s'ha fet de veritat
-  franja          text not null,                       -- 'mati' | 'migdia' | 'vespre' | 'extra'
+  franja          text not null
+    check (franja in ('matinada','mati','migdia','vespre','extra')),
   dia_captura     date not null,                       -- dia operatiu (Europe/Madrid)
   horitzo         text not null,                       -- 'avui' | 'dema'
   dia_objectiu    date not null,                       -- el dia que es prediu
@@ -107,9 +108,20 @@ create table if not exists public.risc_captures (
 );
 ```
 
-El `unique` és a posta: si la captura de les 8:15 es reintenta perquè Meteocat encara no havia
-actualitzat, el reintent **completa la mateixa fila** en comptes de crear-ne una de nova. Una
-captura feta a mà fora d'hora va amb `franja = 'extra'` i no xoca amb res.
+El `unique` és a posta: si la captura es reintenta perquè Meteocat encara no havia actualitzat, el
+reintent **completa la mateixa fila** en comptes de crear-ne una de nova. Una captura feta a mà fora
+d'hora va amb `franja = 'extra'` i no xoca amb res.
+
+**El `check` de `franja` és el tercer lloc on viu la llista de franges**, i el 17-09-2026 va ser el
+que es va oblidar: amb `diaIFranja()` i `FRANGES_CAPTURA` ja canviats, la primera captura de
+`matinada` va petar amb **23514** (`violates check constraint "risc_captures_franja_valida"`) i
+aquell risc no es va desar. Si algun dia n'afegeixes una altra, els tres llocs alhora:
+
+```sql
+alter table public.risc_captures drop constraint if exists risc_captures_franja_valida;
+alter table public.risc_captures add constraint risc_captures_franja_valida
+  check (franja = any (array['matinada','mati','migdia','vespre','extra']));
+```
 
 `risc_historic` **es manté tal com és** (la pestanya la fa servir per a «ahir» i hi ha 194 files
 d'història): es continua escrivint com fins ara, i les captures hi conviuen al costat.

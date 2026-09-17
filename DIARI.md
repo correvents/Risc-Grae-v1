@@ -8,6 +8,57 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — La primera captura de `matinada` va petar: la llista de franges viu a tres llocs
+
+Primera matinada amb el règim nou. Els crons de Supabase, impecables — **al segon**:
+
+| job | ha disparat |
+| --- | --- |
+| `ingesta-matinada-estiu` | 04:45:00 UTC |
+| `captura-matinada-estiu` | 04:50:00 UTC |
+| `ingesta-mati-estiu` | 08:40:00 UTC |
+| `captura-mati-estiu` | 08:50:00 UTC |
+
+**I la captura del matí ja no crema mitja hora**: 26 segons (08:50:01 → 08:50:27), sense cap
+`⏳ Meteocat encara no ha actualitzat`. La d'ahir al migdia, amb l'ancoratge vell, va durar **32
+minuts**. Era el motiu de moure l'ancoratge del matí darrere de l'emissió.
+
+**Però la captura de `matinada` va fallar.** Codi 23514:
+
+```
+new row for relation "risc_captures" violates check constraint "risc_captures_franja_valida"
+```
+
+La taula porta un `check (franja in ('mati','migdia','vespre','extra'))` des que es va crear. Vaig
+canviar `diaIFranja()` i `FRANGES_CAPTURA` i **no la restricció**: la llista de franges viu a tres
+llocs i només en vaig tocar dos. La captura de les 06:50 del 17-09 s'ha perdut.
+
+Restricció arreglada (accepta `matinada`) i apuntada als tres llocs al `CLAUDE.md` i a
+`PLA-CAPTURES.md`. **No es recupera la captura perduda**: un reintent ara desaria les dades de les
+11 h amb l'etiqueta `matinada`, que és justament la mentida que el `capturat_at` explícit va venir a
+tancar. A la taula nova de l'historial hi sortirà com una columna buida, que és el que ha de fer.
+
+Val la pena veure com es va detectar: el workflow **va quedar en vermell**. Si l'error hagués anat
+per un camí amb `continue-on-error`, ningú se n'hauria assabentat.
+
+### Les emissions del vespre: ara sí que hi ha números
+
+`data_emisio`, hora de Madrid, del 16-09:
+
+```
+10:27 · 10:29 · 17:27 · 18:26 · 18:32 · 20:20 · 20:30 · 21:12 · 21:34 · 21:43 · 22:19
+```
+
+La captura del vespre va fer servir l'emissió de les **20:20** — i després en van venir **cinc més**,
+l'última a les **22:19**. O sigui que l'ancoratge de les 20:30 no va tard: va **d'hora**, i es perd
+sistemàticament la cua del vespre.
+
+El 15-09 la cua s'acabava a les 18:53, o sigui que són dos dies molt diferents i encara no hi ha
+prou mostra per decidir l'hora nova. Però la direcció ja no és dubtosa. **Candidat: moure la captura
+del vespre a les 22:45**, o afegir-ne una de tardana i deixar la de les 20:30. És decisió teva.
+
+**Pendent:** decidir l'hora de la captura del vespre amb una setmana de `data_emisio`.
+
 ## 2026-09-17 — Quatre captures, vuit columnes, i la config que no havia pujat mai
 
 Demanat: veure a l'Historial **les quatre prediccions de la vigília i les quatre del mateix dia en

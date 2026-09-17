@@ -363,9 +363,20 @@ seu compte: tot surt de `formula-risc.js`. Vegeu `PLA-CAPTURES.md`.
 del matí era `hora < 11`: afegir-hi la captura de les 06:50 hauria fet que les dues primeres del dia
 caiguessin totes dues a `mati` i, amb el `UNIQUE (dia_captura, franja, horitzo)`, **la segona hauria
 esborrat la primera sense dir res**. Els noms de les tres velles es mantenen perquè les files ja
-desades continuïn volent dir el mateix. La llista **`FRANGES_CAPTURA` de l'`index.html` ha de portar
-els mateixos identificadors i en el mateix ordre**: és l'ordre de les columnes de l'historial i, si
-un identificador no hi consta, aquella captura no troba columna.
+desades continuïn volent dir el mateix.
+
+**La llista de franges viu a tres llocs i s'han de canviar tots tres alhora:**
+
+| On | Què passa si no hi consta |
+| --- | --- |
+| `diaIFranja()` a `scripts/captura-risc.js` | la captura cau a la franja del costat i el `UNIQUE` n'esborra una |
+| `FRANGES_CAPTURA` a l'`index.html` (mateix ordre: és el de les columnes) | aquella captura no troba columna a l'historial |
+| El `check risc_captures_franja_valida` a Supabase | **la captura peta amb 23514 i el risc no es desa** |
+
+El tercer és el que es va oblidar el 17-09-2026: amb els altres dos ja fets, la primera captura de
+`matinada` va morir amb `violates check constraint "risc_captures_franja_valida"` i aquella foto es
+va perdre. El SQL per arreglar-ho és a `PLA-CAPTURES.md` §3. Es veu de seguida perquè el workflow
+queda en vermell — però només si algú mira Actions.
 
 **L'historial les ensenya totes vuit en una sola taula.** Quatre columnes de la vigília (horitzó
 `dema`) i quatre del mateix dia (horitzó `avui`), en ordre, perquè l'evolució es llegeixi d'esquerra
