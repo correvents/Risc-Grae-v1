@@ -8,6 +8,244 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — Resolta la trampa 11 bis: era l'endpoint, i hi ha una v2 amb data
+
+Reportat: meteo.cat dona avisos per al **Barcelonès de demà** i l'SMP Bombers de la web surt en
+blanc.
+
+**No era la web.** Una passada de dades llançada a mà a les 15:23 de Madrid:
+
+```
+📥 Meteocat SMP: 0 episodis, 0 avisos.
+```
+
+Zero. Res descartat per estat ni per zona: l'API no ens donava **res**. Amb 0 avisos, l'SMP Bombers
+no té què pintar i la pantalla feia el que havia de fer.
+
+**Era l'endpoint, i ara està demostrat.** Fem servir `/pronostic/v1/smp/episodis-oberts`, que només
+torna els episodis **ja oberts**. Un avís publicat avui per a demà pertany a un episodi que encara
+no ha començat i no hi surt. La trampa 11 bis deia, amb raó, que una sola observació no feia una
+llei; ara ja n'hi ha **tres** (15-09 dues vegades, 17-09 una) i, sobretot, hi ha la prova directa.
+
+`scripts/provar-smp-endpoints.js` (sonda manual, no escriu res) demana els quatre camins alhora:
+
+| Endpoint | 17-09 a les 15:28 de Madrid |
+| --- | --- |
+| v1 `episodis-oberts` | **0 elements** |
+| v2 `episodis-oberts?data=2026-09-17` | 0 elements |
+| **v2 `episodis-oberts?data=2026-09-18`** | **1 episodi obert · 1 avís vigent · emès a les 09:44** |
+| v1 `episodis-oberts/preavisos` | `[]` |
+| `quotes/v1/consum-actual` | **20.000/mes, 439 fetes, 19.561 lliures** |
+
+L'avís de demà el tenien publicat des de les **09:44 del matí**. El teníem a l'abast sis hores i no
+el vam demanar mai.
+
+**I la quota deixa de ser una incògnita**: pla `Prediccio_20000`, vint mil consultes al mes. En
+gastem unes desenes al dia. La idea de consultar cada hora amb episodis oberts no té cap problema
+de quota; el que la bloquejava era no saber-ho.
+
+### Però la v2 no és un canvi de dues lletres
+
+L'estructura és una altra, i toca el moll de l'os:
+
+| v1 (el que llegeix `processarSMP`) | v2 |
+| --- | --- |
+| `avisos[].dies[]` | `avisos[].**evolucions**[]` |
+| l'afectació porta `periodes[]` | **el període porta `afectacions[]`** (niuat a l'inrevés) |
+| `afectacio.comarca` | `afectacio.**idComarca**` |
+| `afectacio.nivell` = `"Groc"` | `nivell` = **`1`** (número) |
+| `avis.meteor` = text | `episodi.meteor` = **`{ nom }`** |
+| `afectacio.grauPerill` | `afectacio.**perill**` |
+| `dia` = `"2026-09-18"` | `dia` = `"2026-09-18T00:00Z"` |
+| **`afectacio.zona`** | **no hi és** |
+
+L'última fila és la important. `ponderarSMP` —el factor SMP del risc— pondera **per zona**
+(`riscParams.zonesGrup`, les quinze zones de muntanya, amb els pesos que l'usuari edita a
+Configuració → Alertes SMP). La v2 no dona zones: només comarques. O sigui que:
+
+- **L'SMP Bombers no té cap problema**: `matriuRiscComarques` ja treballa per comarca. Només cal
+  llegir `idComarca` i el niuat nou.
+- **El factor SMP del risc sí**: sense noms de zona, s'ha de decidir com es pondera. O es fa un
+  mapatge comarca → zona, o els pesos passen a ser per comarca (i llavors la pantalla de
+  Configuració canvia).
+
+### Rectificació: el port era molt més petit del que vaig dir
+
+Vaig llegir malament. La taula de diferències de dalt compara la v2 amb l'**estructura interna**
+que produeix `processarSMP`, no amb la resposta crua de la v1. Mirant el codi de debò:
+`processarSMP` **ja llegia la forma de la v2** —`avis.evolucions`, `ev.periodes[].afectacions[]`,
+`af.idComarca`, `af.perill`, `episodi.meteor.nom`— i `fetch-smp.js` **ja portava la taula
+`COMARCA_A_ZONA`**, idèntica a la que havia extret de Supabase. La v1 i la v2 tornen el mateix
+format: el que canvia és **quins episodis**.
+
+O sigui que no calia decidir res sobre la ponderació, ni tocar la fórmula, ni la pantalla de
+Configuració, ni l'històric. Només d'on es baixa.
+
+### El canvi, que és de deu línies
+
+`baixarEpisodis()` fa **tres consultes** en comptes d'una: la v1 de sempre, la v2 amb la data
+d'avui i la v2 amb la de demà. Els episodis s'ajunten i `fusionarAvisos()` uneix els dies del
+mateix avís, perquè un episodi de dos dies surt a més d'una resposta i sense això escriuria les
+files repetides a `smp_historic`.
+
+**La v1 s'hi queda a posta.** No està demostrat que la v2 amb data d'avui en sigui un
+superconjunt: el dia de la prova totes dues tornaven buit, o sigui que la comparació no deia res.
+Perdre els avisos d'avui per guanyar els de demà seria un mal canvi.
+
+I com que passar d'una consulta a tres triplica les possibilitats que una fallada passatgera
+s'emporti la passada sencera, cada consulta té **un reintent**. Si després continua fallant, peta:
+no es desa mitja foto com si fos bona.
+
+**Provat** amb la resposta v2 real d'aquell dia:
+
+| | |
+| --- | --- |
+| v1 i v2-avui buides, v2-demà amb l'avís | l'avís passa (**és el cas d'avui**) |
+| el mateix episodi a dues respostes | es dedupeix, no es repeteix cap fila |
+| tot buit | 0 avisos, sense petar |
+| una consulta que falla i es recupera | el reintent la salva |
+| una consulta que falla sempre | peta, com ha de fer |
+
+I la cadena sencera, amb l'avís de demà: **factor SMP 1** (abans 0), **SMP Bombers → Metropolitana
+Sud 06-12**, i el **Barcelonès pintat** al mapa amb el Baix Llobregat, el Baix Penedès, el Garraf i
+el Maresme. Cap zona descartada ni desconeguda.
+
+**Pendent:** veure-ho córrer de debò a la pròxima passada.
+
+## 2026-09-17 — La primera captura de `matinada` va petar: la llista de franges viu a tres llocs
+
+Primera matinada amb el règim nou. Els crons de Supabase, impecables — **al segon**:
+
+| job | ha disparat |
+| --- | --- |
+| `ingesta-matinada-estiu` | 04:45:00 UTC |
+| `captura-matinada-estiu` | 04:50:00 UTC |
+| `ingesta-mati-estiu` | 08:40:00 UTC |
+| `captura-mati-estiu` | 08:50:00 UTC |
+
+**I la captura del matí ja no crema mitja hora**: 26 segons (08:50:01 → 08:50:27), sense cap
+`⏳ Meteocat encara no ha actualitzat`. La d'ahir al migdia, amb l'ancoratge vell, va durar **32
+minuts**. Era el motiu de moure l'ancoratge del matí darrere de l'emissió.
+
+**Però la captura de `matinada` va fallar.** Codi 23514:
+
+```
+new row for relation "risc_captures" violates check constraint "risc_captures_franja_valida"
+```
+
+La taula porta un `check (franja in ('mati','migdia','vespre','extra'))` des que es va crear. Vaig
+canviar `diaIFranja()` i `FRANGES_CAPTURA` i **no la restricció**: la llista de franges viu a tres
+llocs i només en vaig tocar dos. La captura de les 06:50 del 17-09 s'ha perdut.
+
+Restricció arreglada (accepta `matinada`) i apuntada als tres llocs al `CLAUDE.md` i a
+`PLA-CAPTURES.md`. **No es recupera la captura perduda**: un reintent ara desaria les dades de les
+11 h amb l'etiqueta `matinada`, que és justament la mentida que el `capturat_at` explícit va venir a
+tancar. A la taula nova de l'historial hi sortirà com una columna buida, que és el que ha de fer.
+
+Val la pena veure com es va detectar: el workflow **va quedar en vermell**. Si l'error hagués anat
+per un camí amb `continue-on-error`, ningú se n'hauria assabentat.
+
+### Les emissions del vespre: ara sí que hi ha números
+
+`data_emisio`, hora de Madrid, del 16-09:
+
+```
+10:27 · 10:29 · 17:27 · 18:26 · 18:32 · 20:20 · 20:30 · 21:12 · 21:34 · 21:43 · 22:19
+```
+
+La captura del vespre va fer servir l'emissió de les **20:20** — i després en van venir **cinc més**,
+l'última a les **22:19**. O sigui que l'ancoratge de les 20:30 no va tard: va **d'hora**, i es perd
+sistemàticament la cua del vespre.
+
+El 15-09 la cua s'acabava a les 18:53, o sigui que són dos dies molt diferents i encara no hi ha
+prou mostra per decidir l'hora nova. Però la direcció ja no és dubtosa. **Candidat: moure la captura
+del vespre a les 22:45**, o afegir-ne una de tardana i deixar la de les 20:30. És decisió teva.
+
+**Pendent:** decidir l'hora de la captura del vespre amb una setmana de `data_emisio`.
+
+## 2026-09-17 — Quatre captures, vuit columnes, i la config que no havia pujat mai
+
+Demanat: veure a l'Historial **les quatre prediccions de la vigília i les quatre del mateix dia en
+columnes consecutives**, saber **què suma cada factor** a més del seu valor, i entendre per què les
+allaus hi surten a «1/5» si estan desactivades.
+
+### 1. Quatre captures al dia
+
+Hi havia tres franges (`mati`, `migdia`, `vespre`) i quatre ancoratges d'ingesta. Les captures
+anaven per lliure a 10:45 i 20:30, o sigui que les vuit columnes no existien: com a molt sis.
+
+Ara hi ha **quatre jobs de captura per temporada**, cadascun **10 minuts darrere de la seva
+ingesta** (06:50 · 10:50 · 14:50 · 20:30 de Madrid), perquè capturi el que s'acaba de baixar. Els
+jobs de `pg_cron` passen de catorze a **setze**.
+
+**El parany, trobat abans de publicar-ho.** El tall de franja del matí era `hora < 11`: afegir-hi la
+captura de les 06:50 hauria fet que les dues primeres del dia caiguessin totes dues a `mati` i, amb
+el `UNIQUE (dia_captura, franja, horitzo)`, **la segona hauria esborrat la primera sense dir res**.
+Els talls de `diaIFranja()` es van refer per aïllar cada ancoratge i la franja nova és `matinada`.
+Els tres noms vells es mantenen perquè les files ja desades continuïn volent dir el mateix.
+
+### 2. Les vuit prediccions en una taula
+
+L'historial tenia **tres taules** —el mateix dia, l'endemà, el dia abans— i per veure l'evolució
+calia saltar d'una a l'altra i quadrar hores pel cap. Ara n'hi ha **una de vuit columnes**: quatre de
+la vigília (horitzó `dema`) i quatre del mateix dia (horitzó `avui`), en ordre, amb capçalera de dos
+pisos i les fletxes de canvi entre columna i columna.
+
+Les franges **sense captura hi surten buides a posta**. Si s'amaguessin, un dia amb tres captures es
+veuria igual que un dia amb quatre, i justament el que volem saber és si alguna no s'ha fet.
+
+També es poden **obrir en detall les vuit**. Abans el selector només oferia les d'horitzó `avui`: el
+que s'havia dit la vigília es veia a la taula però no es podia desplegar.
+
+Retirats `blocPrevisio` (la fila de xips, que ara és la taula mateixa), `blocHoritzo` i
+`blocSMPBombers`, que ja no cridava ningú.
+
+### 3. Què suma cada factor
+
+Sota el valor de cada factor hi va ara **el que aquell factor suma de veritat** al risc.
+
+No és cosmètic: cap factor no suma el seu valor tal qual, i sense dir-ho la taula enganya. Unes
+allaus a «1/5» semblen sumar 1 quan en sumen **0** —el nivell 1 val 0 a l'escala de perill—, i l'SMP
+i les allaus competeixen pel perill dominant, de manera que el segon només hi posa un suplement.
+Quan els increments topen al màxim, la suma de la columna no dona el risc: també es diu.
+
+### 4. El motiu de debò de l'«1/5»: la config no havia pujat mai a Supabase
+
+Mirat a la taula:
+
+```
+allaus_desactivat = null · formula = null · formula_versio = null · op_config = null
+```
+
+Quan la configuració va passar del `localStorage` a Supabase (trampa 19) es va escriure **només el
+camí de baixada**. El que ja hi havia desat als navegadors no hi va pujar mai i les columnes es van
+quedar a `null`. El resultat és el pitjor possible perquè no es veu: **la pantalla calculava amb la
+config bona i el backend de les captures, que només llegeix Supabase, amb els valors per defecte**.
+Dos números diferents per al mateix dia, que és exactament el que les captures havien de resoldre.
+
+Amb l'interruptor d'allaus es veia a la cara: apagat al navegador, `null` a Supabase, i les captures
+desant `allaus: 1` amb el perill de la primavera congelat al `bpa_latest.json`.
+
+**`migrarConfigCapAmunt(data)`** ho puja en carregar la config, amb dues condicions alhora: que a
+Supabase el camp sigui `null` **i** que aquest dispositiu tingui la preferència desada de veritat.
+La segona no és un detall — sense ella, el primer navegador que obrís l'app pujaria els valors per
+defecte i taparia per sempre la preferència del company que sí que l'havia posada. Un dispositiu que
+no té res a dir, no diu res. Si la pujada falla, **es diu a la franja de dades**: mentre duri, el
+risc desat no és el que es veu.
+
+I la captura desa ara els **interruptors de temporada** (`allausDesactivat`, `boletairesActiu`) dins
+del desglossament, perquè una foto amb `allaus: 1` es pugui distingir d'un dia amb l'interruptor
+posat. Les captures anteriors a avui no en porten constància i es llegeixen com a actives, que és el
+que el backend feia llavors.
+
+De passada, la franja de dades avisa també quan les **allaus estan desactivades**: feia exactament el
+mateix que un factor desmarcat —posar el perill a 0— i només es veia entrant a Configuració.
+
+**Pendent:** que algú obri l'app perquè la migració s'executi i les columnes deixin de ser `null`;
+fins llavors les captures continuen calculant-se amb els valors per defecte. I l'emissió de les
+**21:43** de Madrid del 16-09, que és després de l'ancoratge de la captura del vespre: amb una
+setmana de `data_emisio` es podrà decidir si cal moure-la.
+
 ## 2026-09-16 — Neteja: els crons de GitHub ja no pintaven res
 
 Preguntat: si els crons de Supabase serien millors. **Ja hi eren** —des d'aquell mateix matí— i ja

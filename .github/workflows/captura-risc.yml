@@ -1,12 +1,12 @@
 name: Captura del risc
 
-# Tres captures al dia del risc d'avui i de demà, amb tot el desglossament, a
+# Quatre captures al dia del risc d'avui i de demà, amb tot el desglossament, a
 # `risc_captures`. Serveix per veure **com evoluciona** el risc al llarg del dia:
 # `risc_historic` només en guarda l'última foto, perquè té UNIQUE (data).
 #
 # LES HORES NO LES MANA AQUEST FITXER. El cron de GitHub arriba de 2 a 7 hores
-# tard (vegeu la trampa 8 del CLAUDE.md), i una captura «de les 8:15» que cau a
-# les 13:00 no serveix per comparar dies. Qui les dispara a l'hora és Supabase
+# tard (vegeu la trampa 8 del CLAUDE.md), i una captura «de les 10:50» que cau a
+# les 15:00 no serveix per comparar dies. Qui les dispara a l'hora és Supabase
 # (`pg_cron` + `pg_net` cridant `workflow_dispatch`), que sí que és puntual:
 # vegeu PLA-CAPTURES.md §4 per al SQL.
 #
@@ -14,14 +14,14 @@ name: Captura del risc
 # dispatches però a hores aleatòries: sis passades al dia on en calien tres, i
 # cadascuna podia cremar mitja hora de reintents i sis consultes a Meteocat.
 # En queda **un de sol**: si el `pg_cron` caigués, garanteix una captura al dia
-# —degradat, però viu— i que només n'hi hagi una es veu de seguida. La franja la
-# decideix l'hora real d'execució (`diaIFranja()`), no el cron.
+# —degradada, però viva— i que només n'hi hagi una es veu de seguida. La franja
+# la decideix l'hora real d'execució (`diaIFranja()`), no el cron.
 
 on:
   workflow_dispatch:
     inputs:
       franja:
-        description: 'Franja de la captura (mati, migdia, vespre, extra). Buit = per l''hora que és.'
+        description: 'Franja de la captura (matinada, mati, migdia, vespre, extra). Buit = per l''hora que és.'
         type: string
         default: ''
   schedule:

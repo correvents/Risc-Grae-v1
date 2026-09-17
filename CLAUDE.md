@@ -161,7 +161,9 @@ com les captures les dispara `pg_cron` amb `workflow_dispatch` (`pg_net` → l'A
 token al Vault). Arriba **al segon** i la passada publica en menys de mig minut: mesurat, el dispatch
 de les 18:20:01 tenia els JSON al repositori a les 18:20:28.
 
-Hi ha **catorze jobs**, estiu i hivern de cadascun: sis `captura-*` i vuit `ingesta-*`. Es miren amb
+Hi ha **setze jobs**, estiu i hivern de cadascun: vuit `captura-*` i vuit `ingesta-*`. Cada captura
+va **10 minuts darrere de la seva ingesta** (06:45→06:50, 10:40→10:50, 14:45→14:50, 20:20→20:30 de
+Madrid), perquè capturi el que s'acaba de baixar i no el de la passada d'abans. Es miren amb
 `select jobname, schedule, active from cron.job order by jobname` i l'historial amb
 `select * from cron.job_run_details order by start_time desc`.
 
@@ -283,7 +285,7 @@ alguna fila de més; recuperar el que no s'ha desat no es pot.
 
 Les files anteriors al 16-09-2026 tenen la columna a `null`, i això no es recupera.
 
-**11 bis. L'SMP de demà pot sortir 0 amb avisos ja publicats — i encara no sabem si passa sovint.**
+**11 bis. L'SMP de demà sortia 0 amb avisos ja publicats: la v1 només dona els episodis oberts.**
 Baixem l'SMP de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`. El 15-09-2026, a les 18:36
 i a les 19:01 UTC —just després del butlletí de les 20:30 de Madrid—, l'API va respondre `[]`
 (`📥 Meteocat SMP: 0 episodis, 0 avisos` al log) mentre el web de Meteocat ja tenia avisos formals
@@ -306,13 +308,34 @@ El que **sí** que està descartat és que sigui cosa nostra: no és el filtre p
 (`ESTATS_QUE_COMPTEN` registra al log tot el que descarta, i aquell dia no descartava res) ni el
 mapatge de zones. La resposta era `[]` de debò.
 
-**Com se sabrà.** Ara que hi ha una captura cada vespre, la comparació surt sola: per a cada dia, el
-que deia la captura del vespre d'abans (horitzó `dema`) contra el que va dir la del matí (horitzó
-`avui`). Si l'SMP salta de 0 a un valor alt sovint, és sistemàtic i caldrà un altre camí de l'API;
-si el 15-09 va ser una excepció, no cal tocar res. En unes setmanes hi haurà resposta.
+**RESOLT el 17-09-2026, i era sistemàtic.** No calien setmanes: es va poder preguntar directament.
+Aquell dia, a les 15:28 de Madrid, amb meteo.cat ensenyant avisos per al Barcelonès de l'endemà:
 
-Mentrestant, tracta l'SMP de demà com a **possible cota inferior** —a la pantalla i a les captures—,
-però sense donar per fet que sempre ho és.
+| Endpoint | Resposta |
+| --- | --- |
+| `/pronostic/v1/smp/episodis-oberts` (el d'abans) | **`[]`** |
+| `/pronostic/v2/smp/episodis-oberts?data=2026-09-17` | `[]` |
+| **`/pronostic/v2/smp/episodis-oberts?data=2026-09-18`** | **1 episodi obert, 1 avís vigent, emès a les 09:44** |
+
+La v1 torna **només els episodis ja començats**, i un avís publicat avui per a demà pertany a un
+episodi que encara no ha començat. No era cap excepció del 15-09: passa cada vegada. L'avís d'aquell
+dia el teníem a l'abast des de les 09:44 del matí i no el vam demanar mai.
+
+**El format de la v2 és el mateix** i `processarSMP` ja el sabia llegir (`evolucions`, `idComarca`,
+`perill`, `meteor.nom`), o sigui que el canvi va ser només d'on es baixa: ara `baixarEpisodis()` fa
+**tres consultes** —v1, v2 amb la data d'avui i v2 amb la de demà— i n'ajunta els episodis.
+`fusionarAvisos()` uneix els dies del mateix avís perquè un episodi de dos dies no escrigui les files
+repetides a `smp_historic`. **La v1 s'hi manté a posta**: no està demostrat que la v2 amb data d'avui
+en sigui un superconjunt (el dia de la prova totes dues tornaven buit), i perdre els avisos d'avui
+per guanyar els de demà seria un mal canvi.
+
+**I la quota va deixar de ser una incògnita**: `https://api.meteo.cat/quotes/v1/consum-actual` diu
+pla `Prediccio_20000`, **20.000 consultes al mes**, amb 439 fetes el 17-09. Vuit consultes al dia no
+són res: el que bloquejava mirar-hi més sovint no era la quota, era no saber-la. Si algun dia cal
+consultar cada hora amb episodis oberts, hi cap de sobres.
+
+La sonda que ho va resoldre es queda al repositori: `scripts/provar-smp-endpoints.js` (Actions →
+«Provar endpoints SMP»). No escriu res enlloc i serveix per tornar-hi el dia que l'API canviï.
 
 **14. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
 `dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és
@@ -350,11 +373,44 @@ un factor que no ha arribat no pot semblar un factor a zero.
 
 **18. Les captures del risc són append-only i no substitueixen `risc_historic`.** `risc_historic`
 té `UNIQUE (data)` i s'escriu a sobre: al final del dia només queda l'última foto i no es pot saber
-com hi ha arribat. `risc_captures` desa, tres vegades al dia, el risc d'avui i de demà amb el
+com hi ha arribat. `risc_captures` desa, **quatre vegades al dia**, el risc d'avui i de demà amb el
 desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què es va calcular. **Cap fila no
 es toca mai**; el `UNIQUE (dia_captura, franja, horitzo)` hi és perquè un reintent completi la
 mateixa fila i no en creï una de nova. Ho fa `scripts/captura-risc.js`, que **no** calcula res pel
 seu compte: tot surt de `formula-risc.js`. Vegeu `PLA-CAPTURES.md`.
+
+**Les franges són quatre i els talls de `diaIFranja()` han d'aïllar-les.** `matinada` · `mati` ·
+`migdia` · `vespre`, una per ancoratge (06:50 · 10:50 · 14:50 · 20:30). Quan n'hi havia tres, el tall
+del matí era `hora < 11`: afegir-hi la captura de les 06:50 hauria fet que les dues primeres del dia
+caiguessin totes dues a `mati` i, amb el `UNIQUE (dia_captura, franja, horitzo)`, **la segona hauria
+esborrat la primera sense dir res**. Els noms de les tres velles es mantenen perquè les files ja
+desades continuïn volent dir el mateix.
+
+**La llista de franges viu a tres llocs i s'han de canviar tots tres alhora:**
+
+| On | Què passa si no hi consta |
+| --- | --- |
+| `diaIFranja()` a `scripts/captura-risc.js` | la captura cau a la franja del costat i el `UNIQUE` n'esborra una |
+| `FRANGES_CAPTURA` a l'`index.html` (mateix ordre: és el de les columnes) | aquella captura no troba columna a l'historial |
+| El `check risc_captures_franja_valida` a Supabase | **la captura peta amb 23514 i el risc no es desa** |
+
+El tercer és el que es va oblidar el 17-09-2026: amb els altres dos ja fets, la primera captura de
+`matinada` va morir amb `violates check constraint "risc_captures_franja_valida"` i aquella foto es
+va perdre. El SQL per arreglar-ho és a `PLA-CAPTURES.md` §3. Es veu de seguida perquè el workflow
+queda en vermell — però només si algú mira Actions.
+
+**L'historial les ensenya totes vuit en una sola taula.** Quatre columnes de la vigília (horitzó
+`dema`) i quatre del mateix dia (horitzó `avui`), en ordre, perquè l'evolució es llegeixi d'esquerra
+a dreta. Les franges sense captura hi surten buides a posta: si s'amaguessin, un dia amb tres
+captures es veuria igual que un dia amb quatre. Sota el valor de cada factor hi va **el que aquell
+factor suma de veritat** (`aportacioFactor`), perquè cap factor no suma el seu valor tal qual i sense
+dir-ho la taula enganya: unes allaus a «1/5» semblen sumar 1 quan en sumen 0.
+
+**La captura desa també els interruptors de temporada** (`desglossament.allausDesactivat` i
+`.boletairesActiu`). Sense això, una captura amb `allaus: 1` no es distingeix d'un dia amb
+l'interruptor posat —que donaria 0— i l'historial ensenyava «1/5» sense poder dir si allò comptava.
+Les captures anteriors al 17-09-2026 no en porten constància i es llegeixen com a actives, que és el
+que el backend feia llavors.
 
 **Les hores no les mana `captura-risc.yml`.** Els seus crons són la reserva; qui les dispara a
 l'hora és Supabase (`pg_cron` + `pg_net` → `workflow_dispatch`), perquè un `dispatch` per API
@@ -366,7 +422,9 @@ workflow.
 20:30 suposant que eren les de Meteocat. Amb `dataEmisio` desat (trampa 11 ter) es va poder mirar, i
 les emissions reals cauen en **dues** finestres: **09:30–10:30** i **17:20–19:00** de Madrid. La del
 matí, doncs, preguntava **dues hores abans** que publiquessin: sempre agafava el butlletí del dia
-abans i cremava els 30 minuts sencers de reintents. Moguda a les **10:45**.
+abans i cremava els 30 minuts sencers de reintents. Moguda a les **10:50**, que és l'ancoratge de la
+ingesta del matí: les captures van a les mateixes hores que les passades de dades (06:50 · 10:50 ·
+14:50 · 20:30) perquè capturin el que s'acaba de baixar i no el de la passada d'abans.
 
 La del vespre es queda a les **20:30** a posta: per a una captura, **anar tard no fa mal i anar
 d'hora sí**. Amb les emissions arribant fins a les 18:53, ancorar a les 19:15 deixaria vint minuts de
@@ -387,6 +445,23 @@ d'allaus, els llindars dels helis i la temporada de boletaires es desen a
 imprescindible per a les captures**: si el backend calculés amb els valors per defecte mentre el
 navegador en té d'editats, el risc desat no seria el que es veu. Si afegeixes un paràmetre nou que
 entri al càlcul, ha d'anar a Supabase, no només al navegador.
+
+**I el camí de pujada és tan necessari com el de baixada.** Quan la config va passar a Supabase es va
+escriure només la baixada: el que ja hi havia desat al `localStorage` no hi va pujar mai i les
+columnes es van quedar a `null`. És exactament el cas que la trampa volia evitar, però al revés i
+sense veure's — la pantalla calculant amb la config bona i el backend amb els valors per defecte. Va
+passar amb l'interruptor d'allaus: apagat al navegador des de l'estiu, `allaus_desactivat` a `null`,
+i les captures desant `allaus: 1` amb el perill de la primavera congelat al `bpa_latest.json`.
+
+Ara `migrarConfigCapAmunt(data)` puja, en carregar la config, el que compleix **dues** condicions: que
+a Supabase el camp sigui `null` **i** que aquest dispositiu tingui la preferència desada de veritat al
+`localStorage`. La segona no és un detall: sense ella, el primer navegador que obrís l'app pujaria els
+valors per defecte i taparia per sempre la preferència del company que sí que l'havia posada, i amb la
+fórmula congelaria a Supabase uns punts per defecte que després no es podrien canviar des del codi. Un
+dispositiu que no té res a dir, no diu res. L'excepció és una `formula` amb una `formula_versio` que
+no és la d'ara — aquesta banda la llença per versió, però el backend la llegeix igualment i calcularia
+amb uns punts que aquí ja no volen dir el mateix. Si la pujada falla, es diu a la franja de dades
+(`configDivergent`): mentre duri, el risc desat no és el que es veu.
 
 ## Operativitat dels helicòpters (frontend)
 

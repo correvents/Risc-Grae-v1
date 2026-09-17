@@ -1,7 +1,7 @@
 // Captura del risc: la foto de com estava tot en un moment concret.
 //
 // `risc_historic` té UNIQUE (data) i s'escriu a sobre: al final del dia només hi
-// queda l'última foto i no es pot saber com hi ha arribat. Aquí es desa, tres
+// queda l'última foto i no es pot saber com hi ha arribat. Aquí es desa, quatre
 // vegades al dia, el risc d'avui i de demà amb el desglossament sencer, els
 // factors que el formen, l'SMP Bombers i la fórmula amb què s'ha calculat.
 //
@@ -24,11 +24,11 @@ const FORCA = process.env.FORCA_CAPTURA === 'true';
 const FRANJA_FORCADA = process.env.FRANJA || '';
 
 // ---------- Dia i franja, per l'hora real de Madrid ----------
-// Les captures s'ancoren a les hores en què Meteocat actualitza (08:15, 12:30 i
-// 20:30), però el cron pot arribar tard: la franja es decideix per l'hora que és
-// de veritat, no per la que tocava. Les hores petites són encara del dia
-// anterior, com a `risc-diari.js` (una captura que arriba a les 00:30 és la del
-// vespre d'ahir, no la del matí d'avui).
+// Les captures s'ancoren a les hores en què hem promès que les dades hi seran
+// (06:50, 10:50, 14:50 i 20:30 de Madrid), però una passada pot arribar tard: la
+// franja es decideix per l'hora que és de veritat, no per la que tocava. Les
+// hores petites són encara del dia anterior, com a `risc-diari.js` (una captura
+// que arriba a les 00:30 és la del vespre d'ahir, no la de la matinada d'avui).
 function araMadrid() {
   const s = new Date().toLocaleString('sv', { timeZone: 'Europe/Madrid' });
   return { data: s.split(' ')[0], hora: parseInt(s.split(' ')[1].slice(0, 2), 10) };
@@ -41,9 +41,18 @@ function diaIFranja() {
     const ahir = new Date(new Date(data + 'T12:00:00Z').getTime() - 86400000);
     return { dia: ahir.toISOString().slice(0, 10), franja: 'vespre' };
   }
-  if (hora < 11) return { dia: data, franja: 'mati' };
-  if (hora < 18) return { dia: data, franja: 'migdia' };
-  return { dia: data, franja: 'vespre' };
+  // **Quatre franges, una per ancoratge** (06:50 · 10:50 · 14:50 · 20:30 de
+  // Madrid). Els talls han d'aïllar cada ancoratge: amb els de tres franges que
+  // hi havia (`hora < 11` per al matí), la captura de les 06:50 i la de les
+  // 10:50 queien totes dues a `mati` i, amb el `UNIQUE (dia_captura, franja,
+  // horitzo)`, **la segona esborrava la primera en silenci**.
+  //
+  // Els noms de les tres antigues es mantenen perquè les files ja desades
+  // continuïn volent dir el mateix; la nova és `matinada`.
+  if (hora < 9)  return { dia: data, franja: 'matinada' };  // ancoratge 06:50
+  if (hora < 13) return { dia: data, franja: 'mati' };       // ancoratge 10:50
+  if (hora < 18) return { dia: data, franja: 'migdia' };     // ancoratge 14:50
+  return { dia: data, franja: 'vespre' };                    // ancoratge 20:30
 }
 
 const diaMes = (dataStr, n) =>
@@ -283,7 +292,16 @@ async function main() {
       smp: factors.smp, allaus: factors.allaus, afluencia: afluencia.nivell,
       operativitat: helis.length ? op.count : null, canvi: factors.canvi,
       boletaires: factors.boletaires, planspc: factors.planspc || 0,
-      desglossament: { ...det, afluenciaMotiu: afluencia.motiu, notes: factors.notes },
+      // Els interruptors de temporada hi van a dins a posta. Sense ells, una
+      // captura amb `allaus: 1` no es distingeix d'un dia amb l'interruptor
+      // posat (que donaria 0): la pantalla ensenyava «1/5» sense poder dir si
+      // allò comptava o no. Un valor sense el context que el fa valer 0 enganya
+      // igual que un factor sense dades que passa per un factor a zero.
+      desglossament: {
+        ...det, afluenciaMotiu: afluencia.motiu, notes: factors.notes,
+        allausDesactivat: config.allausDesactivat,
+        boletairesActiu: config.boletairesActiu
+      },
       smp_detall: factors.smpDetall || [],
       allaus_detall: factors.allausDetall || null,
       operativitat_detall: op.detall,
