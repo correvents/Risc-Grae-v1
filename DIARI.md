@@ -8,6 +8,70 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — Resolta la trampa 11 bis: era l'endpoint, i hi ha una v2 amb data
+
+Reportat: meteo.cat dona avisos per al **Barcelonès de demà** i l'SMP Bombers de la web surt en
+blanc.
+
+**No era la web.** Una passada de dades llançada a mà a les 15:23 de Madrid:
+
+```
+📥 Meteocat SMP: 0 episodis, 0 avisos.
+```
+
+Zero. Res descartat per estat ni per zona: l'API no ens donava **res**. Amb 0 avisos, l'SMP Bombers
+no té què pintar i la pantalla feia el que havia de fer.
+
+**Era l'endpoint, i ara està demostrat.** Fem servir `/pronostic/v1/smp/episodis-oberts`, que només
+torna els episodis **ja oberts**. Un avís publicat avui per a demà pertany a un episodi que encara
+no ha començat i no hi surt. La trampa 11 bis deia, amb raó, que una sola observació no feia una
+llei; ara ja n'hi ha **tres** (15-09 dues vegades, 17-09 una) i, sobretot, hi ha la prova directa.
+
+`scripts/provar-smp-endpoints.js` (sonda manual, no escriu res) demana els quatre camins alhora:
+
+| Endpoint | 17-09 a les 15:28 de Madrid |
+| --- | --- |
+| v1 `episodis-oberts` | **0 elements** |
+| v2 `episodis-oberts?data=2026-09-17` | 0 elements |
+| **v2 `episodis-oberts?data=2026-09-18`** | **1 episodi obert · 1 avís vigent · emès a les 09:44** |
+| v1 `episodis-oberts/preavisos` | `[]` |
+| `quotes/v1/consum-actual` | **20.000/mes, 439 fetes, 19.561 lliures** |
+
+L'avís de demà el tenien publicat des de les **09:44 del matí**. El teníem a l'abast sis hores i no
+el vam demanar mai.
+
+**I la quota deixa de ser una incògnita**: pla `Prediccio_20000`, vint mil consultes al mes. En
+gastem unes desenes al dia. La idea de consultar cada hora amb episodis oberts no té cap problema
+de quota; el que la bloquejava era no saber-ho.
+
+### Però la v2 no és un canvi de dues lletres
+
+L'estructura és una altra, i toca el moll de l'os:
+
+| v1 (el que llegeix `processarSMP`) | v2 |
+| --- | --- |
+| `avisos[].dies[]` | `avisos[].**evolucions**[]` |
+| l'afectació porta `periodes[]` | **el període porta `afectacions[]`** (niuat a l'inrevés) |
+| `afectacio.comarca` | `afectacio.**idComarca**` |
+| `afectacio.nivell` = `"Groc"` | `nivell` = **`1`** (número) |
+| `avis.meteor` = text | `episodi.meteor` = **`{ nom }`** |
+| `afectacio.grauPerill` | `afectacio.**perill**` |
+| `dia` = `"2026-09-18"` | `dia` = `"2026-09-18T00:00Z"` |
+| **`afectacio.zona`** | **no hi és** |
+
+L'última fila és la important. `ponderarSMP` —el factor SMP del risc— pondera **per zona**
+(`riscParams.zonesGrup`, les quinze zones de muntanya, amb els pesos que l'usuari edita a
+Configuració → Alertes SMP). La v2 no dona zones: només comarques. O sigui que:
+
+- **L'SMP Bombers no té cap problema**: `matriuRiscComarques` ja treballa per comarca. Només cal
+  llegir `idComarca` i el niuat nou.
+- **El factor SMP del risc sí**: sense noms de zona, s'ha de decidir com es pondera. O es fa un
+  mapatge comarca → zona, o els pesos passen a ser per comarca (i llavors la pantalla de
+  Configuració canvia).
+
+**Pendent:** decidir com es pondera el factor SMP amb la v2. Fins que no es decideixi, la web
+continuarà ensenyant en blanc els avisos que Meteocat publica avui per a demà.
+
 ## 2026-09-17 — La primera captura de `matinada` va petar: la llista de franges viu a tres llocs
 
 Primera matinada amb el règim nou. Els crons de Supabase, impecables — **al segon**:
