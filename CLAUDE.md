@@ -72,6 +72,16 @@ si algú torna a llegir `dia.allaus` cru, l'interruptor deixa de fer efecte en a
 simulador se'l salta a posta (`simulacio: true`): serveix per calibrar amb valors inventats.
 Només afecta el frontend — el backend (`risc-diari.js`) no pot llegir el `localStorage`.
 
+**I compte amb el 0 del BPA, que fins al 17-09-2026 es convertia en 1.** `factorsDelDia` feia
+`perill_maxim_numeric || 1`. Fora de temporada l'ICGC no publica i el resum arriba amb
+`perill_maxim: "Desconegut"` i `perill_maxim_numeric: 0`: aquell `|| 1` ho tornava un 1, i la
+pantalla i les captures ensenyaven **«1/5» com si hi hagués perill feble mesurat**. És la trampa 12
+al revés — un factor sense dades no pot semblar un factor a 1, igual que no pot semblar un factor a
+0. Ara es llegeix el número tal com ve. El risc no en canvia (a l'escala, 0 i 1 valen tots dos 0
+punts), però el que es veu ja és el que hi ha. Aquest bug és el que feia semblar imprescindible
+l'interruptor a l'estiu; l'interruptor continua fent falta per a un dia editat a mà i per si algun
+dia el butlletí queda congelat de debò.
+
 **Interruptor de temporada de boletaires.** El factor `boletaires` existia a la fórmula però **ningú
 n'establia mai el valor**: la casella de Fórmula de risc només diu si compta, i `dia.boletaires` es
 quedava a 0 tret que s'edités el dia a mà — cosa que, a sobre, marca el dia com a editat i congela
