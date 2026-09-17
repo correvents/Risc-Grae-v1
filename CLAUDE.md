@@ -285,7 +285,7 @@ alguna fila de més; recuperar el que no s'ha desat no es pot.
 
 Les files anteriors al 16-09-2026 tenen la columna a `null`, i això no es recupera.
 
-**11 bis. L'SMP de demà pot sortir 0 amb avisos ja publicats — i encara no sabem si passa sovint.**
+**11 bis. L'SMP de demà sortia 0 amb avisos ja publicats: la v1 només dona els episodis oberts.**
 Baixem l'SMP de `https://api.meteo.cat/pronostic/v1/smp/episodis-oberts`. El 15-09-2026, a les 18:36
 i a les 19:01 UTC —just després del butlletí de les 20:30 de Madrid—, l'API va respondre `[]`
 (`📥 Meteocat SMP: 0 episodis, 0 avisos` al log) mentre el web de Meteocat ja tenia avisos formals
@@ -308,13 +308,34 @@ El que **sí** que està descartat és que sigui cosa nostra: no és el filtre p
 (`ESTATS_QUE_COMPTEN` registra al log tot el que descarta, i aquell dia no descartava res) ni el
 mapatge de zones. La resposta era `[]` de debò.
 
-**Com se sabrà.** Ara que hi ha una captura cada vespre, la comparació surt sola: per a cada dia, el
-que deia la captura del vespre d'abans (horitzó `dema`) contra el que va dir la del matí (horitzó
-`avui`). Si l'SMP salta de 0 a un valor alt sovint, és sistemàtic i caldrà un altre camí de l'API;
-si el 15-09 va ser una excepció, no cal tocar res. En unes setmanes hi haurà resposta.
+**RESOLT el 17-09-2026, i era sistemàtic.** No calien setmanes: es va poder preguntar directament.
+Aquell dia, a les 15:28 de Madrid, amb meteo.cat ensenyant avisos per al Barcelonès de l'endemà:
 
-Mentrestant, tracta l'SMP de demà com a **possible cota inferior** —a la pantalla i a les captures—,
-però sense donar per fet que sempre ho és.
+| Endpoint | Resposta |
+| --- | --- |
+| `/pronostic/v1/smp/episodis-oberts` (el d'abans) | **`[]`** |
+| `/pronostic/v2/smp/episodis-oberts?data=2026-09-17` | `[]` |
+| **`/pronostic/v2/smp/episodis-oberts?data=2026-09-18`** | **1 episodi obert, 1 avís vigent, emès a les 09:44** |
+
+La v1 torna **només els episodis ja començats**, i un avís publicat avui per a demà pertany a un
+episodi que encara no ha començat. No era cap excepció del 15-09: passa cada vegada. L'avís d'aquell
+dia el teníem a l'abast des de les 09:44 del matí i no el vam demanar mai.
+
+**El format de la v2 és el mateix** i `processarSMP` ja el sabia llegir (`evolucions`, `idComarca`,
+`perill`, `meteor.nom`), o sigui que el canvi va ser només d'on es baixa: ara `baixarEpisodis()` fa
+**tres consultes** —v1, v2 amb la data d'avui i v2 amb la de demà— i n'ajunta els episodis.
+`fusionarAvisos()` uneix els dies del mateix avís perquè un episodi de dos dies no escrigui les files
+repetides a `smp_historic`. **La v1 s'hi manté a posta**: no està demostrat que la v2 amb data d'avui
+en sigui un superconjunt (el dia de la prova totes dues tornaven buit), i perdre els avisos d'avui
+per guanyar els de demà seria un mal canvi.
+
+**I la quota va deixar de ser una incògnita**: `https://api.meteo.cat/quotes/v1/consum-actual` diu
+pla `Prediccio_20000`, **20.000 consultes al mes**, amb 439 fetes el 17-09. Vuit consultes al dia no
+són res: el que bloquejava mirar-hi més sovint no era la quota, era no saber-la. Si algun dia cal
+consultar cada hora amb episodis oberts, hi cap de sobres.
+
+La sonda que ho va resoldre es queda al repositori: `scripts/provar-smp-endpoints.js` (Actions →
+«Provar endpoints SMP»). No escriu res enlloc i serveix per tornar-hi el dia que l'API canviï.
 
 **14. La targeta del risc recalcula els dies en viu al moment de pintar.** `renderRisc` no llegeix
 `dia.smp` del `localStorage` per a avui i demà: crida `calcularValorsAuto(dia.data)` i el refà, que és

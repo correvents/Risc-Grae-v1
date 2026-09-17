@@ -69,8 +69,48 @@ Configuració → Alertes SMP). La v2 no dona zones: només comarques. O sigui q
   mapatge comarca → zona, o els pesos passen a ser per comarca (i llavors la pantalla de
   Configuració canvia).
 
-**Pendent:** decidir com es pondera el factor SMP amb la v2. Fins que no es decideixi, la web
-continuarà ensenyant en blanc els avisos que Meteocat publica avui per a demà.
+### Rectificació: el port era molt més petit del que vaig dir
+
+Vaig llegir malament. La taula de diferències de dalt compara la v2 amb l'**estructura interna**
+que produeix `processarSMP`, no amb la resposta crua de la v1. Mirant el codi de debò:
+`processarSMP` **ja llegia la forma de la v2** —`avis.evolucions`, `ev.periodes[].afectacions[]`,
+`af.idComarca`, `af.perill`, `episodi.meteor.nom`— i `fetch-smp.js` **ja portava la taula
+`COMARCA_A_ZONA`**, idèntica a la que havia extret de Supabase. La v1 i la v2 tornen el mateix
+format: el que canvia és **quins episodis**.
+
+O sigui que no calia decidir res sobre la ponderació, ni tocar la fórmula, ni la pantalla de
+Configuració, ni l'històric. Només d'on es baixa.
+
+### El canvi, que és de deu línies
+
+`baixarEpisodis()` fa **tres consultes** en comptes d'una: la v1 de sempre, la v2 amb la data
+d'avui i la v2 amb la de demà. Els episodis s'ajunten i `fusionarAvisos()` uneix els dies del
+mateix avís, perquè un episodi de dos dies surt a més d'una resposta i sense això escriuria les
+files repetides a `smp_historic`.
+
+**La v1 s'hi queda a posta.** No està demostrat que la v2 amb data d'avui en sigui un
+superconjunt: el dia de la prova totes dues tornaven buit, o sigui que la comparació no deia res.
+Perdre els avisos d'avui per guanyar els de demà seria un mal canvi.
+
+I com que passar d'una consulta a tres triplica les possibilitats que una fallada passatgera
+s'emporti la passada sencera, cada consulta té **un reintent**. Si després continua fallant, peta:
+no es desa mitja foto com si fos bona.
+
+**Provat** amb la resposta v2 real d'aquell dia:
+
+| | |
+| --- | --- |
+| v1 i v2-avui buides, v2-demà amb l'avís | l'avís passa (**és el cas d'avui**) |
+| el mateix episodi a dues respostes | es dedupeix, no es repeteix cap fila |
+| tot buit | 0 avisos, sense petar |
+| una consulta que falla i es recupera | el reintent la salva |
+| una consulta que falla sempre | peta, com ha de fer |
+
+I la cadena sencera, amb l'avís de demà: **factor SMP 1** (abans 0), **SMP Bombers → Metropolitana
+Sud 06-12**, i el **Barcelonès pintat** al mapa amb el Baix Llobregat, el Baix Penedès, el Garraf i
+el Maresme. Cap zona descartada ni desconeguda.
+
+**Pendent:** veure-ho córrer de debò a la pròxima passada.
 
 ## 2026-09-17 — La primera captura de `matinada` va petar: la llista de franges viu a tres llocs
 
