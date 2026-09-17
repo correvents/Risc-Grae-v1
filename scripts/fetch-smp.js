@@ -198,6 +198,102 @@ function registrarEstatsRebuts(dades) {
               `hauria de comptar, cal afegir-lo a ESTATS_QUE_COMPTEN.`);
 }
 
+// ---------- D'on es baixa: tres consultes, no una ----------
+//
+// **El forat que això tanca.** `/pronostic/v1/smp/episodis-oberts` torna només
+// els episodis **ja oberts**, i un avís que Meteocat publica avui per a demà
+// pertany a un episodi que encara no ha començat: per aquest camí no se'l veu.
+// El 17-09-2026, a les 15:28 de Madrid, la v1 tornava `[]` mentre el web de
+// Meteocat ja tenia avisos per al Barcelonès de l'endemà — emesos a les 09:44
+// d'aquell mateix matí. Va passar igual el 15-09, dues vegades. Era la pregunta
+// oberta de la trampa 11 bis, i la resposta és aquesta.
+//
+// La **v2 accepta una data** (`?data=<dia>Z`) i llavors sí que dona l'episodi
+// d'aquell dia encara que no hagi començat. El format de la resposta és el
+// mateix: `processarSMP` ja la sap llegir sense tocar res.
+//
+// **Es demanen els tres.** La v1 es manté perquè no està demostrat que la v2
+// amb data d'avui en sigui un superconjunt —el dia que es va comprovar totes
+// dues tornaven buit, o sigui que la comparació no deia res— i perdre els
+// avisos d'avui per guanyar els de demà seria un mal canvi. Costa dues
+// consultes més per passada: **vuit al dia contra una quota de 20.000 al mes**
+// (`quotes/v1/consum-actual`), que és el que fa que això no sigui cap problema.
+const URL_V1 = 'https://api.meteo.cat/pronostic/v1/smp/episodis-oberts';
+const urlV2 = (dia) => `https://api.meteo.cat/pronostic/v2/smp/episodis-oberts?data=${dia}Z`;
+
+const avuiMadrid = () => new Date().toLocaleString('sv', { timeZone: 'Europe/Madrid' }).slice(0, 10);
+const diaMes = (d, n) => new Date(new Date(d + 'T12:00:00Z').getTime() + n * 86400000)
+  .toISOString().slice(0, 10);
+
+// Una consulta, amb un reintent. Passar d'una crida a tres triplica les
+// possibilitats que una fallada passatgera s'emporti tota la passada, i això
+// seria un mal negoci: el reintent costa un segon i una consulta de la quota.
+//
+// Si després del reintent continua fallant, **peta**. No es desa mitja foto:
+// una passada incompleta desada com si fos bona és el forat que la trampa 12
+// vol tancar, i el workflow ja sap dir quina font ha caigut.
+async function demanar(etiqueta, url) {
+  for (let intent = 1; intent <= 2; intent++) {
+    try {
+      const resp = await fetch(url, { headers: { 'X-Api-Key': API_KEY } });
+      if (!resp.ok) throw new Error(`${resp.status}: ${(await resp.text()).slice(0, 200)}`);
+      return await resp.json();
+    } catch (e) {
+      if (intent === 2) throw new Error(`Meteocat SMP ${etiqueta} — ${e.message}`);
+      console.log(`⏳ ${etiqueta} ha fallat (${e.message}). Hi torno un cop.`);
+      await new Promise(r => setTimeout(r, 1500));
+    }
+  }
+}
+
+async function baixarEpisodis() {
+  const avui = avuiMadrid();
+  const fonts = [
+    ['v1', URL_V1],
+    [`v2 avui (${avui})`, urlV2(avui)],
+    [`v2 demà (${diaMes(avui, 1)})`, urlV2(diaMes(avui, 1))]
+  ];
+  const episodis = [];
+  const vistos = new Set();
+  const resum = [];
+  for (const [etiqueta, url] of fonts) {
+    const cru = await demanar(etiqueta, url);
+    const llista = Array.isArray(cru) ? cru : [];
+    let nous = 0;
+    for (const ep of llista) {
+      // Un episodi que dura dos dies surt a més d'una resposta. Es compara el
+      // JSON sencer: si és idèntic, és el mateix i no cal duplicar-lo; si no ho
+      // és (cada resposta pot portar només les evolucions del dia demanat),
+      // entra i després `fusionarAvisos` ajunta els dies.
+      const clau = JSON.stringify(ep);
+      if (vistos.has(clau)) continue;
+      vistos.add(clau);
+      episodis.push(ep);
+      nous++;
+    }
+    resum.push(`${etiqueta}: ${llista.length}${nous !== llista.length ? ` (${nous} nous)` : ''}`);
+  }
+  console.log(`🌐 Episodis per font → ${resum.join(' · ')}`);
+  return episodis;
+}
+
+// Demanar tres camins vol dir que el mateix avís pot arribar dues vegades, un
+// cop per dia. Sense ajuntar-los, `toRows` escriuria les files repetides a
+// `smp_historic`. Es fusionen per identitat de l'avís i se n'uneixen els dies.
+function fusionarAvisos(resultat) {
+  const perClau = new Map();
+  for (const avis of resultat.avisos) {
+    const clau = [avis.meteor, avis.estat, avis.dataInici, avis.dataFi, avis.dataEmisio].join('|');
+    const jaHiEs = perClau.get(clau);
+    if (!jaHiEs) { perClau.set(clau, avis); continue; }
+    for (const dia of avis.dies)
+      if (!jaHiEs.dies.some(d => d.dia === dia.dia)) jaHiEs.dies.push(dia);
+    jaHiEs.dies.sort((a, b) => a.dia.localeCompare(b.dia));
+  }
+  resultat.avisos = [...perClau.values()];
+  return resultat;
+}
+
 function processarSMP(dades) {
   const resultat = { dataConsulta: new Date().toISOString(), avisos: [] };
   if (!dades || dades.length === 0) return resultat;
@@ -285,14 +381,10 @@ function toRows(dades) {
 }
 
 async function main() {
-  const resp = await fetch('https://api.meteo.cat/pronostic/v1/smp/episodis-oberts', {
-    headers: { 'X-Api-Key': API_KEY }
-  });
-  if (!resp.ok) throw new Error(`Meteocat SMP ${resp.status}: ${await resp.text()}`);
-  const cru = await resp.json();
+  const cru = await baixarEpisodis();
   registrarEstatsRebuts(cru);
   registrarCampsNoUsats(cru);
-  const dades = processarSMP(cru);
+  const dades = fusionarAvisos(processarSMP(cru));
   registrarCodisDesconeguts(dades);
   const anterior = readJSON('smp_latest.json');
   const changed = hasChanged(dades, anterior);
