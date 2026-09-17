@@ -1,34 +1,6 @@
 {
-  "actualitzat": "2026-09-17T04:45:20.824Z",
+  "actualitzat": "2026-09-17T05:00:27.325Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "16/09/2026 22:27",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127376_INICI--ACTIVAT_INUNCAT_202609162244.pdf"
-      },
-      "descripcio": "SMP Intensitat de pluja Intensitat > 40 mm / 30 minuts - Bages, Baix Llobregat, Baix Penedès, Garraf, Vallès Occidental, Alt Penedès i Moianès - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "15/09/2026 10:44",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127288_ACTUALITZACIO--ACTIVAT_INUNCAT_202609170520.pdf"
-      },
-      "descripcio": "SMP Intensitat de Pluja 30min 16/09 - "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
@@ -56,6 +28,34 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127372_INICI--ACTIVAT_INUNCAT_202609162149.pdf"
       },
       "descripcio": "Observat Pluja Baix Llobregat, Baix Penedès, Alt Penedès i Garraf 6/6 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "16/09/2026 22:27",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127376_INICI--ACTIVAT_INUNCAT_202609162244.pdf"
+      },
+      "descripcio": "SMP Intensitat de pluja Intensitat > 40 mm / 30 minuts - Bages, Baix Llobregat, Baix Penedès, Garraf, Vallès Occidental, Alt Penedès i Moianès - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "15/09/2026 10:44",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127288_ACTUALITZACIO--ACTIVAT_INUNCAT_202609170520.pdf"
+      },
+      "descripcio": "SMP Intensitat de Pluja 30min 16/09 - "
     }
   ]
 }
