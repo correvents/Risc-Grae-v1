@@ -1,0 +1,26 @@
+name: Provar endpoints SMP
+
+# Sonda manual. **Cap cron**: es corre quan cal comprovar què dona cada camí de
+# l'API de l'SMP i comparar-ho amb el que ensenya el web de Meteocat en aquell
+# mateix moment. No escriu res —ni a `data/`, ni a Supabase—, o sigui que es pot
+# llançar sense por.
+#
+# Serveix per a la pregunta oberta de la trampa 11 bis: la v1 d'`episodis-oberts`
+# només torna els episodis ja començats, i els avisos publicats avui per a demà
+# no hi surten.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  provar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Sondar els endpoints
+        env:
+          METEOCAT_API_KEY: ${{ secrets.METEOCAT_API_KEY }}
+        run: node scripts/provar-smp-endpoints.js
