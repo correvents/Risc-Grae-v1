@@ -77,6 +77,14 @@ async function main() {
     const v2 = await provar(`v2 episodis-oberts amb data=${d}`,
       `https://api.meteo.cat/pronostic/v2/smp/episodis-oberts?data=${d}Z`);
     resumir(v2);
+    // La v2 no té per què tornar la mateixa forma que la v1, i `processarSMP`
+    // llegeix camps concrets (`avisos[].dies[].afectacions[]`). Abans de tocar
+    // res cal veure el JSON tal com ve.
+    if (Array.isArray(v2) && v2.length) {
+      console.log('      --- JSON cru ---');
+      console.log(JSON.stringify(v2, null, 1).slice(0, 6000));
+      console.log('      --- fi ---');
+    }
   }
 
   const pre = await provar('v1 episodis-oberts/preavisos',
