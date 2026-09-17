@@ -8,6 +8,52 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — Les allaus sortien «1/5» sense butlletí: un `|| 1` que convertia el 0 en 1
+
+Reportat mirant la taula nova de l'historial: *«la fila allaus està desactivada ara, hauria de
+sortir —, i surt 1/5»*.
+
+La primera hipòtesi era que l'interruptor no havia arribat a Supabase. **No era això.** Mirant el
+`bpa_latest.json` d'aquell moment:
+
+```json
+"resum": { "perill_maxim": "Desconegut", "perill_maxim_numeric": 0 }
+```
+
+I a `formula-risc.js`:
+
+```js
+const perillMax = dades.bpa.resum.perill_maxim_numeric || 1;   // ← el 0 es torna 1
+```
+
+Fora de temporada l'ICGC **no publica butlletí**: el resum arriba amb `Desconegut` i `0`, i aquell
+`|| 1` ho convertia en un 1. La pantalla i les captures ensenyaven «1/5» com si hi hagués perill
+feble **mesurat**, quan el que passa és que no n'hi ha cap. És la trampa 12 al revés: un factor
+sense dades no pot semblar un factor a 1, igual que no pot semblar un factor a 0.
+
+O sigui que l'interruptor d'allaus, fins ara, tapava un bug en comptes d'un problema de dades: el
+que arreglava no era «el perill de la primavera congelat», sinó aquest `|| 1`.
+
+**El número del risc no en canvia.** A l'escala de perill, tant el 0 com l'1 valen 0 punts
+(`allaus.punts` va `{1:0, 2:0, 3:2, 4:4, 5:5}`). Comprovat cas per cas:
+
+| | allaus | risc |
+| --- | --- | --- |
+| BPA sense butlletí (avui) | **0** (abans 1) | 0 |
+| BPA sense butlletí + interruptor | 0 | 0 |
+| BPA amb perill 3 | 3 | 2 |
+| BPA amb perill 3 + interruptor | 0 | 0 |
+| Sense cap dada de BPA | 0 | 0 |
+
+Només canvia que el que es veu és el que hi ha.
+
+**El `?v=` de `formula-risc.js` puja a 7.** El fitxer es carrega amb `<script src="formula-risc.js?v=…">`
+i sense pujar-lo el navegador serveix el de la memòria cau: el canvi no es veuria. Si tornes a tocar
+`formula-risc.js`, puja'l.
+
+**Pendent:** les captures ja desades porten `allaus: 1` i no es reescriuen — són fotos. A partir
+d'ara desaran 0.
+
 ## 2026-09-17 — Resolta la trampa 11 bis: era l'endpoint, i hi ha una v2 amb data
 
 Reportat: meteo.cat dona avisos per al **Barcelonès de demà** i l'SMP Bombers de la web surt en
