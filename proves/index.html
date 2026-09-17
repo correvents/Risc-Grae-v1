@@ -1565,6 +1565,10 @@
       if (!riscFormula.smp.actiu) avisosConfig.push('el factor <strong>Alertes SMP</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (!riscFormula.allaus.actiu) avisosConfig.push('el factor <strong>Allaus</strong> està desmarcat a Configuració → Fórmula de risc: no suma al risc');
       if (boletairesConfig.actiu) avisosConfig.push('🍄 <strong>temporada de bolets</strong> activada a Configuració → Boletaires: suma a tots els dies');
+      // L'interruptor d'allaus fa exactament el mateix que un factor desmarcat
+      // —posa el perill a 0— i no es veia enlloc fora de Configuració. És el que
+      // fa que la targeta digui «0/5» amb el BPA ple de dades.
+      if (allausConfig.desactivat) avisosConfig.push('❄️ <strong>allaus desactivades</strong> a Configuració → Allaus BPA: compten 0 encara que el BPA porti perill');
       const zonesActives = Object.values(riscParams.zones || {}).filter(v => v > 0).length;
       const zonesTotals = Object.keys(riscParams.zones || {}).length;
       if (zonesActives === 0) avisosConfig.push('no hi ha <strong>cap zona activada</strong> a Configuració → Alertes SMP: l\'SMP sempre sortirà 0');
@@ -1585,6 +1589,15 @@
       const avisErrorCalcul = errorCalculRisc
         ? `<div style="width:100%;color:#b71c1c;background:#ffcdd2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;font-weight:700;">
              ⚠️ El càlcul del risc ha donat error (${escapeHtml(errorCalculRisc)}): el número pot no correspondre a les dades d'ara.
+           </div>` : '';
+
+      // La config d'aquest navegador que no ha arribat a Supabase. Mentre duri,
+      // les captures del backend calculen amb uns altres valors: el risc desat
+      // no és el que es veu aquí, i això no pot quedar en silenci.
+      const avisConfigDivergent = configDivergent
+        ? `<div style="width:100%;color:#b71c1c;background:#ffcdd2;border-radius:4px;padding:0.2rem 0.4rem;margin-top:0.25rem;font-weight:700;">
+             ⚠️ Aquesta configuració (${escapeHtml(configDivergent.join(', '))}) no s'ha pogut desar a Supabase:
+             les captures del risc es calculen amb uns altres valors fins que hi arribi.
            </div>` : '';
 
       const avisOperativitat = errorOperativitat
@@ -1612,6 +1625,7 @@
           ${avis}
           ${avisConfig}
           ${avisErrorCalcul}
+          ${avisConfigDivergent}
           ${avisOperativitat}
         </div>`;
     }
@@ -4445,6 +4459,75 @@
     // que pot ser antiga i tenir zones desactivades que ningú recorda haver tocat.
     let origenRiscParams = 'valors per defecte';
 
+    // Quan la config d'aquest navegador no ha arribat a Supabase. No és un
+    // detall estètic: el backend de les captures només llegeix Supabase, o sigui
+    // que mentre això duri el risc desat es calcula amb uns altres valors que el
+    // que es veu aquí. Es diu a la franja de dades.
+    let configDivergent = null;
+
+    // **La config que hi havia al navegador i no va pujar mai.**
+    //
+    // Els paràmetres del risc van viure mesos només al `localStorage`. Quan van
+    // passar a Supabase (trampa 19) es va escriure el camí de baixada —Supabase
+    // mana— però no el de pujada: les columnes es van quedar a `null` i el que
+    // ja hi havia desat en un navegador no hi va arribar mai. El resultat és el
+    // pitjor possible perquè no es veu: la pantalla calcula amb la config bona i
+    // el backend de les captures, que només llegeix Supabase, amb els valors per
+    // defecte. Dos números diferents per al mateix dia.
+    //
+    // Va passar de veritat amb l'interruptor d'allaus: apagat al navegador i
+    // `allaus_desactivat` a `null`, o sigui que les captures desaven `allaus: 1`
+    // amb el perill de la primavera congelat al `bpa_latest.json` mentre la
+    // pantalla en deia 0.
+    //
+    // **Dues condicions, i totes dues fan falta:**
+    //
+    // 1. Que a Supabase el camp no hi sigui (`null`). Si hi ha un valor, encara
+    //    que sigui `false`, mana Supabase: és la decisió de l'equip i no la pot
+    //    desfer el navegador que obri l'app més tard.
+    // 2. Que **aquest dispositiu tingui la preferència desada de veritat**, no
+    //    que en tingui una per defecte. Si no, el primer navegador que obrís
+    //    l'app pujaria els valors per defecte i taparia per sempre la
+    //    preferència del company que sí que l'havia posada — i, amb la fórmula,
+    //    congelaria a Supabase uns punts per defecte que després no es podrien
+    //    canviar des del codi. Un dispositiu que no té res a dir, no diu res.
+    //
+    // La fórmula, a més, es puja si la que hi ha desada és d'una altra versió:
+    // aquesta banda la llença per versió, però el backend la llegeix igualment i
+    // calcularia amb uns punts que aquí ja no volen dir el mateix.
+    const teDesat = (clau) => {
+      try { return localStorage.getItem(clau) != null; } catch(e) { return false; }
+    };
+
+    function migrarConfigCapAmunt(data) {
+      const migrar = {};
+      if ((data.formula == null || data.formula_versio !== RISC_FORMULA_VERSIO) && teDesat('riscGRAE_formula')) {
+        migrar.formula = riscFormula;
+        migrar.formula_versio = RISC_FORMULA_VERSIO;
+      }
+      if (data.allaus_desactivat == null && teDesat(LS_ALLAUS_KEY)) {
+        migrar.allaus_desactivat = !!allausConfig.desactivat;
+      }
+      if (data.op_config == null && teDesat('riscGRAE_opHC')) {
+        migrar.op_config = opConfig;
+      }
+      if (data.boletaires_actiu == null && teDesat(LS_BOLETAIRES_KEY)) {
+        migrar.boletaires_actiu = !!boletairesConfig.actiu;
+      }
+
+      const camps = Object.keys(migrar);
+      if (!camps.length) return;
+
+      console.log('⬆️ Config que Supabase no tenia i es puja:', camps.join(', '));
+      desarConfigSupabase(migrar).then(r => {
+        // Si no puja, es diu. Callar-ho deixaria les captures calculant amb uns
+        // altres valors sense que ho sàpiga ningú, que és exactament el que ha
+        // passat fins ara.
+        configDivergent = r.ok ? null : camps;
+        renderEstatDades();
+      });
+    }
+
     async function carregarRiscConfig() {
       try {
         // Amb sostre: aquesta crida és la primera de l'arrencada i tot el que ve
@@ -4477,6 +4560,7 @@
             boletairesConfig.actiu = data.boletaires_actiu;
             try { localStorage.setItem(LS_BOLETAIRES_KEY, JSON.stringify(boletairesConfig)); } catch(e) {}
           }
+          migrarConfigCapAmunt(data);
           origenRiscParams = 'Supabase';
           localStorage.setItem('riscGRAE_params', JSON.stringify(riscParams));
           renderEstatDades();
@@ -6639,7 +6723,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style="background:#e8f5e9;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><strong>risc_captures</strong></td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Foto del risc (avui i demà) amb tot el desglossament, els factors i l'SMP Bombers. <strong>No s'escriu mai a sobre</strong>: és el que permet veure com evoluciona el risc al llarg del dia.</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (08:15, 12:30 i 20:30)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
+                  <tr style="background:#e8f5e9;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><strong>risc_captures</strong></td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Foto del risc (avui i demà) amb tot el desglossament, els factors i l'SMP Bombers. <strong>No s'escriu mai a sobre</strong>: és el que permet veure com evoluciona el risc al llarg del dia.</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">4× dia (06:50, 10:50, 14:50 i 20:30)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">risc_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Risc GRAE diari calculat</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">1× dia (22:00 CET) + manual</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr style="background:#fafafa;"><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Avisos SMP actius per dia/zona</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">3× dia (si hi ha canvis)</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
                   <tr><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">smp_override_historic</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Overrides manuals SMP per la simulació</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;">Quan l'usuari fa un override</td><td style="padding:0.35rem 0.5rem;border:1px solid #e0e0e0;"><a href="https://supabase.com/dashboard/project/rxfjwklbvqkwgzmpzwae/editor" target="_blank" style="color:#0082d9;">obrir ↗</a></td></tr>
@@ -6990,7 +7074,7 @@
                 <ol style="margin:0;padding-left:1.3rem;color:#555;">
                   <li><strong>window.onload:</strong> crida a <code>carregarRiscEstat()</code>, <code>carregarRiscConfig()</code>, <code>sincronitzarRiscAhir()</code>, <code>sincronitzarSMPAhir()</code>, <code>carregarSMPJSON()</code>, <code>carregarBPAJSON()</code>, <code>carregarPrevisioJSON()</code>, <code>carregarPlansPC()</code>, <code>carregarCanviTempsJSON()</code> (majoritàriament en paral·lel).</li>
                   <li><strong>Cada JSON carregat</strong> → <code>actualitzarRiscAuto()</code> → recalcula SMP, BPA, Canvi, HC, PlansPC → <code>renderRisc()</code>. Quan torna la config de Supabase es torna a cridar: fins llavors no hi ha <code>riscState</code> i les crides anteriors no fan res.</li>
-                  <li><strong>Captura del risc:</strong> tres cops al dia, <code>scripts/captura-risc.js</code> desa a <code>risc_captures</code> el risc d'avui i de demà amb el desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què s'ha calculat. Ho fa amb <code>formula-risc.js</code>, el mateix fitxer que carrega aquesta pàgina, perquè el número desat sigui el que es veu aquí. La pestanya <strong>Historial → Risc</strong> ho ensenya: les captures del dia, què va moure el número entre una i l'altra i què es preveia per a aquell dia des del dia abans.</li>
+                  <li><strong>Captura del risc:</strong> quatre cops al dia (06:50, 10:50, 14:50 i 20:30), <code>scripts/captura-risc.js</code> desa a <code>risc_captures</code> el risc d'avui i de demà amb el desglossament sencer, els factors, l'SMP Bombers i la fórmula amb què s'ha calculat. Ho fa amb <code>formula-risc.js</code>, el mateix fitxer que carrega aquesta pàgina, perquè el número desat sigui el que es veu aquí. La pestanya <strong>Historial → Risc</strong> ho ensenya en una sola taula de <strong>vuit columnes</strong>: les quatre prediccions fetes la vigília (horitzó «demà») i les quatre del mateix dia (horitzó «avui»), en ordre, amb el que suma cada factor a sota del seu valor.</li>
                   <li><strong>Operativitat dels helicòpters:</strong> és l'únic factor asíncron (Supabase + Open-Meteo) i té sostre de 20 s. Si no arriba, la targeta posa <code>sense dades</code> amb el motiu i la franja avisa que el risc es calcula sense aquest factor.</li>
                   <li><strong>Override manual:</strong> el dia es marca <code>modificatManualment=true</code> → l'auto-actualització deixa d'afectar-lo.</li>
                   <li><strong>Guardar risc:</strong> <code>enviarRiscSupabase()</code> → upsert <code>risc_historic</code> + localStorage (<code>riscGRAE</code>).</li>
@@ -8541,11 +8625,16 @@
     // s'escriu a sobre). `risc_captures` en guarda una per franja i horitzó, i
     // és el que permet veure **com hi hem arribat**: què deia la previsió ahir
     // al vespre, què deia aquest matí i què diu ara.
+    // L'ordre d'aquesta llista és l'ordre de les columnes: ha de ser el de
+    // l'ancoratge, no l'alfabètic. Els identificadors han de coincidir amb els
+    // de `diaIFranja()` a `scripts/captura-risc.js`; si n'hi afegeixes una,
+    // afegeix-la als dos costats o les columnes deixaran de trobar la captura.
     const FRANGES_CAPTURA = [
-      { id: 'mati',   etiqueta: 'Matí',   hora: '08:15' },
-      { id: 'migdia', etiqueta: 'Migdia', hora: '12:30' },
-      { id: 'vespre', etiqueta: 'Vespre', hora: '20:30' },
-      { id: 'extra',  etiqueta: 'Extra',  hora: 'fora d\'hora' },
+      { id: 'matinada', etiqueta: 'Matinada', hora: '06:50' },
+      { id: 'mati',     etiqueta: 'Matí',     hora: '10:50' },
+      { id: 'migdia',   etiqueta: 'Migdia',   hora: '14:50' },
+      { id: 'vespre',   etiqueta: 'Vespre',   hora: '20:30' },
+      { id: 'extra',    etiqueta: 'Extra',    hora: 'fora d\'hora' },
     ];
 
     const horaCaptura = (c) =>
@@ -8560,51 +8649,139 @@
              `${puja ? '▲' : '▼'}${Math.abs(valor - anterior)}</span>`;
     }
 
-    function filaFactor(etiqueta, clau, captures, max) {
-      let anterior = null;
-      const cel·les = captures.map(c => {
-        const v = c ? c[clau] : null;
-        const txt = v == null ? '—' : `${v}${max ? '/' + max : ''}`;
-        const d = c ? deltaCaptura(v, anterior) : '';
-        if (c) anterior = v;
-        return `<td style="text-align:center;padding:0.3rem 0.5rem;border-top:1px solid #eee;">
-                  <span style="font-weight:600;">${txt}</span> ${d}</td>`;
-      }).join('');
-      return `<tr><td style="padding:0.3rem 0.5rem;border-top:1px solid #eee;color:#555;">${etiqueta}</td>${cel·les}</tr>`;
+    // Les columnes d'un dia: una per franja, hi hagi captura o no. Una franja
+    // sense captura hi surt buida a posta — si les amaguéssim, un dia amb tres
+    // captures es veuria igual que un dia amb quatre, i justament el que volem
+    // saber és si alguna no s'ha arribat a fer.
+    function slotsEvolucio(captures, diesCaptura) {
+      const slots = [];
+      for (const dia of diesCaptura) {
+        for (const f of FRANGES_CAPTURA) {
+          const c = captures.find(x => x.dia_captura === dia && x.franja === f.id) || null;
+          if (!c && f.id === 'extra') continue;   // l'extra només si existeix
+          slots.push({ dia, franja: f, captura: c });
+        }
+      }
+      // Una captura d'un altre dia, o d'una franja que ja no és a la llista, no
+      // es pot perdre pel camí: va al final amb el nom que porti.
+      for (const c of captures) {
+        if (slots.some(s => s.captura && s.captura.id === c.id)) continue;
+        slots.push({ dia: c.dia_captura, franja: { id: c.franja, etiqueta: c.franja }, captura: c });
+      }
+      return slots;
     }
 
-    function blocHoritzo(titol, dataObjectiu, captures) {
-      const caps = FRANGES_CAPTURA.map(f => captures.find(c => c.franja === f.id) || null);
-      const visibles = FRANGES_CAPTURA.filter((f, n) => caps[n] || f.id !== 'extra');
-      const idx = FRANGES_CAPTURA.map((f, n) => n).filter(n => caps[n] || FRANGES_CAPTURA[n].id !== 'extra');
-      const capsV = idx.map(n => caps[n]);
+    // **Què aporta de veritat cada factor al número final.** Cap factor no suma
+    // el seu valor tal qual, i sense dir-ho la taula enganya: unes allaus a
+    // «1/5» semblen sumar 1 quan en sumen 0, perquè el nivell 1 val 0 a l'escala
+    // de perill. L'SMP i les allaus competeixen pel perill dominant —el segon
+    // només hi posa el suplement— i els increments van per taula de punts.
+    function aportacioFactor(clau, c) {
+      const d = c.desglossament || {};
+      const F = c.formula_config || {};
+      if (clau === 'planspc') return { punts: null, nota: 'info' };
+      if (clau === 'smp' || clau === 'allaus') {
+        if (F[clau] && F[clau].actiu === false) return { punts: null, nota: 'desactivat' };
+        if (d.dominant === clau) return { punts: (d.base || 0) - (d.suplement || 0), nota: 'perill dominant' };
+        if (d.segonNom === clau) return { punts: d.suplement || 0, nota: 'suplement de 2n perill' };
+        return { punts: 0, nota: '' };
+      }
+      const v = (d.increments || {})[clau];
+      return { punts: v == null ? null : v, nota: v == null ? 'desactivat' : 'increment' };
+    }
 
-      const capsalera = idx.map(n => {
-        const c = caps[n];
-        return `<th style="padding:0.35rem 0.5rem;font-size:0.75rem;color:#555;text-align:center;">
-                  ${FRANGES_CAPTURA[n].etiqueta}<br>
-                  <span style="font-weight:400;color:#888;">${c ? horaCaptura(c) : '—'}</span>
+    function filaFactor(etiqueta, clau, slots, max) {
+      let anterior = null;
+      const cel·les = slots.map(s => {
+        const c = s.captura;
+        if (!c) return `<td style="text-align:center;padding:0.3rem 0.35rem;border-top:1px solid #eee;color:#ddd;">·</td>`;
+        const v = c[clau];
+        const txt = v == null ? '—' : `${v}${max ? '/' + max : ''}`;
+        const delta = deltaCaptura(v, anterior);
+        anterior = v;
+
+        const ap = aportacioFactor(clau, c);
+        const suma = ap.punts == null ? '—'
+                   : ap.punts > 0    ? `+${formatarRisc(ap.punts)}`
+                   : '0';
+        const color = ap.punts == null ? '#ccc' : ap.punts > 0 ? '#c62828' : '#bbb';
+        const titol = ap.punts == null
+          ? `No entra al càlcul (${ap.nota})`
+          : ap.punts > 0
+            ? `Suma ${formatarRisc(ap.punts)} al risc (${ap.nota})`
+            : 'No suma res al risc';
+        return `<td style="text-align:center;padding:0.3rem 0.35rem;border-top:1px solid #eee;">
+                  <div style="white-space:nowrap;"><span style="font-weight:600;">${txt}</span> ${delta}</div>
+                  <div title="${titol}" style="font-size:0.66rem;font-weight:700;color:${color};line-height:1.2;">${suma}</div>
+                </td>`;
+      }).join('');
+      return `<tr><td style="padding:0.3rem 0.5rem;border-top:1px solid #eee;color:#555;white-space:nowrap;">${etiqueta}</td>${cel·les}</tr>`;
+    }
+
+    // **Les vuit prediccions d'un mateix dia, en columnes consecutives.** Abans
+    // hi havia una taula per horitzó —el que es deia el dia abans en una, el que
+    // es deia el mateix dia en una altra—, i per veure l'evolució calia saltar
+    // d'una taula a l'altra i quadrar hores pel cap. Ara és una sola línia de
+    // temps que es llegeix d'esquerra a dreta: quatre columnes del dia abans
+    // (horitzó «demà») i quatre del mateix dia (horitzó «avui»).
+    //
+    // `diesCaptura` diu quins dies han de tenir columnes encara que no hi hagi
+    // captura. Per al dia que es mira són dos; per a la previsió de l'endemà,
+    // només el d'avui —les de demà encara no s'han fet i unes columnes buides
+    // del futur no diuen res.
+    function blocEvolucio(titol, subtitol, dataObjectiu, captures, diesCaptura) {
+      const slots = slotsEvolucio(captures, diesCaptura);
+      if (!slots.length) return '';
+
+      // Capçalera de dos pisos: a dalt el dia en què es va fer la predicció, a
+      // baix la franja i l'hora real de la captura.
+      const grups = [];
+      for (const s of slots) {
+        const ultim = grups[grups.length - 1];
+        if (ultim && ultim.dia === s.dia) ultim.n++;
+        else grups.push({ dia: s.dia, n: 1 });
+      }
+      const capsaleraDies = grups.map(g => {
+        const mateixDia = g.dia === dataObjectiu;
+        return `<th colspan="${g.n}" style="padding:0.3rem 0.4rem;font-size:0.72rem;text-align:center;font-weight:700;
+                   color:${mateixDia ? '#b71c1c' : '#777'};background:${mateixDia ? '#fff5f5' : '#fafafa'};">
+                  ${formatRiscDate(g.dia)}
+                  <div style="font-weight:400;color:#999;font-size:0.66rem;">${mateixDia ? 'el mateix dia' : 'previst el dia abans'}</div>
                 </th>`;
       }).join('');
 
-      const filaRisc = idx.map(n => {
-        const c = caps[n];
-        if (!c) return `<td style="text-align:center;padding:0.4rem;color:#bbb;">sense captura</td>`;
+      const capsaleraFranges = slots.map(s => {
+        const c = s.captura;
+        return `<th style="padding:0.3rem 0.35rem;font-size:0.72rem;text-align:center;
+                   color:${c ? '#555' : '#ccc'};font-weight:${c ? '600' : '400'};">
+                  ${s.franja.etiqueta}<br>
+                  <span style="font-weight:400;color:#999;">${c ? horaCaptura(c) : '—'}</span>
+                </th>`;
+      }).join('');
+
+      let riscAnterior = null;
+      const filaRisc = slots.map(s => {
+        const c = s.captura;
+        if (!c) return `<td title="D'aquesta franja no se'n va fer cap captura"
+                            style="text-align:center;padding:0.4rem 0.35rem;color:#ddd;">—</td>`;
         const cls = getRiscColorClass(c.risc);
-        return `<td style="text-align:center;padding:0.4rem;">
-                  <span class="${cls}" style="font-size:1.6rem;font-weight:800;line-height:1;">${c.risc}</span>
-                  <div style="font-size:0.65rem;color:#888;">${getRiscLabel(c.risc)}</div>
-                  ${c.dades_completes === false ? '<div style="font-size:0.62rem;color:#e65100;font-weight:700;">INCOMPLET</div>' : ''}
+        const delta = deltaCaptura(c.risc, riscAnterior);
+        riscAnterior = c.risc;
+        return `<td style="text-align:center;padding:0.4rem 0.35rem;">
+                  <span class="${cls}" style="font-size:1.5rem;font-weight:800;line-height:1;">${c.risc}</span> ${delta}
+                  <div style="font-size:0.62rem;color:#888;">${getRiscLabel(c.risc)}</div>
+                  ${c.dades_completes === false ? '<div style="font-size:0.6rem;color:#e65100;font-weight:700;">INCOMPLET</div>' : ''}
                 </td>`;
       }).join('');
 
-      const detalls = capsV.filter(Boolean).map(c => {
+      const detalls = slots.map(s => s.captura).filter(Boolean).map(c => {
         const d = c.desglossament || {};
         const inc = d.increments || {};
         const parts = Object.entries(inc).filter(([, v]) => v).map(([k, v]) => `${k} +${v}`);
+        const etiq = (FRANGES_CAPTURA.find(f => f.id === c.franja) || { etiqueta: c.franja }).etiqueta;
         return `<details style="margin-top:0.3rem;">
           <summary style="cursor:pointer;font-size:0.75rem;color:#0082d9;">
-            ${FRANGES_CAPTURA.find(f => f.id === c.franja).etiqueta} · ${horaCaptura(c)} · com surt el ${c.risc}
+            ${formatRiscDate(c.dia_captura)} ${etiq.toLowerCase()} · ${horaCaptura(c)} · com surt el ${c.risc}
           </summary>
           <div style="font-size:0.75rem;color:#555;padding:0.35rem 0 0.2rem 0.6rem;line-height:1.6;">
             Perill base <strong>${d.base ?? c.perill_base ?? 0}</strong>
@@ -8621,76 +8798,42 @@
         </details>`;
       }).join('');
 
+      // Si en alguna captura els increments van topar, la suma de les
+      // aportacions de la columna no dona el risc: val més dir-ho que deixar que
+      // algú faci el número i li surti diferent.
+      const hiHaTopall = slots.some(s => s.captura && (s.captura.desglossament || {}).extraTopat);
+
       return `
         <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
-          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.3rem;">${titol}
+          <div style="font-weight:700;font-size:0.9rem;">${titol}
             <span style="font-weight:400;color:#888;font-size:0.8rem;">${formatRiscDate(dataObjectiu)}</span></div>
+          <div style="font-size:0.72rem;color:#888;margin:0.1rem 0 0.4rem;">${subtitol}</div>
+          <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-            <thead><tr><th style="text-align:left;padding:0.35rem 0.5rem;font-size:0.75rem;color:#888;">Captura</th>${capsalera}</tr></thead>
+            <thead>
+              <tr><th rowspan="2" style="text-align:left;padding:0.35rem 0.5rem;font-size:0.75rem;color:#888;vertical-align:bottom;">Factor</th>${capsaleraDies}</tr>
+              <tr>${capsaleraFranges}</tr>
+            </thead>
             <tbody>
-              <tr><td style="padding:0.4rem 0.5rem;font-weight:700;color:#333;">Risc</td>${filaRisc}</tr>
-              ${filaFactor('⚠️ Alertes SMP', 'smp', capsV, 6)}
-              ${filaFactor('❄️ Allaus', 'allaus', capsV, 5)}
-              ${filaFactor('👥 Afluència', 'afluencia', capsV, 3)}
-              ${filaFactor('🚁 HC operatius', 'operativitat', capsV, 4)}
-              ${filaFactor('🌦️ Canvi temps', 'canvi', capsV, 2)}
-              ${filaFactor('🍄 Boletaires', 'boletaires', capsV, 1)}
-              ${filaFactor('🚨 Plans PC', 'planspc', capsV, 3)}
+              <tr><td style="padding:0.4rem 0.5rem;font-weight:700;color:#333;border-top:2px solid #ddd;">Risc</td>${filaRisc}</tr>
+              ${filaFactor('⚠️ Alertes SMP', 'smp', slots, 6)}
+              ${filaFactor('❄️ Allaus', 'allaus', slots, 5)}
+              ${filaFactor('👥 Afluència', 'afluencia', slots, 3)}
+              ${filaFactor('🚁 HC operatius', 'operativitat', slots, 4)}
+              ${filaFactor('🌦️ Canvi temps', 'canvi', slots, 2)}
+              ${filaFactor('🍄 Boletaires', 'boletaires', slots, 1)}
+              ${filaFactor('🚨 Plans PC', 'planspc', slots, 3)}
             </tbody>
           </table>
-          ${detalls}
-        </div>`;
-    }
-
-    // Què s'havia previst per a aquest dia, i quan. És la pregunta que fins ara
-    // no es podia respondre: el risc d'ahir per a avui desapareixia en desar-se
-    // el d'avui a sobre.
-    function blocPrevisio(perAquestDia, dataObjectiu) {
-      if (!perAquestDia.length) return '';
-      const ordenades = [...perAquestDia].sort((a, b) => new Date(a.capturat_at) - new Date(b.capturat_at));
-      const punts = ordenades.map((c, n) => {
-        const quan = new Date(c.capturat_at);
-        const mateixDia = c.dia_captura === dataObjectiu;
-        const etiqueta = (mateixDia ? '' : formatRiscDate(c.dia_captura) + ' ') +
-                         (FRANGES_CAPTURA.find(f => f.id === c.franja) || { etiqueta: c.franja }).etiqueta.toLowerCase();
-        const anterior = n > 0 ? ordenades[n - 1].risc : null;
-        return `<span style="display:inline-block;margin:0.15rem 0.35rem 0.15rem 0;padding:0.15rem 0.45rem;border-radius:4px;background:#f5f5f5;">
-                  <span style="color:#888;font-size:0.72rem;">${etiqueta} ${quan.toLocaleTimeString('ca-ES',{hour:'2-digit',minute:'2-digit'})}</span>
-                  <strong class="${getRiscColorClass(c.risc)}" style="font-size:0.95rem;margin-left:0.25rem;">${c.risc}</strong>
-                  ${deltaCaptura(c.risc, anterior)}
-                </span>`;
-      }).join('');
-      return `
-        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
-          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">📈 Com es veia venir</div>
-          <div style="font-size:0.75rem;color:#888;margin-bottom:0.35rem;">
-            El risc que es donava per al ${formatRiscDate(dataObjectiu)} a cada captura, de la més antiga a la més nova.
           </div>
-          <div>${punts}</div>
-        </div>`;
-    }
-
-    function blocSMPBombers(captures) {
-      const ambDades = captures.filter(c => c.smp_bombers && Object.keys(c.smp_bombers).length);
-      if (!ambDades.length) return '';
-      const regions = Object.keys(ambDades[0].smp_bombers);
-      const files = regions.map(r => {
-        const cel·les = ambDades.map(c => {
-          const v = (c.smp_bombers[r] || {}).dia || 0;
-          return `<td style="text-align:center;padding:0.25rem 0.5rem;border-top:1px solid #eee;background:${colorRisc(v)};color:${textSobreRisc(v)};font-weight:600;">${v}</td>`;
-        }).join('');
-        return `<tr><td style="padding:0.25rem 0.5rem;border-top:1px solid #eee;">${r}</td>${cel·les}</tr>`;
-      }).join('');
-      return `
-        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
-          <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.2rem;">🔥 SMP Bombers per regió</div>
-          <div style="font-size:0.75rem;color:#888;margin-bottom:0.35rem;">Valor màxim del dia a cada regió d'emergència, tal com era a cada captura.</div>
-          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-            <thead><tr><th style="text-align:left;padding:0.25rem 0.5rem;font-size:0.75rem;color:#888;">Regió</th>
-              ${ambDades.map(c => `<th style="padding:0.25rem 0.5rem;font-size:0.75rem;color:#555;">${(FRANGES_CAPTURA.find(f=>f.id===c.franja)||{etiqueta:c.franja}).etiqueta}<br><span style="font-weight:400;color:#888;">${horaCaptura(c)}</span></th>`).join('')}
-            </tr></thead>
-            <tbody>${files}</tbody>
-          </table>
+          <div style="font-size:0.7rem;color:#999;margin-top:0.35rem;line-height:1.5;">
+            El número gran és el valor del factor; el <strong style="color:#c62828;">petit de sota</strong>, el que
+            aquell factor suma de veritat al risc. No coincideixen mai del tot: l'SMP i les allaus competeixen pel
+            perill dominant (el segon només hi posa un suplement) i els increments van per taula de punts.
+            Les fletxes són el canvi respecte de la captura d'abans.
+            ${hiHaTopall ? '<br><span style="color:#e65100;">En alguna captura els increments van topar al màxim: allà la suma de les aportacions és més gran que el risc.</span>' : ''}
+          </div>
+          ${detalls}
         </div>`;
     }
 
@@ -8759,7 +8902,11 @@
         allaus: c.allaus, allausNiv: c.allaus,
         allausPts: +((F.allaus && F.allaus.punts && F.allaus.punts[c.allaus]) ?? 0),
         allausMotiu: ((c.allaus_detall || {}).situacions || []).join(', '),
-        allausDesactivat: false,
+        // El que deia l'interruptor **en aquella captura**, no el que diu ara:
+        // una foto no canvia perquè avui l'hàgim apagat. Les captures anteriors
+        // al 17-09-2026 no en porten constància i es llegeixen com a actives,
+        // que és el que el backend feia llavors.
+        allausDesactivat: !!det.allausDesactivat,
         afluencia: c.afluencia, afluMotiu: det.afluenciaMotiu || '',
         opActiu: !!(F.operativitat && F.operativitat.actiu),
         opTeDades: opDetall.length > 0,
@@ -8881,30 +9028,33 @@
             </div>`);
         }
 
-        // Les d'ahir i les d'avui, per poder-les comparar. La tria per defecte és
-        // la més nova: quan s'obre l'historial, el que interessa és l'última foto.
-        const perTriar = captures
-          .filter(c => c.horitzo === 'avui' && (c.dia_captura === histDataActiva || c.dia_captura === ahir))
+        // **Totes les prediccions fetes per a aquest dia**, de la més antiga a la
+        // més nova: les quatre del dia abans (horitzó «demà») i les quatre del
+        // mateix dia (horitzó «avui»). Són les vuit columnes de la taula i també
+        // les vuit que es poden obrir en detall — abans només s'hi podien triar
+        // les d'horitzó «avui», o sigui que el que s'havia dit la vigília es
+        // podia veure a la taula però no obrir.
+        const perAquestDia = captures
+          .filter(c => c.dia_objectiu === histDataActiva)
           .sort((a, b) => new Date(a.capturat_at) - new Date(b.capturat_at));
-        if (!perTriar.some(c => c.id === histCapturaSel)) {
-          histCapturaSel = perTriar.length ? perTriar[perTriar.length - 1].id : null;
+        if (!perAquestDia.some(c => c.id === histCapturaSel)) {
+          histCapturaSel = perAquestDia.length ? perAquestDia[perAquestDia.length - 1].id : null;
         }
-        const seleccionada = perTriar.find(c => c.id === histCapturaSel);
+        const seleccionada = perAquestDia.find(c => c.id === histCapturaSel);
 
-        const avuiCaps = delDia.filter(c => c.horitzo === 'avui');
         const demaCaps = delDia.filter(c => c.horitzo === 'dema');
-        const ahirCaps = captures.filter(c => c.dia_captura === ahir && c.horitzo === 'avui');
-        const perAquestDia = captures.filter(c => c.dia_objectiu === histDataActiva);
         const demaData = demaCaps.length ? demaCaps[0].dia_objectiu : offsetData(histDataActiva, 1);
 
         cont.innerHTML = `
           <div class="risc-header"><div class="risc-title">⚠️ Risc GRAE · captures del dia</div></div>
           <div style="padding:0 1rem 1rem;">
-            ${blocPrevisio(perAquestDia, histDataActiva)}
-            ${avuiCaps.length ? blocHoritzo('El risc d\'aquell mateix dia', histDataActiva, avuiCaps) : ''}
-            ${demaCaps.length ? blocHoritzo('El que es preveia per a l\'endemà', demaData, demaCaps) : ''}
-            ${ahirCaps.length ? blocHoritzo('El dia abans', ahir, ahirCaps) : ''}
-            ${perTriar.length ? selectorCaptures(perTriar) : ''}
+            ${blocEvolucio('📈 Com ha anat canviant el risc del',
+                'Les vuit prediccions fetes per a aquest dia, en ordre: primer les quatre de la vigília, després les quatre del mateix dia.',
+                histDataActiva, perAquestDia, [ahir, histDataActiva])}
+            ${demaCaps.length ? blocEvolucio('🔮 El que es preveia per a l\'endemà,',
+                'El que deien les captures d\'aquest dia sobre el següent. Per veure com va acabar, passa al dia de després.',
+                demaData, demaCaps, [histDataActiva]) : ''}
+            ${perAquestDia.length ? selectorCaptures(perAquestDia) : ''}
             ${seleccionada ? blocDetallCaptura(seleccionada) : ''}
             <div style="font-size:0.72rem;color:#999;">
               Cada captura és la foto de les dades en aquell moment, amb la fórmula que hi havia.
