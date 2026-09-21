@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-09-20T18:20:16.995Z",
+  "dataConsulta": "2026-09-21T04:45:15.328Z",
   "avui": {
-    "data": "2026-09-20",
-    "variables": {
-      "estatDelCel": "El cel romandrà serè en general. Amb tot, a la tarda podrà créixer algun núvol d'evolució a punts del Pirineu, Prepirineu i de les serralades del prelitoral. Al final del dia arribaran alguns núvols alts pel nord i est del país que deixaran el cel enteranyinat a l'Empordà.\n",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà lleugerament més alta en general. Es podran assolir els 31 °C a punts de Ponent, els 32 °C al quadrant nord-est, i els 33 °C a les Terres de l'Ebre.",
-      "visibilitat": "La visibilitat serà excel·lent en general. ",
-      "vent": "Bufarà vent de component sud i est, tot i que fins a mitja tarda a Ponent i al nord-oest dominarà el vent de sud amb força estones de direcció variable. A partir del vespre, el vent serà fluix i variable en general. "
-    }
-  },
-  "dema": {
     "data": "2026-09-21",
     "variables": {
       "estatDelCel": "El cel romandrà serè en general. Amb tot, fins al final de la matinada i novament a partir del vespre hi haurà algun estrat baix a punts de la depressió Central i prelitoral nord. ",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura, tant la mínima com la màxima serà lleugerament més alta. Tanmateix, a sectors del Pirineu Occidental, quadrant nord-est, i Terres de l'Ebre l'ascens de la temperatura màxima serà moderat. S'espera que la màxima pugui superar els 30 °C a molts punts del país i, fins i tot, a les Terres de l'Ebre es podrien assolir els 36 °C.",
       "visibilitat": "La visibilitat serà excel·lent arreu, tret dels sectors del litoral que es vegin afectats pels núvols baixos, on serà transitòriament bona.",
       "vent": "Fins a mig matí, i novament a partir del vespre, el vent serà fluix i de direcció variable, en general. La resta de la jornada s'imposarà el vent fluix de component oest a l'interior, de sud al litoral, mentre que al vessant nord del Pirineu bufarà vent fluix de component nord. Independentment, al llarg del dia bufarà tramuntana, fluixa amb cops moderats, al nord del cap de Creus, mentre que a les Terres de l'Ebre bufarà el mestral fluix fins a migdia."
+    }
+  },
+  "dema": {
+    "data": "2026-09-22",
+    "variables": {
+      "estatDelCel": "El cel romandrà serè o transitòriament enteranyinat pel pas de bandes de núvols alts, sobretot al matí. A banda, a la tarda podran aparèixer alguns estrats baixos a punts del sector central del litoral i del prelitoral.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà semblant, la màxima serà lleugerament més baixa, sobretot a la meitat nord del litoral i prelitoral.",
+      "visibilitat": "La visibilitat serà excel·lent arreu.",
+      "vent": "Fins a mig matí i novament a partir del vespre el vent serà fluix i variable. Durant les hores centrals del dia serà fluix amb cops moderats de component sud a la meitat oest i de component est a la meitat est amb estones de vent fluix i variable en aquest darrer sector. A més, fins a migdia bufarà la tramuntada moderada al nord de l'Empordà."
     }
   }
 }
