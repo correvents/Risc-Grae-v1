@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-09-22T12:50:24.347Z",
-  "plans": []
+  "actualitzat": "2026-09-22T18:20:20.808Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "22/09/2026 19:20",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127528_INICI--NOACTIVAT_PROCICAT_202609221939.pdf"
+      },
+      "descripcio": "Caiguda fals sostre estació - "
+    }
+  ]
 }
