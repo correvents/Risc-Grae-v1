@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-09-22T18:20:17.008Z",
+  "dataConsulta": "2026-09-23T04:45:14.933Z",
   "avui": {
-    "data": "2026-09-22",
-    "variables": {
-      "estatDelCel": "El cel romandrà serè en general. Amb tot, hi haurà algunes bandes de núvols alts sobretot al matí. A banda, a partir de migdia podran aparèixer alguns intervals de núvols a punts del sector central del litoral, així com créixer alguns núvols d'evolució a punts del prelitoral. \nAl final del dia també es formaran intervals de núvols baixos a altres punts del prelitoral i la Catalunya Central. ",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà lleugerament més baixa, sobretot a la meitat nord del litoral i prelitoral i al Camp de Tarragona.",
-      "visibilitat": "La visibilitat serà excel·lent arreu.",
-      "vent": "El vent bufarà fluix amb cops moderats de component sud a la meitat oest i de component sud i est a la meitat est amb estones de vent fluix i variable en aquest darrer sector. A més, fins a migdia bufarà la tramuntada moderada al nord de l'Empordà.\nA banda, a partir del vespre el vent quedarà fluix i variable. "
-    }
-  },
-  "dema": {
     "data": "2026-09-23",
     "variables": {
       "estatDelCel": "Cel serè en general. Tot i això, fins a primera hora del matí hi haurà alguns estrats baixos a punts de la Catalunya Central, nord de Ponent i extrem sud del litoral. A migdia i primera hora de la tarda es podria formar algun núvol d'evolució al Pirineu. A partir del vespre es podran formar alguns estrats baixos al litoral nord.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà semblant o lleugerament més baixa en general, tot i que localment pujarà a punts de l'oest de la Catalunya Central i nord de Ponent. La màxima serà semblant o lleugerament més baixa al quadrant nord-est i les Terres de l'Ebre, mentre que a la resta serà similar o lleugerament més alta. Hi haurà inversió tèrmica matinal.",
       "visibilitat": "La visibilitat serà excel·lent en general, tot i que hi haurà alguns bancs de boirina o boira matinals a punts de la depressió Central i l'extrem sud del litoral.",
       "vent": "Fins a matí el vent bufarà fluix i variable amb nombroses estones de calma a l'interior, mentre que al litoral predominarà el component nord i est. A partir d'aleshores bufarà fluix amb cops moderats, de component sud i est al litoral i de component sud a l'interior."
+    }
+  },
+  "dema": {
+    "data": "2026-09-24",
+    "variables": {
+      "estatDelCel": "Ambient assolellat, tot i que estarà transitòriament enteranyinat pel pas de diferents bandes de núvols alts i prims sobretot a partir de migdia. Independentment, fins a primera hora del matí hi haurà alguns estrats baixos als dos extrems del litoral.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà similar o lleugerament més baixa en general. Hi haurà inversió tèrmica matinal.\nLa temperatura màxima pujarà lleugerament en general.",
+      "visibilitat": "La visibilitat serà excel·lent en general, tot i que hi haurà alguns bancs de boirina o boira matinals a punts de la Catalunya Central i als dos extrems del litoral.",
+      "vent": "Fins a mig matí, el vent bufarà fluix i variable amb nombroses estones de calma i amb predomini de terral al litoral de matinada. A partir d'aleshores, s'imposarà progressivament el vent fluix amb cops moderats, de component sud i est al quadrant nord-est i de component sud a la resta. Tot i això, a Ponent i altres punts del nord-oest bufarà de component oest fluix amb cops moderats fins al vespre."
     }
   }
 }
