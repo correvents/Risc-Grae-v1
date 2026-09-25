@@ -1,6 +1,6 @@
 {
   "data": "2026-09-25",
-  "actualitzat": "2026-09-25T08:40:28.726Z",
+  "actualitzat": "2026-09-25T08:50:25.539Z",
   "resultats": [
     {
       "punt": {
@@ -185,8 +185,42 @@
         "lon": 1.942,
         "alt": 2050
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 16.2,
+          "precMati": 0,
+          "ventMaxMati": 8,
+          "wmoMati": 2,
+          "tminTarda": 17.8,
+          "tmaxTarda": 20.7,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 12.5,
+          "ventMaxDirTarda": 33,
+          "wmoTarda": 3,
+          "avg30d": 20.678125
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 15,
+          "precMati": 0,
+          "ventMaxMati": 6.9,
+          "wmoMati": 2,
+          "tminTarda": 16.8,
+          "tmaxTarda": 19.4,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 10.2,
+          "ventMaxDirTarda": 203,
+          "wmoTarda": 1,
+          "avg30d": 20.678125
+        }
+      }
     },
     {
       "punt": {
