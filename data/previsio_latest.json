@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-09-24T18:20:16.041Z",
+  "dataConsulta": "2026-09-25T04:45:16.454Z",
   "avui": {
-    "data": "2026-09-24",
-    "variables": {
-      "estatDelCel": "Ambient assolellat, tot i que estarà transitòriament enteranyinat pel pas de diferents bandes de núvols alts i prims, sobretot a la tarda. ",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà similar o pujarà lleugerament en general.",
-      "visibilitat": "La visibilitat serà excel·lent en general.",
-      "vent": "S'imposarà progressivament el vent fluix amb cops moderats, de component sud i est al quadrant nord-est i de component sud a la resta. Tot i això, a Ponent i altres punts del nord-oest bufarà de component oest fluix amb cops moderats fins al vespre.\nA la nit tendirà a quedar fluix i de direcció variable."
-    }
-  },
-  "dema": {
     "data": "2026-09-25",
     "variables": {
       "estatDelCel": "Ambient assolellat, amb algun interval de núvol alt i prim. A partir del vespre es poden formar núvols baixos a punts del litoral i prelitoral sud.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà similar o lleugerament més alta en general. Hi haurà inversió tèrmica matinal.\nLa temperatura màxima pujarà entre lleugerament i moderadament a Ponent, les Terres de l'Ebre i el Camp de Tarragona. A la resta, serà similar o lleugerament més alta. Es mourà entre els 28 i 31 ºC al litoral, i entre els 30 i 35 ºC a la resta, localment més alta a l'interior de les Terres de l'Ebre i a punts del pla de Lleida.",
       "visibilitat": "La visibilitat serà excel·lent en general, tot i que és possible la formació local d'algun banc de boirina o boira matinal al litoral nord, a la vall de l'Ebre. ",
       "vent": "Fins a mig matí, el vent bufarà fluix i variable, amb terral al litoral de matinada. A partir d'aleshores, s'imposarà progressivament el vent de component sud i est a la meitat est i de component sud a la resta, fluix amb cops moderats en general, tot i que amb algun cop fort al vespre al sud de Ponent i del prelitoral sud. Tot i això, bufarà de component oest fins a primera hora de la tarda a Ponent i l'interior de les Terres de l'Ebre. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
+    }
+  },
+  "dema": {
+    "data": "2026-09-26",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat en general, amb bandes de núvols alts i prims que es mouran d'oest a est i que es faran més abundants i extensos durant les hores centrals del dia. A banda, fins a mig matí hi haurà intervals de núvols baixos a punts del litoral i prelitoral sud. A partir de migdia, se'n tornaran a formar de locals al litoral sud, però a partir de vespre tornaran a ser més extensos al litoral i prelitoral sud, i a la nit se'n poden formar també a altres punts del litoral i prelitoral. A més a la tarda poden créixer alguns núvols d'evolució en punts de muntanya. ",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà similar o lleugerament més baixa en general, si bé quedarà lleugerament més alta al litoral sud i punts de l'interior de les Terres de l'Ebre. Hi haurà inversió tèrmica matinal.\nLa temperatura màxima baixarà entre lleugerament i moderadament a Ponent, les Terres de l'Ebre i el Camp de Tarragona. A la resta, serà lleugerament més baixa.",
+      "visibilitat": "La visibilitat serà excel·lent en general, si bé serà regular en zones elevades del litoral i prelitoral sud fins a mig matí i de nou a partir del vespre. ",
+      "vent": "Fins a mig matí, el vent bufarà fluix i variable, amb terral al litoral de matinada. A partir d'aleshores, s'imposarà progressivament el vent de component sud arreu, fluix amb cops moderats en general, tot i que amb algun cop fort al vespre al sud de Ponent i del prelitoral sud. Tot i això, a Ponent bufarà fluix i de component oest fins al migdia. Al final del dia, el vent tornarà a quedar fluix i de direcció variable."
     }
   }
 }
