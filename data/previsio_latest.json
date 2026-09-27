@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-09-27T05:26:40.133Z",
+  "dataConsulta": "2026-09-27T08:40:17.373Z",
   "avui": {
     "data": "2026-09-27",
     "variables": {
-      "estatDelCel": "El cel romandrà entre mig i molt ennuvolat al litoral, prelitoral i punts de l'interior per núvols baixos, més trencats durant les hores centrals del dia. A la resta, el cel està entre poc i mig ennuvolat per bandes de núvols alts i mitjans procedents de l'oest. A banda, a partir del migdia creixeran núvols d'evolució al quadrant nord-est, al prelitoral, al Pirineu i Prepirineu, fins i tot amb alguna nuvolada al Pirineu Occidental.",
+      "estatDelCel": "El cel romandrà mig ennuvolat al litoral i prelitoral per núvols baixos, més trencats durant les hores centrals del dia. A la resta, el cel està entre poc i mig ennuvolat per bandes de núvols alts i mitjans procedents de l'oest. A banda, a partir del migdia creixeran núvols d'evolució al quadrant nord-est, al prelitoral, al Pirineu i Prepirineu, fins i tot amb alguna nuvolada al Pirineu Occidental. Al final del dia tota aquesta nuvolositat augmentarà i el cel tendirà a quedar molt ennuvolat en general.",
       "precipitacions": "Al llarg de la jornada no es descarta alguna roina a punts del litoral, més probables als dos extrems. A més, a partir de la tarda és possible algun ruixat de caràcter feble i aïllat al Pirineu, sobretot extrem occidental i oriental.",
-      "temperatures": "La temperatura mínima serà semblant en general, però lleugerament més alta al prelitoral sud i al litoral. La màxima serà semblant o lleugerament més baixa en general.",
-      "visibilitat": "La visibilitat serà bona en general, si bé serà regular a moltes zones del litoral i prelitoral, sobretot a zones elevades, com també a punts de l'interior fins a mig matí i de nou a partir del vespre. ",
-      "vent": "Fins a mig matí, el vent bufarà fluix i variable, amb terral fluix a trams del litoral de matinada. La resta de la jornada el vent bufarà entre feble i moderat de component sud arreu, amb cops forts durant la segona meitat de la jornada a la vall de l'Ebre, al sud de Ponent i a l'extrem nord-est. "
+      "temperatures": "La temperatura màxima serà semblant o lleugerament més baixa en general.",
+      "visibilitat": "La visibilitat serà bona en general, si bé serà regular a moltes zones del litoral i prelitoral, sobretot a sectors elevats, com també a punts de l'interior fins a mig matí i de nou a partir del vespre. ",
+      "vent": "Fins a mig matí, el vent bufarà fluix i variable en general, tret de trams del litoral on bufarà terral fluix fins a primera hora del matí i de Ponent on bufarà vent de component est fluix. La resta de la jornada el vent bufarà entre feble i moderat de component sud arreu, amb cops forts durant la segona meitat de la jornada a la vall de l'Ebre, al sud de Ponent i a l'extrem nord-est del litoral."
     }
   },
   "dema": {
     "data": "2026-09-28",
     "variables": {
-      "estatDelCel": "El cel romandrà molt ennuvolat en general. Fins a mig matí hi haurà nombrosos núvols baixos al litoral i prelitoral, que amb el pas de les hores s'aniran endinsant cap a l'interior. Per altra banda, circularan núvols alts i mitjans de sud-oest a nord-est. ",
-      "precipitacions": "Des de primera hora del matí i fins al migdia són probables ruixats al litoral i prelitoral, sobretot a la meitat sud, que entraran de mar cap a terra. A partir de llavors, podran afectar altres punts del país. Seran d'intensitat entre feble i moderada i acumularan quantitats entre minses i poc abundants. Poden anar acompanyats de tempesta. A banda, al vespre pot arribar una banda de precipitació per l'oest del país. ",
+      "estatDelCel": "El cel romandrà molt ennuvolat o cobert en general de núvols alts i mitjans que viatjaran de sud-oest a nord-est.\nPer altra banda, fins a mig matí hi haurà nombrosos núvols baixos i algunes nuvolades al litoral i prelitoral, que amb el pas de les hores s'aniran endinsant cap a l'interior. ",
+      "precipitacions": "Durant la matinada és probable algun ruixat aïllat al litoral i prelitoral. Des de primera hora del matí i fins al migdia s'esperen ruixats i xàfecs al litoral i prelitoral, que entraran de mar cap a terra. A partir de llavors, es faran més dispersos, però alhora afectaran altres punts del país. A banda, al vespre pot arribar una banda de pluja per l'oest del país. La precipitació serà d'intensitat entre feble i moderada i acumularà quantitats entre minses i poc abundants en conjunt; a més, és possible que vagi acompanyada de tempesta.",
       "temperatures": "La temperatura mínima serà semblantment o lleugerament més alta. La màxima serà lleugerament més baixa en general.",
       "visibilitat": "La visibilitat empitjorarà i serà entre bona i regular. Hi haurà boires en zones elevades de muntanya. ",
-      "vent": "Durant tota la jornada el vent bufarà entre feble i moderat de component sud i est arreu, amb algun cop fort a l'extrem nord-est al llarg del dia i a la tarda al prelitoral sud i sud de Ponent."
+      "vent": "Durant tota la jornada el vent bufarà entre feble i moderat de component sud i est arreu, amb alguns cops forts a l'extrem nord-est del litoral al llarg del dia i a la tarda al prelitoral sud i sud de Ponent."
     }
   }
 }
