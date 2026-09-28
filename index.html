@@ -1321,7 +1321,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Fórmula del risc: l'única definició, compartida amb els scripts de Node.
        Vegeu formula-risc.js. El ?v= és per saltar-se la cau de Pages quan canviï. -->
-  <script src="formula-risc.js?v=7"></script>
+  <script src="formula-risc.js?v=8"></script>
 
   <script>
     // ==================== SUPABASE ====================
@@ -2192,10 +2192,24 @@
       'Costa Brava', 'Litoral Central', 'Plana de Lleida', 'Camp de Tarragona', "Terres de l'Ebre"
     ];
     
+    // Una sola implementació del «a quin grup compta això», compartida amb el
+    // backend: viu a formula-risc.js (trampa 1).
+    const grupDeZona = FormulaRisc.grupDeZona;
+
     // Mapeig invers: zona original -> grup
     const zonaToGrup = {};
     Object.entries(ZONES_GRUPS).forEach(([grup, zones]) => {
       zones.forEach(z => zonaToGrup[z] = grup);
+    });
+
+    // El mapa que espera `grupDeZona` per a la pestanya Alertes: les zones
+    // s'agrupen amb `ZONES_GRUPS` (el d'aquí, que no és el mateix que el
+    // `zonesGrup` de la fórmula) però les **excepcions per comarca són les
+    // mateixes**, perquè si no el Maresme sortiria a un grup a la taula i a un
+    // altre al càlcul.
+    const mapaGrups = () => ({
+      comarquesGrup: riscParams.comarquesGrup,
+      zonesGrup: zonaToGrup
     });
     
     // Convertir m/s a km/h i formatar llindar
@@ -2372,7 +2386,10 @@
 
             dia.afectacions?.forEach(af => {
               const zonaOriginal = af.zona;
-              const zona = zonaToGrup[zonaOriginal] || zonaOriginal; // Usar grup
+              // La comarca mana sobre la zona: vegeu `comarquesGrup`. Aquí sí
+              // que la tenim (l'afectació la porta), o sigui que el Maresme cau
+              // a Litoral Central i la Selva es queda on era.
+              const zona = grupDeZona(zonaOriginal, af.comarca, mapaGrups()); // Usar grup
               if (!matriu[zona]) matriu[zona] = {};
               if (!matriu[zona][diaKey]) matriu[zona][diaKey] = {};
               
@@ -4580,6 +4597,9 @@
             ...saved,
             zones:     { ...RISC_PARAMS_DEFAULT.zones,     ...(saved.zones || {}) },
             zonesGrup: { ...RISC_PARAMS_DEFAULT.zonesGrup, ...(saved.zonesGrup || {}) },
+            // Les excepcions per comarca són del codi, com el mapatge de zones:
+            // una còpia desada abans que existissin no les ha de fer desaparèixer.
+            comarquesGrup: { ...RISC_PARAMS_DEFAULT.comarquesGrup, ...(saved.comarquesGrup || {}) },
           };
           origenRiscParams = 'aquest dispositiu (Supabase no ha respost)';
         }
@@ -4662,7 +4682,8 @@
         const nivellOrdre = { 'Groc': 1, 'Taronja': 2, 'Vermell': 3 };
         const infoPerZona = {};
         for (const r of data) {
-          const zonaGrup = riscParams.zonesGrup[r.zona] || r.zona;
+          // Sense comarca: `smp_historic` guarda les files per zona.
+          const zonaGrup = grupDeZona(r.zona, null, riscParams);
           if (!((riscParams.zones[zonaGrup] ?? -1) > 0)) continue;
           if (!nivellOrdre[r.nivell]) continue;
           if (!infoPerZona[zonaGrup]) {
@@ -5664,7 +5685,8 @@
         const nivellOrdreH = { 'Groc':1, 'Taronja':2, 'Vermell':3 };
         const zonesNivellH = {};
         for (const r of rows) {
-          const grup = riscParams.zonesGrup[r.zona] || r.zona;
+          // Sense comarca: `smp_historic` guarda les files per zona.
+          const grup = grupDeZona(r.zona, null, riscParams);
           if (!((riscParams.zones[grup] ?? -1) > 0)) continue;
           if (!nivellOrdreH[r.nivell]) continue;
           if (!zonesNivellH[grup] || nivellOrdreH[r.nivell] > nivellOrdreH[zonesNivellH[grup]])
@@ -9134,7 +9156,8 @@
         // Construir matriu zona → dia → periode → {nivell, riscos[]}
         const matriu = {};
         for (const r of data) {
-          const zona = zonaToGrup[r.zona] || r.zona;
+          // Sense comarca: `smp_historic` guarda les files per zona.
+          const zona = grupDeZona(r.zona, null, mapaGrups());
           const emoji = getSMPEmoji(r.meteor);
           if (!matriu[zona]) matriu[zona] = {};
           if (!matriu[zona][r.dia]) matriu[zona][r.dia] = {};

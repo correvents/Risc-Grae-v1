@@ -8,6 +8,50 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-17 — El Maresme sortia com a «Costa Brava»
+
+Preguntat mirant la pestanya Alertes: *«Costa Brava té alertes demà?»*. **No.** L'avís del 18-09 és
+per al Baix Llobregat, el Baix Penedès, el Barcelonès, el Garraf i el **Maresme**, i cap és de la
+Costa Brava.
+
+El que passava: la fila de la taula no ensenya la zona de Meteocat sinó un **grup**, i el grup que
+es diu «Costa Brava» conté també la zona «Litoral Nord», que és on Meteocat posa el Maresme. Llegint
+la taula semblava que l'avís fos a Girona quan era al Maresme.
+
+**Per què no s'ha mogut la zona sencera.** «Litoral Nord» són dues comarques: **21 Maresme + 34
+Selva**. Moure la zona hauria arrossegat la Selva, que sí que és Costa Brava (Blanes, Lloret,
+Tossa): canviàvem un error de nom per un altre. Per això l'excepció va **per comarca**,
+`comarquesGrup = { 21: 'Litoral Central' }`, i es consulta **abans** que la zona.
+
+Tot passa ara per **`grupDeZona(zona, comarca, params)`**, a `formula-risc.js`, que fan servir els
+dos costats. Hi havia **quatre** llocs que resolien el grup pel seu compte; ara no en queda cap.
+
+**Afecta el número de l'SMP, i s'ha de saber.** El factor compta **grups amb avís**, no comarques:
+1–2 grups → SMP 1, 3 o més → SMP 2. Ajuntar el Maresme amb el Litoral Central vol dir un grup menys
+en els dies que toquin tots dos. Demà no canvia res (de 2 grups a 1, i tots dos donen SMP 1), però
+un dia amb avís al Maresme, al Barcelonès i a l'Empordà passaria de SMP 2 a SMP 1.
+
+### Tres sistemes, no dos
+
+Apuntat perquè és el que fa que això s'entengui i no es dedueix del codi:
+
+| | Agrupa per | Per a què |
+| --- | --- | --- |
+| Alertes + factor SMP | zones de Meteocat → **grups orogràfics** | quants àmbits tenen avís |
+| SMP Bombers | comarca → **regió d'emergència** | quina regió queda tocada |
+
+Comprovat amb les dades reals de demà que **l'SMP Bombers no s'ha mogut gens**: continua donant
+Metropolitana Sud (3 de 5 comarques, llindar 3). El Maresme, allà, va a Metropolitana Nord i no
+arriba al llindar (1 de 3, en calen 2) — com abans del canvi.
+
+**I una tercera cosa que es va veure pel camí:** els dos mapatges orogràfics **no diuen el mateix**.
+La fórmula fa 8 grups (Empordà i Gironès dins de «Costa Brava») i l'`index.html` en fa 9 (a part).
+No és cap error —un pondera i l'altre dibuixa una taula— però convé saber-ho abans de comparar-los.
+
+**Pendent:** la targeta d'«ahir» i el pla B sense JSON llegeixen d'`smp_historic`, que guarda les
+files **per zona**: per aquells dos camins el Maresme continua caient a «Costa Brava». Arreglar-ho
+demana desar la comarca a les files, i això toca l'esquema.
+
 ## 2026-09-17 — Les allaus sortien «1/5» sense butlletí: un `|| 1` que convertia el 0 en 1
 
 Reportat mirant la taula nova de l'historial: *«la fila allaus està desactivada ara, hauria de

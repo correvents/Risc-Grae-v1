@@ -396,7 +396,24 @@
   }
 
   // Valor SMP 0-6 d'un dia a partir dels avisos i dels pesos per zona.
-  // `params` és riscParams: { zones: {grup: pes}, zonesGrup: {zonaMeteocat: grup} }.
+  // A quin grup compta una afectació. **La comarca mana sobre la zona**: les
+  // zones de Meteocat no sempre coincideixen amb els àmbits del GRAE i n'hi ha
+  // que caldria partir (vegeu `comarquesGrup`). Si l'afectació no porta comarca
+  // —les files velles d'`smp_historic` són per zona— es resol per zona, com
+  // sempre.
+  //
+  // **Passa-hi sempre pel mig.** Si algú torna a escriure
+  // `zonesGrup[zona] || zona` a pèl en algun camí, aquell camí deixa de veure
+  // les excepcions i el Maresme hi torna a sortir com a Costa Brava — el
+  // mateix forat que la trampa 11, però amb el nom en comptes del pes.
+  function grupDeZona(zona, comarca, params) {
+    const p = params || {};
+    const perComarca = (comarca != null) && (p.comarquesGrup || {})[comarca];
+    return perComarca || (p.zonesGrup || {})[zona] || zona;
+  }
+
+  // `params` és riscParams: { zones: {grup: pes}, zonesGrup: {zonaMeteocat: grup},
+  // comarquesGrup: {codiComarca: grup} }.
   function ponderarSMP(avisos, data_str, params) {
   if (!avisos) {
     return { valor: 0, explicacio: 'Sense dades', zones: { groc: 0, taronja: 0, vermell: 0 }, detall: [] };
@@ -417,7 +434,7 @@
         for (const afectacio of (dia.afectacions || [])) {
           const zonaOriginal = afectacio.zona || '';
           const nivell = afectacio.nivell || '';
-          const zonaGrup = params.zonesGrup[zonaOriginal] || zonaOriginal;
+          const zonaGrup = grupDeZona(zonaOriginal, afectacio.comarca, params);
           if (!((params.zones[zonaGrup] ?? -1) > 0)) {
             if (nivellOrdre[nivell]) {
               if (zonaGrup in params.zones) descartades.add(zonaGrup);
@@ -836,6 +853,25 @@
       "Terres de l'Ebre": 1,
       'Zona Marítima': 1,
     },
+    // **Excepcions per comarca, que manen sobre la zona.**
+    //
+    // Les zones de Meteocat no sempre coincideixen amb els àmbits del GRAE, i
+    // el mapatge normal va per zona: tota la zona cau al mateix grup. El
+    // Maresme n'és el cas — comparteix la zona «Litoral Nord» amb la Selva, i
+    // aquella zona anava a parar al grup «Costa Brava». Resultat: un avís al
+    // Maresme sortia a la pantalla com a «Costa Brava», que és a l'altra punta.
+    //
+    // Moure la zona sencera no servia, perquè la Selva **sí** que és Costa
+    // Brava (Blanes, Lloret, Tossa): hauria canviat un error de nom per un
+    // altre. Per això l'excepció va per comarca.
+    //
+    // ⚠️ Això només val allà on l'afectació porta la comarca. La targeta
+    // d'«ahir» i el pla B quan no hi ha JSON llegeixen d'`smp_historic`, on les
+    // files són per zona: per aquells dos camins el Maresme continua caient a
+    // «Costa Brava». Està apuntat al CLAUDE.md.
+    comarquesGrup: {
+      21: 'Litoral Central',   // Maresme — la zona Litoral Nord va a Costa Brava
+    },
     // Mapeig de zona original a grup (per agrupar alertes)
     zonesGrup: {
       'Pirineu Occidental': 'Pirineu Occidental',
@@ -924,7 +960,7 @@
     RISC_SOSTRE, RISC_PERILL_MAX, RISC_FORMULA_DEFAULT, RISC_FORMULA_VERSIO,
     detallarRisc, calcularRisc,
     afluenciaDelCalendari, formatDateStr, calcularSetmanaSanta,
-    ponderarSMP, avaluarZonesSMPPerNivell,
+    ponderarSMP, avaluarZonesSMPPerNivell, grupDeZona,
     OP_DEFAULT, urlMeteoVol, tramsHores, avaluarFinestraVol,
     provinciaDeBase, provinciaDeCoords, resumirOperativitat,
     REGIONS_BOMBERS, PERIODES_SMP, comarcaARegio, MARITIMES_A_COMARCA,

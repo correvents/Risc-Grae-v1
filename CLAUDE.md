@@ -249,6 +249,37 @@ smp_historic`. La franja de dades avisa dels dos casos (zona apagada per l'usuar
 per l'app), i els paràmetres desats al `localStorage` es fusionen sempre amb el mapatge del codi: els
 pesos són decisió de l'usuari, els noms de zona no.
 
+**11 quater. Els avisos van per agrupació orogràfica; l'SMP Bombers, per regió d'emergència.** Són
+**dos** sistemes diferents i no s'han de barrejar mai:
+
+| | Agrupa per | D'on surt | Per a què |
+| --- | --- | --- | --- |
+| Pestanya **Alertes** i factor SMP del risc | zones de Meteocat → **grups orogràfics** | `zonesGrup` (fórmula) i `ZONES_GRUPS` (index.html) | comptar quants àmbits tenen avís |
+| Pestanya **SMP Bombers** | comarca → **regió d'emergència** | `REGIONS_BOMBERS` | saber quina regió queda tocada |
+
+I encara hi ha una tercera cosa que enganya: **els dos mapatges orogràfics no diuen el mateix**. La
+fórmula en fa **8** grups (l'Empordà i el Gironès cauen dins de «Costa Brava») i l'`index.html` en fa
+**9** (els deixa a part). No és un error —un serveix per ponderar i l'altre per ensenyar una taula—
+però si els compares et sortiran números diferents de grups. Si algun dia s'unifiquen, compte: el
+factor SMP compta **grups**, o sigui que partir-ne un puja el número i ajuntar-ne dos el baixa.
+
+**Excepcions per comarca (`comarquesGrup`), que manen sobre la zona.** Les zones de Meteocat no
+sempre coincideixen amb els àmbits del GRAE. El **Maresme** comparteix la zona «Litoral Nord» amb la
+**Selva**, i aquella zona anava al grup «Costa Brava»: un avís al Maresme sortia a la pantalla com a
+«Costa Brava», que és a l'altra punta. Moure la zona sencera no servia, perquè la Selva **sí** que és
+Costa Brava (Blanes, Lloret, Tossa) — hauria canviat un error de nom per un altre. Per això
+l'excepció va per comarca: `comarquesGrup = { 21: 'Litoral Central' }`.
+
+**Tot el codi ha de resoldre el grup amb `grupDeZona(zona, comarca, params)`**, que viu a
+`formula-risc.js` i el fan servir els dos costats. Si algú torna a escriure `zonesGrup[zona] || zona`
+a pèl, aquell camí deixa de veure les excepcions i el Maresme hi torna a sortir com a Costa Brava:
+és el mateix forat d'aquesta trampa, però amb el nom en comptes del pes.
+
+⚠️ **Només val allà on l'afectació porta la comarca.** La targeta d'«ahir» i el pla B quan no hi ha
+JSON llegeixen d'`smp_historic`, on les files són **per zona**: per aquells dos camins el Maresme
+continua caient a «Costa Brava». Per arreglar-ho caldria desar la comarca a les files o desdoblar-les,
+i això sí que toca l'esquema.
+
 **12. Un factor sense dades no pot semblar un factor a zero.** El risc es calcula amb el que hi ha
 carregat: si l'SMP no ha arribat, val 0 i el número surt igual de tranquil que un dia sense avisos.
 `estatFonts` registra, per a cada font (`FONTS_DADES`), si ha arribat, quan es va consultar l'origen
