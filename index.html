@@ -689,8 +689,16 @@
        avui/demà): dins de cada fila, un mapa petit per franja horària, tots
        visibles alhora. Al mòbil no hi caben els quatre de costat, així que la
        fila es desplaça horitzontalment en comptes d'apilar-los verticalment
-       —apilats quedarien massa petits per llegir-los igualment. */
+       —apilats quedarien massa petits per llegir-los igualment. Les dues
+       files d'un mateix horitzó (comarques i regions) comparteixen un sol
+       contenidor de desplaçament (.smpb-graella-scroll): així es mouen
+       exactament al mateix moment, sense el salt que feia sincronitzar-les
+       per JavaScript en reaccionar a l'esdeveniment 'scroll'. El títol de
+       cada fila és "sticky" perquè no desaparegui quan els mapes es
+       desplacen per sota. */
     .smpb-fila-titol {
+      position: sticky;
+      left: 0;
       font-weight: 700;
       font-size: 0.85rem;
       color: #37474f;
@@ -714,13 +722,16 @@
       color: #37474f;
     }
 
-    .smpb-fila {
-      display: flex;
-      gap: 0.5rem;
+    .smpb-graella-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x proximity;
       padding-bottom: 0.3rem;
+    }
+
+    .smpb-fila {
+      display: flex;
+      gap: 0.5rem;
     }
 
     /* Una quarta part de l'amplada del contenidor: els quatre hi caben de
@@ -3234,12 +3245,16 @@
       // Un requadre per horitzó (avui, demà) que hi agrupa les seves dues
       // files (comarques i regions): separa d'un cop d'ull el que és d'avui
       // del que és de demà, en comptes de deixar-ho tot en una sola pila.
+      // Les dues files comparteixen un sol contenidor de desplaçament
+      // (.smpb-graella-scroll) perquè es moguin alhora al mòbil.
       const grupDiaHTML = (desplacament) => {
         const titolDia = desplacament === 0 ? formatDia(avui) + ' (Avui)' : formatDia(dema) + ' (Demà)';
         return `
           <div class="smpb-grup-dia">
             <div class="smpb-grup-dia-titol">📅 ${titolDia}</div>
-            ${SMPB_FILES.filter(f => f.desplacament === desplacament).map(filaMapesHTML).join('')}
+            <div class="smpb-graella-scroll">
+              ${SMPB_FILES.filter(f => f.desplacament === desplacament).map(filaMapesHTML).join('')}
+            </div>
           </div>`;
       };
 
@@ -3267,27 +3282,6 @@
 
       // Els mapes surten de l'esquelet sense color: el primer pintat els omple.
       pintarMapesSMPBombers(matriu);
-      sincronitzarFilesSMPB();
-    }
-
-    // Al mòbil cada fila es desplaça per separat: sense això, desplaçar les
-    // comarques d'avui no movia les regions d'avui, i calia repetir el gest
-    // dues vegades per veure la mateixa hora a totes dues. Les files d'un
-    // mateix requadre (mateix horitzó) ara es desplacen juntes.
-    function sincronitzarFilesSMPB() {
-      document.querySelectorAll('.smpb-grup-dia').forEach(grup => {
-        const files = [...grup.querySelectorAll('.smpb-fila')];
-        if (files.length < 2) return;
-        let sincronitzant = false;
-        files.forEach(fila => {
-          fila.addEventListener('scroll', () => {
-            if (sincronitzant) return;
-            sincronitzant = true;
-            files.forEach(altra => { if (altra !== fila) altra.scrollLeft = fila.scrollLeft; });
-            sincronitzant = false;
-          });
-        });
-      });
     }
 
     // Nom de comarca quan no hi ha cap avís i, per tant, no ve del JSON.
