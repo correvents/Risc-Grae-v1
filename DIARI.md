@@ -33,8 +33,35 @@ quatre mapes petits de costat, un per franja. Setze mapes en total, sense tempor
   modal i la vista mòbil amb Playwright/Chromium. No hi ha manera de provar-ho amb dades reals SMP
   fins que es publiqui.
 
-No toca `pintarSVGComarques`/`svgComarques` (signatura intacta) ni el mòdul d'historial
-(`pintarBombersHistoric`, `.histb-franja`), que segueixen amb el seu propi selector d'una franja.
+No toca `pintarSVGComarques`/`svgComarques` (signatura intacta).
+
+**Seguiment, mateix dia — tres ajustos més sobre el mateix canvi:**
+
+1. **Un requadre per horitzó.** Les quatre files quedaven totes seguides sense separar
+   visualment avui de demà. Ara `grupDiaHTML(desplacament)` n'agrupa dues (comarques+regions)
+   dins d'un `.smpb-grup-dia` amb la data com a capçalera.
+2. **Comarques i regions es desplacen alhora.** Primer es va provar sincronitzant per
+   JavaScript (escoltar `scroll` d'una fila i copiar-ne el `scrollLeft` a l'altra), però amb
+   `scroll-snap` es notava un salt: una fila ja havia encaixat quan l'altra encara no s'havia
+   mogut. Solució final, sense JS: les dues files comparteixen **un sol contenidor**
+   `overflow-x` (`.smpb-graella-scroll`) — és un únic desplaçament natiu del navegador, no dos
+   de sincronitzats. El títol de cada fila (`Comarques`/`Regions`) és `position:sticky;left:0`
+   perquè no desaparegui en desplaçar-se.
+3. **El mateix patró a l'Historial.** `pintarBombersHistoric`/`blocDetallCaptura` encara duien
+   el disseny vell (botons `.histb-franja`, un sol mapa per vista). S'ha refet amb el mateix
+   esquema: `idMapaHist(vista, periode)` (anàleg a `idMapaSMPB`), vuit mapes petits (2 files x 4
+   franges) dins d'un `.smpb-graella-scroll` compartit, clicables amb `obrirMapaSMPBGran`. Els
+   contenidors (`histb-mapa-*`) surten buits al HTML i `pintarBombersHistoric` hi injecta l'SVG
+   un cop `geoComarques` és carregat (abans ho feia per als 2 divs `histb-comarques`/
+   `histb-regions`; ara per als 8). També s'hi afegeix `svgDefsPerimetres()` (`histb-defs-perimetres`),
+   que abans no s'hi cridava mai.
+
+Tret `histFranjaSMPB`, `triarFranjaHist`, `marcarFranjaHist`.
+
+Provat cada cop amb Playwright/Chromium sense xarxa real (CDN bloquejats en aquest entorn):
+stub de `window.supabase` i dades sintètiques (a l'historial, un `sbClient` amb mètodes
+encadenables i una captura falsa) per comprovar visualment i per script que les dues files es
+mouen exactes al mateix punt.
 
 **Pendent:** cap.
 
