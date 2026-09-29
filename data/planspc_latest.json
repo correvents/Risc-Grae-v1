@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-09-29T12:45:36.998Z",
+  "actualitzat": "2026-09-29T12:50:23.304Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "28/09/2026 11:36",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127640_ACTUALITZACIO--ACTIVAT_INUNCAT_202609281945.pdf"
-      },
-      "descripcio": "SMP Intesitat 28, 29 i 30/09 - "
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
@@ -28,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127716_INICI--ACTIVAT_INUNCAT_202609291233.pdf"
       },
       "descripcio": "Avís intensitat vigilància_90mm/3h - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "28/09/2026 11:36",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127640_ACTUALITZACIO--ACTIVAT_INUNCAT_202609291439.pdf"
+      },
+      "descripcio": "SMP Intesitat 28, 29 i 30/09 - "
     }
   ]
 }
