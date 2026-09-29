@@ -8,6 +8,36 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-09-29 — Mapes de l'SMP Bombers: es treu l'animació, es veuen totes les franges alhora
+
+Petició de l'usuari: els quatre mapes (comarques/regions × avui/demà) passaven una franja horària
+cada 2 s amb un botó de play, i calia recordar quina hora s'estava mirant per comparar-la amb una
+altra. Ara les **quatre franges es veuen totes alhora**: cada fila (p. ex. «Comarques · Avui») té
+quatre mapes petits de costat, un per franja. Setze mapes en total, sense temporitzador.
+
+- Tret `SMPB_MAPES`/`smpBombersEstat.periode`/`.auto`, `smpbTemporitzador`, `arrencarSequenciaSMPBombers`,
+  `aturarSequenciaSMPBombers`, `actualitzarBotoSequencia`, `alternarSequenciaSMPBombers`,
+  `fixarFranjaSMPBombers` i `franjaAra()`. Substituïts per `SMPB_FILES` (4 files) i `idMapaSMPB(fila, periode)`.
+  `pintarMapesSMPBombers(matriu)` ara pinta els setze mapes d'un cop, sense paràmetre de franja.
+- Mapes petits: ~23% d'amplada a l'ordinador (els quatre hi caben de costat), amb `overflow-x:auto`
+  i `scroll-snap` a mòbil (`.smpb-fila`), perquè en pantalla estreta es desplacin en comptes de
+  quedar il·legibles.
+- **Clicar un mapa petit l'obre gran** en un requadre flotant (`obrirMapaSMPBGran`/`tancarMapaSMPBGran`):
+  és un `cloneNode` de l'SVG ja pintat sense el seu `id` (perquè no n'hi hagi dos d'iguals al DOM), i
+  el `<use>` del perímetre de regió funciona igual perquè la cerca per id és de tot el document.
+- La llegenda de colors (0-6, `fora`) i l'explicació del perímetre/territori gris es mouen **a dalt
+  de tot** de la targeta de mapes (abans eren a sota).
+- Actualitzada la documentació integrada (Configuració → manual, apartat 2.10).
+- Provat sense xarxa (CDN de Supabase/Leaflet bloquejats en aquest entorn): stub de `window.supabase`
+  i dades SMP sintètiques via consola per forçar `renderSMPBombers()` i comprovar les 16 targetes, el
+  modal i la vista mòbil amb Playwright/Chromium. No hi ha manera de provar-ho amb dades reals SMP
+  fins que es publiqui.
+
+No toca `pintarSVGComarques`/`svgComarques` (signatura intacta) ni el mòdul d'historial
+(`pintarBombersHistoric`, `.histb-franja`), que segueixen amb el seu propi selector d'una franja.
+
+**Pendent:** cap.
+
 ## 2026-09-17 — Les allaus sortien «1/5» sense butlletí: un `|| 1` que convertia el 0 en 1
 
 Reportat mirant la taula nova de l'historial: *«la fila allaus està desactivada ara, hauria de

@@ -685,27 +685,46 @@
       min-width: 45px;
     }
     
-    /* Els quatre mapes de l'SMP Bombers: dos per fila a l'ordinador, un sol a
-       la pantalla del mòbil, on dos quedarien massa petits per llegir-los. */
-    .smpb-graella {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
+    /* Les quatre files de mapes de l'SMP Bombers (comarques/regions x
+       avui/demà): dins de cada fila, un mapa petit per franja horària, tots
+       visibles alhora. Al mòbil no hi caben els quatre de costat, així que la
+       fila es desplaça horitzontalment en comptes d'apilar-los verticalment
+       —apilats quedarien massa petits per llegir-los igualment. */
+    .smpb-fila-titol {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #37474f;
+      margin: 1rem 0 0.35rem;
+    }
+    .smpb-fila-titol:first-child { margin-top: 0; }
+
+    .smpb-fila {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      padding-bottom: 0.3rem;
+    }
+
+    /* Una quarta part de l'amplada del contenidor: els quatre hi caben de
+       costat a l'ordinador. Es cliquen per veure'ls grans. */
+    .smpb-mapa-petit {
+      flex: 0 0 23%;
+      min-width: 130px;
+      scroll-snap-align: start;
+      cursor: zoom-in;
+    }
+
+    .smpb-mapa-periode {
+      font-size: 0.68rem;
+      color: #78909c;
+      text-align: center;
+      margin-bottom: 0.15rem;
     }
 
     @media (max-width: 700px) {
-      .smpb-graella { grid-template-columns: 1fr; }
-    }
-
-    .smpb-franja {
-      border: 1px solid #cfd8dc;
-      border-radius: 4px;
-      padding: 0.2rem 0.55rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      background: #eceff1;
-      color: #37474f;
+      .smpb-mapa-petit { flex: 0 0 42%; min-width: 140px; }
     }
 
     .smp-taula .cel-alerta {
@@ -2742,24 +2761,23 @@
     const colorRisc = (v) => COLORS_SMP[Math.max(0, Math.min(6, v))];
     const textSobreRisc = (v) => (v >= 4 ? '#fff' : '#000');
 
-    // Els quatre mapes de la graella, en ordre de lectura: la fila d'avui a dalt
-    // i la de demà a sota, i a cada fila les comarques i les regions. Es veuen
-    // tots alhora a posta: abans hi havia un sol mapa amb tres desplegables, i
-    // per comparar dues vistes calia recordar la que acabaves de deixar.
-    const SMPB_MAPES = [
-      { id: 'comarques-avui', vista: 'comarques', desplacament: 0 },
-      { id: 'regions-avui',   vista: 'regions',   desplacament: 0 },
-      { id: 'comarques-dema', vista: 'comarques', desplacament: 1 },
-      { id: 'regions-dema',   vista: 'regions',   desplacament: 1 }
+    // Les quatre files de la graella, en ordre de lectura: per cada horitzó
+    // (avui, demà) primer comarques i després regions. Cada fila mostra un
+    // mapa petit per franja horària (4), tots alhora: abans hi havia un sol
+    // mapa per fila amb un play que les anava alternant cada 2 s, i comparar
+    // dues hores volia dir recordar la que acabaves de deixar.
+    const SMPB_FILES = [
+      { vista: 'comarques', desplacament: 0 },
+      { vista: 'regions',   desplacament: 0 },
+      { vista: 'comarques', desplacament: 1 },
+      { vista: 'regions',   desplacament: 1 }
     ];
-    const SMPB_MS = 2000;   // cada quant avança la seqüència de franges
+    // Id del mapa petit d'una fila i una franja concretes. Els dos punts de la
+    // franja ("06-12") es canvien per subratllats perquè viuen dins d'un id.
+    const idMapaSMPB = (fila, periode) =>
+      `${fila.vista}-${fila.desplacament}-${periode.replace('-', '_')}`;
 
-    // La franja arrenca a l'hora que és: si són les 10 del matí, el primer que
-    // es veu és la de 06-12, i d'aquí la seqüència continua sola.
-    const franjaAra = () => PERIODES_SMP[Math.min(3, Math.floor(new Date().getHours() / 6))];
-
-    let smpBombersEstat = { periode: franjaAra(), auto: true, obertes: [] };
-    let smpbTemporitzador = null;
+    let smpBombersEstat = { obertes: [] };
     let smpbMatriu = {};
     let geoComarques = null;
 
@@ -2881,22 +2899,17 @@
       return `<svg id="smpb-svg-${idMapa}" viewBox="0 0 ${p.ample} ${p.alt}" style="width:100%;height:auto;display:block;">${paths}${bcn}${perimetres}</svg>`;
     }
 
-    // Pinta els quatre mapes d'una franja canviant només el fill i el títol de
-    // cada comarca. Refer l'SVG sencer cada dos segons faria pampallugues i
-    // perdria el tooltip que l'usuari tingués obert.
-    // vista='comarques' pinta el valor de cada comarca; vista='regions' pinta
-    // totes les comarques d'una regió amb el valor agregat de la regió, que és
-    // el que mira un cap de regió.
-    function pintarMapesSMPBombers(matriu, periode) {
-      SMPB_MAPES.forEach(m => {
-        const svg = document.getElementById('smpb-svg-' + m.id);
-        if (svg) pintarSVGComarques(svg, matriu, localDateStr(m.desplacament), periode, m.vista);
-      });
-
-      document.querySelectorAll('.smpb-franja').forEach(el => {
-        const actiu = el.dataset.periode === periode;
-        el.style.background = actiu ? '#0082d9' : '#eceff1';
-        el.style.color = actiu ? '#fff' : '#37474f';
+    // Pinta els setze mapes petits (4 files x 4 franges) canviant el fill i el
+    // títol de cada comarca. vista='comarques' pinta el valor de cada comarca;
+    // vista='regions' pinta totes les comarques d'una regió amb el valor
+    // agregat de la regió, que és el que mira un cap de regió.
+    function pintarMapesSMPBombers(matriu) {
+      SMPB_FILES.forEach(fila => {
+        const dia = localDateStr(fila.desplacament);
+        PERIODES_SMP.forEach(periode => {
+          const svg = document.getElementById('smpb-svg-' + idMapaSMPB(fila, periode));
+          if (svg) pintarSVGComarques(svg, matriu, dia, periode, fila.vista);
+        });
       });
     }
 
@@ -2932,52 +2945,41 @@
       });
     }
 
-    // La seqüència de franges: 00-06 → 06-12 → 12-18 → 18-00, i torna a
-    // començar. Serveix per veure com es mou el dia sense haver de clicar res.
-    function aturarSequenciaSMPBombers() {
-      if (smpbTemporitzador) clearInterval(smpbTemporitzador);
-      smpbTemporitzador = null;
+    // Mapa petit clicat: se'n mostra una còpia gran en un modal. És una còpia
+    // (cloneNode) i no l'original, perquè l'original s'ha de poder continuar
+    // repintant a sota encara que el modal sigui obert — i perquè dos elements
+    // amb el mateix id trencarien getElementById. El <use> del perímetre
+    // segueix funcionant al clon sense repetir els <defs>: la cerca per id és
+    // de tot el document, no només del node on penja el <use>.
+    function obrirMapaSMPBGran(el) {
+      const svg = document.getElementById('smpb-svg-' + el.dataset.id);
+      if (!svg) return;
+      const clon = svg.cloneNode(true);
+      clon.removeAttribute('id');
+      clon.style.width = '100%';
+
+      const modal = document.createElement('div');
+      modal.id = 'modal-mapa-smpb';
+      modal.style.cssText = `
+        position:fixed;top:0;left:0;width:100%;height:100%;
+        background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;
+        z-index:1000;padding:1rem;box-sizing:border-box;
+      `;
+      modal.innerHTML = `
+        <div style="background:#fff;border-radius:10px;padding:1rem;max-width:640px;width:100%;max-height:90vh;overflow:auto;position:relative;box-sizing:border-box;">
+          <button onclick="tancarMapaSMPBGran()" style="position:absolute;top:0.5rem;right:0.5rem;border:none;background:#eceff1;border-radius:50%;width:2rem;height:2rem;font-size:1.1rem;line-height:1;cursor:pointer;color:#37474f;">&times;</button>
+          <div style="font-weight:700;font-size:0.9rem;margin:0 1.8rem 0.6rem 0;color:#37474f;">${escapeHtml(el.dataset.titol)}</div>
+          <div id="modal-mapa-smpb-svg"></div>
+        </div>
+      `;
+      modal.querySelector('#modal-mapa-smpb-svg').appendChild(clon);
+      modal.addEventListener('click', (e) => { if (e.target === modal) tancarMapaSMPBGran(); });
+      document.body.appendChild(modal);
     }
 
-    function arrencarSequenciaSMPBombers() {
-      aturarSequenciaSMPBombers();
-      if (!smpBombersEstat.auto) return;
-      smpbTemporitzador = setInterval(() => {
-        // Es mata sol si la graella ja no és a la vista: l'app l'ha redibuixada,
-        // o l'usuari ha canviat de pestanya i estaríem pintant cada dos segons
-        // una cosa que ningú mira. La secció es queda al DOM en canviar de
-        // pestanya, o sigui que no n'hi ha prou de mirar si l'element existeix.
-        // En tornar a la pestanya, renderSMPBombers torna a arrencar.
-        const seccio = document.getElementById('seccio-smpbombers');
-        if (!document.getElementById('smpb-mapes') || !seccio || !seccio.classList.contains('active')) {
-          aturarSequenciaSMPBombers();
-          return;
-        }
-        const i = PERIODES_SMP.indexOf(smpBombersEstat.periode);
-        smpBombersEstat.periode = PERIODES_SMP[(i + 1) % PERIODES_SMP.length];
-        pintarMapesSMPBombers(smpbMatriu, smpBombersEstat.periode);
-      }, SMPB_MS);
-    }
-
-    function actualitzarBotoSequencia() {
-      const b = document.getElementById('smpb-play');
-      if (b) b.textContent = smpBombersEstat.auto ? '⏸ Aturar' : '▶ Reprendre';
-    }
-
-    function alternarSequenciaSMPBombers() {
-      smpBombersEstat.auto = !smpBombersEstat.auto;
-      actualitzarBotoSequencia();
-      arrencarSequenciaSMPBombers();
-    }
-
-    // Clicar una franja la fixa: si passessin igualment cada dos segons no la
-    // podries mirar.
-    function fixarFranjaSMPBombers(periode) {
-      smpBombersEstat.periode = periode;
-      smpBombersEstat.auto = false;
-      aturarSequenciaSMPBombers();
-      actualitzarBotoSequencia();
-      pintarMapesSMPBombers(smpbMatriu, periode);
+    function tancarMapaSMPBGran() {
+      const modal = document.getElementById('modal-mapa-smpb');
+      if (modal) modal.remove();
     }
 
     // Ordre dels avisos, per quedar-nos amb el més gros quan una franja en porta
@@ -3190,31 +3192,43 @@
       });
       html += `</tr></tbody></table></div>`;
 
-      // Els quatre mapes, tots alhora, amb la franja passant sola
-      const titolMapa = (m) => `${m.vista === 'regions' ? 'Regions' : 'Comarques'} · ` +
-        `${m.desplacament === 0 ? formatDia(avui) + ' (Avui)' : formatDia(dema) + ' (Demà)'}`;
+      // Una fila per vista/horitzó (comarques avui, regions avui, comarques
+      // demà, regions demà), amb un mapa petit per franja horària dins de
+      // cada fila. Es cliquen per veure'ls grans (obrirMapaSMPBGran).
+      const titolFila = (fila) => `${fila.vista === 'regions' ? 'Regions' : 'Comarques'} · ` +
+        `${fila.desplacament === 0 ? formatDia(avui) + ' (Avui)' : formatDia(dema) + ' (Demà)'}`;
+
+      const filaMapesHTML = (fila) => {
+        const titolBase = titolFila(fila);
+        return `
+          <div class="smpb-fila-titol">${titolBase}</div>
+          <div class="smpb-fila">
+            ${PERIODES_SMP.map(periode => {
+              const id = idMapaSMPB(fila, periode);
+              return `
+                <div class="smpb-mapa-petit" data-id="${id}" data-titol="${escapeHtml(titolBase + ' · ' + periode)}" onclick="obrirMapaSMPBGran(this)" title="Clica per veure'l gran">
+                  <div class="smpb-mapa-periode">${periode}</div>
+                  ${svgComarques(id)}
+                </div>`;
+            }).join('')}
+          </div>`;
+      };
 
       html += `
         <div class="card" style="margin-bottom:1.5rem;">
-          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:0.75rem;">
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:0.6rem;">
             <strong style="font-size:0.9rem;">🗺️ Mapes</strong>
-            <button class="risc-btn" id="smpb-play" onclick="alternarSequenciaSMPBombers()" style="padding:0.2rem 0.6rem;font-size:0.8rem;">⏸ Aturar</button>
-            ${PERIODES_SMP.map(p => `<button class="smpb-franja" data-periode="${p}" onclick="fixarFranjaSMPBombers('${p}')">${p}</button>`).join('')}
-            <span style="font-size:0.75rem;color:#888;">Les quatre franges passen soles cada 2 s; clica'n una per aturar-les.</span>
+            <span style="font-size:0.75rem;color:#888;">Clica un mapa per veure'l gran. Al mòbil, cada fila es desplaça cap a la dreta.</span>
           </div>
-          ${geoComarques ? svgDefsPerimetres() : ''}
-          <div id="smpb-mapes" class="smpb-graella">
-            ${SMPB_MAPES.map(m => `
-              <div>
-                <div style="font-size:0.8rem;font-weight:700;color:#37474f;margin-bottom:0.25rem;">${titolMapa(m)}</div>
-                ${svgComarques(m.id)}
-              </div>`).join('')}
-          </div>
-          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;align-items:center;margin-top:0.75rem;font-size:0.8rem;">
+          <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;align-items:center;margin-bottom:0.85rem;font-size:0.8rem;">
             ${COLORS_SMP.map((c, i) => `<span style="background:${c};color:${textSobreRisc(i)};padding:2px 10px;border-radius:4px;">${i}</span>`).join('')}
             <span style="background:${COLOR_FORA_REGIO};color:#37474f;padding:2px 10px;border-radius:4px;border:1px solid #90a4ae;">fora</span>
             <span style="color:#666;">La línia negra és el perímetre de la regió. En gris, el territori amb bombers propis
             (Aran i la ciutat de Barcelona): no compta al risc de cap regió.</span>
+          </div>
+          ${geoComarques ? svgDefsPerimetres() : ''}
+          <div id="smpb-mapes">
+            ${SMPB_FILES.map(filaMapesHTML).join('')}
           </div>
         </div>
       `;
@@ -3222,9 +3236,7 @@
       cont.innerHTML = html;
 
       // Els mapes surten de l'esquelet sense color: el primer pintat els omple.
-      pintarMapesSMPBombers(matriu, smpBombersEstat.periode);
-      actualitzarBotoSequencia();
-      arrencarSequenciaSMPBombers();
+      pintarMapesSMPBombers(matriu);
     }
 
     // Nom de comarca quan no hi ha cap avís i, per tant, no ve del JSON.
@@ -7143,9 +7155,9 @@
                 <p style="margin:0 0 0.5rem;color:#555;">Clicant una fila de la taula s'obre el detall de la regió: <strong>només les comarques que hi tenen avís</strong> (les que estan a 0 les vuit franges no hi surten, no diuen res). De cada comarca hi ha la fila del <strong>grau de perill</strong> (0-6) i, a sota, <strong>una fila per fenomen</strong> amb el <strong>nivell de l'avís i la probabilitat</strong> de cada franja; el llindar surt al costat del nom quan n'hi ha un de sol i, si no, al títol de cada cel·la. El nivell es pinta amb el to fosc del seu propi color, com la resta de la pestanya.</p>
                 <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">És aquí on es veu per què el valor d'una regió pot ser 0 amb comarques a 4 o 6: el llindar de <code>agregarRisc</code> és la meitat + 1 de les comarques, i dues comarques calentes d'una regió de set no hi arriben. La regió mesura si la <em>regió</em> quedarà desbordada, no si hi ha perill en algun lloc.</p>
 
-                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Els quatre mapes</p>
-                <p style="margin:0 0 0.5rem;color:#555;">Es veuen <strong>tots quatre alhora</strong> —comarques i regions, avui i demà— en comptes d'un de sol amb desplegables: així es compara d'un cop d'ull el detall amb l'agregat, i avui amb demà, sense haver de recordar el mapa que acabes de deixar. La <strong>franja de sis hores va passant sola cada 2 s</strong> (00-06 → 06-12 → 12-18 → 18-00) perquè es vegi com es mou el dia; clicant una franja es fixa i el botó ▶/⏸ atura i reprèn la seqüència. Arrenca per la franja de l'hora que és.</p>
-                <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Per dins, la geometria es projecta <strong>un sol cop</strong> (<code>projeccioComarques</code>) i cada canvi de franja només reescriu el color i el títol de cada comarca (<code>pintarMapesSMPBombers</code>): refer quatre SVG sencers cada dos segons faria pampallugues. El temporitzador es mata sol quan la pestanya deixa d'estar activa.</p>
+                <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Els mapes</p>
+                <p style="margin:0 0 0.5rem;color:#555;">Hi ha <strong>quatre files</strong> —comarques i regions, avui i demà— i dins de cada fila, <strong>un mapa petit per franja horària</strong> (00-06 → 06-12 → 12-18 → 18-00): setze mapes en total, tots pintats alhora, sense cap animació ni botó de play. Així es compara d'un cop d'ull el detall amb l'agregat, avui amb demà, i una hora amb una altra, sense haver de recordar el mapa que acabes de deixar. <strong>Clicant un mapa petit se'n veu una còpia gran</strong> en un requadre flotant; en pantalla estreta (mòbil) cada fila es desplaça horitzontalment perquè els quatre mapes no hi caben de costat.</p>
+                <p style="margin:0 0 0.5rem;font-size:0.78rem;color:#888;">Per dins, la geometria es projecta <strong>un sol cop</strong> (<code>projeccioComarques</code>) i cada mapa petit només reescriu el color i el títol de cada comarca sobre el mateix esquelet (<code>pintarMapesSMPBombers</code>). El mapa gran és un <code>cloneNode</code> del petit sense el seu <code>id</code>, perquè no hi hagi dos elements amb el mateix id al DOM alhora.</p>
 
                 <p style="margin:0.75rem 0 0.3rem;font-weight:600;">Colors de la taula i dels mapes</p>
                 <p style="margin:0 0 0.5rem;color:#555;">No és un degradat de verd a vermell sinó <strong>el color de l'avís de Meteocat</strong>, que és el que el cap de regió té al cap: <strong>1–2 groc</strong>, <strong>3–4 taronja</strong>, <strong>5–6 vermell</strong>, i el <strong>0</strong> (cap avís) verd. Dins de cada color, el valor baix és el to clar i l'alt el fosc, o sigui que els dos graons d'un mateix avís es distingeixen sense deixar de ser el mateix color (<code>COLORS_SMP</code>). L'escala del risc del GRAE és una altra i no s'ha de barrejar amb aquesta.</p>
