@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-09-29T13:22:38.059Z",
+  "actualitzat": "2026-09-29T18:20:19.148Z",
   "plans": [
     {
       "plaicona": {
@@ -28,6 +28,73 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127640_ACTUALITZACIO--ACTIVAT_INUNCAT_202609291439.pdf"
       },
       "descripcio": "SMP Intesitat 28, 29 i 30/09 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "29/09/2026 16:36",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127730_INICI--ACTIVAT_INUNCAT_202609291651.pdf"
+      },
+      "descripcio": " Avís Vigilància-Intensitat de pluja Intensitat > 40 mm / 30 minut - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "29/09/2026 17:01",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127732_INICI--ACTIVAT_INUNCAT_202609291715.pdf"
+      },
+      "descripcio": "Avís Vigilància-Intensitat de pluja en 3 hores Intensitat > 60 mm/3 hores - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "29/09/2026 17:29",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127734_INICI--ACTIVAT_INUNCAT_202609291744.pdf"
+      },
+      "descripcio": "Avís vigilància. Intensitat pluja en 3 hores > 90 mm / 3 hores - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "29/09/2026 17:34",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127735_INICI--ACTIVAT_INUNCAT_202609291751.pdf"
+      },
+      "descripcio": "Avís Vigilància. Intensitat 30 min. Baix Ebre - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "29/09/2026 20:00",
+      "descripcio": "Avís Vigilància-Intensitat de pluja en 3 hores Intensitat > 90 mm/3 hores - "
     }
   ]
 }
