@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-09-28T18:20:22.206Z",
+  "dataConsulta": "2026-09-29T04:45:15.434Z",
   "avui": {
-    "data": "2026-09-28",
-    "variables": {
-      "estatDelCel": "El cel romandrà molt ennuvolat o cobert en general de núvols alts i mitjans que viatjaran de sud-oest a nord-est.\nLes nuvolades del litoral i prelitoral s'aniran endinsant cap a l'interior amb el pas de les hores.",
-      "precipitacions": "A partir del migdia els ruixats es faran més dispersos, però alhora afectaran altres punts del país diferents del litoral i prelitoral, preferentment al Prepirineu. A banda, a partir del vespre es tornaran a reforçar els ruixats i xàfecs del litoral i prelitoral. La precipitació serà d'intensitat entre feble i moderada i acumularà quantitats entre minses i poc abundants en conjunt; a més, és possible que vagi acompanyada de tempesta. Amb tot, en les zones avisades, els xàfecs poden descarregar localment amb forta intensitat i acumular quantitats abundants de precipitació.",
-      "temperatures": "La temperatura màxima serà lleugerament més baixa en general i no superarà en cap cas els 30 °C.",
-      "visibilitat": "La visibilitat empitjorarà i serà entre bona i regular. Malgrat tot, en moments de xàfec la visibilitat serà dolenta, com també en zones elevades.",
-      "vent": "A partir de finals del matí el vent bufarà entre feble i moderat de component sud i est arreu, amb alguns cops forts a l'extrem nord-est del litoral al llarg del dia i a la tarda al prelitoral sud i sud de Ponent. Al final del jorn tornarà a quedar fluix i de direcció variable al Pirineu, Prepirineu i interior del quadrant nord-est."
-    }
-  },
-  "dema": {
     "data": "2026-09-29",
     "variables": {
       "estatDelCel": "Fins a primeres hores de la tarda el cel romandrà entre molt ennuvolat i cobert, amb nuvolositat menys compacta a Ponent. A partir de llavors la nuvolositat minvarà, especialment a punts de l'oest. Al final del dia tornaran a augmentar al litoral i prelitoral.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà lleugerament més baixa. La màxima serà semblant a Ponent i a les Terres de l'Ebre, sectors on es registraran els valors més elevats, i davallarà lleugerament a la resta.",
       "visibilitat": "La visibilitat serà entre bona i regular, transitòriament dolenta en moments de precipitació i en zones elevades.",
       "vent": "El vent serà fluix i de direcció variable fins a primera hora del matí i a partir del vespre. Durant les hores centrals del dia s'imposarà el component est entre fluix i moderat, amb alguns cops forts al nord de l'Empordà, mentre que al Pirineu dominarà el component sud, on podrà assolir cops forts a cotes elevades."
+    }
+  },
+  "dema": {
+    "data": "2026-09-30",
+    "variables": {
+      "estatDelCel": "Fins a mig matí, el cel romandrà entre poc i mig ennuvolat al quadrant nord-est i entre mig i molt ennuvolat a la resta. A partir de llavors augmentarà la nuvolositat d'oest a est fins a deixar el cel entre molt ennuvolat i cobert en general, sobretot de núvols alts i mitjans. Independentment, fins a mig matí hi haurà núvols baixos a trams del litoral, prelitoral i depressió Central, com també novament a trams del litoral i prelitoral a partir del vespre.",
+      "precipitacions": "De matinada és possible algun ruixat o xàfec al litoral nord. A la tarda, són probables alguns ruixats dispersos a punts de muntanya de l'extrem nord i del prelitoral sud. La precipitació serà d'intensitat feble i localment moderada i acumularà quantitats minses en general. ",
+      "temperatures": "La temperatura mínima serà semblant o lleugerament més baixa; la màxima pujarà lleugerament.",
+      "visibilitat": "La visibilitat serà entre bona i regular en general. Hi haurà bancs de boirina matinals a fondalades de l'interior.",
+      "vent": "El vent serà fluix i de direcció variable fins a mig matí i al final del dia a l'interior i bufarà el terral fluix al litoral. Durant les hores centrals del dia dominarà el vent de component sud fluix amb cops moderats, amb algun de fort esporàdic a l'Empordà durant la tarda."
     }
   }
 }
