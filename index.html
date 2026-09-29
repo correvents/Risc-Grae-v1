@@ -3267,6 +3267,27 @@
 
       // Els mapes surten de l'esquelet sense color: el primer pintat els omple.
       pintarMapesSMPBombers(matriu);
+      sincronitzarFilesSMPB();
+    }
+
+    // Al mòbil cada fila es desplaça per separat: sense això, desplaçar les
+    // comarques d'avui no movia les regions d'avui, i calia repetir el gest
+    // dues vegades per veure la mateixa hora a totes dues. Les files d'un
+    // mateix requadre (mateix horitzó) ara es desplacen juntes.
+    function sincronitzarFilesSMPB() {
+      document.querySelectorAll('.smpb-grup-dia').forEach(grup => {
+        const files = [...grup.querySelectorAll('.smpb-fila')];
+        if (files.length < 2) return;
+        let sincronitzant = false;
+        files.forEach(fila => {
+          fila.addEventListener('scroll', () => {
+            if (sincronitzant) return;
+            sincronitzant = true;
+            files.forEach(altra => { if (altra !== fila) altra.scrollLeft = fila.scrollLeft; });
+            sincronitzant = false;
+          });
+        });
+      });
     }
 
     // Nom de comarca quan no hi ha cap avís i, per tant, no ve del JSON.
