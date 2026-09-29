@@ -698,6 +698,22 @@
     }
     .smpb-fila-titol:first-child { margin-top: 0; }
 
+    /* Un requadre per horitzó (avui/demà) al voltant de les seves dues files
+       (comarques i regions), perquè es distingeixin d'un cop d'ull. */
+    .smpb-grup-dia {
+      border: 1px solid #cfd8dc;
+      border-radius: 8px;
+      padding: 0.7rem 0.75rem 0.25rem;
+      margin-bottom: 1rem;
+    }
+    .smpb-grup-dia:last-child { margin-bottom: 0; }
+
+    .smpb-grup-dia-titol {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #37474f;
+    }
+
     .smpb-fila {
       display: flex;
       gap: 0.5rem;
@@ -3199,18 +3215,31 @@
         `${fila.desplacament === 0 ? formatDia(avui) + ' (Avui)' : formatDia(dema) + ' (Demà)'}`;
 
       const filaMapesHTML = (fila) => {
-        const titolBase = titolFila(fila);
+        const titolComplet = titolFila(fila);
+        const nomVista = fila.vista === 'regions' ? 'Regions' : 'Comarques';
         return `
-          <div class="smpb-fila-titol">${titolBase}</div>
+          <div class="smpb-fila-titol">${nomVista}</div>
           <div class="smpb-fila">
             ${PERIODES_SMP.map(periode => {
               const id = idMapaSMPB(fila, periode);
               return `
-                <div class="smpb-mapa-petit" data-id="${id}" data-titol="${escapeHtml(titolBase + ' · ' + periode)}" onclick="obrirMapaSMPBGran(this)" title="Clica per veure'l gran">
+                <div class="smpb-mapa-petit" data-id="${id}" data-titol="${escapeHtml(titolComplet + ' · ' + periode)}" onclick="obrirMapaSMPBGran(this)" title="Clica per veure'l gran">
                   <div class="smpb-mapa-periode">${periode}</div>
                   ${svgComarques(id)}
                 </div>`;
             }).join('')}
+          </div>`;
+      };
+
+      // Un requadre per horitzó (avui, demà) que hi agrupa les seves dues
+      // files (comarques i regions): separa d'un cop d'ull el que és d'avui
+      // del que és de demà, en comptes de deixar-ho tot en una sola pila.
+      const grupDiaHTML = (desplacament) => {
+        const titolDia = desplacament === 0 ? formatDia(avui) + ' (Avui)' : formatDia(dema) + ' (Demà)';
+        return `
+          <div class="smpb-grup-dia">
+            <div class="smpb-grup-dia-titol">📅 ${titolDia}</div>
+            ${SMPB_FILES.filter(f => f.desplacament === desplacament).map(filaMapesHTML).join('')}
           </div>`;
       };
 
@@ -3228,7 +3257,8 @@
           </div>
           ${geoComarques ? svgDefsPerimetres() : ''}
           <div id="smpb-mapes">
-            ${SMPB_FILES.map(filaMapesHTML).join('')}
+            ${grupDiaHTML(0)}
+            ${grupDiaHTML(1)}
           </div>
         </div>
       `;
@@ -3237,6 +3267,27 @@
 
       // Els mapes surten de l'esquelet sense color: el primer pintat els omple.
       pintarMapesSMPBombers(matriu);
+      sincronitzarFilesSMPB();
+    }
+
+    // Al mòbil cada fila es desplaça per separat: sense això, desplaçar les
+    // comarques d'avui no movia les regions d'avui, i calia repetir el gest
+    // dues vegades per veure la mateixa hora a totes dues. Les files d'un
+    // mateix requadre (mateix horitzó) ara es desplacen juntes.
+    function sincronitzarFilesSMPB() {
+      document.querySelectorAll('.smpb-grup-dia').forEach(grup => {
+        const files = [...grup.querySelectorAll('.smpb-fila')];
+        if (files.length < 2) return;
+        let sincronitzant = false;
+        files.forEach(fila => {
+          fila.addEventListener('scroll', () => {
+            if (sincronitzant) return;
+            sincronitzant = true;
+            files.forEach(altra => { if (altra !== fila) altra.scrollLeft = fila.scrollLeft; });
+            sincronitzant = false;
+          });
+        });
+      });
     }
 
     // Nom de comarca quan no hi ha cap avís i, per tant, no ve del JSON.
