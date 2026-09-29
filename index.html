@@ -8894,29 +8894,14 @@
         </div>`;
     }
 
-    // La captura que s'està mirant en detall, i la franja horària dels mapes.
+    // La captura que s'està mirant en detall.
     let histCapturaSel = null;
-    let histFranjaSMPB = '12-18';
     let histCaptures = [];
 
     function triarCapturaHist(id) {
       histCapturaSel = id;
       const cont = document.getElementById('hist-contingut');
       if (cont) renderHistRisc(cont);
-    }
-
-    function triarFranjaHist(p) {
-      histFranjaSMPB = p;
-      const c = histCaptures.find(x => x.id === histCapturaSel);
-      if (c) { pintarBombersHistoric(c); marcarFranjaHist(); }
-    }
-
-    function marcarFranjaHist() {
-      document.querySelectorAll('.histb-franja').forEach(el => {
-        const actiu = el.dataset.periode === histFranjaSMPB;
-        el.style.background = actiu ? '#0082d9' : '#eceff1';
-        el.style.color = actiu ? '#fff' : '#37474f';
-      });
     }
 
     // La matriu que esperen els mapes, refeta del que va quedar desat a la
@@ -8931,17 +8916,36 @@
       return matriu;
     }
 
+    // Id d'un mapa petit de l'historial: mateix esquema que idMapaSMPB
+    // (vegeu renderSMPBombers), amb el prefix "hist-" perquè no col·lideixi
+    // amb els de la pestanya SMP Bombers si totes dues han pintat mapes en
+    // aquesta mateixa sessió.
+    const idMapaHist = (vista, periode) => `hist-${vista}-${periode.replace('-', '_')}`;
+
+    // Com a la pestanya SMP Bombers: tots els mapes (comarques i regions x
+    // totes les franges de la captura) es pinten alhora, sense franja activa
+    // ni animació. Els contenidors buits (histb-mapa-*) ja són al DOM des de
+    // blocDetallCaptura; aquí només s'hi injecta l'SVG un cop el mapa de
+    // comarques és carregat.
     async function pintarBombersHistoric(c) {
       if (!c.smp_bombers || !c.smp_bombers.comarques) return;
       await carregarGeoComarques();
       const matriu = matriuDesDeCaptura(c);
-      for (const vista of ['comarques', 'regions']) {
-        const cont = document.getElementById('histb-' + vista);
-        if (!cont) continue;
-        if (!cont.querySelector('svg')) cont.innerHTML = svgComarques('hist-' + vista);
-        const svg = document.getElementById('smpb-svg-hist-' + vista);
-        if (svg) pintarSVGComarques(svg, matriu, c.dia_objectiu, histFranjaSMPB, vista);
-      }
+      const periodes = (c.smp_bombers && c.smp_bombers.periodes) || PERIODES_SMP;
+
+      const defsCont = document.getElementById('histb-defs-perimetres');
+      if (defsCont && !defsCont.innerHTML) defsCont.innerHTML = svgDefsPerimetres();
+
+      ['comarques', 'regions'].forEach(vista => {
+        periodes.forEach(periode => {
+          const id = idMapaHist(vista, periode);
+          const cont = document.getElementById('histb-mapa-' + id);
+          if (!cont) return;
+          if (!cont.querySelector('svg')) cont.innerHTML = svgComarques(id);
+          const svg = document.getElementById('smpb-svg-' + id);
+          if (svg) pintarSVGComarques(svg, matriu, c.dia_objectiu, periode, vista);
+        });
+      });
     }
 
     // El desglossament d'una captura, amb la mateixa funció que la portada:
@@ -9024,20 +9028,34 @@
           </tbody>
         </table>`;
 
+      // Mateix patró que la pestanya SMP Bombers (vegeu renderSMPBombers):
+      // les dues files (comarques i regions) comparteixen un sol contenidor
+      // de desplaçament perquè es moguin alhora al mòbil, i cada mapa petit
+      // s'obre gran en clicar-lo. Els <div id="histb-mapa-…"> surten buits:
+      // pintarBombersHistoric hi injecta l'SVG un cop el mapa de comarques
+      // és carregat.
+      const filaHistHTML = (vista) => {
+        const nomVista = vista === 'regions' ? 'Regions' : 'Comarques';
+        return `
+          <div class="smpb-fila-titol">${nomVista}</div>
+          <div class="smpb-fila">
+            ${periodes.map(periode => {
+              const id = idMapaHist(vista, periode);
+              const titolComplet = `${nomVista} · ${formatRiscDate(c.dia_objectiu)} · ${periode}`;
+              return `
+                <div class="smpb-mapa-petit" data-id="${id}" data-titol="${escapeHtml(titolComplet)}" onclick="obrirMapaSMPBGran(this)" title="Clica per veure'l gran">
+                  <div class="smpb-mapa-periode">${periode}</div>
+                  <div id="histb-mapa-${id}"></div>
+                </div>`;
+            }).join('')}
+          </div>`;
+      };
+
       const mapes = !teBombers ? '' : `
-        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin:0.4rem 0;">
-          ${periodes.map(p => `<button class="histb-franja" data-periode="${p}" onclick="triarFranjaHist('${p}')"
-            style="padding:0.2rem 0.55rem;border:none;border-radius:5px;cursor:pointer;font-size:0.74rem;background:#eceff1;color:#37474f;">${p}</button>`).join('')}
-        </div>
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-          <div style="flex:1;min-width:260px;">
-            <div style="font-size:0.72rem;color:#888;margin-bottom:0.2rem;">Per comarca</div>
-            <div id="histb-comarques"></div>
-          </div>
-          <div style="flex:1;min-width:260px;">
-            <div style="font-size:0.72rem;color:#888;margin-bottom:0.2rem;">Per regió d'emergència</div>
-            <div id="histb-regions"></div>
-          </div>
+        <div id="histb-defs-perimetres"></div>
+        <div class="smpb-graella-scroll">
+          ${filaHistHTML('comarques')}
+          ${filaHistHTML('regions')}
         </div>`;
 
       return `
@@ -9119,7 +9137,7 @@
             </div>
           </div>`;
 
-        if (seleccionada) { await pintarBombersHistoric(seleccionada); marcarFranjaHist(); }
+        if (seleccionada) await pintarBombersHistoric(seleccionada);
       } catch (e) {
         cont.innerHTML = errorHistorial(e.message);
       }
