@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-10-01T13:55:25.923Z",
+  "dataConsulta": "2026-10-01T14:02:27.571Z",
   "avisos": [
     {
       "meteor": "Temps violent",
@@ -1237,6 +1237,66 @@
               "llindar": "Intensitat > 90 mm/3 hores",
               "periodes": [
                 "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-10-01T13:55Z",
+      "dataFi": "2026-10-01T14:55Z",
+      "dataEmisio": "2026-10-01T13:59Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-10-01",
+          "afectacions": [
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
               ]
             }
           ]
