@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-01T14:02:36.584Z",
+  "actualitzat": "2026-10-01T19:20:22.146Z",
   "plans": [
     {
       "plaicona": {
@@ -14,20 +14,6 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610011232.pdf"
       },
       "descripcio": "SMP Intensitat 1 i 2 d'Octubre"
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "01/10/2026 12:55",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127791_INICI--ACTIVAT_INUNCAT_202610011303.pdf"
-      },
-      "descripcio": "Avís Vigilància per Intensitat de pluja en 30 minuts - "
     }
   ]
 }
