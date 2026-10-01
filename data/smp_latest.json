@@ -1,6 +1,51 @@
 {
-  "dataConsulta": "2026-10-01T13:45:19.003Z",
+  "dataConsulta": "2026-10-01T13:55:25.923Z",
   "avisos": [
+    {
+      "meteor": "Temps violent",
+      "estat": "Vigent",
+      "dataInici": "2026-10-01T13:49Z",
+      "dataFi": "2026-10-01T15:49Z",
+      "dataEmisio": "2026-10-01T13:50Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-10-01",
+          "afectacions": [
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Pedra de diàmetre > 2 cm, ratxes de vent > 90 km/h (25 m/s), esclafits i/o tornados o mànegues",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Acumulació de pluja",
       "estat": "Vigent",
