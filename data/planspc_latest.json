@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-10-02T05:52:30.959Z",
+  "actualitzat": "2026-10-02T09:40:18.644Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "30/09/2026 13:19",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610012142.pdf"
-      },
-      "descripcio": "SMP Intensitat 1 i 2 d'Octubre"
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
@@ -34,11 +20,22 @@
       "planom": "INUNCAT",
       "plafase": "ALERTA",
       "plaactivat": "SI",
-      "fasedatahora": "02/10/2026 06:32",
+      "fasedatahora": "02/10/2026 06:43",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127815_INICI--ACTIVAT_INUNCAT_202610020639.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127816_INICI--ACTIVAT_INUNCAT_202610020649.pdf"
       },
-      "descripcio": "SMP Avís Vigilància-Intensitat de pluja en 3 hores Intensitat > 90 mm/3 hores - "
+      "descripcio": " SMP Avís Vigilància-Acumulacio de pluja Acumulada > 200 mm /24 hores - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "02/10/2026 08:23",
+      "descripcio": "Talls ferroviaris - Transport viatgers ferrocarril"
     },
     {
       "plaicona": {
@@ -46,13 +43,13 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "ALERTA",
+      "plafase": "EMERGÈNCIA",
       "plaactivat": "SI",
-      "fasedatahora": "02/10/2026 06:43",
+      "fasedatahora": "02/10/2026 08:25",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127816_INICI--ACTIVAT_INUNCAT_202610020649.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610020911.pdf"
       },
-      "descripcio": " SMP Avís Vigilància-Acumulacio de pluja Acumulada > 200 mm /24 hores - "
+      "descripcio": "SMP Intensitat 1 i 2 d'Octubre"
     }
   ]
 }
