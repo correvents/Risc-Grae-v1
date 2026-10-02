@@ -1,6 +1,51 @@
 {
-  "dataConsulta": "2026-10-01T19:30:16.286Z",
+  "dataConsulta": "2026-10-02T05:45:15.956Z",
   "avisos": [
+    {
+      "meteor": "Acumulació de pluja",
+      "estat": "Vigent",
+      "dataInici": "2026-10-02T04:20Z",
+      "dataFi": "2026-10-02T07:20Z",
+      "dataEmisio": "2026-10-02T04:33Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-10-02",
+          "afectacions": [
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Acumulada > 200 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Acumulada > 200 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Acumulació de pluja",
       "estat": "Ampliat",
@@ -139,6 +184,51 @@
                 "00-06",
                 "06-12",
                 "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 3 hores",
+      "estat": "Vigent",
+      "dataInici": "2026-10-02T04:20Z",
+      "dataFi": "2026-10-02T07:20Z",
+      "dataEmisio": "2026-10-02T04:24Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-10-02",
+          "afectacions": [
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Intensitat > 90 mm/3 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Taronja",
+              "grauPerill": 6,
+              "probabilitat": "Prob 6",
+              "llindar": "Intensitat > 90 mm/3 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
               ]
             }
           ]
