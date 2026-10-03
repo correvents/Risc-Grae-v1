@@ -1,6 +1,6 @@
 {
   "data": "2026-10-03",
-  "actualitzat": "2026-10-03T09:50:23.764Z",
+  "actualitzat": "2026-10-03T12:30:42.956Z",
   "resultats": [
     {
       "punt": {
@@ -17,32 +17,32 @@
           "precMati": 0,
           "ventMaxMati": 6.6,
           "wmoMati": 3,
-          "tminTarda": 7.4,
-          "tmaxTarda": 8.5,
-          "precTarda": 1.61,
+          "tminTarda": 7.2,
+          "tmaxTarda": 9.5,
+          "precTarda": 0.15000000000000002,
           "neuTarda": 0,
-          "ventMaxTarda": 6.9,
-          "ventMaxDirTarda": 208,
+          "ventMaxTarda": 10.5,
+          "ventMaxDirTarda": 184,
           "wmoTarda": 61,
-          "avg30d": 15.896875
+          "avg30d": 15.8875
         }
       },
       "dema": {
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 7.5,
-          "precMati": 2.2,
-          "ventMaxMati": 3.6,
-          "wmoMati": 61,
-          "tminTarda": 7.9,
-          "tmaxTarda": 9.4,
-          "precTarda": 0.30000000000000004,
+          "tmaxMati": 6,
+          "precMati": 0.5,
+          "ventMaxMati": 3,
+          "wmoMati": 51,
+          "tminTarda": 5.6,
+          "tmaxTarda": 7.6,
+          "precTarda": 1.6,
           "neuTarda": 0,
-          "ventMaxTarda": 5.4,
-          "ventMaxDirTarda": 233,
-          "wmoTarda": 51,
-          "avg30d": 15.896875
+          "ventMaxTarda": 4,
+          "ventMaxDirTarda": 360,
+          "wmoTarda": 53,
+          "avg30d": 15.8875
         }
       }
     },
@@ -61,32 +61,32 @@
           "precMati": 0,
           "ventMaxMati": 6.6,
           "wmoMati": 3,
-          "tminTarda": 12.6,
-          "tmaxTarda": 14.8,
+          "tminTarda": 13.1,
+          "tmaxTarda": 15.7,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 9.4,
-          "ventMaxDirTarda": 145,
+          "ventMaxTarda": 12.8,
+          "ventMaxDirTarda": 142,
           "wmoTarda": 3,
-          "avg30d": 21.656250000000004
+          "avg30d": 21.640625000000004
         }
       },
       "dema": {
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 11.5,
-          "precMati": 1.1,
-          "ventMaxMati": 8.7,
-          "wmoMati": 53,
-          "tminTarda": 11.3,
-          "tmaxTarda": 12.6,
-          "precTarda": 1.9,
+          "tmaxMati": 10.1,
+          "precMati": 7.3999999999999995,
+          "ventMaxMati": 5.4,
+          "wmoMati": 61,
+          "tminTarda": 9.4,
+          "tmaxTarda": 11.4,
+          "precTarda": 2.4000000000000004,
           "neuTarda": 0,
-          "ventMaxTarda": 10.2,
-          "ventMaxDirTarda": 350,
-          "wmoTarda": 53,
-          "avg30d": 21.656250000000004
+          "ventMaxTarda": 5.8,
+          "ventMaxDirTarda": 112,
+          "wmoTarda": 61,
+          "avg30d": 21.640625000000004
         }
       }
     },
@@ -98,41 +98,41 @@
         "alt": 2072
       },
       "avui": {
-        "nivell": 1,
+        "nivell": 2,
         "factors": [
-          "Pluja 13.7mm tarda"
+          "Pluja 20.4mm tarda"
         ],
         "dades": {
           "tmaxMati": 9.9,
           "precMati": 0,
           "ventMaxMati": 6,
           "wmoMati": 3,
-          "tminTarda": 9.4,
-          "tmaxTarda": 11,
-          "precTarda": 13.73,
+          "tminTarda": 9.6,
+          "tmaxTarda": 11.8,
+          "precTarda": 20.43,
           "neuTarda": 0,
-          "ventMaxTarda": 7.7,
-          "ventMaxDirTarda": 208,
-          "wmoTarda": 65,
-          "avg30d": 19.628125
+          "ventMaxTarda": 7.9,
+          "ventMaxDirTarda": 240,
+          "wmoTarda": 63,
+          "avg30d": 19.603125000000002
         }
       },
       "dema": {
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 9.7,
-          "precMati": 0.5,
-          "ventMaxMati": 13.6,
-          "wmoMati": 51,
-          "tminTarda": 10.1,
-          "tmaxTarda": 11.4,
-          "precTarda": 0.6000000000000001,
+          "tmaxMati": 8.9,
+          "precMati": 4.4,
+          "ventMaxMati": 7.6,
+          "wmoMati": 61,
+          "tminTarda": 9,
+          "tmaxTarda": 10.4,
+          "precTarda": 3.9000000000000004,
           "neuTarda": 0,
-          "ventMaxTarda": 8,
-          "ventMaxDirTarda": 8,
-          "wmoTarda": 53,
-          "avg30d": 19.628125
+          "ventMaxTarda": 8.3,
+          "ventMaxDirTarda": 214,
+          "wmoTarda": 61,
+          "avg30d": 19.603125000000002
         }
       }
     },
@@ -151,32 +151,32 @@
           "precMati": 0,
           "ventMaxMati": 5,
           "wmoMati": 3,
-          "tminTarda": 11,
-          "tmaxTarda": 12.4,
-          "precTarda": 0.7,
+          "tminTarda": 11.1,
+          "tmaxTarda": 13.4,
+          "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 11.4,
+          "ventMaxTarda": 13.4,
           "ventMaxDirTarda": 188,
-          "wmoTarda": 55,
-          "avg30d": 18.784375
+          "wmoTarda": 3,
+          "avg30d": 18.7625
         }
       },
       "dema": {
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 9.1,
-          "precMati": 0.6,
-          "ventMaxMati": 3.4,
-          "wmoMati": 53,
-          "tminTarda": 9.7,
-          "tmaxTarda": 11.8,
-          "precTarda": 0.1,
+          "tmaxMati": 7.2,
+          "precMati": 5.8999999999999995,
+          "ventMaxMati": 2.4,
+          "wmoMati": 61,
+          "tminTarda": 7.2,
+          "tmaxTarda": 9.5,
+          "precTarda": 3.2,
           "neuTarda": 0,
-          "ventMaxTarda": 11,
-          "ventMaxDirTarda": 322,
-          "wmoTarda": 51,
-          "avg30d": 18.784375
+          "ventMaxTarda": 4.6,
+          "ventMaxDirTarda": 108,
+          "wmoTarda": 61,
+          "avg30d": 18.7625
         }
       }
     },
@@ -188,41 +188,41 @@
         "alt": 2050
       },
       "avui": {
-        "nivell": 0,
-        "factors": [],
+        "nivell": 1,
+        "factors": [
+          "Pluja 13.1mm tarda"
+        ],
         "dades": {
           "tmaxMati": 10.9,
           "precMati": 0,
           "ventMaxMati": 8.4,
           "wmoMati": 3,
           "tminTarda": 8.4,
-          "tmaxTarda": 12.4,
-          "precTarda": 6.800000000000001,
+          "tmaxTarda": 12.1,
+          "precTarda": 13.100000000000001,
           "neuTarda": 0,
-          "ventMaxTarda": 10.8,
-          "ventMaxDirTarda": 176,
+          "ventMaxTarda": 11.3,
+          "ventMaxDirTarda": 163,
           "wmoTarda": 63,
-          "avg30d": 19.590625
+          "avg30d": 19.578125
         }
       },
       "dema": {
-        "nivell": 2,
-        "factors": [
-          "Pluja 23.0mm tarda"
-        ],
+        "nivell": 0,
+        "factors": [],
         "dades": {
-          "tmaxMati": 7.2,
-          "precMati": 14.3,
-          "ventMaxMati": 6.9,
+          "tmaxMati": 8.3,
+          "precMati": 13.299999999999997,
+          "ventMaxMati": 9.2,
           "wmoMati": 63,
-          "tminTarda": 7.7,
-          "tmaxTarda": 9.2,
-          "precTarda": 23.000000000000004,
+          "tminTarda": 9,
+          "tmaxTarda": 10.8,
+          "precTarda": 0.9,
           "neuTarda": 0,
           "ventMaxTarda": 10.3,
-          "ventMaxDirTarda": 324,
-          "wmoTarda": 63,
-          "avg30d": 19.590625
+          "ventMaxDirTarda": 102,
+          "wmoTarda": 53,
+          "avg30d": 19.578125
         }
       }
     },
@@ -234,41 +234,41 @@
         "alt": 1967
       },
       "avui": {
-        "nivell": 0,
-        "factors": [],
+        "nivell": 1,
+        "factors": [
+          "Pluja 10.3mm tarda"
+        ],
         "dades": {
           "tmaxMati": 11.6,
           "precMati": 0,
           "ventMaxMati": 9.5,
           "wmoMati": 3,
-          "tminTarda": 9.2,
-          "tmaxTarda": 12.2,
-          "precTarda": 3.3,
+          "tminTarda": 9,
+          "tmaxTarda": 12,
+          "precTarda": 10.25,
           "neuTarda": 0,
-          "ventMaxTarda": 12.6,
-          "ventMaxDirTarda": 155,
-          "wmoTarda": 61,
-          "avg30d": 20.012499999999996
+          "ventMaxTarda": 13.6,
+          "ventMaxDirTarda": 130,
+          "wmoTarda": 63,
+          "avg30d": 20.018749999999997
         }
       },
       "dema": {
-        "nivell": 2,
-        "factors": [
-          "Pluja 22.2mm tarda"
-        ],
+        "nivell": 0,
+        "factors": [],
         "dades": {
-          "tmaxMati": 9.7,
-          "precMati": 16.200000000000003,
-          "ventMaxMati": 10.5,
-          "wmoMati": 63,
-          "tminTarda": 9.4,
-          "tmaxTarda": 10.6,
-          "precTarda": 22.200000000000003,
+          "tmaxMati": 9.2,
+          "precMati": 23.8,
+          "ventMaxMati": 12.9,
+          "wmoMati": 65,
+          "tminTarda": 9.7,
+          "tmaxTarda": 11,
+          "precTarda": 0.7,
           "neuTarda": 0,
-          "ventMaxTarda": 21.3,
-          "ventMaxDirTarda": 341,
-          "wmoTarda": 65,
-          "avg30d": 20.012499999999996
+          "ventMaxTarda": 10,
+          "ventMaxDirTarda": 150,
+          "wmoTarda": 53,
+          "avg30d": 20.018749999999997
         }
       }
     },
@@ -282,41 +282,41 @@
       "avui": {
         "nivell": 2,
         "factors": [
-          "Pluja 16.4mm tarda"
+          "Pluja 15.2mm tarda"
         ],
         "dades": {
           "tmaxMati": 11.5,
           "precMati": 0,
           "ventMaxMati": 9.8,
           "wmoMati": 3,
-          "tminTarda": 8.6,
-          "tmaxTarda": 10.6,
-          "precTarda": 16.419999999999998,
+          "tminTarda": 8.7,
+          "tmaxTarda": 11.4,
+          "precTarda": 15.169999999999998,
           "neuTarda": 0,
-          "ventMaxTarda": 13.2,
-          "ventMaxDirTarda": 141,
+          "ventMaxTarda": 10.1,
+          "ventMaxDirTarda": 182,
           "wmoTarda": 65,
-          "avg30d": 17.762500000000006
+          "avg30d": 17.775000000000006
         }
       },
       "dema": {
-        "nivell": 2,
+        "nivell": 1,
         "factors": [
-          "Pluja 64.0mm tarda"
+          "Pluja 13.5mm tarda"
         ],
         "dades": {
-          "tmaxMati": 8.3,
-          "precMati": 40.7,
-          "ventMaxMati": 22.1,
+          "tmaxMati": 8.6,
+          "precMati": 57.699999999999996,
+          "ventMaxMati": 20.5,
           "wmoMati": 65,
-          "tminTarda": 8.3,
-          "tmaxTarda": 10.2,
-          "precTarda": 64,
+          "tminTarda": 8.5,
+          "tmaxTarda": 10.4,
+          "precTarda": 13.5,
           "neuTarda": 0,
-          "ventMaxTarda": 26.9,
-          "ventMaxDirTarda": 16,
-          "wmoTarda": 65,
-          "avg30d": 17.762500000000006
+          "ventMaxTarda": 14.4,
+          "ventMaxDirTarda": 77,
+          "wmoTarda": 63,
+          "avg30d": 17.775000000000006
         }
       }
     }
