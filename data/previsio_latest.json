@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-02T19:20:20.319Z",
+  "dataConsulta": "2026-10-03T05:27:36.988Z",
   "avui": {
-    "data": "2026-10-02",
-    "variables": {
-      "estatDelCel": "El cel estarà cobert o molt ennuvolat durant tota la jornada, amb clarianes transitòries.",
-      "precipitacions": "S'espera precipitació a punts del Pirineu i Prepirineu occidental i nord de la depressió central, de forma local a punts del nord-est fins al vespre, i en forma de ruixats locals a punts de l'extrem sud de Catalunya. A la resta de Catalunya no se'n descarten d'aïllats. \nSeran d'intensitat entre feble i moderada i deixaran acumulacions entre minses i poc abundants en conjunt, si bé als sectors avisats seran localment forts o torrencials i abundants o molt abundants, sobretot a l'extrem sud.",
-      "temperatures": "La temperatura baixarà entre lleugerament i moderadament. ",
-      "visibilitat": "La visibilitat serà regular en general, si bé empitjorarà en moments de xàfec. Hi haurà bancs de boira a zones de muntanya.",
-      "vent": "El vent bufarà de component nord i est, serà fluix a l'interior i entre fluix i moderat al litoral. Al final del dia quedarà fluix i de direcció variable, amb predomini del component nord i est al litoral sud."
-    }
-  },
-  "dema": {
     "data": "2026-10-03",
     "variables": {
       "estatDelCel": "Cel mig o molt ennuvolat, fins i tot cobert, de matinada, sobretot al litoral i el prelitoral. A partir del matí i fins a migdia la nuvolositat minvarà lentament i el cel quedarà entre poc i mig ennuvolat en general, tret del litoral i prelitoral on es mantindrà molt ennuvolat. A partir de la tarda creixeran nuvolades a l'interior, mentre que al litoral arribaran núvols baixos, que tornaran a deixar el cel molt ennuvolat a la major part del país.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima baixarà lleugerament, de forma més destacada a sectors de Ponent, mentre que la màxima pujarà lleugerament a la meitat oest i es mantindrà o baixarà a l'est.",
       "visibilitat": "La visibilitat serà bona en general, si bé empitjorarà en moments de xàfec. Hi haurà bancs de boirina matinals a l'interior. A més, fins a primeres hores del matí i sobretot al final del dia, la visibilitat serà regular o dolenta a zones elevades.",
       "vent": "A l'inici i al final del dia bufarà fluix i de direcció variable, tret del litoral on bufarà de component est, entre gregal i llevant. Al centre del dia s'imposarà el vent de component sud i est entre fluix i moderat, sobretot de xaloc arreu, amb estones de fluix i variable a punts de l'interior."
+    }
+  },
+  "dema": {
+    "data": "2026-10-04",
+    "variables": {
+      "estatDelCel": "A l'inici de la matinada estarà molt ennuvolat o cobert al litoral i prelitoral, sobretot al sud; i poc o mig ennuvolat a la resta del país. Ràpidament la nuvolositat augmentarà arreu i quedarà molt ennuvolat o cobert en general, amb creixement de nuvolades al centre del dia. Al llarg de la tarda s'obriran clarianes a Ponent i al Pirineu i Prepirineu occidental.",
+      "precipitacions": "De matinada s'esperen xàfecs de distribució irregular a punts del litoral i el prelitoral. Al centre del dia se n'esperen de locals a qualsevol punt, sobretot a punts de muntanya, així com de més extensos a la meitat nord del litoral i prelitoral. Al final del dia la precipitació tornarà a quedar restringida a punts del litoral. En general seran d'intensitat feble o moderada, tot i que localment podran ser forts o torrencials a punts del litoral i prelitoral. Sovint aniran acompanyats de tempesta i no se'n descarten fenòmens de temps violent.\nS'acumularan quantitats entre poc abundants i abundants, si bé localment seran molt abundants. ",
+      "temperatures": "La temperatura mínima serà lleugerament més alta. La màxima serà semblant o més baixa.",
+      "visibilitat": "Visibilitat entre bona i regular al litoral i prelitoral, localment dolenta, i bona a la resta. En moments de xàfec localment quedarà dolenta.",
+      "vent": "S'imposarà el vent de component est entre fluix i moderat, amb algun cop fort a la costa. Tot i això, de matinada i de nou a la nit quedarà fluix i de direcció variable a l'interior. "
     }
   }
 }
