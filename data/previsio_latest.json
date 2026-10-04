@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-03T19:20:18.068Z",
+  "dataConsulta": "2026-10-04T05:45:15.010Z",
   "avui": {
-    "data": "2026-10-03",
-    "variables": {
-      "estatDelCel": "Cel cobert o molt ennuvolat arreu.",
-      "precipitacions": "S'esperen xàfecs a qualsevol punt del territori, menys probables a l'oest. Els més intensos s'esperen a la façana litoral i punts del prelitoral especialment a partir del vespre. La precipitació serà d'intensitat entre feble i moderada arreu i acumularà quantitats entre minses i poc abundants. Malgrat això a punts del litoral i prelitoral i de forma més aïllada a altres punts de la resta de la meitat est, la intensitat de la precipitació serà localment forta o molt forta, i fins i tot torrencial, sobretot a partir del vespre, i a més es podran acumular quantitats de precipitació durant tot l'episodi (entre dissabte i diumenge) extremadament abundants (< 100 mm), i localment més de 200 mm. La precipitació sovint anirà acompanyada de tempesta. A banda, també s'esperen fenòmens de temps violent: ratxes molt fortes de vent, mànegues i tornados.",
-      "temperatures": "La temperatura serà similar o lleugerament més baixa, tret de punts del terç oest on serà lleugerament més elevada.",
-      "visibilitat": "La visibilitat serà entre regular i dolenta amb molts bancs de boira i boirina, especialment a cims i serralades.",
-      "vent": "S'imposarà el vent de component est entre fluix i moderat amb estones de fluix i variable a punts de l'interior, si bé transitòriament bufarà de component nord i oest a la meitat sud del litoral. Al final del dia hi haurà ratxes fortes o molt de vent, a punts del litoral i prelitoral."
-    }
-  },
-  "dema": {
     "data": "2026-10-04",
     "variables": {
       "estatDelCel": "Fins a migdia cel cobert o molt ennuvolat arreu, però amb l'obertura progressiva d'algunes clarianes transitòries al llarg del matí  a punts de l'extrem sud i Ponent, si bé a partir de migdia també podrà créixer nuvolades aïllades. A la tarda la nuvolositat minvarà de sud a nord i al final del dia la nuvolositat més compacta es mantindrà a l'extrem nord-est i resta del Pirineu, tot i que es mantindran algunes estrats baixos de distribució irregular a altres punts del país.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà lleugerament més alta i la màxima lleugerament més baixa.\n",
       "visibilitat": "Visibilitat entre regular i dolenta, sobretot al litoral i prelitoral, si bé millorarà al llarg del dia a Ponent i extrem sud.",
       "vent": "S'imposarà vent de component est entre fluix i moderat, amb cops forts o molt forts a la costa en moments de xàfec."
+    }
+  },
+  "dema": {
+    "data": "2026-10-05",
+    "variables": {
+      "estatDelCel": "Fins a migdia cel poc o mig ennuvolat en general, tret de punts del litoral i prelitoral on estarà fins a mig matí molt ennuvolat, sobretot als dos extrems del sector. A partir de llavors hi haurà un lleu augment de la nuvolositat amb el creixement d'algunes nuvolades de distribució força irregular.",
+      "precipitacions": "De matinada són possibles alguns ruixats a punts del litoral i prelitoral, preferentment als dos extrems del sector. A més, al centre de la jornada són probables alguns ruixats dispersos preferentment a punts de muntanya, sobretot al Pirineu i al prelitoral. Seran d'intensitat entre feble i moderada i acumularan quantitats entre minses i poc abundants. És possible que, localment, vagin acompanyats de tempesta.",
+      "temperatures": "La temperatura mínima serà lleugerament més baixa, mentre que la màxima serà lleugerament més alta, fins i tot moderadament més alta.",
+      "visibilitat": "Visibilitat entre bona i regular en general. En moments de ruixat quedarà localment dolenta.",
+      "vent": "S'imposarà el vent de component est entre fluix i moderat, amb algun cop fort a la costa. Tot i això, de matinada i de nou a la nit quedarà fluix i de direcció variable a l'interior."
     }
   }
 }
