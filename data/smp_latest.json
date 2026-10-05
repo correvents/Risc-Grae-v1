@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-10-05T09:50:16.966Z",
+  "dataConsulta": "2026-10-05T13:45:21.005Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 3 hores",
@@ -546,66 +546,6 @@
               "llindar": "Intensitat > 60 mm/3 hores",
               "periodes": [
                 "12-18"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Vigent",
-      "dataInici": "2026-10-05T06:14Z",
-      "dataFi": "2026-10-05T08:14Z",
-      "dataEmisio": "2026-10-05T06:17Z",
-      "comentari": "",
-      "dies": [
-        {
-          "dia": "2026-10-05",
-          "afectacions": [
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Taronja",
-              "grauPerill": 6,
-              "probabilitat": "Prob 6",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "00-06",
-                "06-12",
-                "12-18",
-                "18-00"
               ]
             }
           ]
