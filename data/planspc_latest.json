@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-04T19:30:22.890Z",
+  "actualitzat": "2026-10-05T05:45:18.898Z",
   "plans": [
     {
       "plaicona": {
@@ -11,9 +11,20 @@
       "plaactivat": "SI",
       "fasedatahora": "03/10/2026 12:59",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610041734.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610050004.pdf"
       },
-      "descripcio": "Pas a ALERTA SMP Intensitat 1 i 2 d'Octubre"
+      "descripcio": "Emergència INUNCAT 3-5 Octubre"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "EMERGÈNCIA",
+      "plaactivat": "SI",
+      "fasedatahora": "05/10/2026 00:30",
+      "descripcio": "CHE. Vigilància per previsió meteorològica adversa conca de l'Ebre - "
     }
   ]
 }

@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-10-04T19:20:17.663Z",
+  "dataConsulta": "2026-10-05T05:45:16.268Z",
   "avui": {
-    "data": "2026-10-04",
-    "variables": {
-      "estatDelCel": "Cel cobert o molt ennuvolat al terç nord i quadrant nord-est. A la resta del territori, i mig ennuvolat, puntualment molt a la resta. Independentment, creixeran nuvolades a qualsevol punt del territori, de distribució molt irregular. A banda, també hi hauran alguns estrats baixos a punts de l'interior.",
-      "precipitacions": "Són probables alguns ruixats dispersos, de distribució molt irregular, al litoral i prelitoral sobretot a l'extrem sud i nord del litoral; malgrat això tampoc es descarten alguns ruixats al terç oest procedents de l'Aragó.\nLocalment, la intensitat de precipitació serà forta i fins i tot es possible que siguin torrencials a punts del litoral i prelitoral sud i nord. S'acumularan quantitats de precipitació durant tot l'episodi (entre dissabte i diumenge) extremadament abundants (més de 100 mm), i localment més de 200 mm a punts del litoral i prelitoral. A banda, la precipitació anirà acompanyada localment de tempesta.",
-      "temperatures": "Temperatura entre lleugerament i moderadament més alta.\n",
-      "visibilitat": "Visibilitat regular i puntualment dolenta al litoral i prelitoral sobretot en moments de xàfec.",
-      "vent": "S'imposarà vent de component est entre fluix i moderat, amb cops forts al litoral. Al final del dia quedarà fluix i de direcció variable a l'interior."
-    }
-  },
-  "dema": {
     "data": "2026-10-05",
     "variables": {
       "estatDelCel": "Fins a migdia cel mig o molt ennuvolat, si bé a punts del litoral i prelitoral estarà molt ennuvolat o cobert. A partir de llavors creixeran nuvolades de distribució força irregular, però més probables i extenses a la meitat nord del territori. Independentment, hi haurà estrats baixos matinals a molts punts del país, que localment podran persistir fins a migdia o tarda a punts de l'interior.",
-      "precipitacions": "De matinada s'esperen ruixats a punts del litoral i prelitoral, més probables als dos extrems del sector. A més, a partir de migdia s'esperen alguns ruixats dispersos, més probables al terç nord, resta de la meitat est i del prelitoral. Al final del dia es restringiran a punts aïllats del terç nord. Al quadrant nord-est, els ruixats podran ser d'intensitat localment forta, si bé tampoc no es descarta que puguin afectar, de forma més aïllada, a altres punts. S'acumularan quantitats entre minses i poc abundants, localment abundants. És possible que, localment, vagin acompanyats de tempesta. ",
-      "temperatures": "La temperatura mínima serà lleugerament més baixa, mentre que la màxima serà lleugerament més alta, fins i tot moderadament més alta.",
+      "precipitacions": "Fins a primeres hores del matí s'esperen alguns xàfecs al litoral i prelitoral central. A partir de mig matí s'esperen alguns xàfecs dispersos, més probables al terç nord, resta de la meitat est i del prelitoral. Al final del dia es restringiran a punts aïllats del terç nord. Al quadrant nord-est, els ruixats podran ser d'intensitat localment forta, si bé tampoc no es descarta que puguin afectar, de forma més aïllada, a altres punts. S'acumularan quantitats entre minses i poc abundants, localment abundants. És possible que, localment, vagin acompanyats de tempesta. ",
+      "temperatures": "La temperatura màxima serà lleugerament més alta, fins i tot moderadament més alta.",
       "visibilitat": "Visibilitat entre bona i regular en general. En moments de ruixat quedarà localment dolenta.",
       "vent": "S'imposarà el vent de component sud i est entre fluix i moderat, amb algun cop fort a la costa. Tot i això, de matinada i de nou a la nit quedarà fluix i de direcció variable a l'interior."
+    }
+  },
+  "dema": {
+    "data": "2026-10-06",
+    "variables": {
+      "estatDelCel": "Fins a migdia cel poc o mig ennuvolat en general, si bé localment fins a mig matí hi haurà estrats baixos a l'interior que deixaran el cel transitòriament molt ennuvolat. A partir de llavors, s'espera el creixement d'algunes nuvolades en àrees de muntanya, principalment del Pirineu, Prepirineu i quadrant nord-est, i al mateix també n'arribaran al terç oest del territori, procedents de l'Aragó; en conjunt, durant la tarda el cel quedarà molt ennuvolat o cobert.",
+      "precipitacions": "A partir de migdia s'esperen alguns ruixats dispersos a punts del Pirineu, Prepirineu, quadrant nord-est i altres punts del prelitoral, si bé també n'arribaran al llarg de la tarda i vespre, procedents de l'Aragó, a punts de la meitat oest; en conjunt seran d'intensitat feble o moderada, i s'acumularan quantitats entre minses i poc abundants. Localment aniran acompanyades de tempesta.",
+      "temperatures": "Temperatura mínima similar o lleugerament més baixa, i màxima lleugerament més alta.",
+      "visibilitat": "La visibilitat serà entre bona i regular en general amb alguns bancs de boira i boirina a punts de l'interior fins a primera hora del dia. A banda, també serà regular en moments de xàfec.",
+      "vent": "El vent serà fluix i de direcció variable fins a primera hora del matí i de nou al vespre, amb terrals al litoral. Al llarg de la jornada, s'imposarà progressivament el component sud fluix amb cops moderats en general, tret de punts del litoral i prelitoral on predominarà sobretot el sud-oest, tret de l'extrem nord de la Costa Brava on predominarà el sud-est durant."
     }
   }
 }
