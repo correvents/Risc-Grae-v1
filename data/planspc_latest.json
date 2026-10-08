@@ -1,20 +1,6 @@
 {
-  "actualitzat": "2026-10-08T09:50:28.056Z",
+  "actualitzat": "2026-10-08T13:45:21.877Z",
   "plans": [
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "EMERGÈNCIA",
-      "plaactivat": "SI",
-      "fasedatahora": "03/10/2026 12:59",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610072236.pdf"
-      },
-      "descripcio": "Emergència INUNCAT 3-7 Octubre"
-    },
     {
       "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
@@ -28,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127987_INICI--NOACTIVAT_VENTCAT_202610081056.pdf"
       },
       "descripcio": "SMP Vent 08/10 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "EMERGÈNCIA",
+      "plaactivat": "SI",
+      "fasedatahora": "03/10/2026 12:59",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610081343.pdf"
+      },
+      "descripcio": "Emergència INUNCAT 3-7 Octubre"
     }
   ]
 }
