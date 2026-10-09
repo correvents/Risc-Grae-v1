@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-08T19:20:18.853Z",
+  "dataConsulta": "2026-10-09T05:45:18.323Z",
   "avui": {
-    "data": "2026-10-08",
-    "variables": {
-      "estatDelCel": "Durant el que resta de jornada es mantindran algunes nuvolades al litoral central mantindran el cel molt ennuvolat o cobert. A més a l'extrem nord del Pirineu es mantindrà el cel cobert. A la meitat oest es mantindrà el cel serè o poc ennuvolat, mentre que al nord-est la nuvolositat tendirà a minvar de cara a la nit quedant el cel serè o poc ennuvolat.",
-      "precipitacions": "En les immediates hores continuaran els ruixats o xàfecs de distribució irregular a punts del quadrant nord-est del país tot i que, amb el pas de les hores, quedaran restringits al litoral i punts del prelitoral de Barcelona. Seran d'intensitat entre feble i moderada, tot i que localment cauran amb forta intensitat. A més, aniran localment acompanyats de tempesta. S'acumularan quantitats de precipitació entre minses i poc abundants, tot i que localment seran abundants (més de 20 mm). A banda, no es descarta alguna precipitació feble i intermitent a zones altes del vessant nord del Pirineu, desapareixent durant la nit. La cota de neu se situarà al voltant dels 1800 metres.",
-      "temperatures": "La temperatura baixarà arreu.",
-      "visibilitat": "Entre bona i excel·lent en general. Malgrat tot, en zones elevades del quadrant nord-est, al vessant nord del Pirineu i en moments de xàfec serà dolenta.",
-      "vent": "Bufarà tramuntana entre moderada i forta a l'Empordà, amb ratxes molt fortes al nord del sector. Al terç sud bufarà mestral moderat."
-    }
-  },
-  "dema": {
     "data": "2026-10-09",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat en general durant tota la jornada. Amb tot, al final de la tarda arribaran núvols alts i mitjans que deixaran el cel, localment, entre poc i mig ennuvolat.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura, tant la mínima com la màxima entre lleugerament i moderadament més baixes.",
       "visibilitat": "Serà excel·lent. ",
       "vent": "A l'Empordà bufarà tramuntana moderada amb cops forts, tot i que hi haurà ratxes molt fortes al nord del sector. Anirà afluixant al llarg de la tarda. Al terç sud bufarà mestral entre fluix i moderat, amb alguns cops forts durant la primera meitat de la jornada. A la resta de la meitat oest bufarà entre fluix i moderat de component oest. A l'interior de la meitat est i al sector central del litoral i prelitoral bufarà fluix i de direcció variable, amb predomini del component sud durant les hores centrals de la jornada. "
+    }
+  },
+  "dema": {
+    "data": "2026-10-10",
+    "variables": {
+      "estatDelCel": "Durant tota la jornada cel serè o poc ennuvolat per algunes bandes de núvols alts que creuaran el territori de nord a sud. A la tarda es podran formar alguns núvols d'evolució poc importants al Pirineu i al massís del Port.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà lleugerament més alta si bé pujarà moderadament al Pirineu. La temperatura màxima pujarà lleugerament, moderadament al nord-est.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "De matinada i durant el matí es mantindrà el vent de component nord-oest a l'Empordà i a les Terres de l'Ebre, bufarà moderat, amb alguns cops forts al nord del cap de Creus. A la resta predominarà el vent fluix i de direcció variable. A la tarda, el vent de component nord bufarà feble amb alguns cops moderats a l'Empordà, mentre que desapareixerà el mestral a les Terres de l'Ebre imposant-se el vent de component sud fluix amb alguns cops moderats al litoral i prelitoral central i de component oest a la depressió central."
     }
   }
 }
