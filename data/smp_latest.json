@@ -1,12 +1,12 @@
 {
-  "dataConsulta": "2026-10-09T06:20:27.740Z",
+  "dataConsulta": "2026-10-09T09:40:14.948Z",
   "avisos": [
     {
       "meteor": "Estat de la mar",
       "estat": "Ampliat",
-      "dataInici": "2026-10-08T12:00Z",
+      "dataInici": "2026-10-08T18:00Z",
       "dataFi": "2026-10-09T11:59Z",
-      "dataEmisio": "2026-10-08T07:58Z",
+      "dataEmisio": "2026-10-08T17:53Z",
       "comentari": "La direcció d'onatge predominant serà de nord. El llindar d'avís és possible que se superi al nord del cap de Creus i al cap de Begur. ",
       "dies": [
         {
@@ -21,7 +21,6 @@
               "probabilitat": "Probable",
               "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "12-18",
                 "18-00"
               ]
             },
@@ -34,7 +33,6 @@
               "probabilitat": "Molt probable",
               "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "12-18",
                 "18-00"
               ]
             }
@@ -75,9 +73,36 @@
     {
       "meteor": "Estat de la mar",
       "estat": "Vigent",
-      "dataInici": "2026-10-08T18:00Z",
+      "dataInici": "2026-10-09T06:00Z",
       "dataFi": "2026-10-09T11:59Z",
-      "dataEmisio": "2026-10-08T17:53Z",
+      "dataEmisio": "2026-10-09T07:11Z",
+      "comentari": "La direcció d'onatge predominant serà de nord. El llindar d'avís és possible que se superi al nord del cap de Creus. ",
+      "dies": [
+        {
+          "dia": "2026-10-09",
+          "afectacions": [
+            {
+              "zona": "Comarca 99",
+              "comarca": 99,
+              "comarcaNom": "Comarca 99",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Estat de la mar",
+      "estat": "Ampliat",
+      "dataInici": "2026-10-08T12:00Z",
+      "dataFi": "2026-10-09T11:59Z",
+      "dataEmisio": "2026-10-08T07:58Z",
       "comentari": "La direcció d'onatge predominant serà de nord. El llindar d'avís és possible que se superi al nord del cap de Creus i al cap de Begur. ",
       "dies": [
         {
@@ -92,6 +117,7 @@
               "probabilitat": "Probable",
               "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
+                "12-18",
                 "18-00"
               ]
             },
@@ -104,6 +130,7 @@
               "probabilitat": "Molt probable",
               "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
+                "12-18",
                 "18-00"
               ]
             }
