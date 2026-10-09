@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-09T05:50:21.468Z",
+  "actualitzat": "2026-10-09T06:20:31.912Z",
   "plans": [
     {
       "plaicona": {
@@ -14,20 +14,6 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127743_ACTUALITZACIO--ACTIVAT_INUNCAT_202610081735.pdf"
       },
       "descripcio": "Emergència INUNCAT 3-7 Octubre"
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
-      },
-      "plaacronim": "VENTCAT",
-      "planom": "Pla Especial d'Emergències per Risc de Vent a Catalunya",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "08/10/2026 20:29",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-127987_ACTUALITZACIO--ACTIVAT_VENTCAT_202610082039.pdf"
-      },
-      "descripcio": "Alerta VENTCAT"
     }
   ]
 }
