@@ -1,6 +1,6 @@
 {
   "data": "2026-10-11",
-  "actualitzat": "2026-10-11T19:21:08.728Z",
+  "actualitzat": "2026-10-11T19:30:18.775Z",
   "resultats": [
     {
       "punt": {
@@ -9,8 +9,42 @@
         "lon": 0.837,
         "alt": 2500
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 6.4,
+          "precMati": 0,
+          "ventMaxMati": 4.9,
+          "wmoMati": 3,
+          "tminTarda": 7.7,
+          "tmaxTarda": 9.8,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 7.1,
+          "ventMaxDirTarda": 255,
+          "wmoTarda": 2,
+          "avg30d": 13.118750000000002
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 7.4,
+          "precMati": 0,
+          "ventMaxMati": 4.9,
+          "wmoMati": 0,
+          "tminTarda": 9.2,
+          "tmaxTarda": 11.2,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 5.4,
+          "ventMaxDirTarda": 270,
+          "wmoTarda": 3,
+          "avg30d": 13.118750000000002
+        }
+      }
     },
     {
       "punt": {
@@ -151,8 +185,42 @@
         "lon": 1.942,
         "alt": 2050
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 9.1,
+          "precMati": 0,
+          "ventMaxMati": 10.2,
+          "wmoMati": 3,
+          "tminTarda": 10.7,
+          "tmaxTarda": 13.3,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.4,
+          "ventMaxDirTarda": 227,
+          "wmoTarda": 3,
+          "avg30d": 16.587500000000002
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 9.8,
+          "precMati": 0,
+          "ventMaxMati": 6.5,
+          "wmoMati": 3,
+          "tminTarda": 11.1,
+          "tmaxTarda": 13.6,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 8.4,
+          "ventMaxDirTarda": 329,
+          "wmoTarda": 3,
+          "avg30d": 16.587500000000002
+        }
+      }
     },
     {
       "punt": {
@@ -205,8 +273,42 @@
         "lon": 2.345,
         "alt": 2000
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 11.8,
+          "precMati": 0,
+          "ventMaxMati": 3.4,
+          "wmoMati": 3,
+          "tminTarda": 8.6,
+          "tmaxTarda": 11.9,
+          "precTarda": 0.3,
+          "neuTarda": 0,
+          "ventMaxTarda": 8.7,
+          "ventMaxDirTarda": 97,
+          "wmoTarda": 3,
+          "avg30d": 15.346875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 10.7,
+          "precMati": 0,
+          "ventMaxMati": 14,
+          "wmoMati": 3,
+          "tminTarda": 9.2,
+          "tmaxTarda": 11.9,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 6.2,
+          "ventMaxDirTarda": 126,
+          "wmoTarda": 3,
+          "avg30d": 15.346875
+        }
+      }
     }
   ]
 }
