@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-13T19:20:14.694Z",
+  "dataConsulta": "2026-10-14T05:03:20.373Z",
   "avui": {
-    "data": "2026-10-13",
-    "variables": {
-      "estatDelCel": "Fins a finals de la tarda cel molt ennuvolat per estrats baixos, tret de punts de Ponent i cotes altes del Pirineu, sobretot sector occidental on es mantindrà el cel serè. A partir del vespre, la nuvolositat minvarà i el cel quedarà, en conjunt, serè o poc ennuvolat.",
-      "precipitacions": "Són possibles alguns ruixats d'intensitat entre feble i moderada. Seran de distribució molt irregular.",
-      "temperatures": "Temperatura màxima similar a la meitat oest i lleugerament més alta a l'est. ",
-      "visibilitat": "La visibilitat serà regular o dolenta a punts del litoral i prelitoral sud i central i punts de la depressió Central. ",
-      "vent": "Bufarà vent fluix amb cops moderats de component sud i est, sobretot a punts del litoral i prelitoral; hi haurà estones de vent fluix i direcció variable a l'interior, especialment a Ponent. Al final del dia, serà fluix i de direcció variable, amb terral fluix al litoral. "
-    }
-  },
-  "dema": {
     "data": "2026-10-14",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat en general pel pas de bandes de núvols alts, si bé hi haurà alguns estrats baixos matinals a punts de l'interior que durant la tarda s'estendran a punts del litoral i prelitoral, especialment central, on localment el cel quedarà mig o molt ennuvolat.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà semblant en general, tot i que en sectors del Prepirineu i del Prelitoral serà lleugerament més baixa, i, en canvi, punts de Ponent, Terres de l'Ebre, Plana de Vic i Litoral nord serà lleugerament més alta; la màxima, serà lleugerament més alta, tret d'alguns sectors de la meitat oest, on es mantindrà semblant. Valors màxims fregant els 29 °C a les Terres de l'Ebre.",
       "visibilitat": "Visibilitat entre bona i regular, amb bancs de boira i boirina matinals o fins a mig matí a l'interior.",
       "vent": "Fins a mig matí i de nou a partir del vespre el vent serà fluix i de direcció variable, amb predomini del terral al litoral. La resta del dia s'imposarà el vent de component sud al litoral i romandrà fluix i variable a l'interior. Malgrat tot, al nord de la Costa Brava hi haurà estones de vent fluix de component nord."
+    }
+  },
+  "dema": {
+    "data": "2026-10-15",
+    "variables": {
+      "estatDelCel": "El cel romandrà entre mig i molt ennuvolat a causa de núvols baixos al litoral i aniran desapareixent progressivament cap a l'interior deixant el cel serè al Pirineu i Prepirineu. A la tarda, s'anirà aclarint el cel a la zona de la depressió Central i Terres de l'Ebre. ",
+      "precipitacions": "No es descarta algun plugim al litoral i prelitoral, especialment al sector sud.",
+      "temperatures": "La temperatura, tant la mínima com la màxima, serà lleugerament més baixa en conjunt.",
+      "visibilitat": "La visibilitat serà entre bona i regular, amb nombrosos bancs de boira i boirina matinals especialment a punts de l'interior, però també del prelitoral, principalment als extrems, i, fins i tot, no es descarta que puguin arribar fins a la costa.",
+      "vent": "Fins a mig matí i de nou a partir del vespre, el vent serà fluix i de direcció variable, amb predomini, al matí, del terral al litoral. La resta del dia s'imposarà el vent de component sud i est al litoral i romandrà fluix i variable a l'interior. "
     }
   }
 }
