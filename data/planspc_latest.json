@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-15T05:50:23.991Z",
+  "actualitzat": "2026-10-15T09:40:19.874Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128172_ACTUALITZACIO--NOACTIVAT_PLASEQTA_202610142330.pdf"
       },
       "descripcio": "Flama planta Cracker etileno fins a les 23:59h 16/10 - DOW Chemical Ibérica (Polígon Nord) (Plaseqta)"
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "15/10/2026 10:33",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128205_INICI--NOACTIVAT_INUNCAT_202610151115.pdf"
+      },
+      "descripcio": "Avís-Intensitat de pluja Intensitat > 20 mm / 30 minuts - "
     }
   ]
 }
