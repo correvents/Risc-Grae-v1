@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-10-14T19:30:22.704Z",
-  "plans": []
+  "actualitzat": "2026-10-15T04:52:09.488Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PLASEQCAT.png"
+      },
+      "plaacronim": "PLASEQTA",
+      "planom": "Pla risc químic comarques Tarragona",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "14/10/2026 23:01",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128172_ACTUALITZACIO--NOACTIVAT_PLASEQTA_202610142330.pdf"
+      },
+      "descripcio": "Flama planta Cracker etileno fins a les 23:59h 16/10 - DOW Chemical Ibérica (Polígon Nord) (Plaseqta)"
+    }
+  ]
 }

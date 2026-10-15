@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-14T19:20:14.790Z",
+  "dataConsulta": "2026-10-15T04:52:05.545Z",
   "avui": {
-    "data": "2026-10-14",
-    "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat en general pel pas de bandes de núvols alts. Durant les hores centrals de la jornada creixeran alguns núvols d'evolució diürna a punts de muntanya, tant del prelitoral com del Prepirineu. ",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "Temperatura màxima lleugerament més alta, tret d'alguns sectors de la meitat oest, on es mantindrà semblant. Valors màxims fregant els 29 °C a les Terres de l'Ebre.",
-      "visibilitat": "Visibilitat entre bona i regular.",
-      "vent": "La resta del dia s'imposarà el vent de component sud al litoral i romandrà fluix i variable a l'interior. Malgrat tot, al nord de la Costa Brava hi haurà estones de vent fluix de component nord. A partir del vespre el vent serà fluix i de direcció variable, amb predomini del terral al litoral. "
-    }
-  },
-  "dema": {
     "data": "2026-10-15",
     "variables": {
       "estatDelCel": "Al llarg del dia hi haurà intervals de núvols baixos al litoral i prelitoral i a punts de la Catalunya Central. Seran menys abundants durant les hores centrals del dia.  Al Pirineu, Prepirineu i Ponent el cel romandrà serè durant tot el jorn.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura, tant la mínima com la màxima, serà lleugerament més baixa en conjunt.",
       "visibilitat": "La visibilitat serà entre bona i regular, amb nombrosos bancs de boira i boirina matinals especialment a punts de l'interior, però també del prelitoral, principalment als dos extrems.",
       "vent": "Fins a mig matí i de nou a partir del vespre, el vent serà fluix i de direcció variable, amb predomini, al matí, del terral al litoral. La resta del dia s'imposarà el vent de component sud i est al litoral i romandrà fluix i variable a l'interior. "
+    }
+  },
+  "dema": {
+    "data": "2026-10-16",
+    "variables": {
+      "estatDelCel": "Domini de l'ambient assolellat, amb l'arribada d'alguns núvols alts i prims que deixaran el cel enterbolit momentàniament. A banda, fins a mig matí i a partir de mitja tarda hi haurà la presència de núvols baixos a punts de litoral i prelitoral, sobretot al sector sud del sector, que deixaran el cel mig ennuvolat, localment molt ennuvolat. A més, al llarg de la tarda el cel tendirà a quedar cobert al vessant nord del Pirineu.",
+      "precipitacions": "No es descarta alguna precipitació feble i minsa al final del dia al vessant nord del Pirineu Occidental.",
+      "temperatures": "Temperatura mínima igual en general, tret del terç nord del país on podrà pujar lleugerament. Pel que fa a la màxima, no experimentarà canvis importants, excepte al quadrant nord-est, on pujarà lleugerament.",
+      "visibilitat": "La visibilitat serà bona o excel·lent, tret del litoral i prelitoral, on podrà quedar regular durant la primera i la darrera part del dia.",
+      "vent": "El vent bufarà fluix i de direcció variable. Durant les hores centrals del dia, s'imposarà el component sud fluix al litoral.  "
     }
   }
 }
