@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-15T13:50:20.685Z",
+  "actualitzat": "2026-10-15T19:20:15.720Z",
   "plans": [
     {
       "plaicona": {
@@ -21,11 +21,11 @@
       },
       "plaacronim": "INUNCAT",
       "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "15/10/2026 10:33",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "15/10/2026 19:06",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128205_INICI--NOACTIVAT_INUNCAT_202610151115.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128205_ACTUALITZACIO--ACTIVAT_INUNCAT_202610151943.pdf"
       },
       "descripcio": "Avís-Intensitat de pluja Intensitat > 20 mm / 30 minuts - "
     }
