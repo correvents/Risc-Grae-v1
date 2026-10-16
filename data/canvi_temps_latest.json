@@ -1,6 +1,6 @@
 {
   "data": "2026-10-16",
-  "actualitzat": "2026-10-16T05:45:24.634Z",
+  "actualitzat": "2026-10-16T05:50:18.478Z",
   "resultats": [
     {
       "punt": {
@@ -36,7 +36,7 @@
           "tmaxMati": 6.6,
           "precMati": 0,
           "ventMaxMati": 6.1,
-          "wmoMati": 3,
+          "wmoMati": 0,
           "tminTarda": 5.9,
           "tmaxTarda": 9.3,
           "precTarda": 8.2,
@@ -80,7 +80,7 @@
           "tmaxMati": 11.6,
           "precMati": 0,
           "ventMaxMati": 9,
-          "wmoMati": 3,
+          "wmoMati": 2,
           "tminTarda": 8,
           "tmaxTarda": 12,
           "precTarda": 0,
@@ -126,14 +126,14 @@
           "tmaxMati": 9.3,
           "precMati": 0,
           "ventMaxMati": 5.9,
-          "wmoMati": 3,
+          "wmoMati": 0,
           "tminTarda": 7,
           "tmaxTarda": 10.8,
           "precTarda": 7.8,
           "neuTarda": 0,
           "ventMaxTarda": 9.9,
           "ventMaxDirTarda": 224,
-          "wmoTarda": 63,
+          "wmoTarda": 65,
           "avg30d": 16.334374999999998
         }
       }
@@ -159,7 +159,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 12,
           "ventMaxDirTarda": 319,
-          "wmoTarda": 1,
+          "wmoTarda": 0,
           "avg30d": 15.512500000000001
         }
       },
@@ -170,14 +170,14 @@
           "tmaxMati": 9.8,
           "precMati": 0,
           "ventMaxMati": 6.7,
-          "wmoMati": 3,
+          "wmoMati": 0,
           "tminTarda": 6.6,
           "tmaxTarda": 12.5,
           "precTarda": 0.9,
           "neuTarda": 0,
           "ventMaxTarda": 12,
           "ventMaxDirTarda": 314,
-          "wmoTarda": 61,
+          "wmoTarda": 63,
           "avg30d": 15.512500000000001
         }
       }
@@ -221,7 +221,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 12.1,
           "ventMaxDirTarda": 210,
-          "wmoTarda": 3,
+          "wmoTarda": 61,
           "avg30d": 16.08125
         }
       }
@@ -233,8 +233,44 @@
         "lon": 2.148,
         "alt": 1967
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 14.3,
+          "precMati": 0,
+          "ventMaxMati": 7.2,
+          "wmoMati": 3,
+          "tminTarda": 12.3,
+          "tmaxTarda": 14.8,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 7.6,
+          "ventMaxDirTarda": 161,
+          "wmoTarda": 3,
+          "avg30d": 16.734375
+        }
+      },
+      "dema": {
+        "nivell": 1,
+        "factors": [
+          "Pluja 7.7mm tarda"
+        ],
+        "dades": {
+          "tmaxMati": 11.3,
+          "precMati": 0,
+          "ventMaxMati": 8.6,
+          "wmoMati": 0,
+          "tminTarda": 8.4,
+          "tmaxTarda": 11.5,
+          "precTarda": 7.7,
+          "neuTarda": 0,
+          "ventMaxTarda": 9.3,
+          "ventMaxDirTarda": 152,
+          "wmoTarda": 63,
+          "avg30d": 16.734375
+        }
+      }
     },
     {
       "punt": {
@@ -243,8 +279,42 @@
         "lon": 2.345,
         "alt": 2000
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 14.2,
+          "precMati": 0,
+          "ventMaxMati": 11,
+          "wmoMati": 3,
+          "tminTarda": 12.4,
+          "tmaxTarda": 15.2,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 7.6,
+          "ventMaxDirTarda": 260,
+          "wmoTarda": 3,
+          "avg30d": 15.140624999999996
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 10.8,
+          "precMati": 0,
+          "ventMaxMati": 6.1,
+          "wmoMati": 0,
+          "tminTarda": 7.8,
+          "tmaxTarda": 11.2,
+          "precTarda": 6.6,
+          "neuTarda": 0,
+          "ventMaxTarda": 7.6,
+          "ventMaxDirTarda": 93,
+          "wmoTarda": 63,
+          "avg30d": 15.140624999999996
+        }
+      }
     }
   ]
 }
