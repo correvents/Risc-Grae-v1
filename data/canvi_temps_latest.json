@@ -1,6 +1,6 @@
 {
   "data": "2026-10-18",
-  "actualitzat": "2026-10-18T19:20:24.553Z",
+  "actualitzat": "2026-10-18T19:30:26.633Z",
   "resultats": [
     {
       "punt": {
@@ -239,46 +239,8 @@
         "lon": 2.148,
         "alt": 1967
       },
-      "avui": {
-        "nivell": 2,
-        "factors": [
-          "Pluja 17.3mm tarda"
-        ],
-        "dades": {
-          "tmaxMati": 6,
-          "precMati": 11.7,
-          "ventMaxMati": 9.6,
-          "wmoMati": 63,
-          "tminTarda": 4.6,
-          "tmaxTarda": 5.8,
-          "precTarda": 17.3,
-          "neuTarda": 0,
-          "ventMaxTarda": 13.4,
-          "ventMaxDirTarda": 200,
-          "wmoTarda": 63,
-          "avg30d": 16.15625
-        }
-      },
-      "dema": {
-        "nivell": 2,
-        "factors": [
-          "Pluja 45.1mm tarda"
-        ],
-        "dades": {
-          "tmaxMati": 6,
-          "precMati": 16.2,
-          "ventMaxMati": 13,
-          "wmoMati": 63,
-          "tminTarda": 6.3,
-          "tmaxTarda": 7.6,
-          "precTarda": 45.099999999999994,
-          "neuTarda": 0,
-          "ventMaxTarda": 24.3,
-          "ventMaxDirTarda": 148,
-          "wmoTarda": 65,
-          "avg30d": 16.15625
-        }
-      }
+      "avui": null,
+      "dema": null
     },
     {
       "punt": {
