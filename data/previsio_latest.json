@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-10-18T05:45:16.472Z",
+  "dataConsulta": "2026-10-18T09:40:17.262Z",
   "avui": {
     "data": "2026-10-18",
     "variables": {
       "estatDelCel": "Cel cobert o molt ennuvolat en general. ",
-      "precipitacions": "S'espera precipitació d'intensitat entre feble i moderada a qualsevol punt del país. Fins a mig matí, al sud del sector central del litoral on és probable que sigui d'intensitat forta. Independentment, a partir de migdia serà menys probable al Pirineu i al litoral nord. S'acumularan quantitats poc abundants i localment abundants.",
-      "temperatures": "La temperatura màxima baixarà acusadament en general. A més, la temperatura mínima de la jornada es podrà registrar al final del dia i serà lleugerament més baixa que ahir. ",
-      "visibilitat": "La visibilitat serà regular i dolenta, sobretot en els moments de la precipitació.",
-      "vent": "Al llarg del dia bufarà tramuntana moderada al nord i est de l'Empordà, on hi haurà alguns cops forts. Al terç sud el vent bufarà entre fluix i moderat amb algun cop fort de component oest. A la resta del país el vent serà fluix i de direcció variable, amb predomini del component nord i est al litoral. "
+      "precipitacions": "S'espera precipitació d'intensitat entre feble i moderada a qualsevol punt del país. Independentment, a partir de migdia serà menys probable al litoral i prelitoral central i nord. S'acumularan quantitats poc abundants en general i localment abundants a la resta. La cota de neu rondarà els 2.600 metres al Pirineu oriental i els 2.400 a l'occidental, si bé al vessant nord de la serralada se situarà entorn dels 1.800 metres.",
+      "temperatures": "La temperatura màxima baixarà acusadament en general. A més, la temperatura mínima de la jornada es podrà registrar localment al final del dia i serà lleugerament més baixa que ahir. ",
+      "visibilitat": "La visibilitat serà regular en general, i dolenta sobretot a zones elevades i en els moments de la precipitació més intensa.",
+      "vent": "Al llarg del dia bufarà tramuntana moderada al nord i est de l'Empordà, on hi haurà alguns cops forts. A les Terres de l'Ebre el vent bufarà entre fluix i moderat amb algun cop fort de component oest. A la resta del país el vent serà fluix i de direcció variable, amb predomini del component nord i est al litoral. "
     }
   },
   "dema": {
     "data": "2026-10-19",
     "variables": {
       "estatDelCel": "Cel cobert o molt ennuvolat en general. ",
-      "precipitacions": "De matinada s'espera precipitació que començarà a la meitat sud i oest i anirà avançant cap al nord i est. Serà d'intensitat entre feble i moderada, si bé durant la tarda podran ser d'intensitat forta, especialment al litoral. S'acumularan quantitats entre abundant i molt abundants, localment extremadament abundants (més de 100 mm en 24 hores). A més, podrien anar acompanyades de tempesta.",
-      "temperatures": "Tant la temperatura mínima com la màxima baixaran lleugerament. ",
-      "visibilitat": "Visibilitat entre regular i dolenta en general.",
-      "vent": "Vent de component nord i oest entre fluix i moderat a Ponent i al terç sud, amb algun cop fort en aquest darrer sector. A la resta del litoral, del prelitoral i del quadrant nord-est bufarà de component nord i est entre fluix i moderat amb algun cop fort, mentre que a la resta del país serà fluix i de direcció variable, amb predomini del component nord. "
+      "precipitacions": "S'espera precipitació d'intensitat entre feble i moderada a qualsevol punt del país, menys probable de matinada al nord-est de Catalunya. Durant la tarda podrà ser d'intensitat forta, especialment al litoral i prelitoral, on fins i tot també podrà ser torrencial (més de 40 mm en 30 minuts). S'acumularan quantitats entre abundant i molt abundants de precipitació, localment extremadament abundants (més de 100 mm en 24 hores) al litoral, prelitoral i al vessant sud del Pirineu i Prepirineu. A més, els xàfecs podran anar acompanyats de tempesta.",
+      "temperatures": "La temperatura mínima baixarà lleugerament i la màxima serà similar. ",
+      "visibilitat": "Visibilitat entre regular i dolenta en general. Presència de molts bancs de boira a zones elevades i a zones muntanyoses.",
+      "vent": "Vent de component nord i oest entre fluix i moderat a Ponent i al terç sud, amb algun cop fort en aquest darrer sector. A la resta del litoral, del prelitoral i del quadrant nord-est bufarà de component nord i est entre fluix i moderat amb algun cop fort, mentre que a la resta del país serà fluix i de direcció variable, amb predomini del component nord.\nIndependentment, als cims del Pirineu bufarà de component sud moderat amb cops forts, mentre que en moments de xàfec intens també podrà haver-hi algunes ràfegues fortes."
     }
   }
 }

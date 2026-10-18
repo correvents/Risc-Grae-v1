@@ -1,1656 +1,12 @@
 {
-  "dataConsulta": "2026-10-18T05:50:14.437Z",
+  "dataConsulta": "2026-10-18T09:40:15.877Z",
   "avisos": [
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Ampliat",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-18T05:59Z",
-      "dataEmisio": "2026-10-17T08:01Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 7,
-              "comarcaNom": "Bages",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 14,
-              "comarcaNom": "Berguedà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-10-18",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Vigent",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-18T05:59Z",
-      "dataEmisio": "2026-10-17T16:05Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 7,
-              "comarcaNom": "Bages",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 14,
-              "comarcaNom": "Berguedà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-10-18",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Ampliat",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-18T05:59Z",
-      "dataEmisio": "2026-10-16T16:48Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 7,
-              "comarcaNom": "Bages",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 14,
-              "comarcaNom": "Berguedà",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-10-18",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Ampliat",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-17T23:59Z",
-      "dataEmisio": "2026-10-16T08:23Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 7,
-              "comarcaNom": "Bages",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 14,
-              "comarcaNom": "Berguedà",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Taronja",
-              "grauPerill": 4,
-              "probabilitat": "Segur",
-              "llindar": "Intensitat > 90 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Ampliat",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-17T23:59Z",
-      "dataEmisio": "2026-10-15T16:26Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Intensitat de pluja en 3 hores",
-      "estat": "Ampliat",
-      "dataInici": "2026-10-17T12:00Z",
-      "dataFi": "2026-10-17T23:59Z",
-      "dataEmisio": "2026-10-15T07:30Z",
-      "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
-      "dies": [
-        {
-          "dia": "2026-10-17",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 43,
-              "comarcaNom": "Lluçanès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 19,
-              "comarcaNom": "Garrotxa",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Intensitat > 60 mm/3 hores",
-              "periodes": [
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        }
-      ]
-    },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Ampliat",
       "dataInici": "2026-10-17T12:00Z",
       "dataFi": "2026-10-19T23:59Z",
-      "dataEmisio": "2026-10-17T07:56Z",
+      "dataEmisio": "2026-10-17T16:05Z",
       "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
       "dies": [
         {
@@ -2323,10 +679,10 @@
     },
     {
       "meteor": "Intensitat de pluja en 30 minuts",
-      "estat": "Vigent",
+      "estat": "Ampliat",
       "dataInici": "2026-10-17T12:00Z",
       "dataFi": "2026-10-19T23:59Z",
-      "dataEmisio": "2026-10-17T16:05Z",
+      "dataEmisio": "2026-10-17T07:56Z",
       "comentari": "Els xàfecs aniran acompanyats de tempesta i localment de calamarsa. ",
       "dies": [
         {
@@ -4417,11 +2773,78 @@
       ]
     },
     {
+      "meteor": "Estat de la mar",
+      "estat": "Vigent",
+      "dataInici": "2026-10-19T00:00Z",
+      "dataFi": "2026-10-19T11:59Z",
+      "dataEmisio": "2026-10-18T08:33Z",
+      "comentari": "La direcció d'onatge predominant serà de l'ENE, amb notable mar de fons.",
+      "dies": [
+        {
+          "dia": "2026-10-19",
+          "afectacions": [
+            {
+              "zona": "Comarca 88",
+              "comarca": 88,
+              "comarcaNom": "Comarca 88",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Comarca 89",
+              "comarca": 89,
+              "comarcaNom": "Comarca 89",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "meteor": "Acumulació de pluja",
       "estat": "Vigent",
       "dataInici": "2026-10-19T00:00Z",
       "dataFi": "2026-10-19T23:59Z",
-      "dataEmisio": "2026-10-17T16:04Z",
+      "dataEmisio": "2026-10-18T08:19Z",
       "comentari": "",
       "dies": [
         {
@@ -4432,8 +2855,8 @@
               "comarca": 1,
               "comarcaNom": "Alt Camp",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4447,8 +2870,8 @@
               "comarca": 8,
               "comarcaNom": "Baix Camp",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4462,8 +2885,8 @@
               "comarca": 36,
               "comarcaNom": "Tarragonès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4597,8 +3020,8 @@
               "comarca": 11,
               "comarcaNom": "Baix Llobregat",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4612,8 +3035,8 @@
               "comarca": 13,
               "comarcaNom": "Barcelonès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4627,8 +3050,8 @@
               "comarca": 17,
               "comarcaNom": "Garraf",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4642,8 +3065,8 @@
               "comarca": 21,
               "comarcaNom": "Maresme",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4672,8 +3095,8 @@
               "comarca": 3,
               "comarcaNom": "Alt Penedès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4687,8 +3110,8 @@
               "comarca": 12,
               "comarcaNom": "Baix Penedès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4701,6 +3124,36 @@
               "zona": "Pirineu Central",
               "comarca": 15,
               "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 23,
+              "comarcaNom": "Noguera",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 25,
+              "comarcaNom": "Pallars Jussà",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
@@ -4717,8 +3170,8 @@
               "comarca": 35,
               "comarcaNom": "Solsonès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4731,6 +3184,36 @@
               "zona": "Pirineu Occidental",
               "comarca": 4,
               "comarcaNom": "Alt Urgell",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
@@ -4777,8 +3260,8 @@
               "comarca": 31,
               "comarcaNom": "Ripollès",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4807,8 +3290,8 @@
               "comarca": 14,
               "comarcaNom": "Berguedà",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4867,8 +3350,8 @@
               "comarca": 40,
               "comarcaNom": "Vallès Occidental",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
@@ -4882,14 +3365,872 @@
               "comarca": 41,
               "comarcaNom": "Vallès Oriental",
               "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
               "llindar": "Acumulada > 100 mm /24 hores",
               "periodes": [
                 "00-06",
                 "06-12",
                 "12-18",
                 "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 3 hores",
+      "estat": "Vigent",
+      "dataInici": "2026-10-19T00:00Z",
+      "dataFi": "2026-10-19T23:59Z",
+      "dataEmisio": "2026-10-18T08:09Z",
+      "comentari": "Els xàfecs aniran localment acompanyats de tempesta.",
+      "dies": [
+        {
+          "dia": "2026-10-19",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 1,
+              "comarcaNom": "Alt Camp",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 13,
+              "comarcaNom": "Barcelonès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 17,
+              "comarcaNom": "Garraf",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 3,
+              "comarcaNom": "Alt Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 12,
+              "comarcaNom": "Baix Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 60 mm/3 hores",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-10-19T12:00Z",
+      "dataFi": "2026-10-20T23:59Z",
+      "dataEmisio": "2026-10-18T08:09Z",
+      "comentari": "Els xàfecs aniran localment acompanyats de tempesta.",
+      "dies": [
+        {
+          "dia": "2026-10-19",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 1,
+              "comarcaNom": "Alt Camp",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 43,
+              "comarcaNom": "Lluçanès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 2,
+              "comarcaNom": "Alt Empordà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 10,
+              "comarcaNom": "Baix Empordà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 13,
+              "comarcaNom": "Barcelonès",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 17,
+              "comarcaNom": "Garraf",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 3,
+              "comarcaNom": "Alt Penedès",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 12,
+              "comarcaNom": "Baix Penedès",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 42,
+              "comarcaNom": "Moianès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 16,
+              "comarcaNom": "Conca de Barberà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Taronja",
+              "grauPerill": 4,
+              "probabilitat": "Segur",
+              "llindar": "Intensitat > 40 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-10-20",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 1,
+              "comarcaNom": "Alt Camp",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 2,
+              "comarcaNom": "Alt Empordà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 10,
+              "comarcaNom": "Baix Empordà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 13,
+              "comarcaNom": "Barcelonès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 17,
+              "comarcaNom": "Garraf",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 3,
+              "comarcaNom": "Alt Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 12,
+              "comarcaNom": "Baix Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 42,
+              "comarcaNom": "Moianès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 16,
+              "comarcaNom": "Conca de Barberà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
               ]
             }
           ]
