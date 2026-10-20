@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-19T19:20:16.017Z",
+  "dataConsulta": "2026-10-20T05:01:20.105Z",
   "avui": {
-    "data": "2026-10-19",
-    "variables": {
-      "estatDelCel": "Cel cobert o molt ennuvolat en general durant tota la jornada.",
-      "precipitacions": "Al llarg del dia s'espera precipitació extensa, procedent del mar i que creuarà el territori de sud a nord. Serà d'intensitat entre feble i moderada en general, si bé podrà ser d'intensitat forta, localment torrencial, al litoral i prelitoral central i sud, com també a la Catalunya Central i el Pirineu Oriental. S'acumularan quantitats de pluja entre abundants i molt abundants de precipitació, localment extremadament abundants al litoral, prelitoral i al vessant sud del Pirineu i Prepirineu oriental i central. A més, els xàfecs podran anar acompanyats de tempesta i no es descarta de fenòmens de temps violent.",
-      "temperatures": "La temperatura sense grans canvis.",
-      "visibilitat": "Visibilitat entre regular i dolenta en general. Presència de molts bancs de boira a zones elevades i muntanyoses.",
-      "vent": "Vent de component nord i oest entre fluix i moderat a Ponent i al terç sud, amb algun cop fort en aquest darrer sector. A la resta del litoral i del prelitoral bufarà de component nord i est entre fluix i moderat amb algun cop fort, mentre que a la resta del país serà fluix i de direcció variable, amb predomini del component nord i est.\nIndependentment, als cims del Pirineu bufarà de component sud moderat amb cops forts, mentre que en moments de xàfec intens també podrà haver-hi algunes ràfegues fortes."
-    }
-  },
-  "dema": {
     "data": "2026-10-20",
     "variables": {
       "estatDelCel": "Cel cobert de matinada i fins a primera hora del matí arreu. Al llarg del matí la nuvolositat tendirà a minvar lentament i progressivament per Ponent fins a quedar serè o poc ennuvolat, amb l'arribada d'alguns núvols alts o mitjans al final del dia per l'oest.\nAra bé, al quadrant nord-est del país, i al Pirineu i al Prepirineu la nuvolositat persistirà; i, a més, a partir de migdia creixeran nuvolades que mantindran el cel localment molt ennuvolat o cobert. Independentment, a la cara nord del Pirineu el cel estarà molt ennuvolat o cobert al llarg del dia, amb alguna clariana transitòria a centre de la jornada.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà lleugerament més baixa, tret del litoral i prelitoral nord on pujarà lleugerament. Per la seva banda, la temperatura màxima serà entre lleugerament i moderadament més alta.",
       "visibilitat": "La visibilitat tendirà a quedar entre bona i excel·lent, si bé hi haurà bancs de boira i boirina fins a mig matí a l'interior.",
       "vent": "Vent de component nord i oest entre fluix i moderat, amb cops forts de mestral al terç sud i de tramuntana al nord de l'Empordà. A l'interior del quadrant nord-est, al nord del litoral central i al sud de la Costa Brava, amb predomini del component sud al centre del dia. Al final del dia bufarà fluix i de direcció variable a l'interior i es mantindrà el component nord als dos extrems. "
+    }
+  },
+  "dema": {
+    "data": "2026-10-21",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat per alguns núvols alts, més nombrosos de matinada i al final del dia, quan també n'arribaran de mitjans. També hi haurà intervals de núvols mitjans a l'extrem nord del país al llarg del dia, sobretot fins a migdia. A partir de migdia, creixeran nuvolades a punts del quadrant nord-est i al Pirineu que deixaran el cel entre mig i molt ennuvolat. A banda, al vessant nord del Pirineu el cel es mantindrà entre molt ennuvolat i cobert durant el dia.",
+      "precipitacions": "A partir de migdia s'esperen ruixats d'intensitat entre feble i moderada a punts del quadrant nord-est, localment acompanyats de tempesta. A banda, al vessant nord del Pirineu és probable precipitació feble fins al vespre. Acumularan quantitats minses o poc abundants.",
+      "temperatures": "Temperatura mínima en descens lleuger i localment moderat, si bé a l'extrem sud serà similar. La temperatura màxima serà similar. ",
+      "visibilitat": "La visibilitat serà excel·lent, si bé fins a l'inici del matí serà localment regular o dolenta a la Catalunya central per la presència de boirina o d'algun banc de boira. Malgrat tot, serà dolenta al vessant nord del Pirineu i entre regular i dolenta en moments de xàfec.",
+      "vent": "Vent de component oest entre fluix i moderat, amb cops forts a partir de mig matí a Ponent i al litoral i prelitoral sud. Al quadrant nord-est del país, però, bufarà vent de component est fluix amb cops moderats, excepte a l'extrem nord del litoral on la tramuntana bufarà moderada amb cops forts a partir de migdia. Independentment, a l'inici i al final del dia serà fluix i de direcció variable a l'interior. "
     }
   }
 }
