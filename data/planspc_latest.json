@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-10-20T14:16:07.139Z",
-  "plans": []
+  "actualitzat": "2026-10-20T19:20:18.132Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
+      },
+      "plaacronim": "TRANSCAT",
+      "planom": "Nou transcat",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "20/10/2026 18:22",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128330_INICI--NOACTIVAT_TRANSCAT_202610201835.pdf"
+      },
+      "descripcio": "Camió amb fuita al dipòsit de gasoil C-12 pk 18\n - "
+    }
+  ]
 }
