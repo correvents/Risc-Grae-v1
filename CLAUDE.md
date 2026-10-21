@@ -544,3 +544,14 @@ python3 -m http.server 8000          # i obrir l'app; mirar la consola del naveg
 ```
 
 L'app s'ha de servir per HTTP: amb `file://` els GeoJSON del mapa no carreguen.
+
+**Hooks de Claude Code** (`.claude/settings.json`, des del 21-10-2026). Només afecten les sessions de
+Claude; la web i els workflows no els llegeixen.
+
+- `guarda.js` (abans d'editar) **bloqueja** qualsevol edició de `data/*.json` i qualsevol clau
+  secreta de Supabase en un `.html`. Mira el **valor** de la clau (JWT amb `role: service_role` o
+  `sb_secret_…`), no la paraula, perquè el manual integrat parla de «service_role».
+- `comprova.js` (després d'editar) passa `node --check` als `.js` i a cada `<script>` de dins dels
+  `.html` (l'error diu la línia de l'HTML). En tocar `formula-risc.js` recorda la feina de la trampa 1.
+
+Si un hook bloqueja una cosa que sí que s'ha de fer, el que cal és canviar el hook, no saltar-se'l.

@@ -8,6 +8,23 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-10-21 — Hooks de Claude Code: guarda de `data/` i de claus, i comprovació de sintaxi
+
+Petició de l'usuari: recomanacions d'automatització per a Claude Code, i muntar les tres primeres.
+Res d'això toca la web ni els workflows: només actua quan Claude edita fitxers.
+
+- `.claude/hooks/guarda.js` (PreToolUse): no deixa editar `data/*.json` (els escriu
+  `commit-dades.sh`) ni posar una clau `service_role`/`sb_secret_` en un `.html` (trampa 9).
+- `.claude/hooks/comprova.js` (PostToolUse): `node --check` dels `.js` i dels `<script>` inline de
+  l'`index.html`, que era el fitxer que la comprovació manual del CLAUDE.md no cobria. En tocar
+  `formula-risc.js` recorda versió, explicació, manual, `?v=` i còpia de `proves/`.
+- Provats amb casos bons i dolents (clau anon passa, service_role no; un parèntesi trencat a
+  `renderRisc` surt amb la línia de l'HTML).
+
+**Pendent (recomanat, no fet):** una ordre `/comprova-franges` que compari `diaIFranja()`,
+`FRANGES_CAPTURA` i el check `risc_captures_franja_valida` de Supabase (trampa 18), i un
+recordatori d'escriure aquest diari en acabar la sessió.
+
 ## 2026-09-29 — Mapes de l'SMP Bombers: es treu l'animació, es veuen totes les franges alhora
 
 Petició de l'usuari: els quatre mapes (comarques/regions × avui/demà) passaven una franja horària
