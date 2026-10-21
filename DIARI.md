@@ -8,6 +8,12 @@ Format d'una entrada: data, què s'ha fet, per què, i què queda pendent.
 
 ---
 
+## 2026-10-21 — S'amaga la pestanya 🗺️ Mapa
+
+Petició de l'usuari. L'enllaç de la barra de pestanyes a `mapa.html` queda comentat a
+l'`index.html`; `mapa.html` continua publicat i s'hi pot entrar per URL. Per tornar-la a
+ensenyar, n'hi ha prou de treure el comentari.
+
 ## 2026-10-21 — Hooks de Claude Code: guarda de `data/` i de claus, i comprovació de sintaxi
 
 Petició de l'usuari: recomanacions d'automatització per a Claude Code, i muntar les tres primeres.
