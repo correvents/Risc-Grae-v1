@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-10-21T05:45:44.168Z",
+  "dataConsulta": "2026-10-21T09:40:16.798Z",
   "avui": {
     "data": "2026-10-21",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat per alguns núvols alts, més nombrosos de matinada i al final del dia, quan també n'arribaran de mitjans. També hi haurà intervals de núvols mitjans a l'extrem nord del país al llarg del dia, sobretot fins a migdia. A partir de migdia, creixeran nuvolades a punts del quadrant nord-est i al Pirineu que deixaran el cel entre mig i molt ennuvolat. A banda, al vessant nord del Pirineu el cel es mantindrà entre molt ennuvolat i cobert durant el dia.",
-      "precipitacions": "A partir de migdia s'esperen ruixats d'intensitat entre feble i moderada a punts del quadrant nord-est, localment acompanyats de tempesta. A banda, al vessant nord del Pirineu és probable precipitació feble fins al vespre. Acumularan quantitats minses o poc abundants. Al final de la jornada es formaran alguns xàfecs locals a punts del litoral central, d'intensitat feble o moderada, tot i que localment podran ser forts i acumular quantitats abundants.",
-      "temperatures": "Temperatura mínima en descens lleuger i localment moderat, si bé a l'extrem sud serà similar. La temperatura màxima serà similar o lleugerament més baixa. ",
-      "visibilitat": "La visibilitat serà excel·lent, si bé fins a l'inici del matí serà localment regular o dolenta a la Catalunya Central per la presència de boirina o d'algun banc de boira. Malgrat tot, serà dolenta al vessant nord del Pirineu i entre regular i dolenta en moments de xàfec.",
-      "vent": "Vent de component oest entre fluix i moderat, amb cops forts a partir de mig matí a Ponent i al litoral i prelitoral sud. Al quadrant nord-est del país, però, bufarà vent de component est fluix amb cops moderats, excepte a l'extrem nord del litoral on la tramuntana bufarà moderada amb cops forts a partir de migdia. Independentment, a l'inici i al final del dia serà fluix i de direcció variable a l'interior. "
+      "estatDelCel": "Cel serè o poc ennuvolat per alguns núvols alts, més nombrosos al final del dia, quan també n'arribaran de mitjans. També hi haurà intervals de núvols mitjans a l'extrem nord del país al llarg del dia, sobretot fins a migdia. A partir de migdia, creixeran nuvolades a punts del quadrant nord-est i al Pirineu que deixaran el cel entre mig i molt ennuvolat i podran arribar al sector central del litoral al final del dia. A banda, al vessant nord del Pirineu el cel es mantindrà entre molt ennuvolat i cobert fins al vespre.",
+      "precipitacions": "A partir de migdia s'esperen ruixats d'intensitat entre feble i moderada a punts del quadrant nord-est, no es descarta que localment vagin acompanyats de tempesta. A banda, al vessant nord del Pirineu s'espera precipitació feble a partir de mig matí i fins al vespre. Acumularan quantitats minses o poc abundants. Al final de la jornada es formaran alguns xàfecs locals a punts del litoral central, d'intensitat feble o moderada, tot i que localment és possible que puguin ser forts i acumular quantitats abundants.",
+      "temperatures": "Temperatura màxima similar o lleugerament més baixa. ",
+      "visibilitat": "La visibilitat serà excel·lent. Malgrat tot, serà dolenta al vessant nord del Pirineu i entre regular i dolenta en moments de xàfec.",
+      "vent": "Vent de component oest entre fluix i moderat, amb cops forts a partir de mig matí a Ponent i al litoral i prelitoral sud. Al quadrant nord-est del país, però, bufarà vent de component est fluix amb cops moderats, excepte a l'extrem nord del litoral on la tramuntana bufarà moderada amb cops forts a partir de migdia. Al final del dia serà fluix i de direcció variable a molts punts de l'interior."
     }
   },
   "dema": {
     "data": "2026-10-22",
     "variables": {
       "estatDelCel": "Cel mig ennuvolat per alguns núvols alts i mitjans en general, més nombrosos al nord. A més, al litoral i prelitoral central i al sud de la Costa Brava estarà entre mig i molt ennuvolat per núvols baixos; al llarg de la tarda es podran estendre a la resta del litoral i prelitoral nord i al sud del país. Independentment, fins a mig matí hi haurà estrats baixos en fondalades de l'interior del territori. ",
-      "precipitacions": "De matinada s'esperen alguns ruixats o xàfecs locals al litoral central i al sud de la Costa Brava, d'intensitat entre feble i moderada, localment forts. Acumularan quantitats de precipitació entre minses i poc abundants, localment abundants. A partir de migdia no es descarta algun plugim feble i minso al mateix sector.",
-      "temperatures": "Temperatura lleugerament més baixa.",
+      "precipitacions": "De matinada s'esperen alguns ruixats o xàfecs locals al litoral central i al sud de la Costa Brava, d'intensitat entre feble i moderada, si bé localment no es descarta que siguin d'intensitat forta. A la tarda no es descarta precipitació feble al massís del Port i al nord del litoral i prelitoral central. Acumularan quantitats de precipitació entre minses i poc abundants, localment abundants. ",
+      "temperatures": "Temperatura mínima similar a la meitat est i lleugerament més baixa a la resta del país. A la resta de Catalunya serà lleugerament més baixa.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que fins a mig matí serà regular o dolenta en fondalades de l'interior del país, sobretot de la Catalunya Central.",
-      "vent": "Vent fluix amb cops moderats de component oest a Ponent i al prelitoral sud i de component sud entre fluix i moderat a la resta del país, amb algun cop fort al litoral nord. A més, fins a migdia hi haurà tramuntana al litoral nord i mestral al sud, entre fluix i moderat i amb algun cop fort de matinada. \nA banda, fins a mig matí i al final del dia el vent serà fluix i de direcció variable a l'interior. "
+      "vent": "Vent fluix amb cops moderats de component oest a Ponent i al prelitoral sud i de component sud entre fluix i moderat a la resta del país, amb algun cop fort al litoral nord a partir de migdia. A més, de matinada hi haurà tramuntana o mestral a l'extrem nord del litoral i mestral al sud, entre fluix i moderat.\nA banda, fins a mig matí i al final del dia el vent serà fluix i de direcció variable a l'interior. "
     }
   }
 }
