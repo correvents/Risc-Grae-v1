@@ -1,14 +1,55 @@
 {
-  "dataConsulta": "2026-10-23T14:16:07.047Z",
+  "dataConsulta": "2026-10-23T19:20:14.338Z",
   "avisos": [
     {
       "meteor": "Intensitat de pluja en 30 minuts",
       "estat": "Vigent",
-      "dataInici": "2026-10-24T00:00Z",
+      "dataInici": "2026-10-23T18:00Z",
       "dataFi": "2026-10-24T05:59Z",
-      "dataEmisio": "2026-10-23T07:15Z",
+      "dataEmisio": "2026-10-23T16:01Z",
       "comentari": "",
       "dies": [
+        {
+          "dia": "2026-10-23",
+          "afectacions": [
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        },
         {
           "dia": "2026-10-24",
           "afectacions": [
@@ -40,6 +81,18 @@
               "zona": "Litoral Nord",
               "comarca": 34,
               "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
