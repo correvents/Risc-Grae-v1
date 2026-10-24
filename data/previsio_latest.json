@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-23T19:20:15.115Z",
+  "dataConsulta": "2026-10-24T04:47:46.448Z",
   "avui": {
-    "data": "2026-10-23",
-    "variables": {
-      "estatDelCel": "Cel entre poc i mig ennuvolat per núvols alts i mitjans fins a migdia, i entre serè i poc ennuvolat a partir de llavors.\nA partir del final del matí es formaran núvols baixos i mitjans al quadrant nord-est, Pirineu i Prepirineu, com també alguna nuvolada aïllada durant la tarda.\nIndependentment, al vessant nord del Pirineu arribaran núvols que deixaran el cel entre mig i molt ennuvolat al llarg del dia, amb intervals de cobert durant el matí i a partir del vespre.",
-      "precipitacions": "S'espera precipitació feble a la cara nord del Pirineu, sobretot a cotes altes, amb una cota de neu que se situarà entre 1.800 i 1.600 metres.\nAl final del dia s'esperen ruixats entre febles i moderats és probable al litoral i prelitoral nord i central. \nS'acumularan quantitats entre minses i poc abundants.\n",
-      "temperatures": "Temperatura màxima entre lleugerament i moderadament més alta, si bé serà similar o lleugerament més alta al litoral i prelitoral sud i lleugerament o moderadament més baixa a la Val d'Aran.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que serà dolenta a cotes altes del vessant nord del Pirineu.",
-      "vent": "Bufarà vent de component nord i oest, amb mestral a les Terres de l'Ebre i tramuntana al nord i est de l'Empordà. En general, el vent bufarà entre feble i moderat amb cops forts, i alguns de molt forts als dos extrems del litoral. Malgrat tot, al litoral i prelitoral central, al sud de la Costa Brava i a l'interior del quadrant nord-est bufarà vent de component sud fluix amb cops moderats, amb intervals de vent fluix i de direcció variable. "
-    }
-  },
-  "dema": {
     "data": "2026-10-24",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat en general per núvols alts i mitjans, més abundants durant la tarda i especialment a partir del vespre, quan deixaran el cel entre mig i molt ennuvolat sobretot a la meitat nord.\nTot i això, de matinada i fins a primera hora del matí hi haurà intervals de núvols baixos al sector central del litoral i prelitoral, a l'interior del quadrant nord-est, a l'altiplà Central i al prelitoral sud i a la Val d'Aran.\nPer altra banda, de matinada i fins a mig matí creixeran nuvolades al litoral central i a partir de mig matí a altres punts del quadrant nord-est.\n",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima baixarà lleugerament, mentre que la màxima experimentarà un descens entre lleuger i moderat, sobretot a la meitat est de Catalunya. ",
       "visibilitat": "Visibilitat entre bona i excel·lent. Tot i això, hi haurà boirina o alguns bancs de boira matinals a l'est de la depressió Central i a l'altiplà Central, mentre que serà entre bona i regular al litoral i prelitoral central tot el dia i també al quadrant nord-est a partir de migdia.",
       "vent": "S'imposarà el vent de component nord i oest entre fluix i moderat, amb ratxes fortes al nord de la Costa Brava i al terç sud. Tot i això, a punts del quadrant nord-est, al nord del litoral central i al sud de la Costa Brava serà fluix i de direcció variable, amb predomini del component sud fluix al centre de la jornada. A banda, de matinada i al final del dia serà fluix i de direcció variable a l'interior, mentre que al litoral bufarà de component oest fluix amb intervals moderats. "
+    }
+  },
+  "dema": {
+    "data": "2026-10-25",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat en general, si bé fins a mig matí i a partir del vespre creuaran bandes de núvols alts.\nIndependentment, fins a primera hora del matí també hi haurà intervals de núvols baixos al nord de la Catalunya central, i al final del dia s'ennnuvolarà al vessant nord del Pirineu.",
+      "precipitacions": "Al final del dia arribarà precipitació feble, minsa i dispersa a la cara nord del Pirineu. La cota de neu rondarà entorn dels 2.800 metres.",
+      "temperatures": "Temperatura mínima similar o lleugerament més baixa. La màxima serà entre lleugerament i moderadament més alta. ",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que fins a primeres hores serà regular al nord de la depressió Central.",
+      "vent": "Durant les hores centrals del dia bufarà de component oest a l'interior de la meitat oest. A la resta bufarà de component sud. En general, bufarà entre fluix i moderat. La resta del dia bufarà fluix i de direcció variable a l'interior i de terral al litoral, fluix amb cops moderats."
     }
   }
 }
