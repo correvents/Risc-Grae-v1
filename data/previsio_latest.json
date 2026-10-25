@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-24T19:20:14.284Z",
+  "dataConsulta": "2026-10-25T04:55:57.781Z",
   "avui": {
-    "data": "2026-10-24",
-    "variables": {
-      "estatDelCel": "Cel entre mig i molt ennuvolat de núvols alts i mitjans, amb estones de cobert durant el vespre. Independentment, hi haurà intervals de núvols baixos al litoral i prelitoral central, al quadrant nord-est i a la Val d'Aran.\n\n",
-      "precipitacions": "Al litoral i prelitoral central i nord no es descarta precipitació feble i minsa fins al vespre.",
-      "temperatures": "Temperatura en descens entre lleuger i moderat.",
-      "visibilitat": "Visibilitat entre bona i excel·lent. Tot i això, serà entre bona i regular al litoral i prelitoral central i també al quadrant nord-est.",
-      "vent": "Fins al vespre bufarà el vent fluix amb cops moderats de component oest a l'interior i al tram de litoral comprès entre el cap de Salou i el delta de l'Ebre; a la resta del litoral bufarà el vent de component sud. Al final del dia quedarà fluix i de direcció variable a l'interior, mentre que al litoral entrarà el terral fluix amb cops moderats."
-    }
-  },
-  "dema": {
     "data": "2026-10-25",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat en general, si bé fins a mig matí i a partir de la tarda creuaran bandes de núvols alts, i alguns de mitjans al centre del dia pel terç nord.\nIndependentment, fins a primera hora del matí hi haurà intervals de núvols baixos al nord de la Catalunya central, i a partir de la tarda al vessant nord del Pirineu.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura serà mínima similar o lleugerament més baixa al quadrant nord-est i similar o lleugerament més alta a la resta del territori. La temperatura màxima pujarà entre lleugerament i moderadament arreu, la qual superarà els 20 °C a molts punts del litoral, prelitoral, Terres de l'Ebre i Ponent.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent, tot i que fins a primeres hores del matí serà regular al nord de la depressió Central. Per altra banda, a partir de migdia quedarà dolenta a cotes mitjanes i altes del vessant nord del Pirineu.",
       "vent": "Durant les hores centrals del dia hi haurà vent de component oest a l'interior de la meitat oest, mentre que a la resta bufarà de component sud. Bufarà entre fluix i moderat en general, per bé que hi haurà cops forts al sud de Ponent, a les Terres de l'Ebre i al prelitoral sud, sobretot a partir de mig matí.\nLa resta del dia bufarà fluix i de direcció variable a l'interior i de terral al litoral, fluix amb cops moderats."
+    }
+  },
+  "dema": {
+    "data": "2026-10-26",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat amb la circulació d'algunes bandes de núvols alts i prims. Per altra banda, fins a mig matí hi haurà intervals de núvols baixos a punts de la depressió Central i al vessant nord del Pirineu, mentre que al centre del dia n'apareixeran a trams del litoral i prelitoral central.",
+      "precipitacions": "De matinada és probable precipitació feble, minsa i dispersa a la cara nord del Pirineu, amb una cota de neu que rondarà els 2.800 metres.",
+      "temperatures": "Temperatura mínima lleugerament o moderadament més alta a la meitat oest, i similar o lleugerament superior a la resta. Temperatura màxima en ascens entre lleu i moderat arreu. ",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Tot i això, fins a primeres hores del matí serà regular a punts de la depressió Central per la presència de bancs de boira i boirina, i de matinada serà dolenta al vessant nord del Pirineu.",
+      "vent": "Bufarà vent fluix i de direcció a l'interior al llarg del jorn, si bé al centre del dia hi haurà intervals de component sud i oest a la depressió Central. Al litoral dominarà el terral de matinada i a la nit, fluix amb cops moderats, i el vent de components sud i est al centre del dia."
     }
   }
 }
