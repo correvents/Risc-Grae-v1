@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-10-26T05:50:19.418Z",
+  "actualitzat": "2026-10-26T09:40:16.934Z",
   "plans": [
     {
       "plaicona": {
@@ -7,11 +7,11 @@
       },
       "plaacronim": "PROCICAT",
       "planom": "PROCICAT",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "25/10/2026 17:53",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "26/10/2026 09:51",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128425_ACTUALITZACIO--ACTIVAT_PROCICAT_202610260109.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128425_ACTUALITZACIO--NOACTIVAT_PROCICAT_202610261032.pdf"
       },
       "descripcio": "Accident autobús - "
     }
