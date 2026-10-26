@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-10-26T09:40:13.786Z",
+  "dataConsulta": "2026-10-26T13:45:15.013Z",
   "avui": {
     "data": "2026-10-26",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat per la circulació d'algunes bandes de núvols alts i prims. \nTot i això, fins a mig matí hi haurà núvols baixos a punts de la depressió Central i al vessant nord del Pirineu, que deixaran el cel mig ennuvolat o molt ennuvolat a la Vall d'Aran. També hi haurà núvols baixos al litoral i prelitoral central i sud al llarg del jorn, més trencats a migdia.",
+      "estatDelCel": "Cel serè o poc ennuvolat per la circulació de nord a sud del territori d'algunes bandes de núvols alts i prims. També hi haurà núvols baixos al litoral i prelitoral central i sud al llarg del jorn que localment deixaran el cel mig o molt ennuvolat.",
       "precipitacions": "No s'espera precipitació.",
       "temperatures": "Temperatura màxima en ascens entre lleu i moderat, tret de trams del litoral sud on davallarà lleument; quedarà per sobre dels 20 °C gairebé arreu del país, i fins i tot superarà els 24 °C a punts de Ponent i de les Terres de l'Ebre.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. Tot i això, fins a primeres hores del matí serà regular o puntualment dolenta a punts del nord de la depressió Central per la presència de bancs de boira i boirina locals; a més, de matinada serà dolenta al vessant nord del Pirineu. Serà entre bona i regular al llarg de la jornada al litoral i prelitoral central.",
-      "vent": "Bufarà vent fluix i de direcció a l'interior al llarg del jorn, si bé al centre del dia hi haurà intervals de component sud i oest a la depressió Central. Al litoral dominarà el terral de matinada i a la nit, i el vent de components sud i est al centre del dia; serà fluix amb cops moderats."
+      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
+      "vent": "Bufarà vent fluix i de direcció a l'interior al llarg del jorn, si bé al centre del dia hi haurà intervals de component sud i oest a la depressió Central. Al litoral dominarà el vent de component sud i est al centre del dia; serà fluix amb cops moderats."
     }
   },
   "dema": {
     "data": "2026-10-27",
     "variables": {
-      "estatDelCel": "Domini del cel serè en general, si bé a partir de mitja tarda arribaran núvols alts i alguns de mitjans, que avançaran d'oest a est. Independentment, hi haurà núvols baixos fins a mig matí a la vall de l'Ebre, punts de la depressió central, del litoral i prelitoral; al llarg del dia persistiran a trams del litoral i prelitoral i al final del dia s'estendran cap a la depressió Central. Independentment, al final del dia també arribaran núvols baixos al vessant nord del Pirineu.",
+      "estatDelCel": "Domini del cel serè o poc ennuvolat en general, si bé a partir de mitja tarda arribaran núvols alts i alguns de mitjans, que avançaran d'oest a est i que localment deixaran el cel mig ennuvolat, puntualment molt al terç oest. Independentment, hi haurà núvols baixos fins a mig matí i de nou al final del dia a la vall de l'Ebre, punts de la depressió central i del litoral i prelitoral. Independentment, al final del dia es formaran núvols baixos al vessant nord del Pirineu.",
       "precipitacions": "No s'espera precipitació.",
       "temperatures": "La temperatura mínima pujarà lleugerament. La temperatura màxima serà similar o lleugerament més alta, si bé ascendirà moderadament a punts del litoral i prelitoral central; superarà els 20 °C a bona part del territori i fins i tot els 25 °C al prelitoral central i Terres de l'Ebre.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. Tot i això, fins a mig matí serà regular a la depressió central, com també a punts de la vall de l'Ebre, del litoral i prelitoral, i empitjorarà a la nit al prelitoral i depressió Central.",
-      "vent": "A l'interior el vent serà fluix i de direcció variable al llarg de la jornada, si bé al centre del dia hi haurà intervals de component sud i oest a l'oest del sector. Per altra banda, al litoral dominarà el terral de matinada i a la nit, fluix amb cops moderats, per bé que a partir de mitja tarda entrarà tramuntana entre fluixa i moderada al nord de l'Alt Empordà; durant les hores centrals del dia s'imposarà el vent de component sud entre fluix i moderat."
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Tot i això, fins a mig matí serà localment regular o dolenta a la depressió central, vall de l'Ebre, i fondalades del litoral i prelitoral, on localment es formaran bancs de boira.",
+      "vent": "A l'interior el vent serà fluix i de direcció variable al llarg de la jornada, si bé al centre del dia hi haurà intervals de component sud i oest a l'oest del territori. Per altra banda, al litoral dominarà el terral de matinada i a la nit, fluix amb cops moderats, per bé que a partir de migdia entrarà tramuntana entre fluixa i moderada al nord de l'Alt Empordà; a la resta del sector durant les hores centrals del dia s'imposarà el vent de component sud entre fluix i moderat, amb estones de vent variable al sud de la Costa Brava."
     }
   }
 }
