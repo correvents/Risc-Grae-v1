@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-28T19:20:16.529Z",
+  "dataConsulta": "2026-10-29T05:45:13.612Z",
   "avui": {
-    "data": "2026-10-28",
-    "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat a bona part del país, si bé hi haurà nuvolades a l'interior del quadrant nord-est i al nord del litoral central, on localment el cel restarà molt ennuvolat o cobert.",
-      "precipitacions": "És probable algun ruixat feble i minso a punts de les serralades de l'interior del quadrant nord-est. Al final del dia no es descarta precipitació feble al sector nord del litoral central.",
-      "temperatures": "La temperatura baixarà lleugerament, tret de punts del litoral on serà similar.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent.",
-      "vent": "Bufarà el component oest fluix amb algun cop moderat a la meitat oest, i el component sud i est fluix a la resta. Al final del dia quedarà fluix i de direcció variable en general, amb terral a trams del litoral. Independentment, a l'Empordà bufarà tramuntana entre fluixa i moderada, amb cops forts fins al vespre."
-    }
-  },
-  "dema": {
     "data": "2026-10-29",
     "variables": {
       "estatDelCel": "Dominarà l'ambient assolellat amb l'arribada de núvols alts de nord a sud del país, més nombrosos a partir de mitja tarda. Independentment, hi haurà núvols baixos fins a migdia i de nou al final de la jornada a punts de la depressió central, sobretot al nord  del sector, i punts del prelitoral i litoral; en aquest darrer sector podran persistir, localment, durant les hores centrals de la jornada. A banda, a la resta del territori el cel romandrà serè o poc ennuvolat per alguns núvols alts que circularan de nord a sud i que seran notablement més nombrosos a partir de mitja tarda.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima i màxima baixarà entre lleugerament i moderadament.",
       "visibilitat": "La visibilitat fins a final del matí serà localment regular o dolenta a fondalades de la depressió central, vall de l'Ebre, i del litoral i prelitoral, on localment es hi haurà bancs de boira i boirina.",
       "vent": "A l'interior el vent serà fluix i de direcció variable al llarg de la jornada, si bé al centre del dia hi haurà intervals de component sud fluix a l'oest del territori. Per altra banda, al litoral dominarà el terral fluix de matinada i de nou a partir del vespre, si bé a partir de migdia s'imposarà el vent de component sud, sobretot de sud-est, tret del sector nord de la Costa Brava on predominarà el nord-est. A banda, fins a migdia hi haurà tramuntana d'entre fluixa i moderada al litoral de l'Alt Empordà."
+    }
+  },
+  "dema": {
+    "data": "2026-10-30",
+    "variables": {
+      "estatDelCel": "Durant la matinada, el cel estarà molt ennuvolat per la presència de núvols mitjans i alts. Al matí, la nuvolositat anirà minvant de sud a nord fins a quedar entre poc i mig ennuvolat. Amb tot, augmentarà a la meitat sud del territori, sobretot al terç sud, on estarà molt ennuvolat o cobert. Independentment, fins a primeres hores del matí trobarem estrats baixos a valls i fondalades de l'interior.",
+      "precipitacions": "Fins a mig matí, s'espera precipitació feble, localment moderada al terç sud del país. A més, a partir de migdia també se n'espera en forma de ruixat a punts del prelitoral sud. De cara al final del dia n'és possible al Prepirineu Occidental com a l'extrem nord-est del país.",
+      "temperatures": "Temperatura mínima moderadament més alta a la meitat oest i semblant o lleugerament més baixa a la resta. Temperatura màxima lleugerament més baixa.",
+      "visibilitat": "La visibilitat, fins a final del matí, serà localment regular o dolenta a fondalades del nord de la depressió central i del prelitoral, on localment hi haurà estrats baixos.",
+      "vent": "Vent fluix i de direcció variable, amb predomini del component nord. Al litoral bufarà entre fluix i moderat. A partir de mig matí s’imposarà el component nord al litoral nord, el component nord i est al central i el component est al litoral sud."
     }
   }
 }

@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-10-28T19:30:17.917Z",
-  "plans": []
+  "actualitzat": "2026-10-29T05:45:17.465Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "28/10/2026 20:53",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128497_INICI--NOACTIVAT_PROCICAT_202610282113.pdf"
+      },
+      "descripcio": "Vaga conductors RENFE 29.10 - Transport viatgers ferrocarril"
+    }
+  ]
 }
