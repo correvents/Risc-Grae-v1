@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-29T19:20:14.879Z",
+  "dataConsulta": "2026-10-30T05:45:14.681Z",
   "avui": {
-    "data": "2026-10-29",
-    "variables": {
-      "estatDelCel": "Predominarà el cel serè o poc ennuvolat amb l'arribada de núvols alts de nord a sud del país. Malgrat tot, hi haurà núvols baixos al sector central del prelitoral i del litoral on estarà entre molt ennuvolat i cobert.",
-      "precipitacions": "Al final del dia és possible precipitació feble i minsa al sector costaner del Camp de Tarragona.",
-      "temperatures": "La temperatura baixarà lleugerament, tot i que ho farà moderadament al litoral i prelitoral central i nord. ",
-      "visibilitat": "La visibilitat serà bona, localment excel·lent.",
-      "vent": "A l'interior el vent serà fluix i de direcció variable al llarg de la jornada, si bé hi haurà intervals de component sud fluix a l'oest del país. Per altra banda, al litoral s'imposarà el terral fluix a partir del vespre."
-    }
-  },
-  "dema": {
     "data": "2026-10-30",
     "variables": {
       "estatDelCel": "Durant la matinada, el cel estarà molt ennuvolat per la presència de núvols mitjans i alts. Al matí, la nuvolositat anirà minvant de sud a nord fins a quedar entre poc i mig ennuvolat. Amb tot, augmentarà a la meitat sud del territori, sobretot al terç sud, on estarà molt ennuvolat o cobert. Independentment, fins a primeres hores del matí trobarem estrats baixos a valls i fondalades de l'interior.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà moderadament més alta a la meitat oest. En canvi, serà lleugerament més baixa a la resta. Temperatura màxima lleugerament més baixa en general.",
       "visibilitat": "La visibilitat, fins a final del matí, serà localment regular o dolenta a fondalades del nord de la depressió central i del prelitoral, on localment hi haurà estrats baixos i boires.",
       "vent": "Vent fluix i de direcció variable, amb predomini del component nord. Al litoral bufarà entre fluix i moderat. A partir de mig matí s’imposarà el component nord al litoral nord, el component nord i est al central i el component est al litoral sud."
+    }
+  },
+  "dema": {
+    "data": "2026-10-31",
+    "variables": {
+      "estatDelCel": "El cel començarà molt ennuvolat fins a migdia quan la nuvolositat minvarà progressivament de nord a sud fins a quedar el cel serè o poc ennuvolat a la tarda, tret del terç sud. Al final del dia la nuvolositat minvarà en general. Independentment, al vessant nord del Pirineu romandrà serè tot el jorn.",
+      "precipitacions": "Fins a mig matí és probable precipitació feble i minsa al quadrant nord-est, i no se'n descarta a la resta del prelitoral. A partir del migdia, són probables ruixats febles i minsos o localment poc abundants al Prepirineu, a la depressió Central, a la meitat sud del prelitoral i al delta de l'Ebre.",
+      "temperatures": "La temperatura mínima baixarà lleugerament en general, fins i tot de forma moderada al sector central del País. La màxima baixarà lleugerament, amb un descens més acusat al terç nord i a l'extrem sud.",
+      "visibilitat": "La visibilitat serà bona, localment regular fins migdia. A partir d'aleshores millorarà progressivament.",
+      "vent": "El vent bufarà fluix i variable al principi i al final del dia. La resta del dia s'imposarà el vent de component est fluix amb cops moderats, si bé a l'Empordà bufarà de component nord i est."
     }
   }
 }
