@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-10-30T19:20:14.204Z",
+  "dataConsulta": "2026-10-31T05:45:13.829Z",
   "avui": {
-    "data": "2026-10-30",
-    "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat al Pirineu, Prepirineu i quadrant nord-est, i entre mig i molt ennuvolat a la resta.",
-      "precipitacions": "S'espera precipitació feble o localment moderada al terç sud del país, sobretot al litoral.",
-      "temperatures": "La temperatura serà lleugerament més baixa en general, si bé a punts del Pla de Lleida i de l'extrem nord-est serà similar.",
-      "visibilitat": "La visibilitat serà entre bona i regular.",
-      "vent": "A l'interior en conjunt el vent serà fluix i de direcció variable, amb predomini del component sud. Al litoral bufarà entre fluix i moderat, serà de component nord al litoral nord, i de components nord i est a la resta."
-    }
-  },
-  "dema": {
     "data": "2026-10-31",
     "variables": {
       "estatDelCel": "Durant la matinada la nuvolositat augmentarà en general i el cel quedarà molt ennuvolat o cobert fins al vespre, sobretot per núvols baixos, tot i que al llarg del dia arribaran i es formaran algunes nuvolades a punts del litoral i prelitoral, sobretot al nord-est. A partir del vespre la nuvolositat tendirà a minvar en general. Independentment, el vessant nord del Pirineu romandrà serè tot el jorn.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura no experimentarà grans canvis, tret del Pirineu on baixarà, tant la mínima com la màxima.",
       "visibilitat": "La visibilitat serà entre bona i regular, amb boires i boirines de matinada, sobretot a cotes mitjanes. A partir del vespre millorarà progressivament.",
       "vent": "El vent bufarà fluix i variable al principi i al final del dia. La resta de la jornada s'imposarà el vent de component sud i est fluix amb cops moderats, més reforçat al litoral. Tot i això, a l'Empordà bufarà de component nord, també entre fluix i moderat."
+    }
+  },
+  "dema": {
+    "data": "2026-11-01",
+    "variables": {
+      "estatDelCel": "Cel serè en general; si bé fins a primeres hores del matí hi haurà alguns estrats baixos a punts de la depressió Central i del prelitoral, així com al final de la tarda se'n formaran a punts del litoral i prelitoral sud de la costa Brava i nord de la Central.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima serà entre lleugerament i moderadament més baixa. Per la seva banda, la màxima serà semblant o lleugerament superior, sobretot a punts del litoral i el prelitoral.",
+      "visibilitat": "La visibilitat serà excel·lent, si bé fins a primera hora del matí serà regular o puntualment dolenta a punts de la depressió Central i del prelitoral on hi haurà bancs de boira o boirina.",
+      "vent": "Bufarà vent de component nord i oest entre fluix i moderat, serà més reforçat als dos extrems del litoral i prelitoral i a partir de mig matí, quan hi haurà amb cops forts. Malgrat tot, a l'interior de la meitat est i a punts del sector central del litoral i el prelitoral, bufarà fluix i variable."
     }
   }
 }
