@@ -1,4 +1,98 @@
 {
-  "dataConsulta": "2026-10-31T05:56:30.071Z",
-  "avisos": []
+  "dataConsulta": "2026-10-31T09:40:14.251Z",
+  "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-10-31T12:00Z",
+      "dataFi": "2026-10-31T23:59Z",
+      "dataEmisio": "2026-10-31T09:16Z",
+      "comentari": "",
+      "dies": [
+        {
+          "dia": "2026-10-31",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 30,
+              "comarcaNom": "Ribera d'Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
