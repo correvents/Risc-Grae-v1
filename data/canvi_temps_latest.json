@@ -1,6 +1,6 @@
 {
   "data": "2026-11-01",
-  "actualitzat": "2026-11-01T05:50:20.887Z",
+  "actualitzat": "2026-11-01T06:25:05.459Z",
   "resultats": [
     {
       "punt": {
@@ -67,7 +67,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 19.4,
           "ventMaxDirTarda": 338,
-          "wmoTarda": 3,
+          "wmoTarda": 0,
           "avg30d": 13.968750000000002
         }
       },
@@ -111,7 +111,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 35.1,
           "ventMaxDirTarda": 17,
-          "wmoTarda": 3,
+          "wmoTarda": 2,
           "avg30d": 12.068750000000003
         }
       },
@@ -192,7 +192,7 @@
           "tmaxMati": 6.4,
           "precMati": 0,
           "ventMaxMati": 9.4,
-          "wmoMati": 2,
+          "wmoMati": 0,
           "tminTarda": 5,
           "tmaxTarda": 8.3,
           "precTarda": 0,
