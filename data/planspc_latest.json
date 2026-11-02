@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-11-02T09:50:19.638Z",
-  "plans": []
+  "actualitzat": "2026-11-02T13:45:36.307Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "02/11/2026 12:07",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128574_INICI--ACTIVAT_INUNCAT_202611021221.pdf"
+      },
+      "descripcio": "SMP - Intensitat de pluja en 30 minuts 2 i 3/11 - "
+    }
+  ]
 }
