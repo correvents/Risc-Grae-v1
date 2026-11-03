@@ -1,6 +1,6 @@
 {
   "data": "2026-11-03",
-  "actualitzat": "2026-11-03T05:45:23.024Z",
+  "actualitzat": "2026-11-03T05:50:20.577Z",
   "resultats": [
     {
       "punt": {
@@ -10,10 +10,8 @@
         "alt": 2500
       },
       "avui": {
-        "nivell": 1,
-        "factors": [
-          "Neu a 2500m"
-        ],
+        "nivell": 0,
+        "factors": [],
         "dades": {
           "tmaxMati": -2,
           "precMati": 0,
@@ -22,10 +20,10 @@
           "tminTarda": -4.2,
           "tmaxTarda": -2.6,
           "precTarda": 6,
-          "neuTarda": 3.8499999999999996,
+          "neuTarda": 1.47,
           "ventMaxTarda": 6,
           "ventMaxDirTarda": 5,
-          "wmoTarda": 75,
+          "wmoTarda": 73,
           "avg30d": 7.95625
         }
       },
@@ -251,7 +249,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 12.5,
           "ventMaxDirTarda": 136,
-          "wmoTarda": 63,
+          "wmoTarda": 55,
           "avg30d": 12.396875000000001
         }
       },
@@ -262,7 +260,7 @@
           "tmaxMati": 1.4,
           "precMati": 0,
           "ventMaxMati": 5.9,
-          "wmoMati": 3,
+          "wmoMati": 71,
           "tminTarda": 0.5,
           "tmaxTarda": 2.8,
           "precTarda": 0.1,
@@ -292,10 +290,10 @@
           "tminTarda": -0.4,
           "tmaxTarda": 3.2,
           "precTarda": 1.2999999999999998,
-          "neuTarda": 0.42000000000000004,
+          "neuTarda": 0.07,
           "ventMaxTarda": 7.4,
           "ventMaxDirTarda": 137,
-          "wmoTarda": 73,
+          "wmoTarda": 71,
           "avg30d": 11.375
         }
       },
@@ -306,14 +304,14 @@
           "tmaxMati": 1.5,
           "precMati": 0.1,
           "ventMaxMati": 4.6,
-          "wmoMati": 2,
+          "wmoMati": 71,
           "tminTarda": -0.2,
           "tmaxTarda": 3,
           "precTarda": 0,
           "neuTarda": 0,
           "ventMaxTarda": 5.6,
           "ventMaxDirTarda": 165,
-          "wmoTarda": 51,
+          "wmoTarda": 3,
           "avg30d": 11.375
         }
       }
