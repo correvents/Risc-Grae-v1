@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-02T19:20:16.044Z",
+  "dataConsulta": "2026-11-03T05:45:15.082Z",
   "avui": {
-    "data": "2026-11-02",
-    "variables": {
-      "estatDelCel": "El cel estarà serè en general o poc ennuvolat en general. Malgrat tot, al litoral i al prelitoral hi haurà nuvolades que deixaran el cel molt ennuvolat o cobert, sobretot a la nit.",
-      "precipitacions": "S'esperen alguns ruixats al sector central del litoral i prelitoral. Seran d'intensitat feble o puntualment moderats, tot i que a partir del vespre és possible que localment siguin forts. Acumularan quantitats de precipitació minses o poc abundants, localment abundants.",
-      "temperatures": "La temperatura serà moderadament més baixa, excepte del prelitoral, on serà lleugerament més baixa.",
-      "visibilitat": "La visibilitat serà excel·lent al Pirineu. A la resta serà entre bona i regular, puntualment dolenta a cotes mitjanes del Prepirineu i elevades del prelitoral.",
-      "vent": "Al litoral nord bufarà vent de component nord i est entre fluix i moderat amb cops forts. A la resta del litoral bufarà de component sud fluix amb cops moderats. Per la seva banda, a l'interior del país bufarà el vent fluix amb cops moderats de component sud i oest en general, tret de l'extrem nord del Pirineu bufarà el component nord. Malgrat tot, al vespre quedarà fluix i variable."
-    }
-  },
-  "dema": {
     "data": "2026-11-03",
     "variables": {
       "estatDelCel": "De matinada estarà molt ennuvolat per núvols baixos al sector central del litoral i prelitoral i a trams de la depressió Central, en especial de la meitat est, i romandrà serè però transitant cap a poc ennuvolat a la resta. A partir del matí creixeran nuvolades a qualsevol indret, però especialment al litoral, prelitoral i altres punts de la meitat nord i est, i n'arribaran des del sud i des del mar i el cel quedarà progressivament molt ennuvolat, fins i tot cobert, en general. A partir de les darreres hores de la tarda la nuvolositat començarà a minvar per l'extrem sud i cap al nord.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura baixarà, la mínima lleugerament i la màxima moderadament, si bé a punts de l'interior el descens serà localment acusat.",
       "visibilitat": "La visibilitat serà entre bona i regular, puntualment dolenta fins a primera hora del matí a punts elevats del prelitoral i la depressió Central.",
       "vent": "En general, el vent serà fluix i de direcció variable. Malgrat això, hi haurà mestral a les Terres de l'Ebre i tramuntana al nord de la Costa Brava, serà d'intensitat moderada amb cops forts, sobretot fins a migdia."
+    }
+  },
+  "dema": {
+    "data": "2026-11-04",
+    "variables": {
+      "estatDelCel": "De matinada la nuvolositat minvarà, si bé quedaran estrats baixos extensos fins al final del matí que deixaran el cel entre mig i molt ennuvolat, tret del vessant nord del Pirineu i de les Terres de l'Ebre on quedarà poc ennuvolat. A partir de migdia dominarà l'ambient assolellat si bé durant la tarda es formaran alguns núvols baixos i n'arribaran de mitjans a punts del Pirineu i del sector central del litoral i prelitoral.",
+      "precipitacions": "De matinada s'espera precipitació feble i minsa a punts dels sectors central i nord del litoral i prelitoral.",
+      "temperatures": "La temperatura mínima serà semblant, mentre que la màxima serà lleugerament més alta.",
+      "visibilitat": "La visibilitat serà entre bona i regular, puntualment dolenta fins a primera hora del matí amb bancs de boira i boirina a valls i fondalades de l'interior. A partir de migdia millorarà a entre bona i excel·lent.",
+      "vent": "En general, el vent serà fluix i de direcció variable a l'interior. Al litoral dominarà el vent de component de components nord i est, fluix amb cops moderats. Malgrat això, hi haurà mestral a les Terres de l'Ebre fins a migdia i tramuntana al nord de la Costa Brava al llarg del dia entre fluixa i moderada. El mestral serà més reforçat amb alguns cops forts de matinada."
     }
   }
 }
