@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-05T05:45:46.345Z",
+  "dataConsulta": "2026-11-05T07:00:00.867Z",
   "avui": {
     "data": "2026-11-05",
     "variables": {
-      "estatDelCel": "Fins a l'inici de la tarda el cel estarà mig o transitòriament molt ennuvolat, localment cobert a la meitat oest i mig ennuvolat a la meitat est. A partir de llavors la nuvolositat anirà minvant progressivament de sud-oest a nord-est. Tot i això, creixeran nuvolades a punts de muntanya de la meitat sud. Al vespre el cel quedarà serè o poc ennuvolat en general.",
+      "estatDelCel": "Fins a l'inici de la tarda el cel estarà mig o transitòriament molt ennuvolat, localment cobert a la meitat oest i mig ennuvolat a la resta. A partir de llavors la nuvolositat anirà minvant progressivament de sud-oest a nord-est. Tot i això, creixeran nuvolades a punts de muntanya de la meitat sud. Al vespre el cel quedarà serè o poc ennuvolat en general.",
       "precipitacions": "Fins a la tarda, s'espera precipitació d'intensitat feble, localment moderada, a qualsevol punt del país tret del quadrant nord-est. Acumularà quantitats entre minses i poc abundants, localment abundants a punts de l'extrem sud. La cota de neu voltarà els 1.700 metres.",
-      "temperatures": "La temperatura mínima serà semblant. La màxima serà entre lleugerament i moderadament més alta.",
+      "temperatures": "La temperatura màxima serà entre lleugerament i moderadament més alta.",
       "visibilitat": "La visibilitat serà bona, localment regular, sobretot a zones elevades. A la tarda millorarà en general.",
-      "vent": "El vent bufarà fluix i de direcció variable, amb el predomini del component oest. Al nord de l'Empordà bufarà de tramuntana entre fluixa i moderada tota la jornada."
+      "vent": "El vent bufarà fluix i de direcció variable en general. Amb tot, al nord de l'Empordà bufarà de tramuntana entre fluixa i moderada fins a mig matí."
     }
   },
   "dema": {
     "data": "2026-11-06",
     "variables": {
-      "estatDelCel": "El cel romandrà serè o poc ennuvolat en general. Amb tot, hi haurà alguns estrats baixos matinals a punts de la depressió Central com també a la vall de l'Ebre.",
+      "estatDelCel": "El cel romandrà serè o transitòriament enteranyinat, sobretot a la tarda, pel pas de bandes de núvols alts. Amb tot, hi haurà alguns estrats baixos matinals a punts de la depressió Central com també a la vall de l'Ebre.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura serà semblant.",
+      "temperatures": "La temperatura, tant la mínima com la màxima, serà semblant.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent, si bé, de matinada, hi haurà alguns bancs de boira o boirina a punts de la depressió Central.",
-      "vent": "El vent bufarà fluix i variable al principi i al final del dia. Al centre de la jornada s'imposarà el vent de component sud fluix al litoral i de component oest entre fluix i moderat a l'interior. Amb tot, a la tarda bufarà de component est, fluix, a l'Empordà i de component nord al litoral nord."
+      "vent": "El vent bufarà fluix i variable al principi i al final del dia. Al centre de la jornada predominarà el vent de component sud fluix al litoral i de component oest entre fluix i moderat a l'interior. Amb tot, a la tarda bufarà de component est, fluix, a l'Empordà i de component nord al litoral nord i extrem sud del sector."
     }
   }
 }
