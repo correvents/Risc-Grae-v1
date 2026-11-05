@@ -1,6 +1,6 @@
 {
   "data": "2026-11-05",
-  "actualitzat": "2026-11-05T09:40:23.808Z",
+  "actualitzat": "2026-11-05T09:50:18.830Z",
   "resultats": [
     {
       "punt": {
@@ -277,16 +277,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 4.2,
+          "tmaxMati": 3.9,
           "precMati": 0,
           "ventMaxMati": 17.4,
           "wmoMati": 3,
           "tminTarda": 0.1,
-          "tmaxTarda": 5,
+          "tmaxTarda": 4.9,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 13.8,
-          "ventMaxDirTarda": 228,
+          "ventMaxTarda": 16.5,
+          "ventMaxDirTarda": 238,
           "wmoTarda": 1,
           "avg30d": 10.803125000000001
         }
