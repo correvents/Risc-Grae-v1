@@ -1,6 +1,6 @@
 {
   "data": "2026-11-06",
-  "actualitzat": "2026-11-06T06:59:56.315Z",
+  "actualitzat": "2026-11-06T09:40:29.425Z",
   "resultats": [
     {
       "punt": {
@@ -13,16 +13,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": -0.7,
+          "tmaxMati": -0.8,
           "precMati": 0,
-          "ventMaxMati": 7.4,
+          "ventMaxMati": 5.9,
           "wmoMati": 0,
           "tminTarda": -2.2,
           "tmaxTarda": 1.4,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 5.8,
-          "ventMaxDirTarda": 292,
+          "ventMaxTarda": 5.2,
+          "ventMaxDirTarda": 291,
           "wmoTarda": 3,
           "avg30d": 7
         }
@@ -57,16 +57,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 5.4,
+          "tmaxMati": 5.3,
           "precMati": 0,
-          "ventMaxMati": 7.3,
+          "ventMaxMati": 7.9,
           "wmoMati": 0,
           "tminTarda": 1.9,
-          "tmaxTarda": 6.7,
+          "tmaxTarda": 6.8,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 9.5,
-          "ventMaxDirTarda": 130,
+          "ventMaxTarda": 10,
+          "ventMaxDirTarda": 120,
           "wmoTarda": 3,
           "avg30d": 12.346874999999997
         }
@@ -101,7 +101,7 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 2,
+          "tmaxMati": 1.9,
           "precMati": 0,
           "ventMaxMati": 8.2,
           "wmoMati": 0,
@@ -109,8 +109,8 @@
           "tmaxTarda": 3.7,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 7.4,
-          "ventMaxDirTarda": 227,
+          "ventMaxTarda": 6.7,
+          "ventMaxDirTarda": 212,
           "wmoTarda": 3,
           "avg30d": 10.578125
         }
@@ -147,14 +147,14 @@
         "dades": {
           "tmaxMati": 2.5,
           "precMati": 0,
-          "ventMaxMati": 5.5,
+          "ventMaxMati": 5.9,
           "wmoMati": 0,
           "tminTarda": 0.7,
           "tmaxTarda": 5.2,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 7.4,
-          "ventMaxDirTarda": 137,
+          "ventMaxTarda": 6,
+          "ventMaxDirTarda": 125,
           "wmoTarda": 3,
           "avg30d": 9.749999999999998
         }
@@ -189,16 +189,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 1.8,
+          "tmaxMati": 1.9,
           "precMati": 0,
-          "ventMaxMati": 5.5,
+          "ventMaxMati": 6.5,
           "wmoMati": 0,
           "tminTarda": -0.3,
-          "tmaxTarda": 3.8,
+          "tmaxTarda": 3.9,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 5,
-          "ventMaxDirTarda": 30,
+          "ventMaxTarda": 5.1,
+          "ventMaxDirTarda": 46,
           "wmoTarda": 0,
           "avg30d": 10.703125000000002
         }
@@ -233,16 +233,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 3.8,
+          "tmaxMati": 4,
           "precMati": 0,
-          "ventMaxMati": 3,
+          "ventMaxMati": 5.9,
           "wmoMati": 0,
           "tminTarda": 1.7,
           "tmaxTarda": 4.3,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 9,
-          "ventMaxDirTarda": 151,
+          "ventMaxTarda": 8.7,
+          "ventMaxDirTarda": 152,
           "wmoTarda": 3,
           "avg30d": 11.593749999999998
         }
@@ -277,16 +277,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 3.3,
+          "tmaxMati": 3.7,
           "precMati": 0,
-          "ventMaxMati": 5.5,
+          "ventMaxMati": 5.4,
           "wmoMati": 0,
           "tminTarda": 0,
           "tmaxTarda": 4,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 6.2,
-          "ventMaxDirTarda": 148,
+          "ventMaxTarda": 7.2,
+          "ventMaxDirTarda": 127,
           "wmoTarda": 3,
           "avg30d": 10.528125000000001
         }
