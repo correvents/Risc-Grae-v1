@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-11-09T09:50:19.960Z",
-  "plans": []
+  "actualitzat": "2026-11-09T13:45:20.444Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_TRANSCAT.png"
+      },
+      "plaacronim": "TRANSCAT",
+      "planom": "Nou transcat",
+      "plafase": "ALERTA",
+      "plaactivat": "SI",
+      "fasedatahora": "09/11/2026 13:29",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128774_INICI--ACTIVAT_TRANSCAT_202611091338.pdf"
+      },
+      "descripcio": "Camió de MMPP bolcat sense fuita.  - "
+    }
+  ]
 }
