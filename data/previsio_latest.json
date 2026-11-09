@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-08T19:20:14.321Z",
+  "dataConsulta": "2026-11-09T05:45:24.152Z",
   "avui": {
-    "data": "2026-11-08",
-    "variables": {
-      "estatDelCel": "En les pròximes hores es mantindrà el cel molt ennuvolat o cobert per núvols alts i mitjans arreu del territori. A més, al litoral i prelitoral sud els núvols baixos s'estendran i deixaran el cel entre molt ennuvolat i cobert.",
-      "precipitacions": "Al final del dia, no es descarta algun ruixat feble i minso a punts del litoral i prelitoral sud.",
-      "temperatures": "La temperatura serà lleugerament més alta.",
-      "visibilitat": "La visibilitat serà bona en general, si bé a punts del litoral, prelitoral sud serà localment dolenta per la presència de bancs de boira.",
-      "vent": "Predominarà el vent de component sud i est a l'interior mentra que al litoral es mantindrà el component sud entre fluix i moderat, més reforçat a la Costa Brava. A darrera hora tornarà a imposar-se el terral fluix al litoral central i sud."
-    }
-  },
-  "dema": {
     "data": "2026-11-09",
     "variables": {
       "estatDelCel": "De matinada el cel estarà mig o molt ennuvolat per núvols alts com també per núvols baixos que seran extensos a la depressió Central al litoral i al prelitoral. Al llarg del matí la nuvolositat augmentarà ràpidament i el cel quedarà molt ennuvolat o cobert arreu. A l final de la tarda la nuvolositat minvarà d'oest a est, si bé al vespre augmentarà la nuvolositat de nou a l'extrem oest, i a més quedaran estrats baixos extensos.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà moderadament més alta. La màxima serà semblant, si bé a punts de l'extrem nord-est pujarà lleugerament.",
       "visibilitat": "La visibilitat serà entre bona i regular, en general. Malgrat això, de matinada i fins a migdia hi haurà bancs de boira a punts de la depressió Central i al prelitoral sud, on la visibilitat serà dolenta. A banda, serà transitòriament dolenta en moments de ruixat.",
       "vent": "De matinada i a darrera hora del dia el vent tendirà a bufar fluix i de direcció variable. Al llarg del dia, s'imposarà el vent de component sud al litoral i prelitoral així com al quadrant nord-est. Bufarà amb intensitat entre fluixa i moderada, més reforçat al litoral nord on hi haurà alguns cops forts. A l'interior serà fluix i variable, si bé durant la tarda dominarà el component sud i est amb algun cop moderat."
+    }
+  },
+  "dema": {
+    "data": "2026-11-10",
+    "variables": {
+      "estatDelCel": "De matinada i de nou al final del dia els núvols seran abundants al Pirineu i Prepirineu occidental on el cel quedarà molt ennuvolat o cobert, i estarà mig o localment molt ennuvolat al nord de Ponent. A la resta del país predominarà l'ambient assolellat o poc ennuvolat en general per algunes bandes de núvols alts que circularan d'oest a est i que seran més abundants a la meitat oest. A més, hi haurà estrats baixos extensos durant la matinada i fins a primera hora del matí a valls del Prepirineu, a la depressió Central i al sector central del litoral i prelitoral.",
+      "precipitacions": "Durant la matinada i de nou al final del dia, s'espera precipitació feble, localment moderada, al quadrant nord-oest. S'acumularan quantitats minses o poc abundants. La cota de neu rondarà els 2.600 metres.",
+      "temperatures": "Temperatura mínima similar o lleugerament més baixa, i màxima entre lleuger i moderat ascens, més marcat al sector litoral i prelitoral.",
+      "visibilitat": "La visibilitat serà regular de matinada, localment dolenta a la depressió Central, valls del Prepirineu i al prelitoral central per la presència d'alguns bancs de boira matinals, com també a punts del Pirineu i Prepirineu occidental. La resta del dia la visibilitat serà, en conjunt, bona.",
+      "vent": "Bufarà vent de component oest d'intensitat entre fluixa i moderada arreu, si bé hi haurà alguns cops forts a la meitat sud del país, així com a punts del litoral i prelitoral on predominarà el garbí. També a cotes mitjanes i altes del Pirineu s'esperen algunes ratxes de vent fortes."
     }
   }
 }
