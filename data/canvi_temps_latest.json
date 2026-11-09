@@ -1,6 +1,6 @@
 {
   "data": "2026-11-09",
-  "actualitzat": "2026-11-09T05:45:35.971Z",
+  "actualitzat": "2026-11-09T05:50:58.838Z",
   "resultats": [
     {
       "punt": {
@@ -23,7 +23,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 10.6,
           "ventMaxDirTarda": 170,
-          "wmoTarda": 55,
+          "wmoTarda": 61,
           "avg30d": 6.76875
         }
       },
@@ -98,20 +98,22 @@
         "alt": 2072
       },
       "avui": {
-        "nivell": 0,
-        "factors": [],
+        "nivell": 1,
+        "factors": [
+          "Pluja 8.1mm tarda"
+        ],
         "dades": {
           "tmaxMati": 5.7,
-          "precMati": 0.30000000000000004,
+          "precMati": 0.38,
           "ventMaxMati": 9.6,
-          "wmoMati": 53,
+          "wmoMati": 51,
           "tminTarda": 5.3,
           "tmaxTarda": 6.2,
-          "precTarda": 6.53,
+          "precTarda": 8.1,
           "neuTarda": 0,
           "ventMaxTarda": 21.2,
           "ventMaxDirTarda": 201,
-          "wmoTarda": 61,
+          "wmoTarda": 63,
           "avg30d": 10.418749999999998
         }
       },
@@ -146,16 +148,16 @@
         "factors": [],
         "dades": {
           "tmaxMati": 5.3,
-          "precMati": 0.03,
+          "precMati": 0,
           "ventMaxMati": 6.6,
           "wmoMati": 51,
           "tminTarda": 3.3,
           "tmaxTarda": 6.3,
-          "precTarda": 2.9,
+          "precTarda": 3.4,
           "neuTarda": 0,
           "ventMaxTarda": 8.2,
           "ventMaxDirTarda": 139,
-          "wmoTarda": 55,
+          "wmoTarda": 61,
           "avg30d": 9.593749999999998
         }
       },
@@ -195,7 +197,7 @@
           "wmoMati": 3,
           "tminTarda": 4.5,
           "tmaxTarda": 9.3,
-          "precTarda": 0.1,
+          "precTarda": 0.3,
           "neuTarda": 0,
           "ventMaxTarda": 10.4,
           "ventMaxDirTarda": 219,
@@ -287,7 +289,7 @@
           "neuTarda": 0,
           "ventMaxTarda": 22.8,
           "ventMaxDirTarda": 249,
-          "wmoTarda": 51,
+          "wmoTarda": 3,
           "avg30d": 10.284374999999999
         }
       },
