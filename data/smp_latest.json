@@ -1,4 +1,389 @@
 {
-  "dataConsulta": "2026-11-10T07:29:44.078Z",
-  "avisos": []
+  "dataConsulta": "2026-11-10T09:40:13.915Z",
+  "avisos": [
+    {
+      "meteor": "Vent",
+      "estat": "Vigent",
+      "dataInici": "2026-11-11T18:00Z",
+      "dataFi": "2026-11-12T17:59Z",
+      "dataEmisio": "2026-11-10T08:23Z",
+      "comentari": "El vent bufarà de component sud. El llindar d'avís és probable que s'assoleixi a les cotes més elevades.",
+      "dies": [
+        {
+          "dia": "2026-11-11",
+          "afectacions": [
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 43,
+              "comarcaNom": "Lluçanès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 32,
+              "comarcaNom": "Segarra",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 20,
+              "comarcaNom": "Gironès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Gironès i Pla de l'Estany",
+              "comarca": 28,
+              "comarcaNom": "Pla de l'Estany",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 34,
+              "comarcaNom": "Selva",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 15,
+              "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 19,
+              "comarcaNom": "Garrotxa",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 42,
+              "comarcaNom": "Moianès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Acumulació de pluja",
+      "estat": "Vigent",
+      "dataInici": "2026-11-11T18:00Z",
+      "dataFi": "2026-11-12T17:59Z",
+      "dataEmisio": "2026-11-10T08:54Z",
+      "comentari": "El llindar d’avís és probable que se superi a les cotes més elevades del vessant sud.",
+      "dies": [
+        {
+          "dia": "2026-11-11",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "comarca": 25,
+              "comarcaNom": "Pallars Jussà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Pirineu Central",
+              "comarca": 25,
+              "comarcaNom": "Pallars Jussà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 5,
+              "comarcaNom": "Alta Ribagorça",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 39,
+              "comarcaNom": "Aran",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Acumulada > 100 mm /24 hores",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
