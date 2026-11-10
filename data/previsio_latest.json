@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-09T19:20:14.847Z",
+  "dataConsulta": "2026-11-10T05:45:13.354Z",
   "avui": {
-    "data": "2026-11-09",
-    "variables": {
-      "estatDelCel": "Cel entre molt ennuvolat i cobert arreu. ",
-      "precipitacions": "Se n'espera a la meitat oest del país i a altres punts del sector central del litoral i prelitoral. Al final del dia de nou arribarà precipitació al quadrant nord-oest, sobretot al vessant sud del Pirineu i Prepirineu occidental. En general, serà d'intensitat feble, localment moderada al vessant sud del Pirineu i Terres de l'Ebre i s'acumularan quantitats entre minses i poc abundants.",
-      "temperatures": "La temperatura serà semblant.",
-      "visibilitat": "La visibilitat serà entre bona i regular, en general. Si bé, serà dolenta à al vessant sud del Pirineu i Prepirineu, on quedarà dolenta, i a punts elevats del prelitoral sud.",
-      "vent": "Bufarà el vent de component sud al litoral i prelitoral així com al quadrant nord-est. Bufarà amb intensitat entre fluixa i moderada, més reforçat al litoral nord on hi haurà alguns cops forts, sobretot a l'Alt Empordà. A la resta de l'interior serà fluix i variable, si bé durant la tarda dominarà el component sud i est amb algun cop moderat. A darrera hora del dia el vent tendirà a bufar fluix i de direcció variable."
-    }
-  },
-  "dema": {
     "data": "2026-11-10",
     "variables": {
       "estatDelCel": "De matinada i de nou a partir del vespre els núvols seran abundants al Pirineu i Prepirineu occidental, especialment al vessant sud, on el cel quedarà molt ennuvolat o cobert, i estarà mig o localment molt ennuvolat al quadrant nord-occidental. A la resta del país predominarà l'ambient assolellat o poc ennuvolat en general per algunes bandes de núvols alts que circularan d'oest a est i que seran més abundants a la meitat oest. A més, hi haurà estrats baixos extensos durant la matinada i fins a primera hora del matí a valls del Prepirineu, a la depressió Central i al sector central del litoral i prelitoral.",
@@ -18,6 +8,16 @@
       "temperatures": "Temperatura mínima similar o lleugerament més alta, i màxima entre lleuger i moderat ascens, més marcat al sector litoral i prelitoral.",
       "visibilitat": "La visibilitat serà regular de matinada, localment dolenta a la depressió Central, valls del Prepirineu i al prelitoral central per la presència d'alguns bancs de boira matinals. La resta del dia la visibilitat serà, en conjunt, bona. Independentment, al llarg del dia serà regular o localment dolenta al vessant sud del Pirineu i Prepirineu occidental.",
       "vent": "Bufarà vent de component oest d'intensitat entre fluixa i moderada arreu, si bé hi haurà alguns cops forts a cotes elevades del Pirineu i del prelitoral, així com a la Costa Brava i al nord de la Central, on predominarà el garbí."
+    }
+  },
+  "dema": {
+    "data": "2026-11-11",
+    "variables": {
+      "estatDelCel": "Cel entre mig i molt ennuvolat per bandes de núvols alts i mitjans que circularan de sud-oest a nord-est, si bé hi haurà més clarianes cap al centre del dia, i la nuvolositat serà més abundant i compacta de matinada i de nou a partir del vespre. A banda, també s'esperen intervals de núvols baixos al Pirineu i Prepirineu occidental, especialment al vessant sud, i al nord de Ponent, sobretot fins a mig matí i de nou al final del dia. També hi haurà alguns estrats baixos matinals a punts del litoral, així com també en algunes fondalades de l'interior. Al final del dia la nuvolositat de tipus baix augmentarà al litoral i prelitoral.",
+      "precipitacions": "Fins a mig matí s'espera precipitació feble a punts del terç oest, sobretot al vessant sud del Pirineu i Prepirineu occidental. A més, a partir del vespre arribarà precipitació des del sud que ràpidament s'estendrà afectant a qualsevol punt. S'acumularan quantitats minses de precipitació, localment poc abundants. Cota de neu: 2.700 metres.",
+      "temperatures": "Temperatura mínima lleugerament o moderadament més alta. Temperatura màxima en lleuger ascens, si bé a punts del Pirineu i Prepirineu serà similar o fins i tot a cotes altes, lleugerament més baixa.",
+      "visibilitat": "La visibilitat serà bona en general, però puntualment regular fins a mig matí al vessant sud del Pirineu i Prepirineu occidental i al nord de Ponent, així com també a fondalades de l'interior a causa de la presència d'alguns bancs de boira. Independentment, la visibilitat també empitjorarà al final del dia a punts del litoral i prelitoral sud.",
+      "vent": "De matinada el vent serà fluix i de direcció variable a l'interior, amb terral a la meitat sud del litoral i domini del vent de component sud a la resta de la costa. Al llarg del matí s'imposarà el vent de component sud i oest entre fluix i moderat amb algun cop fort a punts del litoral nord i cotes elevades de les serralades."
     }
   }
 }
