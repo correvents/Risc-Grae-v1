@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-10T15:41:20.933Z",
+  "actualitzat": "2026-11-10T19:20:17.589Z",
   "plans": [
     {
       "plaicona": {
@@ -7,13 +7,27 @@
       },
       "plaacronim": "TRANSCAT",
       "planom": "Nou transcat",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "09/11/2026 13:29",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "10/11/2026 17:40",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128774_ACTUALITZACIO--ACTIVAT_TRANSCAT_202611091736.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128774_ACTUALITZACIO--NOACTIVAT_TRANSCAT_202611101756.pdf"
       },
       "descripcio": "Camió de MMPP bolcat sense fuita.  - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
+      },
+      "plaacronim": "INUNCAT",
+      "planom": "INUNCAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "10/11/2026 18:33",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128806_INICI--NOACTIVAT_INUNCAT_202611101906.pdf"
+      },
+      "descripcio": "SMP Acumulació pluja pel dia 11 i 12/novembre - "
     }
   ]
 }
