@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-11T06:46:03.595Z",
+  "actualitzat": "2026-11-11T09:40:18.510Z",
   "plans": [
     {
       "plaicona": {
@@ -28,6 +28,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128806_INICI--NOACTIVAT_INUNCAT_202611101906.pdf"
       },
       "descripcio": "SMP Acumulació pluja pel dia 11 i 12/novembre - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "11/11/2026 07:48",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128821_ACTUALITZACIO--NOACTIVAT_PROCICAT_202611111017.pdf"
+      },
+      "descripcio": "Afectació mobilitat 11-N"
     }
   ]
 }
