@@ -1,6 +1,6 @@
 {
   "data": "2026-11-11",
-  "actualitzat": "2026-11-11T14:16:12.982Z",
+  "actualitzat": "2026-11-11T15:09:45.955Z",
   "resultats": [
     {
       "punt": {
@@ -17,7 +17,7 @@
           "precMati": 0.2,
           "ventMaxMati": 7.3,
           "wmoMati": 51,
-          "tminTarda": 3,
+          "tminTarda": 2.6,
           "tmaxTarda": 5.1,
           "precTarda": 0,
           "neuTarda": 0,
@@ -61,12 +61,12 @@
           "precMati": 0,
           "ventMaxMati": 7.3,
           "wmoMati": 3,
-          "tminTarda": 7,
+          "tminTarda": 6.9,
           "tmaxTarda": 9,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 14,
-          "ventMaxDirTarda": 157,
+          "ventMaxTarda": 13.1,
+          "ventMaxDirTarda": 159,
           "wmoTarda": 3,
           "avg30d": 12.196874999999997
         }
@@ -105,12 +105,12 @@
           "precMati": 0.8,
           "ventMaxMati": 7.2,
           "wmoMati": 63,
-          "tminTarda": 5.4,
+          "tminTarda": 5.1,
           "tmaxTarda": 6.5,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 12.6,
-          "ventMaxDirTarda": 190,
+          "ventMaxTarda": 10.4,
+          "ventMaxDirTarda": 180,
           "wmoTarda": 3,
           "avg30d": 10.381249999999998
         }
@@ -149,12 +149,12 @@
           "precMati": 0.1,
           "ventMaxMati": 4.1,
           "wmoMati": 61,
-          "tminTarda": 4.9,
+          "tminTarda": 4.6,
           "tmaxTarda": 6.5,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 9.1,
-          "ventMaxDirTarda": 187,
+          "ventMaxTarda": 7.6,
+          "ventMaxDirTarda": 188,
           "wmoTarda": 3,
           "avg30d": 9.556249999999999
         }
@@ -197,8 +197,8 @@
           "tmaxTarda": 9.3,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 9.5,
-          "ventMaxDirTarda": 183,
+          "ventMaxTarda": 10,
+          "ventMaxDirTarda": 193,
           "wmoTarda": 3,
           "avg30d": 10.384375
         }

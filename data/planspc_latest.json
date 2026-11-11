@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-11T14:16:12.084Z",
+  "actualitzat": "2026-11-11T15:09:45.141Z",
   "plans": [
     {
       "plaicona": {
@@ -14,20 +14,6 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128774_ACTUALITZACIO--NOACTIVAT_TRANSCAT_202611101756.pdf"
       },
       "descripcio": "Camió de MMPP bolcat sense fuita.  - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "11/11/2026 07:48",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128821_ACTUALITZACIO--NOACTIVAT_PROCICAT_202611111017.pdf"
-      },
-      "descripcio": "Afectació mobilitat 11-N"
     },
     {
       "plaicona": {
@@ -56,6 +42,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128802_INICI--NOACTIVAT_VENTCAT_202611111131.pdf"
       },
       "descripcio": "SMP Vent pels dies 11 - 12/novembre - 2/6 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "11/11/2026 07:48",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128821_ACTUALITZACIO--NOACTIVAT_PROCICAT_202611111555.pdf"
+      },
+      "descripcio": "Afectació mobilitat 11-N"
     }
   ]
 }
