@@ -1,6 +1,6 @@
 {
   "data": "2026-11-11",
-  "actualitzat": "2026-11-11T05:50:20.778Z",
+  "actualitzat": "2026-11-11T06:46:10.818Z",
   "resultats": [
     {
       "punt": {
@@ -22,7 +22,7 @@
           "precTarda": 0,
           "neuTarda": 0,
           "ventMaxTarda": 7.4,
-          "ventMaxDirTarda": 223,
+          "ventMaxDirTarda": 226,
           "wmoTarda": 3,
           "avg30d": 6.71875
         }
@@ -57,9 +57,9 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 8.4,
+          "tmaxMati": 8.2,
           "precMati": 0,
-          "ventMaxMati": 9.7,
+          "ventMaxMati": 9.4,
           "wmoMati": 3,
           "tminTarda": 6.6,
           "tmaxTarda": 9.5,
@@ -105,7 +105,7 @@
         "dades": {
           "tmaxMati": 6.2,
           "precMati": 0.8,
-          "ventMaxMati": 9,
+          "ventMaxMati": 8.1,
           "wmoMati": 63,
           "tminTarda": 5.5,
           "tmaxTarda": 7.1,
@@ -147,9 +147,9 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 5.5,
+          "tmaxMati": 5.4,
           "precMati": 0.1,
-          "ventMaxMati": 4.6,
+          "ventMaxMati": 3.2,
           "wmoMati": 61,
           "tminTarda": 4.7,
           "tmaxTarda": 6.4,
@@ -191,9 +191,9 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 7.7,
+          "tmaxMati": 7.6,
           "precMati": 0,
-          "ventMaxMati": 14.5,
+          "ventMaxMati": 12.2,
           "wmoMati": 3,
           "tminTarda": 6.1,
           "tmaxTarda": 9.5,
@@ -235,12 +235,12 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 10.1,
+          "tmaxMati": 10.2,
           "precMati": 0,
           "ventMaxMati": 20.1,
           "wmoMati": 3,
           "tminTarda": 6.9,
-          "tmaxTarda": 10.6,
+          "tmaxTarda": 10.5,
           "precTarda": 0,
           "neuTarda": 0,
           "ventMaxTarda": 9.4,
@@ -281,7 +281,7 @@
         "dades": {
           "tmaxMati": 10.5,
           "precMati": 0,
-          "ventMaxMati": 11,
+          "ventMaxMati": 12.1,
           "wmoMati": 3,
           "tminTarda": 6.8,
           "tmaxTarda": 10.8,
