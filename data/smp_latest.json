@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-11-11T19:30:16.210Z",
+  "dataConsulta": "2026-11-12T05:45:17.048Z",
   "avisos": [
     {
       "meteor": "Vent",
@@ -1811,6 +1811,869 @@
       ]
     },
     {
+      "meteor": "Estat de la mar",
+      "estat": "Ampliat",
+      "dataInici": "2026-11-12T06:00Z",
+      "dataFi": "2026-11-13T05:59Z",
+      "dataEmisio": "2026-11-11T09:07Z",
+      "comentari": "La direcció d'onatge predominant serà de component sud. A més, hi haurà mar de fons.",
+      "dies": [
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Comarca 88",
+              "comarca": 88,
+              "comarcaNom": "Comarca 88",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 90",
+              "comarca": 90,
+              "comarcaNom": "Comarca 90",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 92",
+              "comarca": 92,
+              "comarcaNom": "Comarca 92",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 94",
+              "comarca": 94,
+              "comarcaNom": "Comarca 94",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-11-13",
+          "afectacions": [
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Estat de la mar",
+      "estat": "Vigent",
+      "dataInici": "2026-11-12T06:00Z",
+      "dataFi": "2026-11-13T05:59Z",
+      "dataEmisio": "2026-11-11T16:48Z",
+      "comentari": "La direcció d'onatge predominant serà de component sud. A més, hi haurà mar de fons.",
+      "dies": [
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Comarca 88",
+              "comarca": 88,
+              "comarcaNom": "Comarca 88",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 90",
+              "comarca": 90,
+              "comarcaNom": "Comarca 90",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 92",
+              "comarca": 92,
+              "comarcaNom": "Comarca 92",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 94",
+              "comarca": 94,
+              "comarcaNom": "Comarca 94",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-11-13",
+          "afectacions": [
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Estat de la mar",
+      "estat": "Ampliat",
+      "dataInici": "2026-11-12T00:00Z",
+      "dataFi": "2026-11-13T05:59Z",
+      "dataEmisio": "2026-11-10T17:04Z",
+      "comentari": "La direcció d'onatge predominant serà de component sud. A més, hi haurà mar de fons.",
+      "dies": [
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Comarca 88",
+              "comarca": 88,
+              "comarcaNom": "Comarca 88",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 90",
+              "comarca": 90,
+              "comarcaNom": "Comarca 90",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 92",
+              "comarca": 92,
+              "comarcaNom": "Comarca 92",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 94",
+              "comarca": 94,
+              "comarcaNom": "Comarca 94",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        },
+        {
+          "dia": "2026-11-13",
+          "afectacions": [
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 92",
+              "comarca": 92,
+              "comarcaNom": "Comarca 92",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Estat de la mar",
+      "estat": "Ampliat",
+      "dataInici": "2026-11-12T00:00Z",
+      "dataFi": "2026-11-12T23:59Z",
+      "dataEmisio": "2026-11-10T08:41Z",
+      "comentari": "La direcció d'onatge predominant serà de component sud. A més, hi haurà mar de fons.",
+      "dies": [
+        {
+          "dia": "2026-11-12",
+          "afectacions": [
+            {
+              "zona": "Comarca 88",
+              "comarca": 88,
+              "comarcaNom": "Comarca 88",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 90",
+              "comarca": 90,
+              "comarcaNom": "Comarca 90",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 92",
+              "comarca": 92,
+              "comarcaNom": "Comarca 92",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 93",
+              "comarca": 93,
+              "comarcaNom": "Comarca 93",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 94",
+              "comarca": 94,
+              "comarcaNom": "Comarca 94",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Comarca 98",
+              "comarca": 98,
+              "comarcaNom": "Comarca 98",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "meteor": "Acumulació de pluja",
       "estat": "Ampliat",
       "dataInici": "2026-11-11T18:00Z",
@@ -2770,234 +3633,6 @@
               "grauPerill": 2,
               "probabilitat": "Probable",
               "llindar": "Intensitat > 20 mm / 30 minuts",
-              "periodes": [
-                "00-06"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Estat de la mar",
-      "estat": "Vigent",
-      "dataInici": "2026-11-12T06:00Z",
-      "dataFi": "2026-11-13T05:59Z",
-      "dataEmisio": "2026-11-11T16:48Z",
-      "comentari": "La direcció d'onatge predominant serà de component sud. A més, hi haurà mar de fons.",
-      "dies": [
-        {
-          "dia": "2026-11-12",
-          "afectacions": [
-            {
-              "zona": "Comarca 88",
-              "comarca": 88,
-              "comarcaNom": "Comarca 88",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Comarca 90",
-              "comarca": 90,
-              "comarcaNom": "Comarca 90",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Comarca 91",
-              "comarca": 91,
-              "comarcaNom": "Comarca 91",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 92",
-              "comarca": 92,
-              "comarcaNom": "Comarca 92",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 93",
-              "comarca": 93,
-              "comarcaNom": "Comarca 93",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 94",
-              "comarca": 94,
-              "comarcaNom": "Comarca 94",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 95",
-              "comarca": 95,
-              "comarcaNom": "Comarca 95",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 96",
-              "comarca": 96,
-              "comarcaNom": "Comarca 96",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 97",
-              "comarca": 97,
-              "comarcaNom": "Comarca 97",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Comarca 98",
-              "comarca": 98,
-              "comarcaNom": "Comarca 98",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            }
-          ]
-        },
-        {
-          "dia": "2026-11-13",
-          "afectacions": [
-            {
-              "zona": "Comarca 91",
-              "comarca": 91,
-              "comarcaNom": "Comarca 91",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Comarca 93",
-              "comarca": 93,
-              "comarcaNom": "Comarca 93",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Comarca 95",
-              "comarca": 95,
-              "comarcaNom": "Comarca 95",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Comarca 96",
-              "comarca": 96,
-              "comarcaNom": "Comarca 96",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Comarca 97",
-              "comarca": 97,
-              "comarcaNom": "Comarca 97",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
-              "periodes": [
-                "00-06"
-              ]
-            },
-            {
-              "zona": "Comarca 98",
-              "comarca": 98,
-              "comarcaNom": "Comarca 98",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
                 "00-06"
               ]

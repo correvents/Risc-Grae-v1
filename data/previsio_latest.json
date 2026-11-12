@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-11T19:20:18.162Z",
+  "dataConsulta": "2026-11-12T05:45:18.280Z",
   "avui": {
-    "data": "2026-11-11",
-    "variables": {
-      "estatDelCel": "Cel entre molt ennuvolat o cobert arreu.",
-      "precipitacions": "Fins al vespre s'espera precipitació al terç oest quefectarà qualsevol punt a fins a la nit. Serà d'intensitat entre feble i moderada i acumularà quantitats minses a l'Empordà, i poc abundants a la resta del territori, tret de les cotes altes del vessant sud del Pirineu i Prepirineu occidental i d'algun punt del Camp de Tarragona on podrà ser abundant. Cota de neu: de 2.600 a 2.800 metres.",
-      "temperatures": "Temperatura semblant o en lleuger ascens.",
-      "visibilitat": "La visibilitat serà enter regular i dolenta, preferentment a sectors elevats.",
-      "vent": "S'imposarà el vent de component sud i est entre fluix i moderat. Hi haurà cops forts al terç oest, i alguns de molt forts a les cotes altes del Pirineu."
-    }
-  },
-  "dema": {
     "data": "2026-11-12",
     "variables": {
       "estatDelCel": "Cel molt ennuvolat o cobert de matinada arreu. Al llarg del matí s’obriran clarianes i quedarà serè o poc ennuvolat a partir de migdia. Malgrat això, al terç nord del país es mantindrà entre mig i molt ennuvolat, i cobert al nord del Pirineu. Alhora, a l'extrem nord-est del litoral i prelitoral creixeran nuvolades durant la tarda que també deixaran el cel molt ennuvolat.",
@@ -18,6 +8,16 @@
       "temperatures": "Temperatura mínima lleugerament més baixa, la qual es donarà al final del dia, sobretot a punts de l'interior. Temperatura màxima davallarà lleugerament en conjunt i de manera moderada al Pirineu i Prepirineu; tot i això, pujarà lleugerament a punts del litoral, sobretot nord i sud.",
       "visibilitat": "La visibilitat serà entre regular i dolenta de matinada. Serà entre bona i excel·lent a partir de llavors, tret del Pirineu i Prepirineu on continuarà regular i empitjorarà a partir de migdia.",
       "vent": "Bufarà vent de component sud i oest moderat amb cops forts en general, i cops molt forts fins a mig matí a cotes altes del Pirineu, i a partir del matí a la depressió Central, prelitoral i a l'interior del quadrant nord-est. A partir del vespre afluixarà, i quedarà fluix i de direcció variable al terç nord, mentre que el component oest es mantindrà moderat a la resta amb algun cop fort."
+    }
+  },
+  "dema": {
+    "data": "2026-11-13",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat en conjunt, hi haurà núvols baixos al matí a l'altiplà Central, mentre que fins a mitja tarda es formaran núvols mitjans al litoral i prelitoral central i sud que deixaran el cel mig ennuvolat. A més, a partir del final del matí creixeran nuvolades a l'extrem nord-est del país on quedarà entre mig i molt ennuvolat.\nIndependentment, de matinada estarà molt ennuvolat o cobert al Pirineu i Prepirineu occidental i fins a migdia al vessant nord del Pirineu, on la nuvolositat serà més trencada a partir de llavors.",
+      "precipitacions": "S'espera precipitació feble i intermitent al vessant nord del Pirineu fins a mig matí. Al quadrant nord-est, s'esperen ruixats dispersos a partir de migdia, febles o localment moderats. La cota de neu baixarà de 2.400 a 2.000 al vessant nord i a 2.200 a la resta.",
+      "temperatures": "Temperatura, tant mínima com màxima, entre lleugerament i moderadament més baixa.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Independentment, al vessant nord del Pirineu serà dolenta tot el dia.",
+      "vent": "Bufarà vent de component nord i oest entre fluix i moderat amb cops forts, i alguns de molt forts al nord del Cap de Creus. Malgrat això, al quadrant nord-est i la resta del Pirineu i Prepirineu hi haurà intervals de vent fluix i variable, amb domini del vent de component sud i est al sud del litoral i prelitoral nord i al nord del litoral i prelitoral central durant les hores centrals del dia."
     }
   }
 }
