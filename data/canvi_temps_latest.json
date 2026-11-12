@@ -1,6 +1,6 @@
 {
   "data": "2026-11-12",
-  "actualitzat": "2026-11-12T13:45:31.569Z",
+  "actualitzat": "2026-11-12T14:16:06.981Z",
   "resultats": [
     {
       "punt": {
@@ -19,7 +19,7 @@
           "wmoMati": 61,
           "tminTarda": 0.9,
           "tmaxTarda": 3.5,
-          "precTarda": 0.6,
+          "precTarda": 0.5,
           "neuTarda": 0,
           "ventMaxTarda": 8.1,
           "ventMaxDirTarda": 257,
@@ -107,7 +107,7 @@
           "wmoMati": 63,
           "tminTarda": 4,
           "tmaxTarda": 6.9,
-          "precTarda": 1.35,
+          "precTarda": 2.23,
           "neuTarda": 0,
           "ventMaxTarda": 11,
           "ventMaxDirTarda": 169,
@@ -151,7 +151,7 @@
           "wmoMati": 61,
           "tminTarda": 4.2,
           "tmaxTarda": 8.1,
-          "precTarda": 0.65,
+          "precTarda": 0.03,
           "neuTarda": 0,
           "ventMaxTarda": 9.2,
           "ventMaxDirTarda": 59,
