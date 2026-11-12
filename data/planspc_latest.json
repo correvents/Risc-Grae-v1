@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-12T09:50:22.683Z",
+  "actualitzat": "2026-11-12T13:45:23.455Z",
   "plans": [
     {
       "plaicona": {
@@ -17,20 +17,6 @@
     },
     {
       "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_INUNCAT.png"
-      },
-      "plaacronim": "INUNCAT",
-      "planom": "INUNCAT",
-      "plafase": "PREALERTA",
-      "plaactivat": "NO",
-      "fasedatahora": "10/11/2026 18:33",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128806_ACTUALITZACIO--NOACTIVAT_INUNCAT_202611111111.pdf"
-      },
-      "descripcio": "SMP Acumulació pluja pel dia 11 i 12/novembre - "
-    },
-    {
-      "plaicona": {
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
       },
       "plaacronim": "VENTCAT",
@@ -39,7 +25,7 @@
       "plaactivat": "NO",
       "fasedatahora": "11/11/2026 11:15",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128802_INICI--NOACTIVAT_VENTCAT_202611111131.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-128802_ACTUALITZACIO--NOACTIVAT_VENTCAT_202611121113.pdf"
       },
       "descripcio": "SMP Vent pels dies 11 - 12/novembre - 2/6 - "
     }
