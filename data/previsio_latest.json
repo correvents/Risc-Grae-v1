@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-13T13:45:15.409Z",
+  "dataConsulta": "2026-11-13T19:20:15.912Z",
   "avui": {
     "data": "2026-11-13",
     "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat en conjunt, si bé hi haurà núvols baixos fins a migdia a la depressió Central, així com al llarg de la jornada al nord-est del país.\nIndependentment, estarà entre mig i molt ennuvolat al Pirineu, sobretot fins a migdia al seu vessant nord.",
-      "precipitacions": "Fins a mig dia no es descarta precipitació feble al vessant nord del Pirineu. Independentment, al quadrant nord-est, s'esperen ruixats dispersos a partir del final del matí, entre febles i moderats, que no es descarta que vagin acompanyats de tempesta. La cota de neu se situarà entorn dels 2.300 metres.",
+      "estatDelCel": "Cel poc o mig ennuvolat en conjunt, sobretot per núvols alts i mitjans, localment molt ennuvolat al quadrant nord-oest i a l'extrem nord-est.",
+      "precipitacions": "Fins a l'inici de la nit s'espera algun ruixat a l'extrem nord-est, d'intensitat feble o localment moderada, que no es descarta que vagi acompanyat de tempesta. La cota de neu se situarà entorn dels 2.300 metres.",
       "temperatures": "Temperatura lleugerament més baixa.",
-      "visibilitat": "La visibilitat serà bona. Independentment, a cotes altes i mitjanes del vessant nord del Pirineu serà regular.",
-      "vent": "Bufarà vent de component nord i oest entre fluix i moderat en general, amb cops forts fins a mitja tarda al terç sud i al nord del Cap de Creus. Malgrat això, a la resta del quadrant nord-est i al Pirineu i Prepirineu, hi haurà intervals de vent fluix i variable, amb domini del vent de component sud i est al litoral i prelitoral durant les hores centrals del dia.\nA partir del vespre afluixarà arreu, i al final del dia quedarà fluix i de direcció variable en general, amb domini del terral al litoral."
+      "visibilitat": "La visibilitat serà bona. Independentment, a cotes altes i mitjanes del vessant sud del Pirineu serà regular.",
+      "vent": "A partir del vespre el vent afluixarà arreu, i al final del dia quedarà fluix i de direcció variable en general, amb domini del terral al litoral."
     }
   },
   "dema": {
     "data": "2026-11-14",
     "variables": {
-      "estatDelCel": "Durant la matinada la nuvolositat augmentarà i fins a migdia quedarà mig o molt ennuvolat en conjunt, amb estones de cel cobert al nord-oest, sobretot al vessant sud del Pirineu. A la tarda s'obriran clarianes, i quedarà entre poc i mig ennuvolat en conjunt, tot i que al terç nord la nuvolositat serà més persistent i seguirà molt ennuvolat o a estones cobert.",
-      "precipitacions": "S'espera precipitació feble i intermitent al llarg del dia al Pirineu i Prepirineu occidental. A partir de migdia també n'és probable a la resta del territori en forma de ruixat aïllat, sobretot de la meitat oest. S'acumularan quantitats minses, localment poc abundants. La cota de neu voltarà els 2.300 metres.",
+      "estatDelCel": "Durant la matinada la nuvolositat augmentarà fins a quedar mig o molt ennuvolat en conjunt, amb estones de cel cobert al nord-oest, sobretot al vessant sud del Pirineu. Així i tot, hi haurà algunes clarianes transitòries al centre del dia. ",
+      "precipitacions": "S'espera precipitació feble i intermitent al llarg del dia al Pirineu i Prepirineu occidental. A partir de migdia també n'és probable a la resta del territori en forma de ruixat aïllat, sobretot de la meitat oest i a la resta del prelitoral central. Localment, aniran acompanyats de tempesta, sobretot al terç sud on els ruixats seran moderats. \nS'acumularan quantitats minses, localment poc abundants. La cota de neu voltarà els 2.300 metres.",
       "temperatures": "Temperatura semblant o lleugerament més baixa, tant la mínima com la màxima.",
       "visibilitat": "La visibilitat serà entre regular i dolenta a cotes mitjanes i altes del Pirineu i Prepirineu occidental, i a la resta serà bona.",
-      "vent": "Fins a mig matí i al final del dia el vent bufarà fluix i de direcció variable a l'interior, amb terral fluix amb cops moderats al litoral. La resta del jorn s'imposarà el vent fluix de component sud i est al litoral i de component sud i oest a l'interior."
+      "vent": "Fins a mig matí i al final del dia el vent bufarà fluix i de direcció variable a l'interior, amb terral fluix amb cops moderats al litoral. La resta del jorn s'imposarà el vent fluix de component sud i oest al litoral i de component oest a l'interior."
     }
   }
 }
