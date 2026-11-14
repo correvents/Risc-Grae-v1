@@ -1,4 +1,44 @@
 {
-  "dataConsulta": "2026-11-14T06:43:30.776Z",
-  "avisos": []
+  "dataConsulta": "2026-11-14T09:40:18.204Z",
+  "avisos": [
+    {
+      "meteor": "Intensitat de pluja en 30 minuts",
+      "estat": "Vigent",
+      "dataInici": "2026-11-14T12:00Z",
+      "dataFi": "2026-11-14T17:59Z",
+      "dataEmisio": "2026-11-14T08:41Z",
+      "comentari": "Els xàfecs aniran acompanyats de tempesta.",
+      "dies": [
+        {
+          "dia": "2026-11-14",
+          "afectacions": [
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 9,
+              "comarcaNom": "Baix Ebre",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Terres de l'Ebre",
+              "comarca": 22,
+              "comarcaNom": "Montsià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Intensitat > 20 mm / 30 minuts",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
