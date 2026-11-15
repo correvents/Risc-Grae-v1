@@ -1,6 +1,6 @@
 {
   "data": "2026-11-15",
-  "actualitzat": "2026-11-15T06:48:52.528Z",
+  "actualitzat": "2026-11-15T09:40:28.045Z",
   "resultats": [
     {
       "punt": {
@@ -13,16 +13,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": -0.5,
+          "tmaxMati": -0.4,
           "precMati": 0,
-          "ventMaxMati": 7.6,
+          "ventMaxMati": 8.7,
           "wmoMati": 3,
           "tminTarda": -0.8,
-          "tmaxTarda": 0.7,
+          "tmaxTarda": 0.5,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 7.9,
-          "ventMaxDirTarda": 223,
+          "ventMaxTarda": 7.1,
+          "ventMaxDirTarda": 257,
           "wmoTarda": 3,
           "avg30d": 5.565625000000001
         }
@@ -57,16 +57,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 4.3,
+          "tmaxMati": 4.7,
           "precMati": 0,
-          "ventMaxMati": 4.7,
+          "ventMaxMati": 7.4,
           "wmoMati": 3,
           "tminTarda": 3,
           "tmaxTarda": 6,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 12.9,
-          "ventMaxDirTarda": 162,
+          "ventMaxTarda": 13.2,
+          "ventMaxDirTarda": 151,
           "wmoTarda": 3,
           "avg30d": 11.096875
         }
@@ -97,8 +97,42 @@
         "lon": 1.014,
         "alt": 2072
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 2.2,
+          "precMati": 0,
+          "ventMaxMati": 7.2,
+          "wmoMati": 3,
+          "tminTarda": 2,
+          "tmaxTarda": 2.5,
+          "precTarda": 0.1,
+          "neuTarda": 0,
+          "ventMaxTarda": 16.3,
+          "ventMaxDirTarda": 250,
+          "wmoTarda": 51,
+          "avg30d": 9.246875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 4.5,
+          "precMati": 0,
+          "ventMaxMati": 6.6,
+          "wmoMati": 3,
+          "tminTarda": 3.4,
+          "tmaxTarda": 6.3,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 13.3,
+          "ventMaxDirTarda": 267,
+          "wmoTarda": 3,
+          "avg30d": 9.246875
+        }
+      }
     },
     {
       "punt": {
@@ -107,8 +141,42 @@
         "lon": 1.09,
         "alt": 2200
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 1.2,
+          "precMati": 0,
+          "ventMaxMati": 4.9,
+          "wmoMati": 3,
+          "tminTarda": 0.8,
+          "tmaxTarda": 1.9,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 8.3,
+          "ventMaxDirTarda": 187,
+          "wmoTarda": 3,
+          "avg30d": 8.421875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 3.4,
+          "precMati": 0,
+          "ventMaxMati": 5.4,
+          "wmoMati": 3,
+          "tminTarda": 1.8,
+          "tmaxTarda": 5.2,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 5.3,
+          "ventMaxDirTarda": 118,
+          "wmoTarda": 3,
+          "avg30d": 8.421875
+        }
+      }
     },
     {
       "punt": {
@@ -117,8 +185,42 @@
         "lon": 1.942,
         "alt": 2050
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 3.3,
+          "precMati": 0,
+          "ventMaxMati": 14.3,
+          "wmoMati": 3,
+          "tminTarda": 2.6,
+          "tmaxTarda": 4.9,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 18.5,
+          "ventMaxDirTarda": 262,
+          "wmoTarda": 3,
+          "avg30d": 9.537499999999998
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 2.9,
+          "precMati": 0,
+          "ventMaxMati": 1.8,
+          "wmoMati": 3,
+          "tminTarda": 2.4,
+          "tmaxTarda": 5.7,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 4,
+          "ventMaxDirTarda": 27,
+          "wmoTarda": 3,
+          "avg30d": 9.537499999999998
+        }
+      }
     },
     {
       "punt": {
@@ -127,8 +229,42 @@
         "lon": 2.148,
         "alt": 1967
       },
-      "avui": null,
-      "dema": null
+      "avui": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 5.8,
+          "precMati": 0,
+          "ventMaxMati": 10.8,
+          "wmoMati": 3,
+          "tminTarda": 3,
+          "tmaxTarda": 6.6,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 23.9,
+          "ventMaxDirTarda": 312,
+          "wmoTarda": 3,
+          "avg30d": 10.2875
+        }
+      },
+      "dema": {
+        "nivell": 0,
+        "factors": [],
+        "dades": {
+          "tmaxMati": 6.7,
+          "precMati": 0,
+          "ventMaxMati": 4.8,
+          "wmoMati": 3,
+          "tminTarda": 4.9,
+          "tmaxTarda": 7.9,
+          "precTarda": 0,
+          "neuTarda": 0,
+          "ventMaxTarda": 9,
+          "ventMaxDirTarda": 337,
+          "wmoTarda": 3,
+          "avg30d": 10.2875
+        }
+      }
     },
     {
       "punt": {
@@ -141,16 +277,16 @@
         "nivell": 0,
         "factors": [],
         "dades": {
-          "tmaxMati": 5.3,
+          "tmaxMati": 4.9,
           "precMati": 0,
-          "ventMaxMati": 15.5,
+          "ventMaxMati": 13.1,
           "wmoMati": 3,
           "tminTarda": 2.6,
-          "tmaxTarda": 6.6,
+          "tmaxTarda": 6.8,
           "precTarda": 0,
           "neuTarda": 0,
-          "ventMaxTarda": 16.9,
-          "ventMaxDirTarda": 250,
+          "ventMaxTarda": 16.2,
+          "ventMaxDirTarda": 251,
           "wmoTarda": 3,
           "avg30d": 9.581250000000002
         }
