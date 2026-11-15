@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-14T19:20:14.585Z",
+  "dataConsulta": "2026-11-15T05:45:13.320Z",
   "avui": {
-    "data": "2026-11-14",
-    "variables": {
-      "estatDelCel": "Cel entre mig i molt ennuvolat en conjunt, o entre molt ennuvolat i cobert a la meitat oest, sobretot al vessant sud del Pirineu. ",
-      "precipitacions": "S'espera precipitació feble i intermitent al Pirineu i Prepirineu occidental, i també en altres indrets del nord-oest del país. A més, s'esperen alguns ruixats o xàfecs al sector central del litoral i prelitoral, a l'est de Ponent i a la Catalunya central fins a l'inici de la nit, quan en són probables a altres punts del país, si bé seran menys probables al litoral nord. Localment, aniran acompanyats de tempesta i calamarsa.\nS'acumularan quantitats minses o poc abundants. La cota de neu voltarà els 2.300 metres.",
-      "temperatures": "La temperatura serà lleugerament més baixa.",
-      "visibilitat": "La visibilitat serà entre regular i dolenta a cotes mitjanes i altes del Pirineu i Prepirineu occidental, i a la resta serà bona.",
-      "vent": "Bufarà el vent fluix amb algun cop moderat, de component sud i oest al litoral i de component oest a l'interior.\nAl final del dia el vent bufarà fluix i de direcció variable a l'interior, amb terral fluix amb cops moderats al litoral. "
-    }
-  },
-  "dema": {
     "data": "2026-11-15",
     "variables": {
       "estatDelCel": "Cel serè o poc ennuvolat durant la matinada, tret de punts de la depressió Central i del Pirineu i Prepirineu on hi haurà alguns estrats baixos. A paritr del matí, la nuvolositat augmentarà d'oest a est. Inicicialment seran núvols alts i prims, però la nuvolositat es farà més abundant i compacta amb el pas de les hores. Al llarg de la tarda, hi haurà estones de cel molt ennuvolat o cobert en general arreu. Al final del dia la nuvolositat minvarà de nou d'oest a est.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima baixarà lleugerament en general, tot i que al litoral sud localment es mantindrà similar. La temperatura màxima serà similar o lleugerament més alta al nord-est, similar al litoral, i baixarà lleugerament a la resta del país. ",
       "visibilitat": "Visibilitat bona en general, amb algunes boires o boirines matinals a l'interior que reduïran la visibilitat en aquests sectors. A banda, durant la tarda serà entre regular i dolenta a cotes mitjanes i altes del terç oest.",
       "vent": "Fins a mig matí i de nou al final del dia el vent bufarà vent fluix i de direcció variable a l'interior; al litoral s'imposarà el terral fluix amb cops moderats, més reforçat als dos extrems. La resta del jorn s'imposarà el vent entre fluix i moderat de component sud al litoral, amb cops forts a la meitat nord del sector, i de component sud i oest a l'interior amb cops forts a cotes altes i al quadrant nord-est."
+    }
+  },
+  "dema": {
+    "data": "2026-11-16",
+    "variables": {
+      "estatDelCel": "Cel serè o poc ennuvolat en general, amb el pas d'alguns núvols alts i mitjans. Tot i això, fins a mig matí hi haurà alguns estrats baixos a la depressió Central i altres punts de l'interior, i a la tarda creixerà algun núvol al Pirineu i Prepirineu.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "Temperatura mínima lleugerament més baixa. La màxima, en canvi, pujarà lleugerament. ",
+      "visibilitat": "Visibilitat entre bona i excel·lent, si bé fins a mig matí serà regular o dolenta per bancs de boira i boirina a punts de l'altiplà central i del nord de la depressió Central.",
+      "vent": "Predominarà el vent de component oest en general, sobretot durant les hores centrals de la jornada quan hi haurà algun cop fort, sobretot a cotes altes i al litoral."
     }
   }
 }
