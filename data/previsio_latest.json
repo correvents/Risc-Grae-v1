@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-16T13:45:15.546Z",
+  "dataConsulta": "2026-11-16T19:20:15.779Z",
   "avui": {
     "data": "2026-11-16",
     "variables": {
-      "estatDelCel": "Cel poc o mig ennuvolat per la circulació de núvols alts i mitjans que puntualment podran deixar el cel mig o molt ennuvolat. A banda, hi haurà alguns estrats baixos a la depressió Central i altres punts de l'interior que localment persistiran fins al final del matí a l'altiplà Central i nord de Ponent. A més, a la tarda creixerà algun núvol al Pirineu i Prepirineu.",
+      "estatDelCel": "Cel mig o molt ennuvolat per la circulació de núvols alts i mitjans, que puntualment el podran deixar cobert. A banda, hi haurà núvols baixos al Pirineu i Prepirineu, que també deixaran el cel entre mig i molt ennuvolat.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura màxima serà similar o pujarà lleugerament.",
-      "visibilitat": "Visibilitat entre bona i excel·lent, si bé hi haurà bancs de boira i boirina matinals a la depressió Central i a punts del nord-est, que seran localment persistents fins al final del mati a punts de l'altiplà central i del nord de la depressió Central.",
-      "vent": "Predominarà el vent de component oest entre fluix i moderat en general, tot i que a l'extrem nord-est bufarà de component sud. Hi haurà alguns cops forts sobretot a la meitat sud del prelitoral i litoral a partir de migdia a la meitat nord del litoral, a altres punts del nord-est i a cotes altes de la meitat nord, on hi haurà cops forts i algun de molt fort a partir del vespre, principalment a zones de muntanya."
+      "temperatures": "La temperatura pujarà entre lleugerament i moderadament al litoral i prelitoral sud, al sud de Ponent i als cims del Pirineu i Prepirineu, baixarà lleugerament a les valls del Pirineu i Prepirineu i serà similar a la resta.",
+      "visibilitat": "Visibilitat entre bona i excel·lent, tret de cotes elevades del Pirineu i Prepirineu on serà entre regular i dolenta per bancs de boira.",
+      "vent": "Predominarà el vent de component oest entre fluix i moderat en general, tot i que a l'extrem nord del litoral i prelitoral bufarà de component sud. Hi haurà alguns cops forts als cims del Pirineu i a partir del vespre a altres punts del nord-est, principalment a zones de muntanya."
     }
   },
   "dema": {
     "data": "2026-11-17",
     "variables": {
-      "estatDelCel": "Circularan bandes de núvols alts i mitjans al llarg del dia, més abundants a partir del migdia quan deixaran el cel molt ennuvolat o cobert. A més, també hi haurà estrats baixos matinals a punts de la depressió Central, localment persistent fins al final del matí, i a partir de migdia a zones de muntanya del nord-oest.",
-      "precipitacions": "A partir del migdia s'espera precipitació feble a punts del Pirineu i Prepirineu occidental, i n'és possible a altres punts del Pirineu, Prepirineu i terç oest. Serà feble i acumularà quantitats minses o localment poc abundants.\nLa cota de neu se situarà entorn els 2.700 metres.",
+      "estatDelCel": "Circularan bandes de núvols alts i mitjans al llarg del dia que deixaran el cel entre mig i molt ennuvolat, fins i tot cobert a partir del migdia. Independentment, es formaran estrats baixos matinals a punts de la depressió Central, localment persistent fins al final del matí; també hi haurà núvols baixos a zones de muntanya del nord-oest, sobretot a partir de migdia. ",
+      "precipitacions": "A partir del migdia s'espera precipitació feble a punts del Pirineu i Prepirineu occidental, i n'és possible a altres punts del Pirineu, Prepirineu i terç oest. Serà feble i acumularà quantitats entre inapreciables i minses, o localment poc abundants a cotes altes del Pirineu occidental.\nLa cota de neu se situarà entorn els 2.700 metres.",
       "temperatures": "La temperatura mínima pujarà entre lleugerament i moderadament. La temperatura màxima pujarà lleugerament.",
-      "visibilitat": "Visibilitat entre bona i excel·lent, per bé que hi haurà bancs de boira a punts de muntanya del nord-oest durant el matí que es faran més nombrosos i abundants a altres zones elevades del quadrant nord-oest a partir de mitja tarda. A més, hi haurà alguns bancs de boira i boirina matinals a punts de la depressió Central i el Prepirineu, localment persistents fins al final del matí.",
-      "vent": "S'imposarà el vent de component oest entre fluix i moderat amb cops forts a zones elevades del país, sobretot de la meitat nord, a punts del quadrant nord-est i a punts de la meitat nord del litoral on, sobretot, bufarà de llebeig."
+      "visibilitat": "Visibilitat entre bona i excel·lent. Tot i això, serà dolenta per bancs de boira a punts de muntanya del Pirineu i Prepirineu tot el dia, i que a partir del migdia es faran més nombrosos i abundants a altres zones elevades del quadrant nord-oest. A més, hi haurà alguns bancs de boira i boirina matinals a punts de la depressió Central i el Prepirineu, localment persistents fins al final del matí.",
+      "vent": "S'imposarà el vent de component oest entre fluix i moderat amb cops forts a zones elevades del país, sobretot de la meitat nord, a punts del quadrant nord-est i a punts de la meitat nord del litoral on, sobretot, bufarà de llebeig.\nTot i això, al nord del cap de Creus el vent bufarà entre fluix i moderat de component nord fins a mig matí i de component sud fins al vespre; a partir de llavors quedarà fluix i de direcció variable."
     }
   }
 }
