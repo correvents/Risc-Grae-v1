@@ -1,5 +1,5 @@
 {
-  "dataConsulta": "2026-11-18T19:30:13.625Z",
+  "dataConsulta": "2026-11-19T05:45:14.164Z",
   "avisos": [
     {
       "meteor": "Vent",
@@ -799,56 +799,66 @@
       ]
     },
     {
-      "meteor": "Vent",
+      "meteor": "Estat de la mar",
       "estat": "Ampliat",
-      "dataInici": "2026-11-17T06:00Z",
-      "dataFi": "2026-11-17T23:59Z",
-      "dataEmisio": "2026-11-17T08:36Z",
-      "comentari": "El vent bufarà de component oest. El llindar d'avís es podrà superar sobretot a zones elevades.",
+      "dataInici": "2026-11-19T00:00Z",
+      "dataFi": "2026-11-19T11:59Z",
+      "dataEmisio": "2026-11-18T09:06Z",
+      "comentari": "La direcció d'onatge predominant serà de sud-oest. Hi haurà notable mar de fons.",
       "dies": [
         {
-          "dia": "2026-11-17",
+          "dia": "2026-11-19",
           "afectacions": [
             {
-              "zona": "Gironès i Pla de l'Estany",
-              "comarca": 20,
-              "comarcaNom": "Gironès",
+              "zona": "Comarca 91",
+              "comarca": 91,
+              "comarcaNom": "Comarca 91",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
+                "00-06",
+                "06-12"
               ]
             },
             {
-              "zona": "Litoral Nord",
-              "comarca": 34,
-              "comarcaNom": "Selva",
+              "zona": "Comarca 95",
+              "comarca": 95,
+              "comarcaNom": "Comarca 95",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
+                "00-06",
+                "06-12"
               ]
             },
             {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
+              "zona": "Comarca 96",
+              "comarca": 96,
+              "comarcaNom": "Comarca 96",
               "nivell": "Groc",
               "grauPerill": 1,
               "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "llindar": "Onades > 2.50 metres (maregassa)",
               "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
+                "00-06",
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Comarca 97",
+              "comarca": 97,
+              "comarcaNom": "Comarca 97",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Onades > 2.50 metres (maregassa)",
+              "periodes": [
+                "00-06",
+                "06-12"
               ]
             }
           ]

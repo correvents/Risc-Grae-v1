@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-18T19:20:15.099Z",
+  "dataConsulta": "2026-11-19T05:45:15.211Z",
   "avui": {
-    "data": "2026-11-18",
-    "variables": {
-      "estatDelCel": "Augment ràpid dels núvols d'oest a est del país que deixaran el cel molt ennuvolat o cobert arreu a partir del vespre.",
-      "precipitacions": "Al llarg de la tarda arribarà precipitació feble o localment moderada per l'oest que s'estendrà ràpidament a la resta del territori, si bé serà menys probable al litoral i prelitoral nord. La quantitat de precipitació acumulada serà minsa o localment poc abundant, tot i que a cotes elevades del Pirineu i Prepirineu occidental podrà ser puntualment abundant (més de 20 mm en 24 hores). \nLa cota de neu rondarà els 2.800 metres, si bé transitòriament se situarà entorn dels 3.000 metres.",
-      "temperatures": "La temperatura pujarà lleugerament, tret de trams del litoral on baixarà lleument.",
-      "visibilitat": "Visibilitat entre bona i excel·lent, per bé que a cotes altes del Pirineu i Prepirineu serà entre regular i dolenta.",
-      "vent": "El vent serà fluix i de direcció variable en general. Tot i això, bufarà de component oest entre fluix i moderat amb cops forts a les cotes altes del Montseny, del Pirineu i Prepirineu, fins i tot amb alguns cops molt forts als cims del Pirineu i del Montseny al final del dia."
-    }
-  },
-  "dema": {
     "data": "2026-11-19",
     "variables": {
       "estatDelCel": "Cel cobert o molt ennuvolat al principi de la matinada. Posteriorment, la nuvolositat minvarà ràpidament i des del matí el cel quedarà serè o poc ennuvolat en general, si bé al terç nord, al prelitoral sud i al nord de la depressió Central persistiran alguns núvols baixos fins a mig matí. Independentment, a partir de migdia es formaran alguns núvols mitjans pel Pirineu i podran créixer algunes nuvolades a l'extrem nord-est.",
@@ -18,6 +8,16 @@
       "temperatures": "Temperatura mínima i màxima entre lleugerament i moderadament més baixa. La mínima es registrarà a molts punts del país al final de la jornada.",
       "visibilitat": "Visibilitat excel·lent, si bé fins a primeres hores del matí serà entre regular i dolenta al nord de la depressió Central, al Pirineu i al Prepirineu.",
       "vent": "Bufarà vent de component oest entre fluix i moderat amb cops forts arreu, i cops molt forts a la meitat sud de Catalunya, al litoral i prelitoral central i als cims del Pirineu fins a migdia.\nNogensmenys, al litoral i prelitoral nord bufarà fluix i de direcció variable fins a mig matí i a la nit, tret del nord del Cap de Creus on hi haurà tramuntana entre fluixa i moderada, mentre que al centre del dia s'imposarà el vent de component est fluix amb cops moderats."
+    }
+  },
+  "dema": {
+    "data": "2026-11-20",
+    "variables": {
+      "estatDelCel": "Cel enteranyinat per núvols alts i mitjans arreu; tot i això, podran deixar el cel molt ennuvolat a la meitat sud del país fins a mig matí i a partir de mitja tarda. Per altra banda, de matinada hi haurà alguns núvols baixos al nord de la depressió Central, al Pirineu i Prepirineu occidental i al sud de la Costa Brava; al centre del dia també se'n formaran al Pirineu.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura baixarà lleugerament, tant la mínima com la màxima.",
+      "visibilitat": "La visibilitat serà excel·lent. Malgrat això, de matinada serà regular o localment dolenta a valls i fondalades del nord de la depressió Central i del Prepirineu.",
+      "vent": "De matinada el vent bufarà de component oest entre fluix i moderat amb algun cop fort al litoral i prelitoral central i sud; a la resta serà fluix i de direcció variable, però amb terral al litoral nord fluix amb cops moderats.\nLa resta del jorn dominarà el vent de component oest entre fluix i moderat, amb alguns cops forts esporàdics a la meitat sud, tret del quadrant nord-est on s'imposarà el component est i sud fluix amb cops moderats.\nA la nit, quedarà fluix i variable a l'interior i entrarà el terral fluix amb cops moderats al litoral."
     }
   }
 }
