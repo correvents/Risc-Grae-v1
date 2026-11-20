@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-11-20T07:29:41.534Z",
-  "plans": []
+  "actualitzat": "2026-11-20T09:40:18.029Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
+      },
+      "plaacronim": "VENTCAT",
+      "planom": "Pla Especial d'Emergències per Risc de Vent a Catalunya",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "20/11/2026 10:30",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129019_INICI--NOACTIVAT_VENTCAT_202611201036.pdf"
+      },
+      "descripcio": "Avís SMP Vent 22/11 perill 2/6 - "
+    }
+  ]
 }
