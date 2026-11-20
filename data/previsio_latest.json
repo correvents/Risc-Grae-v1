@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-20T05:45:17.560Z",
+  "dataConsulta": "2026-11-20T07:29:37.616Z",
   "avui": {
     "data": "2026-11-20",
     "variables": {
-      "estatDelCel": "Fins a mitja tarda el cel estarà enteranyinat de núvols alts arreu, si bé també n'hi haurà de mitjans al terç sud del país que podran deixar el cel molt ennuvolat o cobert. A partir de llavors, la nuvolositat es farà més abundant i compacta de sud a nord i a darrera hora del dia quedarà molt ennuvolat arreu o cobert al sud. Per altra banda, de matinada hi haurà alguns núvols baixos al nord de la depressió Central, al Pirineu i Prepirineu occidental i al sud de la Costa Brava.",
+      "estatDelCel": "Fins a migdia el cel estarà enteranyinat de núvols alts arreu, si bé també n'hi haurà de mitjans al terç sud del país que podran deixar el cel molt ennuvolat o cobert. A la tarda, el cel es mantindrà entre poc i mig ennuvolat per núvols alts a la meitat nord mentre que es mantindrà abundant i compacta a les Terres de l'Ebre.",
       "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura baixarà lleugerament o localment de forma moderada, tant la mínima com la màxima.",
-      "visibilitat": "La visibilitat serà excel·lent. Malgrat això, de matinada serà regular o localment dolenta a valls i fondalades del nord de la depressió Central i del Prepirineu.",
-      "vent": "De matinada el vent bufarà de component oest entre fluix i moderat amb algun cop fort al litoral i prelitoral central i sud; a la resta serà fluix i de direcció variable, tret del litoral nord on hi haurà terral fluix amb cops moderats.\nLa resta del jorn dominarà el vent de component oest entre fluix i moderat, amb alguns cops forts esporàdics a la meitat sud, tret del quadrant nord-est on s'imposarà el component est i sud fluix amb cops moderats, i de les valls del Pirineu i Prepirineu on el vent serà fluix i de direcció variable.\nA la nit, quedarà fluix i variable a l'interior i entrarà el terral fluix amb cops moderats al litoral."
+      "temperatures": "La temperatura màxima baixarà lleugerament o localment de forma moderada.",
+      "visibilitat": "La visibilitat serà excel·lent.",
+      "vent": "Durant les primeres hores del matí el vent bufarà de component oest entre fluix i moderat al litoral i prelitoral central i sud; a la resta serà fluix i de direcció variable, tret del litoral nord on hi haurà terral fluix amb cops moderats.\nLa resta del jorn dominarà el vent de component oest entre fluix i moderat, amb alguns cops forts esporàdics a la meitat sud. D'altra banda, al quadrant nord-est s'imposarà el vent de component est i sud fluix amb cops moderats, i a les valls del Pirineu i Prepirineu el vent serà fluix i de direcció variable.\nA la nit, quedarà fluix i variable a l'interior i s'imposarà el terral fluix amb cops moderats al litoral."
     }
   },
   "dema": {
     "data": "2026-11-21",
     "variables": {
-      "estatDelCel": "Cel molt ennuvolat o cobert de núvols alts i mitjans, sobretot durant el matí. A partir de migdia, seran menys espessos a la meitat est i al llarg de la tarda minvaran transitòriament de sud a nord. Independentment, hi haurà núvols baixos al litoral sud i central al llarg del dia, però sobretot al matí, que al llarg de la tarda també arribaran al litoral nord.",
-      "precipitacions": "S'espera precipitació feble i intermitent al Pirineu i Prepirineu occidental, sobretot al matí, mentre que a la tarda serà probable a altres punts terç oest. Independentment, no es descarta al sector central del litoral i prelitoral algun ruixat o gotellada aïllada durant el matí. La precipitació acumularà quantitats entre inapreciables i minses. La cota de neu passarà dels 1.800 metres als 2.200 metres al matí i continuarà pujant a la tarda fins a situar-se entorn dels 2.800 metres.",
-      "temperatures": "La temperatura pujarà lleugerament, tant mínima com màxima.",
-      "visibilitat": "La visibilitat serà bona en general, tret de les cotes altes del Pirineu i Prepirineu occidental serà regular o dolenta.",
-      "vent": "El vent serà fluix i de direcció variable a l'interior. Al litoral, bufarà terral matinal i nocturn fluix, i durant les hores centrals del dia s'imposarà el component sud entre fluix i moderat al litoral.\nIndependentment, a cotes altes del Pirineu el vent bufarà entre moderat i fort de component oest."
+      "estatDelCel": "De matinada i durant el matí, cel molt ennuvolat o cobert per núvols alts i mitjans arreu. A partir de migdia, seran menys espessos tret del quadrant nord-oest on persistiran. Independentment, hi haurà alguns núvols baixos al litoral sud i central al llarg del matí, que també es formaran al litoral prelitoral nord a partir del migdia.",
+      "precipitacions": "S'espera precipitació feble i intermitent al Pirineu i Prepirineu occidental, sobretot al matí, mentre que a la tarda no se'n descarta a altres punts del terç oest. La precipitació acumularà quantitats entre inapreciables i minses. La cota de neu passarà dels 1.800 metres als 2.200 metres al matí i continuarà pujant a la tarda fins a situar-se entorn dels 2.800 metres.",
+      "temperatures": "La temperatura pujarà lleugerament, tant la mínima com la màxima.",
+      "visibilitat": "La visibilitat serà bona en general, tret de les cotes altes del Pirineu i Prepirineu occidental on serà regular o localment dolenta per bancs de boira.",
+      "vent": "El vent serà fluix i de direcció variable a l'interior durant tot el dia. Al litoral, bufarà terral durant la matinada i el matí i bufarà de component sud entre fluix i moderat durant les hores centrals del dia, amb algun cop moderat a la Costa Brava.\nIndependentment, a cotes altes del Pirineu i a la serralada transversal, el vent bufarà entre moderat i fort de component oest."
     }
   }
 }
