@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-20T19:20:16.856Z",
+  "dataConsulta": "2026-11-21T05:45:14.790Z",
   "avui": {
-    "data": "2026-11-20",
-    "variables": {
-      "estatDelCel": "Cel enteranyinat de núvols alts i mitjans arreu, si bé continuaran sent molt abundants i espessos al litoral i prelitoral central i sud on deixaran el cel molt ennuvolat o cobert. A partir del vespre la nuvolositat augmentarà i el cel quedarà entre molt ennuvolat i cobert arreu.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura serà similar a Ponent i al nord de l'Empordà, i baixarà entre lleugerament i moderadament a la resta del país.",
-      "visibilitat": "La visibilitat serà excel·lent en general, i bona al nord-est.",
-      "vent": "Fins al vespre dominarà el vent de component oest fluix amb cops moderats, tret del sud del litoral i prelitoral central i del nord del Camp de Tarragona on encara hi haurà algun cop fort. A partir de llavors el vent quedarà fluix i variable a l'interior i s'imposarà el terral fluix amb cops moderats al litoral."
-    }
-  },
-  "dema": {
     "data": "2026-11-21",
     "variables": {
       "estatDelCel": "De matinada i durant el matí, el cel estarà molt ennuvolat o cobert per núvols alts i sobretot mitjans arreu. A partir de migdia, seran menys espessos i abundants, tret del quadrant nord-oest on persistiran. Independentment, hi haurà alguns núvols baixos al litoral sud i central al llarg del matí, que a partir del migdia també arribaran al sud de la Costa Brava.\nAl vessant sud del Pirineu occidental la nuvolositat serà abundant i compacta tot el dia.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura pujarà lleugerament, tant la mínima com la màxima.",
       "visibilitat": "La visibilitat serà bona en general, tret de les cotes altes del Pirineu i Prepirineu occidental on serà regular o localment dolenta per bancs de boira tot el jorn.",
       "vent": "El vent serà fluix i de direcció variable a l'interior durant tot el dia, tret de les cotes altes del Pirineu i a la serralada Transversal, on bufarà entre moderat i fort de component oest. Al litoral, hi haurà terral fins a mig matí i bufarà de component sud entre fluix i moderat a partir de llavors, amb alguns cops forts a la Costa Brava; tot i això, al final del dia entrarà el terral fluix al litoral sud.\n"
+    }
+  },
+  "dema": {
+    "data": "2026-11-22",
+    "variables": {
+      "estatDelCel": "Cel molt ennuvolat de matinada. Posteriorment, quedarà l'ambient assolellat, si bé persistiran fins al final del matí núvols baixos al Pirineu, Prepirineu i nord de la depressió Central. Per altra banda, a partir de la tarda hi haurà intervals de núvols baixos al litoral i prelitoral nord, fins i tot amb alguna nuvolada, i alguns núvols mitjans al Pirineu; independentment, al vessant nord del Pirineu quedarà molt ennuvolat o cobert a partir de vespre.\n",
+      "precipitacions": "Durant la matinada s'espera precipitació al quadrant nord-oest i no es descarta algun plugim feble a altres punts del terç oest. A la tarda és probable algun ruixat al nord-est i s'espera precipitació feble al vessant nord del Pirineu. La precipitació serà d'intensitat feble i acumularà quantitats minses o poc abundants. La cota de neu començarà de matinada als 2.700 metres, però durant el matí baixarà ràpidament cap als 1.600 metres.",
+      "temperatures": "Temperatura mínima i màxima lleugerament inferior. La mínima es registrarà, a molts indrets, al final dia.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat això, serà regular o localment dolenta fins a mig matí a zones elevades del nord de la depressió Central, del Pirineu i Prepirineu occidental, i a partir de la tarda al vessant nord de Pirineu. ",
+      "vent": "Bufarà vent de component oest moderat amb cops forts en general, i amb cops molt forts als cims del Pirineu i a la meitat sud de Catalunya. Tot i això, al litoral i prelitoral nord serà fluix i de direcció variable, si bé el vent girarà a component sud i est fluix al centre del dia."
     }
   }
 }
