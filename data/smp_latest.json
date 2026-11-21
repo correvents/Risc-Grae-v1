@@ -1,12 +1,12 @@
 {
-  "dataConsulta": "2026-11-21T15:23:24.039Z",
+  "dataConsulta": "2026-11-21T19:20:13.933Z",
   "avisos": [
     {
       "meteor": "Vent",
       "estat": "Vigent",
       "dataInici": "2026-11-22T00:00Z",
       "dataFi": "2026-11-22T17:59Z",
-      "dataEmisio": "2026-11-21T08:17Z",
+      "dataEmisio": "2026-11-21T16:15Z",
       "comentari": "El vent bufarà de component oest.  Al Pirineu és possible que el llindar d'avís se superi a les cotes altes.",
       "dies": [
         {
@@ -85,7 +85,8 @@
               "probabilitat": "Poc probable",
               "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
               "periodes": [
-                "06-12"
+                "06-12",
+                "12-18"
               ]
             },
             {
@@ -237,6 +238,45 @@
               "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
               "periodes": [
                 "00-06",
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 27,
+              "comarcaNom": "Pla d'Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 33,
+              "comarcaNom": "Segrià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 38,
+              "comarcaNom": "Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
                 "06-12",
                 "12-18"
               ]
