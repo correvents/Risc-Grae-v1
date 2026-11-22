@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-22T14:16:01.988Z",
+  "actualitzat": "2026-11-22T15:21:05.581Z",
   "plans": [
     {
       "plaicona": {
@@ -14,6 +14,20 @@
         "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129019_ACTUALITZACIO--ACTIVAT_VENTCAT_202611221100.pdf"
       },
       "descripcio": "Avís SMP Vent 22/11 perill 2/6 - "
+    },
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
+      },
+      "plaacronim": "PROCICAT",
+      "planom": "PROCICAT",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "22/11/2026 15:49",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129047_INICI--NOACTIVAT_PROCICAT_202611221608.pdf"
+      },
+      "descripcio": "Foc habitatge 5 plantes - "
     }
   ]
 }
