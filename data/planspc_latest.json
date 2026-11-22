@@ -1,5 +1,5 @@
 {
-  "actualitzat": "2026-11-22T15:21:05.581Z",
+  "actualitzat": "2026-11-22T19:20:16.183Z",
   "plans": [
     {
       "plaicona": {
@@ -7,27 +7,13 @@
       },
       "plaacronim": "VENTCAT",
       "planom": "Pla Especial d'Emergències per Risc de Vent a Catalunya",
-      "plafase": "ALERTA",
-      "plaactivat": "SI",
-      "fasedatahora": "20/11/2026 18:35",
-      "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129019_ACTUALITZACIO--ACTIVAT_VENTCAT_202611221100.pdf"
-      },
-      "descripcio": "Avís SMP Vent 22/11 perill 2/6 - "
-    },
-    {
-      "plaicona": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT.png"
-      },
-      "plaacronim": "PROCICAT",
-      "planom": "PROCICAT",
       "plafase": "PREALERTA",
       "plaactivat": "NO",
-      "fasedatahora": "22/11/2026 15:49",
+      "fasedatahora": "22/11/2026 18:57",
       "comunicatpdf": {
-        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129047_INICI--NOACTIVAT_PROCICAT_202611221608.pdf"
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129019_ACTUALITZACIO--NOACTIVAT_VENTCAT_202611221923.pdf"
       },
-      "descripcio": "Foc habitatge 5 plantes - "
+      "descripcio": "Avís SMP Vent 22/11 perill 2/6 - "
     }
   ]
 }

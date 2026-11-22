@@ -1,6 +1,574 @@
 {
-  "dataConsulta": "2026-11-22T15:20:59.720Z",
+  "dataConsulta": "2026-11-22T19:20:12.630Z",
   "avisos": [
+    {
+      "meteor": "Vent",
+      "estat": "Ampliat",
+      "dataInici": "2026-11-22T06:00Z",
+      "dataFi": "2026-11-22T23:59Z",
+      "dataEmisio": "2026-11-22T08:17Z",
+      "comentari": "El vent bufarà de component oest.  Al Pirineu és possible que el llindar d'avís se superi a les cotes altes.",
+      "dies": [
+        {
+          "dia": "2026-11-22",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 1,
+              "comarcaNom": "Alt Camp",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 7,
+              "comarcaNom": "Bages",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 32,
+              "comarcaNom": "Segarra",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Empordà",
+              "comarca": 2,
+              "comarcaNom": "Alt Empordà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 108 km/h (30 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 13,
+              "comarcaNom": "Barcelonès",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 17,
+              "comarcaNom": "Garraf",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Nord",
+              "comarca": 21,
+              "comarcaNom": "Maresme",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 3,
+              "comarcaNom": "Alt Penedès",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 12,
+              "comarcaNom": "Baix Penedès",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 15,
+              "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 24,
+              "comarcaNom": "Osona",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 27,
+              "comarcaNom": "Pla d'Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 33,
+              "comarcaNom": "Segrià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 38,
+              "comarcaNom": "Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Prepirineu",
+              "comarca": 42,
+              "comarcaNom": "Moianès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 16,
+              "comarcaNom": "Conca de Barberà",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 29,
+              "comarcaNom": "Priorat",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Groc",
+              "grauPerill": 3,
+              "probabilitat": "Molt probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12",
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 41,
+              "comarcaNom": "Vallès Oriental",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "06-12"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meteor": "Vent",
+      "estat": "Vigent",
+      "dataInici": "2026-11-22T12:00Z",
+      "dataFi": "2026-11-22T23:59Z",
+      "dataEmisio": "2026-11-22T16:31Z",
+      "comentari": "El vent bufarà de component oest.  Al Pirineu és possible que el llindar d'avís se superi a les cotes altes.",
+      "dies": [
+        {
+          "dia": "2026-11-22",
+          "afectacions": [
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 1,
+              "comarcaNom": "Alt Camp",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 8,
+              "comarcaNom": "Baix Camp",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Camp de Tarragona",
+              "comarca": 36,
+              "comarcaNom": "Tarragonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 6,
+              "comarcaNom": "Anoia",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Catalunya Central",
+              "comarca": 32,
+              "comarcaNom": "Segarra",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 11,
+              "comarcaNom": "Baix Llobregat",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 13,
+              "comarcaNom": "Barcelonès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Litoral Central",
+              "comarca": 17,
+              "comarcaNom": "Garraf",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 3,
+              "comarcaNom": "Alt Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Penedès",
+              "comarca": 12,
+              "comarcaNom": "Baix Penedès",
+              "nivell": "Groc",
+              "grauPerill": 2,
+              "probabilitat": "Probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18",
+                "18-00"
+              ]
+            },
+            {
+              "zona": "Pirineu Central",
+              "comarca": 15,
+              "comarcaNom": "Cerdanya",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Occidental",
+              "comarca": 26,
+              "comarcaNom": "Pallars Sobirà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Pirineu Oriental",
+              "comarca": 31,
+              "comarcaNom": "Ripollès",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 27,
+              "comarcaNom": "Pla d'Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 33,
+              "comarcaNom": "Segrià",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Plana de Lleida",
+              "comarca": 38,
+              "comarcaNom": "Urgell",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Serres de Prades i Montsant",
+              "comarca": 16,
+              "comarcaNom": "Conca de Barberà",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            },
+            {
+              "zona": "Vallès",
+              "comarca": 40,
+              "comarcaNom": "Vallès Occidental",
+              "nivell": "Groc",
+              "grauPerill": 1,
+              "probabilitat": "Poc probable",
+              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
+              "periodes": [
+                "12-18"
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "meteor": "Vent",
       "estat": "Ampliat",
@@ -329,341 +897,6 @@
               "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
               "periodes": [
                 "00-06",
-                "06-12"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "meteor": "Vent",
-      "estat": "Vigent",
-      "dataInici": "2026-11-22T06:00Z",
-      "dataFi": "2026-11-22T23:59Z",
-      "dataEmisio": "2026-11-22T08:17Z",
-      "comentari": "El vent bufarà de component oest.  Al Pirineu és possible que el llindar d'avís se superi a les cotes altes.",
-      "dies": [
-        {
-          "dia": "2026-11-22",
-          "afectacions": [
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 1,
-              "comarcaNom": "Alt Camp",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 8,
-              "comarcaNom": "Baix Camp",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Camp de Tarragona",
-              "comarca": 36,
-              "comarcaNom": "Tarragonès",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 6,
-              "comarcaNom": "Anoia",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 7,
-              "comarcaNom": "Bages",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Catalunya Central",
-              "comarca": 32,
-              "comarcaNom": "Segarra",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Empordà",
-              "comarca": 2,
-              "comarcaNom": "Alt Empordà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 108 km/h (30 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 11,
-              "comarcaNom": "Baix Llobregat",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 13,
-              "comarcaNom": "Barcelonès",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Central",
-              "comarca": 17,
-              "comarcaNom": "Garraf",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Litoral Nord",
-              "comarca": 21,
-              "comarcaNom": "Maresme",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 3,
-              "comarcaNom": "Alt Penedès",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Penedès",
-              "comarca": 12,
-              "comarcaNom": "Baix Penedès",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18",
-                "18-00"
-              ]
-            },
-            {
-              "zona": "Pirineu Central",
-              "comarca": 15,
-              "comarcaNom": "Cerdanya",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Occidental",
-              "comarca": 26,
-              "comarcaNom": "Pallars Sobirà",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 24,
-              "comarcaNom": "Osona",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Pirineu Oriental",
-              "comarca": 31,
-              "comarcaNom": "Ripollès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "comarca": 27,
-              "comarcaNom": "Pla d'Urgell",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "comarca": 33,
-              "comarcaNom": "Segrià",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Plana de Lleida",
-              "comarca": 38,
-              "comarcaNom": "Urgell",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Prepirineu",
-              "comarca": 42,
-              "comarcaNom": "Moianès",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "comarca": 16,
-              "comarcaNom": "Conca de Barberà",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Serres de Prades i Montsant",
-              "comarca": 29,
-              "comarcaNom": "Priorat",
-              "nivell": "Groc",
-              "grauPerill": 2,
-              "probabilitat": "Probable",
-              "llindar": "Ratxa màxima > 90 km/h (25 m/s)",
-              "periodes": [
-                "06-12"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 40,
-              "comarcaNom": "Vallès Occidental",
-              "nivell": "Groc",
-              "grauPerill": 3,
-              "probabilitat": "Molt probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
-                "06-12",
-                "12-18"
-              ]
-            },
-            {
-              "zona": "Vallès",
-              "comarca": 41,
-              "comarcaNom": "Vallès Oriental",
-              "nivell": "Groc",
-              "grauPerill": 1,
-              "probabilitat": "Poc probable",
-              "llindar": "Ratxa màxima > 72 km/h (20 m/s)",
-              "periodes": [
                 "06-12"
               ]
             }
