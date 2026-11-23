@@ -1,20 +1,20 @@
 {
-  "dataConsulta": "2026-11-23T05:45:17.244Z",
+  "dataConsulta": "2026-11-23T07:53:00.880Z",
   "avui": {
     "data": "2026-11-23",
     "variables": {
-      "estatDelCel": "El cel estarà enteranyinat pel pas de núvols alts i prims, sobretot durant el matí. Tot i això, hi haurà núvols baixos fins a primera hora del matí a la Catalunya central i fins al migdia també al vessant nord del Pirineu occidental, on deixaran el cel molt ennuvolat o cobert.\nIndependentment, durant la tarda es formaran alguns núvols baixos al quadrant nord-est.",
-      "precipitacions": "Fins a primera hora del matí s'espera precipitació al vessant nord del Pirineu occidental, sobretot a cotes altes i durant la matinada. Serà feble i acumularà quantitats inapreciables o localment minses. La cota de neu rondarà els 1.600 metres.",
-      "temperatures": "Temperatura mínima serà lleugerament més baixa i localment moderadament més baixa al litoral. Per la seva banda, la màxima serà lleugerament més baixa, especialment al quadrant nord-est.",
-      "visibilitat": "La visibilitat serà bona o excel·lent. Malgrat això, serà localment regular o puntualment dolenta fins a primera hora del matí al nord de l'altiplà central i fins a mig matí al vessant nord del Pirineu occidental.",
-      "vent": "El vent bufarà de component nord i oest als dos extrems del país d'intensitat moderada amb cops forts, especialment fins a mig matí. A la resta bufarà fluix i variable, malgrat que al centre del dia bufarà fluix de component oest a l'interior i de components sud i est al litoral. D'altra banda, a l'extrem nord del Pirineu bufarà vent de component nord entre fluix i moderat, amb cops forts als cims més elevats fins a mig matí."
+      "estatDelCel": "Predomini del cel serè o poc ennuvolat pel pas d'alguns núvols alts i prims i alguns de mitjans, sobretot durant el matí i a la meitat sud del litoral i prelitoral. Tot i això, hi haurà alguns estrats baixos fins a primera hora del matí al nord de la Catalunya central i fins al migdia també al vessant nord del Pirineu occidental, on deixaran el cel molt ennuvolat o cobert.\nIndependentment, al llarg del matí es formaran alguns núvols baixos al quadrant nord-est que al llarg de la tarda es faran més extensos i compactes, deixant localment el cel mig o molt ennuvolat.",
+      "precipitacions": "Fins a primera hora del matí s'espera precipitació al vessant nord del Pirineu occidental, sobretot a cotes altes. Serà feble i acumularà quantitats inapreciables o localment minses. La cota de neu rondarà els 1.600 metres.",
+      "temperatures": "La temperatura màxima serà lleugerament més baixa, especialment al quadrant nord-est, on localment el descens serà moderat.",
+      "visibilitat": "La visibilitat serà bona o excel·lent. Malgrat això, serà localment regular o puntualment dolenta fins a primera hora del matí a zones fondes del nord de la depressió Central i fins a mig matí al vessant nord del Pirineu occidental.",
+      "vent": "El vent bufarà de component nord i oest als dos extrems del país d'intensitat moderada amb cops forts, especialment fins a mig matí, si bé a les Terres de l'Ebre es mantindrà fins a primera hora de la tarda. A la resta bufarà fluix i variable, malgrat que al centre del dia bufarà fluix de component oest a l'interior i de components sud i est al litoral. Al final del dia el vent es tornarà fluix i de direcció variable, si bé a punts del litoral central es mantindrà el component sud i est fluix."
     }
   },
   "dema": {
     "data": "2026-11-24",
     "variables": {
-      "estatDelCel": "La nuvolositat augmentarà ràpidament de matinada i al llarg del matí quedarà entre molt ennuvolat i cobert en general, amb núvols més espessos a partir de mitja tarda.",
-      "precipitacions": "És possible precipitació al sector central del litoral i del prelitoral al matí i se n'espera a partir migdia a la meitat oest del país. A la tarda avançarà progressivament d'oest a est fins afectar a qualsevol punt de Catalunya. Serà d'intensitat feble, localment moderada, i acumularà quantitats entre minses i poc abundants. La cota de neu se situarà entorn dels 2.200 metres i baixarà fins als 1.800 metres, si bé baixarà fins a 1.500 metres al vessant nord del Pirineu occidental al final del dia.",
+      "estatDelCel": "La nuvolositat augmentarà ràpidament de matinada i al llarg del matí quedarà entre molt ennuvolat i cobert en general, amb núvols més compactes a partir de mitja tarda.",
+      "precipitacions": "No es descarta precipitació al sector central del litoral i del prelitoral al matí i se n'espera a partir migdia a qualsevol punt del territori, si bé serà menys probable a l'extrem sud i extrem nord-est. Serà d'intensitat feble en general, però localment moderada al sector central del litoral i prelitoral a partir de mitja tarda, i acumularà quantitats entre minses i poc abundants. La cota de neu se situarà entorn dels 2.200 metres i baixarà fins als 1.800 metres, si bé baixarà fins a 1.500 metres al vessant nord del Pirineu occidental al final del dia.",
       "temperatures": "La temperatura serà semblant o lleugerament més baixa.",
       "visibilitat": "La visibilitat serà regular o dolenta a valls i fondalades de l'interior i bona a la resta fins a mitja tarda quan empitjorarà en general i quedarà entre regular i dolenta, especialment en zones de muntanya.",
       "vent": "Fins a mig matí el vent bufarà fluix i variable. A partir d'aleshores, s'imposarà el component sud entre fluix i moderat, amb alguns cops forts al litoral nord, al prelitoral sud i a cotes altes del país."
