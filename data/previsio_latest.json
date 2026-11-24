@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-24T05:45:20.046Z",
+  "dataConsulta": "2026-11-24T09:40:16.491Z",
   "avui": {
     "data": "2026-11-24",
     "variables": {
-      "estatDelCel": "La nuvolositat augmentarà ràpidament de matinada i al llarg del matí quedarà entre molt ennuvolat i cobert en general, amb núvols més abundants i compactes a partir de migdia.",
-      "precipitacions": "És possible alguna precipitació feble i minsa al sector central del litoral i del prelitoral al matí. A partir de migdia s'espera precipitació a qualsevol punt del territori, si bé serà menys probable a l'extrem sud i extrem nord-est. Serà d'intensitat feble o localment moderara i s'acumularan quantitas minses o puntualment poc abundants de precipitació, si bé al sector central del litoral i prelitoral és possible que a partir del vespre sigui forta i abundant. La cota de neu se situarà inicialment entorn dels 2.000 metres al nord-oest, i baixarà fins al voltant dels 1.800 metres en general, si bé baixarà fins als 1.600 metres al vessant nord del Pirineu occidental al final del dia.",
-      "temperatures": "La temperatura mínima serà similar o lleugerament més baixa. La temperatura màxima serà similar o lleugerament més alta.",
-      "visibilitat": "La visibilitat serà regular o dolenta a valls i fondalades de l'interior i bona a la resta fins a la tarda quan empitjorarà en general i quedarà entre regular i dolenta, especialment en zones de muntanya.",
-      "vent": "Fins a mig matí el vent bufarà fluix i variable. A partir d'aleshores, s'imposarà el component sud entre fluix i moderat, amb alguns cops forts al litoral nord, al prelitoral sud i a cotes altes del país. Al final del dia entrarà el vent de component oest per Ponent, entre fluix i moderat amb algun cop fort."
+      "estatDelCel": "El cel estarà entre molt ennuvolat i cobert en general, amb núvols més abundants i compactes a partir de migdia.",
+      "precipitacions": "És possible alguna precipitació feble i minsa al sector central del litoral i del prelitoral al matí. A partir de la tarda s'espera precipitació a qualsevol punt del territori, si bé serà menys probable a l'extrem sud. Serà d'intensitat feble o localment moderada i s'acumularan quantitats minses o puntualment poc abundants de precipitació, si bé al sector central del litoral i prelitoral és possible que, a partir del vespre, sigui forta i abundant. La cota de neu se situarà inicialment entorn dels 2.000 metres al nord-oest, i baixarà fins al voltant dels 1.800 metres en general.",
+      "temperatures": "La temperatura màxima serà similar o pujarà lleugerament a zones elevades.",
+      "visibilitat": "La visibilitat serà regular o dolenta a valls i fondalades de l'interior i bona a la resta fins a la tarda, quan empitjorarà en general i quedarà entre regular i dolenta, especialment en zones de muntanya.",
+      "vent": "S'imposarà el component sud entre fluix i moderat, amb alguns cops forts al litoral nord, al prelitoral sud i a cotes altes del país. Al final del dia entrarà el vent de component oest per Ponent, entre fluix i moderat, amb algun cop fort."
     }
   },
   "dema": {
     "data": "2026-11-25",
     "variables": {
-      "estatDelCel": "De matinada i primeres hores del matí, la nuvolositat minvarà d'oest a est, si bé al llarg del dia arribaran novament nuvolades per l'oest del país i també en creixeran al terç nord del territori. A partir de la tarda, la nuvolositat es farà més abundant i compacta pel nord-oest.",
-      "precipitacions": "S'espera precipitació, de matinada a l'extrem nord del Pirineu i al litoral i prelitoral nord i central, durant les hores centrals del dia se n'espera en forma de ruixats al nord-est, mentre que a partir del vespre n'arribarà de nou a l'extrem nord del Pirineu, sobretot a la Val d'Aran. La precipitació serà d'intensitat feble o localment moderada, puntualment és probable que vinguin acompanyats de tempesta i de calabruix. La quantitat de precipitació acumulada serà minsa o localment poc abundant. La cota de neu baixarà de matinada cap als 1.200 metres.",
-      "temperatures": "La temperatura mínima serà lleugerament més alta, tret del Pirineu i Prepirineu on baixarà lleugerament i puntualment es donarà al final del dia. Per la seva banda, la màxima baixarà entre lleugerament i moderadament.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de la meitat nord del país que deixaran la visibilitat regular o dolenta.",
-      "vent": "El vent bufarà de component oest entre fluix i moderat amb cops forts. Malgrat tot, al quadrant nord-est i a les valls del Pirineu i Prepirineu serà fluix i de direcció variable."
+      "estatDelCel": "De matinada, la nuvolositat minvarà d'oest a est, si bé al llarg del matí arribaran novament nuvolades per l'oest del país i també se'n formaran al terç nord del territori. A partir de la tarda, la nuvolositat es farà més abundant i compacta.",
+      "precipitacions": "S'espera precipitació, a l'inici de la matinada a punts del litoral i prelitoral nord. Al llarg del matí arribarà precipitació al Pirineu i, durant les hores centrals del dia, se n'espera en forma de ruixats al nord-est, mentre que a partir del vespre n'arribarà de nou a l'extrem nord del Pirineu, sobretot a la Val d'Aran. \nLa precipitació serà d'intensitat feble o localment moderada, puntualment podrà anar acompanyada de tempesta i calabruix. La quantitat de precipitació acumulada serà minsa o localment poc abundant. La cota de neu se situarà entorn als 1.200 metres.",
+      "temperatures": "La temperatura mínima serà lleugerament més alta, tret del Pirineu i Prepirineu on baixarà lleugerament i puntualment s'assolirà al final del dia. \nPer la seva banda, la màxima baixarà entre lleugerament i moderadament.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de la meitat nord del país, on la visibilitat serà regular o dolenta.",
+      "vent": "El vent bufarà de component oest entre fluix i moderat, amb cops forts i alguns de molt forts. Malgrat tot, al quadrant nord-est i a les valls del Pirineu i Prepirineu serà fluix i de direcció variable."
     }
   }
 }
