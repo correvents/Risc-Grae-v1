@@ -1,23 +1,23 @@
 {
-  "dataConsulta": "2026-11-25T05:45:14.796Z",
+  "dataConsulta": "2026-11-25T08:51:00.765Z",
   "avui": {
     "data": "2026-11-25",
     "variables": {
-      "estatDelCel": "De matinada, la nuvolositat minvarà d'oest a est i a l'inici del matí el cel quedarà poc o mig ennuvolat. Al llarg del matí, però sobretot a la tarda, arribaran novament nuvolades per l'oest del país i també se'n formaran al terç nord del territori.",
-      "precipitacions": "A l'inici de la matinada, és probable algun ruixat a punts del litoral i prelitoral nord. Al matí són possibles alguns ruixats febles i dispersos al terç nord. A més, durant les hores centrals del dia s'esperen ruixats al nord-est, mentre que a partir de la tarda n'arribarà de nou al nord-oest, sobretot a l'extrem nord del Pirineu, i especialment a la Val d'Aran. \nLa precipitació serà d'intensitat feble o localment moderada, puntualment podrà anar acompanyada de tempesta i de calabruix. La quantitat de precipitació acumulada serà minsa o localment poc abundant. La cota de neu se situarà entorn als 1.200 metres.",
-      "temperatures": "La temperatura mínima serà lleugerament més alta, tret del Pirineu i Prepirineu on baixarà lleugerament i puntualment s'assolirà al final del dia. \nPer la seva banda, la màxima baixarà entre lleugerament i moderadament.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de la meitat nord del país, on la visibilitat serà regular o dolenta.",
-      "vent": "El vent bufarà de component oest entre fluix i moderat, amb cops forts i alguns de molt forts sobretot cap a la Catalunya Central i Camp de Tarragona a partir de la tarda. Malgrat tot, al quadrant nord-est i a les valls del Pirineu i Prepirineu serà fluix i de direcció variable."
+      "estatDelCel": "Ràpid augment de la nuvolositat fins a quedar cobert. Al centre del dia s'obriran clarianes d'oest a est, però tornarà a ennuvolar-se durant la tarda.\nA banda, hi haurà algunes nuvolades al terç nord i en punts de l'oest.",
+      "precipitacions": "S'espera precipitació extensa durant el matí a la meitat oest, mentre que no se'n descarta a la resta del país. A més, durant les hores centrals del dia s'esperen ruixats al terç nord, i alguns d'aïllats a la resta del quadrant nord-oest i punts del prelitoral sud. Al final del dia tendirà a quedar concentrada al Pirineu, sobretot a l'extrem nord.\nLa precipitació serà d'intensitat feble o localment moderada i puntualment podrà anar acompanyada de tempesta i de pedra tova durant la tarda. La quantitat de precipitació acumulada serà minsa o localment poc abundant. La cota de neu se situarà entorn dels 1.200 metres, localment més baixa.",
+      "temperatures": "La temperatura mínima serà lleugerament més alta, tret del Pirineu i Prepirineu, on baixarà lleugerament i puntualment s'assolirà al final del dia. \nPer la seva banda, la màxima baixarà entre lleugerament i moderadament.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent, localment regular a cotes altes. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de la meitat nord del país, on la visibilitat serà regular o dolenta.",
+      "vent": "El vent bufarà de component oest entre fluix i moderat, amb cops forts i alguns de molt forts sobretot cap a la Catalunya Central i el Camp de Tarragona a partir de la tarda. Malgrat tot, al quadrant nord-est i a les valls del Pirineu i Prepirineu serà fluix i de direcció variable."
     }
   },
   "dema": {
     "data": "2026-11-26",
     "variables": {
-      "estatDelCel": "Circularan bandes de núvols alts i mitjans que deixaran el cel mig ennuvolat en general, o puntualment molt ennuvolat, fins al migdia. A partir d'aleshores tendiran a minvar de nord a sud fins a quedar serè o poc ennuvolat. Al vessant nord del Pirineu, el cel estarà cobert tot i que a partir del vespre la nuvolositat minvarà. \nA banda, al final del dia es formaran estrats baixos a punts de la meitat nord del litoral i prelitoral, així com a punts de la Catalunya central.",
-      "precipitacions": "S'espera precipitació feble al vessant nord del Pirineu, amb una cota de neu entorn dels 1.200 metres. La quantitat de precipitació acumulada serà minsa a cotes baixes i poc abundant a cotes mitjanes i altes en general (fins a 10 cm aproximadament), si bé de forma local es poden acumular més de 20 cm per damunt dels 2.000 metres.",
-      "temperatures": "La temperatura mínima serà lleugerament més baixa, mentre que la màxima pujarà lleugerament.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de l'interior.",
-      "vent": "El vent bufarà de component oest entre fluix i moderat amb cops forts i alguns de molt forts a les Terres de l'Ebre, sobretot fins a migdia. Malgrat tot, al terç nord serà fluix i de direcció variable, tret de les cotes mitjanes i altes de les serralades així com de l'Alt Empordà, on dominarà el component nord moderat, amb cops forts sobretot fins a mig matí."
+      "estatDelCel": "De matinada circularan bandes de núvols alts i mitjans que deixaran el cel mig ennuvolat en general o puntualment molt ennuvolat. Durant el matí minvaran, però reapareixeran al centre del dia i afectaran tot Catalunya. A partir de mitja tarda tendiran a minvar de nou de nord a sud. \nAl vessant nord del Pirineu, el cel estarà cobert, tot i que al llarg de la nit la nuvolositat minvarà. \nA banda, al final del dia es formaran estrats baixos a punts de la Catalunya Central.",
+      "precipitacions": "S'espera precipitació feble a l'extrem nord del Pirineu, sobretot al vessant nord, amb una cota de neu que pujarà dels 1.200 als 1.400 metres. La quantitat de precipitació acumulada serà minsa a cotes baixes i poc abundant a cotes mitjanes i altes en general. Es podran acumular fins a 10 cm de neu, aproximadament.",
+      "temperatures": "La temperatura mínima serà lleugerament o moderadament més baixa, mentre que la màxima pujarà lleugerament.",
+      "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de l'interior, sobretot a les de la meitat nord.",
+      "vent": "El vent bufarà de component oest entre fluix i moderat amb cops forts i alguns de molt forts a les Terres de l'Ebre, sobretot fins a migdia i al final del jorn. Malgrat tot, al terç nord serà fluix i de direcció variable, tret de les cotes mitjanes i altes de les serralades així com de l'Alt Empordà, on dominarà el component nord moderat, amb cops forts sobretot fins a mig matí."
     }
   }
 }
