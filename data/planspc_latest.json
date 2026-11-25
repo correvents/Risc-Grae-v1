@@ -1,4 +1,19 @@
 {
-  "actualitzat": "2026-11-25T09:50:19.054Z",
-  "plans": []
+  "actualitzat": "2026-11-25T13:45:17.414Z",
+  "plans": [
+    {
+      "plaicona": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/ico_PROCICAT_VENT.png"
+      },
+      "plaacronim": "VENTCAT",
+      "planom": "Pla Especial d'Emergències per Risc de Vent a Catalunya",
+      "plafase": "PREALERTA",
+      "plaactivat": "NO",
+      "fasedatahora": "25/11/2026 10:43",
+      "comunicatpdf": {
+        "url": "https://documents.dadesobertes.gencat.cat/cecat/docs/I-129104_INICI--NOACTIVAT_VENTCAT_202611251104.pdf"
+      },
+      "descripcio": "SMP vent 2/6 dia 25 i 26 - "
+    }
+  ]
 }
