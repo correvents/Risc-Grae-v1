@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-25T19:20:13.474Z",
+  "dataConsulta": "2026-11-26T05:45:16.662Z",
   "avui": {
-    "data": "2026-11-25",
-    "variables": {
-      "estatDelCel": "Cel entre mig i molt ennuvolat, localment cobert sobretot a la meitat oest.",
-      "precipitacions": "S'espera precipitació feble i dispersa al terç oest, i a l'extrem nord-est fins al vespre. Al final del dia minvarà arreu, tret del vessant nord del Pirineu on es mantindrà. La quantitat de precipitació acumulada serà minsa o localment poc abundant. La cota de neu se situarà entorn dels 1.200 metres.",
-      "temperatures": "La temperatura baixarà entre lleugerament i moderadament, la mínima al Pirineu i Prepirineu puntualment s'assolirà al final del dia.",
-      "visibilitat": "La visibilitat serà entre bona i excel·lent, localment regular a cotes altes.",
-      "vent": "El vent bufarà de component oest entre fluix i moderat, amb cops forts i alguns de molt forts sobretot cap al Camp de Tarragona i les Terres de l'Ebre. Malgrat tot, al quadrant nord-est i a les valls del Pirineu i Prepirineu hi haurà intervals de vent fluix i de direcció variable."
-    }
-  },
-  "dema": {
     "data": "2026-11-26",
     "variables": {
       "estatDelCel": "De matinada circularan bandes de núvols alts i mitjans que deixaran el cel mig ennuvolat en general o puntualment molt ennuvolat. Durant el matí minvaran, però reapareixeran al centre del dia i afectaran tot Catalunya circulant de nord a sud del territori.\nAl vessant nord del Pirineu, el cel estarà cobert tota la jornada, si bé de matinada i fins a mig matí i de nou al vespre la nuvolositat serà menys abundant.\nA banda, al principi i final del dia es formaran estrats baixos a punts de la Catalunya Central.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura mínima serà lleugerament o moderadament més baixa, mentre que la màxima serà similar o localment més alta.",
       "visibilitat": "La visibilitat serà entre bona i excel·lent. Malgrat tot, hi haurà alguns bancs de boira o boirina matinals a valls i fondalades de l'interior, sobretot a punts de la depressió Central.",
       "vent": "El vent bufarà de component oest entre fluix i moderat amb cops forts i alguns de molt forts a les Terres de l'Ebre, sobretot fins a migdia i al final del jorn. Malgrat tot, al terç nord serà fluix i de direcció variable, tret de les cotes mitjanes i altes de les serralades així com de l'Alt Empordà, on dominarà el component nord moderat, amb cops forts sobretot fins a mig matí."
+    }
+  },
+  "dema": {
+    "data": "2026-11-27",
+    "variables": {
+      "estatDelCel": "Ambient assolellat arreu del país, amb alguns núvols alts i mitjans a partir de migdia, sobretot terç nord.\nA banda, hi haurà intervals de núvols baixos a punts del sud de la Costa Brava i nord del litoral central, així com a punts de l'interior del quadrant nord-est a partir del vespre. També hi haurà estrats baixos a punts de la depressió Central, que localment podran persistir fins a final del matí a punts de l'oest del sector.",
+      "precipitacions": "No s'espera precipitació.",
+      "temperatures": "La temperatura mínima baixarà lleugerament o puntualment moderadament, especialment a punts del Pirineu i alguna vall del terç nord.\nPer la seva banda, la temperatura màxima serà similar, si bé baixarà lleugerament a punts de l'interior.",
+      "visibilitat": "La visibilitat serà bona a tot Catalunya, si bé serà regular o dolenta a punts de la depressió Central durant el matí a causa d'alguns bancs de boira persistents.",
+      "vent": "Predomini del vent de component nord i oest entre fluix i moderat en general, amb algun cop fort al litoral sud fins a mig matí. Al nord del cap de Creus bufarà tramuntana amb cops forts durant tota la jornada, menys intensa al centre del dia. \nIndependentment, hi haurà intervals de vent fluix i de direcció variable al quadrant nord-est."
     }
   }
 }
