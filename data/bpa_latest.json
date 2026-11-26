@@ -1,8 +1,8 @@
 {
   "data": "2026-11-26",
-  "actualitzat": "2026-11-26T13:50:20.590Z",
+  "actualitzat": "2026-11-26T17:20:59.203Z",
   "font": "ICGC - Institut Cartogràfic i Geològic de Catalunya",
-  "url_pdf": null,
+  "url_pdf": "https://bpa.icgc.cat/butlletigenerator/bpadoc/bpa_2026-11-26_cat.pdf",
   "zones": [
     {
       "nom": "Aran - Franja Nord Pallaresa",
@@ -10,32 +10,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "Lliscaments basals",
+      "situacio_primaria": "",
+      "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14445,
-          "id_zona": "1",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14444,
-          "id_zona": "1",
-          "id_tipus_situacio": "5",
-          "tipus_situacio": "Lliscaments basals",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "2",
-          "priority": "2"
-        }
-      ]
+      "problems": []
     },
     {
       "nom": "Ribagorçana - Vall Fosca",
@@ -43,22 +22,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
+      "situacio_primaria": "",
       "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14443,
-          "id_zona": "2",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        }
-      ]
+      "problems": []
     },
     {
       "nom": "Pallaresa",
@@ -66,22 +34,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
+      "situacio_primaria": "",
       "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14442,
-          "id_zona": "3",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        }
-      ]
+      "problems": []
     },
     {
       "nom": "Perafita-Puigpedrós",
@@ -89,22 +46,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
+      "situacio_primaria": "",
       "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14441,
-          "id_zona": "4",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        }
-      ]
+      "problems": []
     },
     {
       "nom": "Vessant Nord Cadí-Moixeró",
@@ -112,22 +58,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
+      "situacio_primaria": "",
       "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14440,
-          "id_zona": "5",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        }
-      ]
+      "problems": []
     },
     {
       "nom": "Prepirineu",
@@ -147,32 +82,11 @@
       "perill": "",
       "perill_numeric": 0,
       "cota_critica": "",
-      "situacio_primaria": "Neu humida",
-      "situacio_secundaria": "Lliscaments basals",
+      "situacio_primaria": "",
+      "situacio_secundaria": "",
       "distribucio_mantell": "",
       "tendencia": "",
-      "problems": [
-        {
-          "id_problema": 14439,
-          "id_zona": "7",
-          "id_tipus_situacio": "4",
-          "tipus_situacio": "Neu humida",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "1",
-          "priority": "1"
-        },
-        {
-          "id_problema": 14438,
-          "id_zona": "7",
-          "id_tipus_situacio": "5",
-          "tipus_situacio": "Lliscaments basals",
-          "origen": "1",
-          "tendencia": "2",
-          "mida": "2",
-          "priority": "2"
-        }
-      ]
+      "problems": []
     }
   ],
   "resum": {
