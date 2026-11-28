@@ -1,16 +1,6 @@
 {
-  "dataConsulta": "2026-11-27T19:20:13.940Z",
+  "dataConsulta": "2026-11-28T05:45:14.176Z",
   "avui": {
-    "data": "2026-11-27",
-    "variables": {
-      "estatDelCel": "Cel serè o poc ennuvolat, tot i això es formaran intervals de núvols baixos a punts de l'interior del quadrant nord-est i de la depressió Central al final del dia.",
-      "precipitacions": "No s'espera precipitació.",
-      "temperatures": "La temperatura nocturna serà lleugerament o moderadament més alta a les cotes altes del Pirineu, i semblant o lleugerament més baixa a la resta.",
-      "visibilitat": "La visibilitat serà bona o excel·lent.",
-      "vent": "El vent quedarà fluix i de direcció variable a l'interior i s'imposarà el terral fluix amb algun cop moderat al litoral."
-    }
-  },
-  "dema": {
     "data": "2026-11-28",
     "variables": {
       "estatDelCel": "El cel romandrà majoritàriament serè arreu del país, si bé es podran formar alguns intervals de núvols baixos a punts del sud de la Costa Brava i al litoral central al matí. A partir de mitja tarda, aquests núvols s'estendran a altres indrets del litoral i prelitoral. Independentment, hi haurà estrats baixos matinals a punts de la depressió Central, especialment a la meitat oest de la zona. En conjunt tendiran a minvar a primeres hores del matí, si bé alguns d'ells aguantaran fins a final del matí, sobretot els de l'altiplà Central.",
@@ -18,6 +8,16 @@
       "temperatures": "La temperatura, tant la mínima com la màxima, serà semblant o lleugerament, puntualment moderadament, més alta sobretot al quadrant nord-oest del país.",
       "visibilitat": "La visibilitat serà bona, si bé fins a mig matí quedarà regular o dolenta a punts de la depressió Central a causa d'alguns bancs de boira.",
       "vent": "Fins a mig matí el vent serà fluix i de direcció variable a l'interior i bufarà el terral fluix amb cops moderats al litoral. La resta del dia s'imposarà el vent de components nord i est fluix amb cops moderats, tot i que a valls del Prepirineu, Pirineu i a Ponent hi haurà intervals de vent fluix i variable."
+    }
+  },
+  "dema": {
+    "data": "2026-11-29",
+    "variables": {
+      "estatDelCel": "El cel romandrà mig ennuvolat pel pas de bandes de núvols alts i mitjans, sobretot al matí i a la meitat nord del país. A banda, hi haurà núvols baixos extensos fins a mig matí al litoral, prelitoral i la depressió Central, localment persistents fins a migdia, que localment deixaran el cel mig o molt ennuvolat. Independentment, a partir de mig matí el cel quedarà entre mig i molt ennuvolat al vessant nord del Pirineu.",
+      "precipitacions": "A partir de mitja tarda és possible precipitació feble a punts del litoral central i sud, i al vessant nord del Pirineu. S'acumularan quantitats minses. La cota de neu voltarà els 1900 metres.",
+      "temperatures": "La temperatura mínima serà lleugerament o moderadament més alta. Per la seva part, la màxima baixarà lleugerament a l'interior, i quedarà semblant al litoral.",
+      "visibilitat": "La visibilitat serà bona, si bé fins a final del matí serà regular o dolenta a punts de la depressió Central i del prelitoral a causa d'alguns bancs de boira.",
+      "vent": "Fins a mig matí el vent serà fluix i de direcció variable a l'interior i bufarà el terral fluix amb cops moderats al litoral. La resta del dia s'imposarà el vent de component est fluix amb cops moderats, tot i que a valls del Prepirineu, Pirineu i a Ponent hi haurà intervals de vent fluix i variable."
     }
   }
 }
